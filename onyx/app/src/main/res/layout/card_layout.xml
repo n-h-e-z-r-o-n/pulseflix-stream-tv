@@ -1,51 +1,67 @@
 <!-- res/layout/item_grid.xml -->
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
+    android:id="@+id/spotlightMovie"
     android:focusableInTouchMode="true"
     android:nextFocusDown="@id/SliderButton"
-    android:nextFocusUp="@id/SliderButton">
+    android:background="?attr/BG_color"
+    android:nextFocusUp="@id/HomeSearchInput">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/SliderBackdrop"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            tools:ignore="ContentDescription" />
+
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/BG_color"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent=".75"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+
+                <ImageView
+                    android:id="@+id/SliderBackdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/overlay_bottom_gradient"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom" />
+
+                <LinearLayout
+                    android:layout_width="450dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/overlay_left_gradient"
+                    android:orientation="horizontal"
+                    android:layout_gravity="start" />
+
+        </FrameLayout>
+
+
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/overlay_bottom_gradient"
-            android:orientation="horizontal"
-            android:layout_gravity="end" />
-
-        <LinearLayout
-            android:layout_width="450dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/overlay_left_gradient"
-            android:orientation="horizontal"
-            android:layout_gravity="start" />
-
-
-
-        <LinearLayout
-            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
 
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="40dp"
-            android:layout_marginStart="20dp"
-            android:orientation="vertical">
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent=".45"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            >
 
             <TextView
                 android:id="@+id/SliderTitle"
@@ -57,7 +73,7 @@
                 android:singleLine="false"
                 android:text="Sakamoto Days Part 2"
                 android:textColor="?attr/FG_color"
-                android:textSize="45sp"
+                android:textSize="40sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/tre"
@@ -70,7 +86,7 @@
                 <TextView
                     android:id="@+id/SliderGenre"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="Action"
@@ -84,7 +100,7 @@
                     android:alpha="0.8"
                     />
 
-                <LinearLayout
+            <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -152,6 +168,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="Mv"
+                        android:fontFamily="@font/a"
                         android:singleLine="true"
                         android:textColor="?attr/FG_color"
                         android:textSize="13sp"
@@ -217,7 +234,7 @@
                 <TextView
                     android:id="@+id/SliderOverview"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:ellipsize="end"
                     android:maxLines="10"
@@ -232,13 +249,21 @@
 
             <LinearLayout
                 android:id="@+id/SliderButton"
-                android:layout_width="90dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:layout_marginBottom="10dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:layout_gravity="bottom"
                 android:clickable="true"
                 android:background="@drawable/tv_button_selector"
-                android:nextFocusLeft="@+id/sideBar"
+                android:nextFocusUp="@+id/spotlightMovie"
+                android:nextFocusLeft="@+id/SliderButton"
+                android:nextFocusRight="@+id/SliderButton"
+                android:nextFocusDown="@+id/itemGrid2"
+
                 android:gravity="center">
 
                 <ImageView
@@ -263,15 +288,8 @@
             </LinearLayout>
 
 
-
-
-
-
         </LinearLayout>
 
 
-    </FrameLayout>
 
-
-
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

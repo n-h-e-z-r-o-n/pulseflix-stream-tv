@@ -5,55 +5,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/BG_color"
-    tools:context=".MainActivity"
-    >
+    tools:context=".MainActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
-        <LinearLayout
+    <!-- Center Container -->
+    <LinearLayout
+        android:id="@+id/centerContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/splashLogo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="@string/app_name"
+            android:src="@raw/logo"
+            android:visibility="gone"
+            app:layout_constraintDimensionRatio="1.5"
+            tools:ignore="ContentDescription"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            />
+
+        <!-- ONYX Title -->
+        <TextView
+            android:id="@+id/onyxTitle"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:text="ONYX"
+            android:textSize="150sp"
+            android:textColor="?attr/FG_color"
+            android:shadowColor="?attr/AccentColor"
+            android:shadowDx="5"
+            android:shadowDy="6"
+            android:shadowRadius="4"
+            android:fontFamily="@font/j"
+            android:layout_marginBottom="32dp"
+            tools:ignore="HardcodedText" />
 
+        <!-- Loading Animation -->
+        <ImageView
+            android:id="@+id/LoadingAnimation"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@raw/loadsplash"
+            android:contentDescription="@string/app_name" />
 
-                <!-- Logo in center -->
-            <ImageView
-                android:id="@+id/splashLogo"
-                android:layout_width="625dp"
-                android:layout_height="438dp"
-                android:contentDescription="@string/app_name"
-                android:visibility="gone"
-                android:src="@raw/logo" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ONYX"
-                android:textSize="250sp"
-                android:textColor="?attr/FG_color"
-                tools:ignore="HardcodedText"
-                android:shadowColor="?attr/AccentColor"
-                android:shadowDx="5"
-                android:shadowDy="6"
-                android:shadowRadius="4"
-                android:fontFamily="@font/j"
-                android:visibility="visible"
-                />
-
-                <ImageView
-                    android:id="@+id/LoadingAnimation"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@raw/loadsplash"
-                    android:contentDescription="@string/app_name" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <include android:id="@+id/showloading" layout="@layout/laod_animation" android:visibility="visible"/>
+    <!-- Loading overlay (optional include) -->
+    <include
+        android:id="@+id/showloading"
+        layout="@layout/laod_animation"
+        android:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,10 +13,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 
+
 class AnimeSwiper(
     private val  items: MutableList<AnimeSliderItem>,
     private val layoutResId: Int
 ) :  RecyclerView.Adapter<AnimeSwiper.ViewHolder>() {
+
+    companion object {
+        private var lastKeyTime = 0L
+        private val KEY_DEBOUNCE_DELAY = 450L // ms
+    }
 
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -44,8 +50,6 @@ class AnimeSwiper(
         val cardDub: TextView = view.findViewById(R.id.cardDub)
 
         val cardSub: TextView = view.findViewById(R.id.cardSub)
-
-
 
 
     }
@@ -127,6 +131,25 @@ class AnimeSwiper(
 
             false
         }
+
+        holder.CardViewcontiner.setOnKeyListener { v, keyCode, event ->
+            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+            val now = System.currentTimeMillis()
+            if (now - lastKeyTime < KEY_DEBOUNCE_DELAY) return@setOnKeyListener true
+            lastKeyTime = now
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    if (position == 0) return@setOnKeyListener true
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    if (position == items.size) return@setOnKeyListener true
+                }
+            }
+
+            false
+        }
+
     }
 
     override fun getItemCount() = items.size
@@ -153,12 +176,18 @@ data class AnimeSliderItem(
 )
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class AnimeTrendingAdapter(
     private val  items: MutableList<TrendingAnimeItem>,   // ✅ mutable now,
     private val layoutResId: Int   // 👈 pass in the layout resource
 ) :  RecyclerView.Adapter<AnimeTrendingAdapter.ViewHolder>() {
+
+    companion object {
+        private var lastKeyTime = 0L
+        private val KEY_DEBOUNCE_DELAY = 350L // ms
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val CardViewcontiner: CardView = view.findViewById(R.id.CardViewcontiner)
@@ -229,6 +258,24 @@ class AnimeTrendingAdapter(
             false
         }
 
+        holder.CardViewcontiner.setOnKeyListener { v, keyCode, event ->
+            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+            val now = System.currentTimeMillis()
+            if (now - lastKeyTime < KEY_DEBOUNCE_DELAY) return@setOnKeyListener true
+            lastKeyTime = now
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    if (position == 0) return@setOnKeyListener true
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    if (position == items.size) return@setOnKeyListener true
+                }
+            }
+
+            false
+        }
+
 
     }
 
@@ -254,6 +301,11 @@ class AnimeAiringAdapter(
     private val  items: MutableList<AiringAnimeItem>,   // ✅ mutable now,
     private val layoutResId: Int   // 👈 pass in the layout resource
 ) :  RecyclerView.Adapter<AnimeAiringAdapter.ViewHolder>() {
+
+    companion object {
+        private var lastKeyTime = 0L
+        private val KEY_DEBOUNCE_DELAY = 350L // ms
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val CardViewcontiner: CardView = view.findViewById(R.id.CardViewcontiner)
@@ -319,6 +371,24 @@ class AnimeAiringAdapter(
                         // Last item - stop focus from moving out to the right
                         return@setOnKeyListener true
                     }
+                }
+            }
+
+            false
+        }
+
+        holder.CardViewcontiner.setOnKeyListener { v, keyCode, event ->
+            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+            val now = System.currentTimeMillis()
+            if (now - lastKeyTime < KEY_DEBOUNCE_DELAY) return@setOnKeyListener true
+            lastKeyTime = now
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    if (position == 0) return@setOnKeyListener true
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    if (position == items.size) return@setOnKeyListener true
                 }
             }
 

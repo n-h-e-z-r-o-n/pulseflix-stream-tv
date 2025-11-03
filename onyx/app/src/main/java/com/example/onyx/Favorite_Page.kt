@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import org.json.JSONArray
 import kotlin.text.ifEmpty
 
@@ -19,7 +21,9 @@ class Favorite_Page : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_favorite_page)
+
         NavAction.setupSidebar(this@Favorite_Page)
+        setupBackPressedCallback()
 
         val recyclerView = findViewById<RecyclerView>(R.id.favoritesRecycler)
         val FaveData = findViewById<LinearLayout>(R.id.FaveData)
@@ -151,5 +155,13 @@ class Favorite_Page : AppCompatActivity() {
 
             recyclerView.adapter = FavAdapter(items, R.layout.square_card, FavBackdrop, FavTitle, FavGenre, FavType, FavRating, FavYear, FavOverview,RemoveFaveItem )
         }
+    }
+
+    private fun setupBackPressedCallback() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                    findViewById<ImageButton>(R.id.btnFav).requestFocus()
+            }
+        })
     }
 }

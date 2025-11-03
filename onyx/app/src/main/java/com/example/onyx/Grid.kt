@@ -26,6 +26,8 @@ class GridAdapter(
     companion object {
         private const val VIEW_TYPE_MOVIE = 0
         private const val VIEW_TYPE_ADD_BUTTON = 1
+        private var lastKeyTime = 0L
+        private val KEY_DEBOUNCE_DELAY = 350L // ms
     }
 
     // Callback for the "Add More" button
@@ -40,32 +42,7 @@ class GridAdapter(
         val showType: TextView? = view.findViewById(R.id.showType)
 
         init {
-            itemView.setOnFocusChangeListener { v, hasFocus ->
-                v.animate()
-                    .scaleX(if (hasFocus) 1.02f else 1f)
-                    .scaleY(if (hasFocus) 1.02f else 1f)
-                    .setDuration(150)
-                    .start()
 
-                try {
-                    val overlay: View = itemView.findViewById(R.id.focusOverlay)
-                    if (hasFocus) {
-                        overlay.apply {
-                            alpha = 0f
-                            visibility = View.VISIBLE
-                            animate().alpha(1f).setDuration(150).start()
-                        }
-                    } else {
-                        overlay.animate()
-                            .alpha(0f)
-                            .setDuration(150)
-                            .withEndAction { overlay.visibility = View.GONE }
-                            .start()
-                    }
-                } catch (e: Exception) {
-                    // Safe catch for add button layout which has no overlay
-                }
-            }
         }
     }
 
@@ -120,6 +97,26 @@ class GridAdapter(
             intent.putExtra("imdb_code", imdbCode)
             intent.putExtra("type", type)
             context.startActivity(intent)
+        }
+
+
+
+        holder.itemView.setOnKeyListener { v, keyCode, event ->
+            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+            val now = System.currentTimeMillis()
+            if (now - lastKeyTime < KEY_DEBOUNCE_DELAY) return@setOnKeyListener true
+            lastKeyTime = now
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    if (position == 0) return@setOnKeyListener true
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    if (position == items.size) return@setOnKeyListener true
+                }
+            }
+
+            false
         }
     }
 

@@ -12,10 +12,12 @@ import android.os.Environment
 import android.provider.Settings
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -69,6 +71,7 @@ class Profile_Page : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         NavAction.setupSidebar(this)
+        setupBackPressedCallback()
 
         // Initialize views
         initializeViews()
@@ -458,6 +461,14 @@ class Profile_Page : AppCompatActivity() {
         }
 
         subscriptionWidget.text = displayText
+    }
+
+    private fun setupBackPressedCallback() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findViewById<ImageButton>(R.id.btnProfile).requestFocus()
+            }
+        })
     }
 
 

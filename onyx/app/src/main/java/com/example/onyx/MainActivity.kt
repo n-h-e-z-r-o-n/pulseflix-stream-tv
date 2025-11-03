@@ -20,8 +20,6 @@ class MainActivity : ComponentActivity() {
         setContentView(R.layout.activity_main)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-
-
         val loadingImageView = findViewById<ImageView>(R.id.LoadingAnimation)
         Glide.with(this)
             .asGif()
@@ -29,13 +27,20 @@ class MainActivity : ComponentActivity() {
             .into(loadingImageView)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            if (isSubscriptionActive()) {
-                startActivity(Intent(this, Home_Page::class.java))
-            } else {
-                startActivity(Intent(this, PayWall::class.java))
+
+            if (!GlobalUtils.isTv(this)) {
+                startActivity(Intent(this, Instraction::class.java))
+            }else {
+                if (isSubscriptionActive()) {
+                    startActivity(Intent(this, Home_Page::class.java))
+                } else {
+                    startActivity(Intent(this, PayWall::class.java))
+                }
             }
             finish()
         }, 10500)
+
+
 
     }
 

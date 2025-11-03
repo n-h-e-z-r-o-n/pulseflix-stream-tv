@@ -3,43 +3,184 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Home_Page"
-    android:background="?attr/BG_color" >
+    android:background="?attr/BG_color">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+        <ScrollView
+            android:id="@+id/HomeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:layout_marginStart="50dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never">
+
+
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:scrollbars="none">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/Slider_widget"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:clipToPadding="false"
+                        android:scrollbars="none" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=" Movies"
+                            android:paddingStart="5dp"
+                            android:height="13sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/d"
+                            android:textSize="13sp"
+                            android:textColor="?attr/AccentColor"
+                            tools:ignore="HardcodedText,RtlSymmetry"
+                            android:layout_marginTop="13sp"
+                            />
+
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/MoviesRecyclerView"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:clipToPadding="false"
+                            android:scrollbars="none"
+
+                            tools:ignore="RtlSymmetry" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=" Tv Series"
+                            android:paddingStart="5dp"
+                            android:height="13sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/d"
+                            android:textSize="13sp"
+                            android:layout_marginTop="13sp"
+                            android:textColor="?attr/AccentColor"
+                            tools:ignore="HardcodedText,RtlSymmetry"
+                            />
+
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/TVsRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clipToPadding="false"
+                            android:scrollbars="none"
+                            tools:ignore="RtlSymmetry" />
+
+                    </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
 
 
 
         <LinearLayout
+            android:id="@+id/searchContainerHome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/BG_color"
+            android:layout_marginStart="50dp"
+            android:orientation="vertical"
+            android:nextFocusLeft="@+id/searchContainerHome"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Search Results"
+                android:textStyle="bold"
+                android:fontFamily="@font/d"
+                android:textSize="13sp"
+                android:textColor="?attr/AccentColor"
+                tools:ignore="HardcodedText"
+                android:layout_marginTop="70dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/SearchResults"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:orientation="vertical"
                 android:overScrollMode="never"
                 android:scrollbars="none"
-                android:paddingStart="41dp"
-                tools:layout_editor_absoluteY="8dp"
-                tools:ignore="RtlSymmetry"
-                android:nextFocusLeft="@id/btnHome">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/Slider_widget"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never"
-                    android:scrollbars="none"
-                    tools:ignore="NestedWeights" />
-
-
-
+                tools:ignore="NestedWeights"
+                android:nextFocusUp="@+id/Anime_Trending_widget"
+                android:nextFocusDown="@+id/Anime_Airing_widget"/>
 
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="400dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="51dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="12dp"
+            android:focusableInTouchMode="true">
+
+            <!-- Search Icon -->
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_search"
+                app:tint="?attr/FG_color" />
+
+            <!-- Space -->
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="match_parent" />
+
+            <!-- Search Text Input -->
+            <EditText
+                android:id="@+id/HomeSearchInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="Search movies,shows,people..."
+                android:textColor="?attr/FG_color"
+                android:textColorHint="?attr/FG_color"
+                android:padding = "9dp"
+                android:inputType="text"
+                android:singleLine="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:nextFocusLeft="@+id/HomeSearchInput"
+                android:nextFocusRight="@+id/HomeSearchInput"
+                android:nextFocusUp="@+id/HomeSearchInput"
+                android:nextFocusDown="@+id/spotlightMovie"
+                android:background="@drawable/search_background"
+                android:imeOptions="actionSearch"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
         <include layout="@layout/laod_animation"/>
         <include layout="@layout/side_bar"/>
     </FrameLayout>

@@ -3,4 +3,5 @@
 <resources>
     <dimen name="grid_item_width">130dp</dimen>
     <dimen name="grid_item_height">195dp</dimen>
+    <dimen name="splash_title_size">60sp</dimen>
 </resources>

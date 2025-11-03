@@ -53,6 +53,15 @@ class Anime_Page : AppCompatActivity() {
 
 
     private fun animeHomeData() {
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels     // in pixels
+        val screenHeight = displayMetrics.heightPixels    // in pixels
+
+        val recyclerView = findViewById<RecyclerView>(R.id.spotlightAnimes)
+        val params = recyclerView.layoutParams
+        params.height = (screenHeight * 0.75).toInt()
+        recyclerView.layoutParams = params
+
         CoroutineScope(Dispatchers.IO).launch {
             repeat(1) { attempt ->
                 try {
@@ -354,8 +363,6 @@ class Anime_Page : AppCompatActivity() {
                     return@launch
                 }
 
-
-
             }
         }
 
@@ -373,8 +380,9 @@ class Anime_Page : AppCompatActivity() {
 
                     val searchTerm = searchInput.text.toString().trim()
                     if (searchTerm.isNotEmpty()) {
-                        findViewById<LinearLayout>(R.id.searchContainerAnime).visibility =
-                            View.VISIBLE
+                        findViewById<LinearLayout>(R.id.searchContainerAnime).visibility = View.VISIBLE
+                        findViewById<LinearLayout>(R.id.AnimeHomeContainer).visibility = View.GONE
+                        findViewById<View>(R.id.AnimeSearchInput).nextFocusDownId = R.id.searchContainerAnime
                         isSearchContainerAnimeVisible = true
                         searchAnimeFetch(searchTerm)
                     }
@@ -397,7 +405,9 @@ class Anime_Page : AppCompatActivity() {
 
                 if (isSearchContainerAnimeVisible) {
                     findViewById<LinearLayout>(R.id.searchContainerAnime).visibility = View.GONE
+                    findViewById<LinearLayout>(R.id.AnimeHomeContainer).visibility = View.VISIBLE
                     isSearchContainerAnimeVisible = false
+                    findViewById<View>(R.id.AnimeSearchInput).nextFocusDownId = R.id.spotlightAnimesCard
 
                 }else {
                     findViewById<ImageButton>(R.id.btnAnime).requestFocus()

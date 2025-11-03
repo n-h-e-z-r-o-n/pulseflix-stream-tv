@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageButton
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -27,6 +29,7 @@ class Notification_Page : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_notification_page)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        setupBackPressedCallback()
 
         LoadingAnimation.setup(this@Notification_Page)
         NavAction.setupSidebar(this)
@@ -70,5 +73,13 @@ class Notification_Page : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setupBackPressedCallback() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findViewById<ImageButton>(R.id.btnNotification).requestFocus()
+            }
+        })
     }
 }

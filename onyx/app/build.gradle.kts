@@ -70,6 +70,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("org.jsoup:jsoup:1.16.1")
+    implementation("com.intuit.sdp:sdp-android:1.1.0")
+    implementation("com.intuit.ssp:ssp-android:1.1.0")
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)

@@ -21,6 +21,7 @@
 
 
     <LinearLayout
+        android:id="@+id/AnimeHomeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -58,7 +59,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/spotlightAnimes"
                         android:layout_width="match_parent"
-                        android:layout_height="450dp"
+                        android:layout_height="0dp"
                         android:clipToPadding="false"
                         android:descendantFocusability="beforeDescendants"
                         android:focusable="true"
@@ -209,7 +210,7 @@
             android:nextFocusLeft="@+id/AnimeSearchInput"
             android:nextFocusRight="@+id/AnimeSearchInput"
             android:nextFocusUp="@+id/AnimeSearchInput"
-            android:nextFocusDown="@+id/cardButton"
+            android:nextFocusDown="@+id/spotlightAnimesCard"
             android:background="@drawable/search_background"
             android:imeOptions="actionSearch"
             tools:ignore="HardcodedText" />

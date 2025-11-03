@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="top">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                     android:background="@android:color/transparent"
                     android:contentDescription="Home"
                     android:nextFocusUp="@id/btnProfile"
-                    android:nextFocusDown="@id/btnMovies"
+                    android:nextFocusDown="@id/btnAnime"
                     android:src="@drawable/ic_home"
                     app:tint="@color/nav_icon_color_selector"
                     android:clickable="true"
@@ -74,6 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="14dp"
+                android:visibility="gone"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -108,6 +109,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="14dp"
                 android:gravity="center_vertical"
@@ -155,8 +157,8 @@
                     android:layout_height="48dp"
                     android:background="@android:color/transparent"
                     android:contentDescription="Tv"
-                    android:nextFocusUp="@id/btnMovies"
-                    android:nextFocusDown="@id/btnSearch"
+                    android:nextFocusUp="@id/btnHome"
+                    android:nextFocusDown="@id/btnFav"
                     android:src="@drawable/ic_anime"
                     app:tint="@color/nav_icon_color_selector"
                     android:clickable="true"
@@ -178,41 +180,6 @@
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/btnSearch"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="Search"
-                    android:nextFocusUp="@id/btnAnime"
-                    android:nextFocusDown="@id/btnFav"
-                    android:src="@drawable/ic_search"
-                    app:tint="@color/nav_icon_color_selector"
-                    android:clickable="true"
-                    android:focusable="true"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:id="@+id/labelSearch"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="Search"
-                    android:textColor="?attr/FG_color"
-                    android:textSize="14sp"
-                    android:visibility="gone"
-                    tools:ignore="HardcodedText" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -227,7 +194,7 @@
                     android:layout_height="48dp"
                     android:background="@android:color/transparent"
                     android:importantForAccessibility="no"
-                    android:nextFocusUp="@id/btnSearch"
+                    android:nextFocusUp="@id/btnAnime"
                     android:nextFocusDown="@id/btnNotification"
                     android:src="@drawable/ic_fave"
                     app:tint="@color/nav_icon_color_selector"

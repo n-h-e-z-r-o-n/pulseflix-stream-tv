@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
@@ -17,7 +18,13 @@ import com.bumptech.glide.Glide
 class CardSwiper(
     private val  items: MutableList<SliderItem>,   // ✅ mutable now,
     private val layoutResId: Int   // 👈 pass in the layout resource
+
 ) :  RecyclerView.Adapter<CardSwiper.ViewHolder>() {
+
+    companion object {
+        private var lastKeyTime = 0L
+        private val KEY_DEBOUNCE_DELAY = 350L // ms
+    }
 
     private val genreMap = mapOf(
         28 to "Action", 12 to "Adventure", 16 to "Animation", 35 to "Comedy",
@@ -29,6 +36,7 @@ class CardSwiper(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 
+        val CardViewSquare: ConstraintLayout = view.findViewById(R.id.spotlightMovie)
         val SliderBackdrop: ImageView = view.findViewById(R.id.SliderBackdrop)
         val SliderTitle: TextView = view.findViewById(R.id.SliderTitle)
         val SliderOverview: TextView = view.findViewById(R.id.SliderOverview)
@@ -96,13 +104,32 @@ class CardSwiper(
             .into(holder.SliderBackdrop)
 
 
-            holder.SliderButton.setOnClickListener {
-                val context = holder.itemView.context
-                val intent = android.content.Intent(context, Watch_Page::class.java)
-                intent.putExtra("imdb_code", imdbCode)
-                intent.putExtra("type", type)
-                context.startActivity(intent)
+        holder.SliderButton.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = android.content.Intent(context, Watch_Page::class.java)
+            intent.putExtra("imdb_code", imdbCode)
+            intent.putExtra("type", type)
+            context.startActivity(intent)
+        }
+
+
+        holder.CardViewSquare.setOnKeyListener { v, keyCode, event ->
+            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+            val now = System.currentTimeMillis()
+            if (now - lastKeyTime < KEY_DEBOUNCE_DELAY) return@setOnKeyListener true
+            lastKeyTime = now
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    if (position == 0) return@setOnKeyListener true
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    if (position == items.size) return@setOnKeyListener true
+                }
             }
+
+            false
+        }
     }
 
     override fun getItemCount() = items.size

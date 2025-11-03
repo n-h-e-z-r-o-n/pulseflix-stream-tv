@@ -1,9 +1,11 @@
 package com.example.onyx
 
 import android.app.Activity
+import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Process
 import android.util.Log
 
@@ -45,7 +47,7 @@ object GlobalUtils {
     private const val KEY_NOTIFICATIONS = "notifications"
     private const val KEY_VIDEO_QUALITY = "video_quality"
     private const val KEY_APP_THEME  = "app_theme"
-    
+
     // Default values
     private const val DEFAULT_VIDEO_QUALITY = "1080p"
     private const val DEFAULT_THEME = "dark"
@@ -277,7 +279,15 @@ object GlobalUtils {
             if (minutes > 0) append("${minutes} min")
         }.trim()
     }
-
+    /**
+     * Checks if the app is running on a TV device.
+     * @param context The application context.
+     * @return True if the device is a TV, false otherwise.
+     */
+    fun isTv(context: Context): Boolean {
+        val uiModeManager = context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+        return uiModeManager.currentModeType == Configuration.UI_MODE_TYPE_TELEVISION
+    }
 
 
 }
