@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:id="@+id/sideBar"
-        android:layout_width="40dp"
+        android:layout_width="1dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"

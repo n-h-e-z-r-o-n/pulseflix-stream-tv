@@ -138,7 +138,7 @@ object NavAction {
     }
 
     private fun expandSidebar(context: Context, sidebar: LinearLayout, expand: Boolean) {
-        val collapsed = 40.dpToPx(context)
+        val collapsed = 1.dpToPx(context)
         val expanded = 610.dpToPx(context)
         val start = sidebar.layoutParams.width
         val end = if (expand) expanded else collapsed

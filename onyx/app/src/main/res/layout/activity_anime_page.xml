@@ -28,7 +28,6 @@
         android:orientation="vertical"
         android:overScrollMode="never"
         android:scrollbars="none"
-        android:paddingStart="41dp"
         tools:layout_editor_absoluteY="8dp"
         tools:ignore="RtlSymmetry"
         android:nextFocusLeft="@id/btnHome">
@@ -119,6 +118,50 @@
                             tools:ignore="NestedWeights"
                             android:nextFocusUp="@+id/Anime_Trending_widget"
                             android:nextFocusDown="@+id/Anime_Airing_widget"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Dubbed Anime"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/d"
+                            android:textSize="13sp"
+                            android:textColor="?attr/AccentColor"
+                            tools:ignore="HardcodedText"
+                            android:layout_marginTop="10dp"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/Anime_Dubbed_widget"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clipToPadding="false"
+                            android:overScrollMode="never"
+                            android:scrollbars="none"
+                            tools:ignore="NestedWeights"
+                            android:nextFocusUp="@+id/Anime_Trending_widget"
+                            android:nextFocusDown="@+id/Anime_Airing_widget"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="recently-updated"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/d"
+                            android:textSize="13sp"
+                            android:textColor="?attr/AccentColor"
+                            tools:ignore="HardcodedText"
+                            android:layout_marginTop="10dp"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/Anime_RecentlyUpdated_widget"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clipToPadding="false"
+                            android:overScrollMode="never"
+                            android:scrollbars="none"
+                            tools:ignore="NestedWeights"
+                            android:nextFocusUp="@+id/Anime_Trending_widget"
+                            android:nextFocusDown="@+id/Anime_Airing_widget"/>
+
 
                     </LinearLayout>
 
@@ -218,7 +261,7 @@
     </LinearLayout>
 
 
-    <include layout="@layout/side_bar" android:id="@+id/Animeside_bar"/>
+    <include layout="@layout/side_bar"  android:id="@+id/Animeside_bar"/>
 
 
 </FrameLayout>

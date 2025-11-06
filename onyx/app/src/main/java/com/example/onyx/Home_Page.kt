@@ -503,7 +503,11 @@ class Home_Page : AppCompatActivity() {
                         val numberOfSeasons = try{jsonObject.getJSONObject("last_episode_to_air").getString("season_number")} catch (e: Exception) {""}
                         val episodeNumber = try{jsonObject.getJSONObject("last_episode_to_air").getString("episode_number")} catch (e: Exception) {""}
                         val showD = "SS$numberOfSeasons EPS$episodeNumber"
-                        val firstAirDate = jsonObject.getString("first_air_date").substring(0, 4)
+                        val firstAirDate = if (jsonObject.getString("first_air_date").length >= 4) {
+                                  jsonObject.getString("first_air_date").substring(0, 4)
+                                } else{
+                                  jsonObject.getString("first_air_date")}
+
                         val voteAverage = "☆" + jsonObject.getString("vote_average").substring(0, 3)
 
                         //val imgUrl = "https://image.tmdb.org/t/p/w500" + jsonObject.getString("poster_path")

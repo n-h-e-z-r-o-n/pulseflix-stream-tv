@@ -27,6 +27,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Calendar
@@ -36,8 +37,18 @@ class Anime_Page : AppCompatActivity() {
     //private var urlHome = "http://192.168.100.22:4000"
     private var urlHome ="https://corsproxy.io/https://aniwatch-api-r4uo.vercel.app/"
     private var isSearchContainerAnimeVisible = false
-    private var searchDebounceHandler: Handler? = null
-    private var searchDebounceRunnable: Runnable? = null
+    private var currentAnimePage = 0
+    private var isLoadingMoreDubbed = false
+
+    private var currentRecentlyAnimePage = 0
+    private var isLoadingMoreRecently = false
+
+
+
+    private lateinit var dubbedAdapter: AnimeGridAdapter
+    private lateinit var dubbedRecyclerView : RecyclerView
+    private lateinit var RecentlyAdapter: AnimeGridAdapter
+    private lateinit var RecentlyRecyclerView : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +57,40 @@ class Anime_Page : AppCompatActivity() {
         NavAction.setupSidebar(this@Anime_Page)
 
 
+
         animeHomeData()
         setupSearchUi()
         setupBackPressedCallback()
+
+        val tvSpacing = (8 * resources.displayMetrics.density).toInt()
+        //------------------------------------------------------------------------------------------
+
+        dubbedRecyclerView = findViewById(R.id.Anime_Dubbed_widget)
+        dubbedRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false).apply {
+            isSmoothScrollbarEnabled = false
+            isItemPrefetchEnabled = false
+        }
+        dubbedRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+        dubbedAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
+        dubbedRecyclerView.adapter = dubbedAdapter
+        dubbedAdapter.onAddMoreClicked = { loadDubbedAnime() }
+
+        //------------------------------------------------------------------------------------------
+
+
+        RecentlyRecyclerView = findViewById(R.id.Anime_RecentlyUpdated_widget)
+        RecentlyRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false).apply {
+            isSmoothScrollbarEnabled = false
+            isItemPrefetchEnabled = false
+        }
+        RecentlyRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+        RecentlyAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
+        RecentlyRecyclerView.adapter = RecentlyAdapter
+        RecentlyAdapter.onAddMoreClicked = { loadDubbedAnime() }
+        //------------------------------------------------------------------------------------------
+
+        loadDubbedAnime()
+        loadRecentlyAnime()
     }
 
 
@@ -152,17 +194,6 @@ class Anime_Page : AppCompatActivity() {
                         )
                         recyclerView.adapter = AnimeSwiper(spotlightAnimesitmes, R.layout.anime_card_spotlight)
                     }
-
-
-
-
-
-
-
-
-
-
-
 
                     return@launch
                 } catch (e: Exception) {
@@ -277,9 +308,172 @@ class Anime_Page : AppCompatActivity() {
 
     }
 
+
+    private fun loadDubbedAnime() {
+        if (isLoadingMoreDubbed) return // Prevent multiple rapid clicks
+        currentAnimePage++
+        fetchDubbedAnime()
+    }
+
+    private fun fetchDubbedAnime() {
+        isLoadingMoreDubbed = true
+        CoroutineScope(Dispatchers.IO).launch {
+
+            repeat(5) { attempt ->
+                try {
+                    val url = "$urlHome/api/v2/hianime/category/dubbed-anime?page=$currentAnimePage"
+                    val connection = URL(url).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = org.json.JSONObject(response)
+                    val fData = jsonObject.getJSONObject("data")
+
+                    Log.e("DEBUG_DubbedAnime1", "${fData}")
+
+                    val  dubbedAnime = fData.getJSONArray("animes")
+                    Log.e("DEBUG_DubbedAnime2", "${fData}")
+
+                    val airingItems = mutableListOf<AiringAnimeItem>()
+
+                    for (i in 0 until dubbedAnime.length()) {
+
+                        val item = dubbedAnime.getJSONObject(i)
+
+                        val title = item.getString("name")
+
+                        val imageUrl = item.getString("poster")
+
+                        val id = item.getString("id")
+
+                        val type = item.getString("type")
+
+                        val sub = item.getJSONObject("episodes").optString("sub", "")
+                        val dub = item.getJSONObject("episodes").optString("dub", "")
+
+                        airingItems.add(
+                            AiringAnimeItem(
+                                id,
+                                title,
+                                imageUrl,
+                                type,
+                                sub,
+                                dub
+                            )
+                        )
+
+
+                        val movieItem = AiringAnimeItem(
+                            id,
+                            title,
+                            imageUrl,
+                            type,
+                            sub,
+                            dub
+                        )
+
+                        withContext(Dispatchers.Main) {
+                            dubbedAdapter.addItem(movieItem)
+                            isLoadingMoreDubbed = false
+                        }
+                    }
+
+                    return@launch
+                } catch (e: Exception) {
+                    Log.e("DEBUG_TAG_TvShows", "Attempt ${attempt+1} failed", e)
+                    delay(10_000)
+                    currentAnimePage--
+                }
+                withContext(Dispatchers.Main) {
+                    isLoadingMoreDubbed = false
+                }
+            }
+        }
+    }
+
+    private fun loadRecentlyAnime() {
+        if (isLoadingMoreRecently) return // Prevent multiple rapid clicks
+        currentRecentlyAnimePage++
+        fetchRecentlyAnime()
+    }
+
+    private fun fetchRecentlyAnime() {
+        isLoadingMoreDubbed = true
+        CoroutineScope(Dispatchers.IO).launch {
+
+            repeat(5) { attempt ->
+                try {
+                    val url = "$urlHome/api/v2/hianime/category/recently-updated?page=$currentRecentlyAnimePage"
+                    val connection = URL(url).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = org.json.JSONObject(response)
+                    val fData = jsonObject.getJSONObject("data")
+
+                    Log.e("DEBUG_DubbedAnime1", "${fData}")
+
+                    val  dubbedAnime = fData.getJSONArray("animes")
+                    Log.e("DEBUG_DubbedAnime2", "${fData}")
+
+                    val airingItems = mutableListOf<AiringAnimeItem>()
+
+                    for (i in 0 until dubbedAnime.length()) {
+
+                        val item = dubbedAnime.getJSONObject(i)
+
+                        val title = item.getString("name")
+
+                        val imageUrl = item.getString("poster")
+
+                        val id = item.getString("id")
+
+                        val type = item.getString("type")
+
+                        val sub = item.getJSONObject("episodes").optString("sub", "")
+                        val dub = item.getJSONObject("episodes").optString("dub", "")
+
+                        airingItems.add(
+                            AiringAnimeItem(
+                                id,
+                                title,
+                                imageUrl,
+                                type,
+                                sub,
+                                dub
+                            )
+                        )
+
+
+                        val movieItem = AiringAnimeItem(
+                            id,
+                            title,
+                            imageUrl,
+                            type,
+                            sub,
+                            dub
+                        )
+
+                        withContext(Dispatchers.Main) {
+                            RecentlyAdapter.addItem(movieItem)
+                            isLoadingMoreRecently = false
+                        }
+                    }
+
+                    return@launch
+                } catch (e: Exception) {
+                    Log.e("DEBUG_TAG_TvShows", "Attempt ${attempt+1} failed", e)
+                    delay(10_000)
+                    currentRecentlyAnimePage--
+                }
+                withContext(Dispatchers.Main) {
+                    isLoadingMoreRecently = false
+                }
+            }
+        }
+    }
+
+
+
     private fun searchAnimeFetch(searchTerm:String){
-
-
 
         CoroutineScope(Dispatchers.IO).launch {
             repeat(1) { attempt ->

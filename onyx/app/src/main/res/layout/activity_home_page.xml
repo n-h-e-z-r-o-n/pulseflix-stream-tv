@@ -18,7 +18,6 @@
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:scrollbars="none"
-            android:layout_marginStart="50dp"
             android:clipToPadding="false"
             android:overScrollMode="never">
 

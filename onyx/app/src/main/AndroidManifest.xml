@@ -44,24 +44,14 @@
             android:exported="false" />
         <activity
             android:name=".Favorite_Page"
-            android:exported="false"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".Search_Page"
-            android:exported="false"
-            android:launchMode="singleTop" />
+            android:exported="false"             />
+
         <activity
             android:name=".Actor_Page"
             android:exported="false"
             android:launchMode="singleTop" />
-        <activity
-            android:name=".Tv_Page"
-            android:exported="false"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".Movie_Page"
-            android:exported="false"
-            android:launchMode="singleTop" />
+
+
         <activity
             android:name=".Home_Page"
             android:exported="false"

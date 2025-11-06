@@ -2,6 +2,7 @@ package com.example.onyx
 
 import android.content.Intent
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -15,6 +16,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -36,6 +38,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class Watch_Anime_Page : AppCompatActivity() {
+    private lateinit var FaveButton :ImageButton
 
     private var urlHome ="https://corsproxy.io/https://aniwatch-api-r4uo.vercel.app/"
 
@@ -43,6 +46,8 @@ class Watch_Anime_Page : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_watch_anime_page)
+        FaveButton =  findViewById(R.id.favoriteButton)
+
 
         val animeCode = intent.getStringExtra("anime_code")
         val poster = intent.getStringExtra("anime_poster")
@@ -50,8 +55,6 @@ class Watch_Anime_Page : AppCompatActivity() {
         Log.e("Watch_Anime_Page 1", animeCode.toString())
 
         //http://192.168.100.22:4000/api/v2/hianime/anime/$animeCode/episodes
-
-
 
         //getInfo("my-status-as-an-assassin-obviously-exceeds-the-heros-19922")
         getInfo(animeCode.toString())
@@ -73,6 +76,13 @@ class Watch_Anime_Page : AppCompatActivity() {
                     val response = connection.inputStream.bufferedReader().use { it.readText() }
                     val jsonObject = org.json.JSONObject(response)
                     val data = jsonObject.getJSONObject("data")
+
+                    setupFavoriteButton(
+                        button = FaveButton,
+                        data = data,
+                        id = id,
+                        type = "anime"
+                    )
 
                     val id = data.getJSONObject("anime").getJSONObject("info").getString("id")
                     val anilistId = data.getJSONObject("anime").getJSONObject("info").getString("anilistId")
@@ -351,6 +361,39 @@ class Watch_Anime_Page : AppCompatActivity() {
 
                 }
             }
+        }
+    }
+
+    private fun setupFavoriteButton(
+        button: ImageButton,   // 👈 Changed to ImageButton
+        data: JSONObject,
+        id: String,
+        type: String
+    ) {
+
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun applyIcon() {
+            val isFav = FavoritesManager.isFavorite(this@Watch_Anime_Page, id, type)
+            if (isFav) {
+                button.setImageResource(R.drawable.ic_tickfave)  // ❤️ e.g. filled heart icon
+                button.tooltipText = "Remove from Favorites"
+            } else {
+                button.setImageResource(R.drawable.ic_addfave) // 🤍 outline heart icon
+                button.tooltipText = "Add to Favorites"
+            }
+        }
+
+        applyIcon()
+
+        button.setOnClickListener {
+            val isFav = FavoritesManager.isFavorite(this@Watch_Anime_Page, id, type)
+            if (isFav) {
+                FavoritesManager.removeFavorite(this@Watch_Anime_Page, id, type)
+            } else {
+                FavoritesManager.addFavorite(this@Watch_Anime_Page,id ,type, data)
+            }
+            applyIcon()
         }
     }
 

@@ -8,19 +8,27 @@ object FavoritesManager {
     private const val PREFS_NAME = "favorites_prefs"
     private const val KEY_FAVORITES = "favorites_json"
 
-    fun addFavorite(context: Context, item: JSONObject) {
+
+
+    fun addFavorite(context: Context, id: String, type: String, item: JSONObject) {
         val list = getFavorites(context).toMutableList()
-        val id = item.optString("id")
-        val type = item.optString("media_type").ifEmpty {
-            if (item.has("first_air_date")) "tv" else "movie"
-        }
-        if (list.any { it.optString("id") == id && (
-                it.optString("media_type").ifEmpty { if (it.has("first_air_date")) "tv" else "movie" } == type
-            )
-        }) return
+
+        // Normalize type for consistent comparison
+        val mediaType = type.lowercase()
+
+        // Check if the same item already exists
+        if (list.any { fav ->
+                fav.optString("_id") == id && fav.optString("_media_type") == mediaType
+            }) return
+
+        // Attach the new standardized fields so we never rely on JSON structure again
+        item.put("_id", id)
+        item.put("_media_type", mediaType)
+
         list.add(item)
         saveFavorites(context, list)
     }
+
 
     fun removeFavorite(context: Context, id: String, type: String) {
         val list = getFavorites(context).filterNot { o ->
@@ -33,10 +41,10 @@ object FavoritesManager {
     }
 
     fun isFavorite(context: Context, id: String, type: String): Boolean {
-        return getFavorites(context).any { o ->
-            val oid = o.optString("id")
-            val otype = o.optString("media_type").ifEmpty { if (o.has("first_air_date")) "tv" else "movie" }
-            oid == id && otype == type
+        val mediaType = type.lowercase()
+
+        return getFavorites(context).any { fav ->
+            fav.optString("_id") == id && fav.optString("_media_type") == mediaType
         }
     }
 

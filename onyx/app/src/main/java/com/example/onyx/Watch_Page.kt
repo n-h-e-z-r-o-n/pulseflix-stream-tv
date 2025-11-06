@@ -304,7 +304,9 @@ class Watch_Page : AppCompatActivity() {
 
                         setupFavoriteButton(
                             button = FaveButton,
-                            data = jsonObject
+                            data = jsonObject,
+                            id =  tmdbId,
+                            type = type
                         )
 
                         if(type=="tv"){
@@ -764,14 +766,15 @@ class Watch_Page : AppCompatActivity() {
 
     private fun setupFavoriteButton(
         button: ImageButton,   // 👈 Changed to ImageButton
-        data: JSONObject
+        data: JSONObject,
+        id: String,
+        type: String
     ) {
-        val id = data.optString("id")
-        val inferredType = if (data.has("first_air_date")) "tv" else "movie"
+
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun applyIcon() {
-            val isFav = FavoritesManager.isFavorite(this@Watch_Page, id, inferredType)
+            val isFav = FavoritesManager.isFavorite(this@Watch_Page, id, type)
             if (isFav) {
                 button.setImageResource(R.drawable.ic_tickfave)  // ❤️ e.g. filled heart icon
                 button.tooltipText = "Remove from Favorites"
@@ -784,11 +787,11 @@ class Watch_Page : AppCompatActivity() {
         applyIcon()
 
         button.setOnClickListener {
-            val isFav = FavoritesManager.isFavorite(this@Watch_Page, id, inferredType)
+            val isFav = FavoritesManager.isFavorite(this@Watch_Page, id, type)
             if (isFav) {
-                FavoritesManager.removeFavorite(this@Watch_Page, id, inferredType)
+                FavoritesManager.removeFavorite(this@Watch_Page, id, type)
             } else {
-                FavoritesManager.addFavorite(this@Watch_Page, data)
+                FavoritesManager.addFavorite(this@Watch_Page,id ,type, data)
             }
             applyIcon()
         }

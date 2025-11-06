@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ONYX"
-            android:textSize="150sp"
+            android:textSize="170sp"
             android:textColor="?attr/FG_color"
             android:shadowColor="?attr/AccentColor"
             android:shadowDx="5"
@@ -53,8 +53,8 @@
         <!-- Loading Animation -->
         <ImageView
             android:id="@+id/LoadingAnimation"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@raw/loadsplash"
             android:contentDescription="@string/app_name" />
 

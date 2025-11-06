@@ -124,7 +124,7 @@ class CardSwiper(
                     if (position == 0) return@setOnKeyListener true
                 }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                    if (position == items.size) return@setOnKeyListener true
+                    if (position == items.size-1) return@setOnKeyListener true
                 }
             }
 

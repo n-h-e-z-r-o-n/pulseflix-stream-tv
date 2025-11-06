@@ -9,6 +9,8 @@
     android:gravity="center"
     android:layout_gravity="center"
     android:orientation="vertical"
+    android:id="@+id/ItemAdd"
+    android:nextFocusRight="@+id/ItemAdd"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="2dp"
     card_view:cardBackgroundColor="?attr/BG_color_up"

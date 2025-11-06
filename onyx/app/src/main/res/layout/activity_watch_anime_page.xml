@@ -313,7 +313,26 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:textColor="?FG_color"
-                        android:textSize="10sp"/>
+                        android:textSize="10sp"
+                        tools:ignore="SmallSp" />
+
+                    <ImageButton
+                        android:id="@+id/favoriteButton"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="12dp"
+                        android:background="@drawable/tv_button_selector"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:src="@drawable/ic_addfave"
+                        app:tint="?attr/AccentColor"
+                        android:textColor="?attr/AccentColor"
+                        android:textAllCaps="false"
+                        android:tooltipText="Add to Favorites"
+                        android:nextFocusLeft="@+id/TrailerButton"
+                        android:nextFocusRight="@+id/serverButton"
+                        android:elevation="4dp"
+                        tools:ignore="UnusedAttribute" />
 
                 </LinearLayout>
 

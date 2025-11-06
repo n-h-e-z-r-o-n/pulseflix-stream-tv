@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-
+import com.bumptech.glide.request.target.Target
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GridAdapter(
@@ -565,14 +565,14 @@ class FavAdapter(
                         // Backdrop image
                         Glide.with(backdropView.context)
                             .load(item.backdropUrl)
-                            .centerCrop()
+                            .override(Target.SIZE_ORIGINAL, backdropView.height) // scale height to container
                             .into(backdropView)
 
                         // ✅ Set text properties correctly
                         favTitleView.text    = item.title
                         favGenreView.text    = item.genres
                         favTypeView.text     = item.showType          // ensure you have a `type` field
-                        favRatingView.text   = "IMDB ${item.voteAverage}"
+                        favRatingView.text   = "${item.voteAverage}"
                         favYearView.text     = item.releaseDate
                         favOverviewView.text = item.overview
 
@@ -622,10 +622,17 @@ class FavAdapter(
 
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
-            val intent = android.content.Intent(context, Watch_Page::class.java)
-            intent.putExtra("imdb_code", imdbCode)
-            intent.putExtra("type", type)
-            context.startActivity(intent)
+            if(type == "anime"){
+                val intent = Intent(context, Watch_Anime_Page::class.java)
+                intent.putExtra("anime_code", imdbCode)
+                intent.putExtra("anime_poster", posterUrl)
+                context.startActivity(intent)
+            }else {
+                val intent = Intent(context, Watch_Page::class.java)
+                intent.putExtra("imdb_code", imdbCode)
+                intent.putExtra("type", type)
+                context.startActivity(intent)
+            }
         }
 
 
@@ -638,6 +645,10 @@ class FavAdapter(
         items.add(item)
         notifyItemInserted(items.size - 1)
 
+    }
+    fun clearItems() {
+        items.clear()
+        notifyDataSetChanged()  // Notify RecyclerView that data is cleared
     }
 
 }
