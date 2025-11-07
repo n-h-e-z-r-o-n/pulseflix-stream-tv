@@ -3,7 +3,6 @@ package com.example.onyx
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageButton
@@ -27,7 +26,6 @@ class Favorite_Page : AppCompatActivity() {
 
         NavAction.setupSidebar(this@Favorite_Page)
         setupBackPressedCallback()
-
         loadFavorites()
     }
 
@@ -51,7 +49,7 @@ class Favorite_Page : AppCompatActivity() {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        val Spacing = (13 * resources.displayMetrics.density).toInt()
+        val Spacing = (5 * resources.displayMetrics.density).toInt()
         recyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
 
 
@@ -82,8 +80,6 @@ class Favorite_Page : AppCompatActivity() {
                 var overview:String
                 var id:String
                 var type:String
-
-
 
 
                 val _media_type = obj.optString("_media_type")

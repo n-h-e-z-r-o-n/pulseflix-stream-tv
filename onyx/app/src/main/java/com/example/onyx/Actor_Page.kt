@@ -23,6 +23,8 @@ class Actor_Page : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_actor_page)
+        LoadingAnimation.setup(this@Actor_Page, R.raw.b)
+        LoadingAnimation.show(this@Actor_Page)
 
         NavAction.setupSidebar(this@Actor_Page)
 
@@ -69,7 +71,7 @@ class Actor_Page : AppCompatActivity() {
                 connection.setRequestProperty("accept", "application/json")
                 connection.setRequestProperty(
                     "Authorization",
-                    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                    "Bearer ${BuildConfig.TM_K}"
                 )
                 val response = connection.inputStream.bufferedReader().use { it.readText() }
                 val jsonObject = JSONObject(response)
@@ -122,7 +124,7 @@ class Actor_Page : AppCompatActivity() {
                 connection2.setRequestProperty("accept", "application/json")
                 connection2.setRequestProperty(
                         "Authorization",
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                        "Bearer ${BuildConfig.TM_K}"
                     )
 
                 val response2 = connection2.inputStream.bufferedReader().use { it.readText() }
@@ -159,6 +161,7 @@ class Actor_Page : AppCompatActivity() {
 
                         withContext(Dispatchers.Main) {
                             adapter.addItem(movieItem)  // 👈 add one at a time
+                            LoadingAnimation.hide(this@Actor_Page)
                         }
                 }
             }catch (e:Exception){

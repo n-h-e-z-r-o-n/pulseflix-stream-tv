@@ -19,12 +19,8 @@ import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
@@ -36,23 +32,27 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import com.example.onyx.BuildConfig
+
 
 class Watch_Anime_Page : AppCompatActivity() {
     private lateinit var FaveButton :ImageButton
 
-    private var urlHome ="https://corsproxy.io/https://aniwatch-api-r4uo.vercel.app/"
+    private var urlHome = BuildConfig.A_K
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        GlobalUtils.applyTheme(this)
         enableEdgeToEdge()
         setContentView(R.layout.activity_watch_anime_page)
+        LoadingAnimation.setup(this@Watch_Anime_Page, R.raw.b)
+        LoadingAnimation.show(this@Watch_Anime_Page)
+
         FaveButton =  findViewById(R.id.favoriteButton)
-
-
         val animeCode = intent.getStringExtra("anime_code")
         val poster = intent.getStringExtra("anime_poster")
 
-        Log.e("Watch_Anime_Page 1", animeCode.toString())
+        Log.e("ANIME_Watch id", animeCode.toString())
 
         //http://192.168.100.22:4000/api/v2/hianime/anime/$animeCode/episodes
 
@@ -77,12 +77,9 @@ class Watch_Anime_Page : AppCompatActivity() {
                     val jsonObject = org.json.JSONObject(response)
                     val data = jsonObject.getJSONObject("data")
 
-                    setupFavoriteButton(
-                        button = FaveButton,
-                        data = data,
-                        id = id,
-                        type = "anime"
-                    )
+                    Log.e("ANIME_Watch Data", data.toString())
+
+
 
                     val id = data.getJSONObject("anime").getJSONObject("info").getString("id")
                     val anilistId = data.getJSONObject("anime").getJSONObject("info").getString("anilistId")
@@ -97,17 +94,32 @@ class Watch_Anime_Page : AppCompatActivity() {
                     val sub = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("sub", "")
                     val dub = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("dub", "")
                     val aired = data.getJSONObject("anime").getJSONObject("moreInfo").getString("aired")
-                    val status = data.getJSONObject("anime").getJSONObject("moreInfo").getString("status")
-                    val studios = data.getJSONObject("anime").getJSONObject("moreInfo").getString("studios")
+                    //val status = data.getJSONObject("anime").getJSONObject("moreInfo").getString("status")
+                    //val studios = data.getJSONObject("anime").getJSONObject("moreInfo").getString("studios")
                     val genresArray = data.getJSONObject("anime").getJSONObject("moreInfo").getJSONArray("genres")
                     var genre = ""
                     for (i in 0 until genresArray.length()) {
                         genre = genre +" ~ " +genresArray.getString(i)
                     }
 
-                    val  seasons = data.getJSONArray("seasons")
-                    val  relatedAnimes = data.getJSONArray("relatedAnimes")
-                    val  recommendedAnime = data.getJSONArray("recommendedAnimes")
+                    val  seasons = data.getJSONArray("seasons")?: JSONArray()
+                    val  relatedAnimes = data.getJSONArray("relatedAnimes")?: JSONArray()
+                    val  recommendedAnime = data.getJSONArray("recommendedAnimes")?: JSONArray()
+
+                    val saveData  = jsonObject.getJSONObject("data")
+                    saveData.remove("recommendedAnimes")
+                    saveData.remove("relatedAnimes")
+                    saveData.remove("mostPopularAnimes")
+
+
+
+
+                    setupFavoriteButton(
+                        button = FaveButton,
+                        data = saveData,
+                        id = id,
+                        type = "anime"
+                    )
 
 
 
@@ -141,6 +153,7 @@ class Watch_Anime_Page : AppCompatActivity() {
                         }
 
                         showRecommendation(relatedAnimes, recommendedAnime)
+                        LoadingAnimation.hide(this@Watch_Anime_Page)
 
                     }
 
@@ -149,7 +162,8 @@ class Watch_Anime_Page : AppCompatActivity() {
                     return@launch
                 } catch (e: Exception) {
                     delay(20_000)
-                    Log.e("ANIME_STATUS HOME 1", "Error fetching data", e)
+                    Log.e("ANIME_Watch 1", "Error fetching data", e)
+                    LoadingAnimation.show(this@Watch_Anime_Page)
                 }
             }
         }

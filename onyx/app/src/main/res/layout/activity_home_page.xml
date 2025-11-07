@@ -148,7 +148,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_search"
-                app:tint="?attr/FG_color" />
+                app:tint="?attr/FG_color"
+                tools:ignore="ContentDescription" />
 
             <!-- Space -->
             <Space
@@ -176,7 +177,7 @@
                 android:nextFocusDown="@+id/spotlightMovie"
                 android:background="@drawable/search_background"
                 android:imeOptions="actionSearch"
-                tools:ignore="HardcodedText" />
+                tools:ignore="Autofill,HardcodedText" />
 
         </LinearLayout>
 

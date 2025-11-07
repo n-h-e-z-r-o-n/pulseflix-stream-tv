@@ -23,8 +23,10 @@ class MainActivity : ComponentActivity() {
         val loadingImageView = findViewById<ImageView>(R.id.LoadingAnimation)
         Glide.with(this)
             .asGif()
-            .load(R.raw.loadsplash)
+            .load(R.raw.c)
             .into(loadingImageView)
+
+
 
         Handler(Looper.getMainLooper()).postDelayed({
 
@@ -39,6 +41,8 @@ class MainActivity : ComponentActivity() {
             }
             finish()
         }, 10500)
+
+
 
 
 

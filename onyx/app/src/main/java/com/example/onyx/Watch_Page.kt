@@ -60,6 +60,8 @@ class Watch_Page : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_watch_page)
+        LoadingAnimation.setup(this@Watch_Page, R.raw.b)
+        LoadingAnimation.show(this@Watch_Page)
 
 
         episodes_recycler = findViewById<RecyclerView>(R.id.episodes_recycler)
@@ -98,7 +100,7 @@ class Watch_Page : AppCompatActivity() {
                         connection.setRequestProperty("accept", "application/json")
                         connection.setRequestProperty(
                             "Authorization",
-                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                            "Bearer ${BuildConfig.TM_K}"
                         )
                         val response = connection.inputStream.bufferedReader().use { it.readText() }
                         val jsonObject = JSONObject(response)
@@ -112,7 +114,7 @@ class Watch_Page : AppCompatActivity() {
                     connection.setRequestProperty("accept", "application/json")
                     connection.setRequestProperty(
                         "Authorization",
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                        "Bearer ${BuildConfig.TM_K}"
                     )
 
                     val response = connection.inputStream.bufferedReader().use { it.readText() }
@@ -318,7 +320,7 @@ class Watch_Page : AppCompatActivity() {
                             season_count_widget.text = "$no_of_season Seasons"
                             createSeasonButtons( no_of_season, validSeasons, tmdbId, jsonObject)
                         }
-
+                        LoadingAnimation.hide(this@Watch_Page)
                     }
 
 
@@ -541,7 +543,7 @@ class Watch_Page : AppCompatActivity() {
                     connection.setRequestProperty("accept", "application/json")
                     connection.setRequestProperty(
                         "Authorization",
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                        "Bearer ${BuildConfig.TM_K}"
                     )
                     val response = connection.inputStream.bufferedReader().use { it.readText() }
                     val jsonObject = JSONObject(response)
@@ -631,7 +633,7 @@ class Watch_Page : AppCompatActivity() {
                     connection.setRequestProperty("accept", "application/json")
                     connection.setRequestProperty(
                         "Authorization",
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                        "Bearer ${BuildConfig.TM_K}"
                     )
 
                     val response = connection.inputStream.bufferedReader().use { it.readText() }
@@ -696,7 +698,7 @@ class Watch_Page : AppCompatActivity() {
                     connection.setRequestProperty("accept", "application/json")
                     connection.setRequestProperty(
                         "Authorization",
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                        "Bearer ${BuildConfig.TM_K}"
                     )
 
                     val response = connection.inputStream.bufferedReader().use { it.readText() }

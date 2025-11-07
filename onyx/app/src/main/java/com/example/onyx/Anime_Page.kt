@@ -1,24 +1,17 @@
 package com.example.onyx
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.KeyEvent
 import android.widget.ImageButton
 import kotlinx.coroutines.CoroutineScope
@@ -27,15 +20,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
-import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.Calendar
 import kotlin.String
+import com.example.onyx.BuildConfig
+
 
 class Anime_Page : AppCompatActivity() {
     //private var urlHome = "http://192.168.100.22:4000"
-    private var urlHome ="https://corsproxy.io/https://aniwatch-api-r4uo.vercel.app/"
+    private var urlHome = BuildConfig.A_K
     private var isSearchContainerAnimeVisible = false
     private var currentAnimePage = 0
     private var isLoadingMoreDubbed = false
@@ -52,9 +45,12 @@ class Anime_Page : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        GlobalUtils.applyTheme(this)
         enableEdgeToEdge()
         setContentView(R.layout.activity_anime_page)
         NavAction.setupSidebar(this@Anime_Page)
+        LoadingAnimation.setup(this@Anime_Page, R.raw.b)
+        LoadingAnimation.show(this@Anime_Page)
 
 
 
@@ -193,6 +189,7 @@ class Anime_Page : AppCompatActivity() {
                             false
                         )
                         recyclerView.adapter = AnimeSwiper(spotlightAnimesitmes, R.layout.anime_card_spotlight)
+                        LoadingAnimation.hide(this@Anime_Page)
                     }
 
                     return@launch

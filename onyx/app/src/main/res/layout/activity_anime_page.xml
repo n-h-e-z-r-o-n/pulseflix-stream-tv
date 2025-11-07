@@ -260,9 +260,8 @@
 
     </LinearLayout>
 
-
+    <include layout="@layout/laod_animation"/>
     <include layout="@layout/side_bar"  android:id="@+id/Animeside_bar"/>
-
 
 </FrameLayout>
 

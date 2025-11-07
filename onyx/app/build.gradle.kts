@@ -15,6 +15,11 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildConfigField( "String", "TM_K", "\"eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw\"")
+        buildConfigField( "String", "PA_K", "\"ISSecretKey_live_e9d3162e-95cb-42a4-b64b-ee378525ca5a\"")
+        buildConfigField( "String", "A_K", "\"https://corsproxy.io/https://aniwatch-api-r4uo.vercel.app\"")
+
+
     }
 
     buildTypes {
@@ -36,7 +41,9 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
+        buildConfig = true
     }
+
 }
 
 dependencies {
@@ -72,6 +79,7 @@ dependencies {
     implementation("org.jsoup:jsoup:1.16.1")
     implementation("com.intuit.sdp:sdp-android:1.1.0")
     implementation("com.intuit.ssp:ssp-android:1.1.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2")
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)

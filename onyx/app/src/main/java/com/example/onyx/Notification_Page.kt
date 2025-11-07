@@ -46,6 +46,11 @@ class Notification_Page : AppCompatActivity() {
 
         loadNotifications()
     }
+
+    override fun onResume() {
+        super.onResume()
+        loadNotifications()
+    }
     
     private fun loadNotifications() {
         CoroutineScope(Dispatchers.IO).launch {

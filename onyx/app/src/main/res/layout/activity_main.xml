@@ -53,17 +53,11 @@
         <!-- Loading Animation -->
         <ImageView
             android:id="@+id/LoadingAnimation"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="75dp"
+            android:layout_height="50dp"
             android:src="@raw/loadsplash"
             android:contentDescription="@string/app_name" />
 
     </LinearLayout>
-
-    <!-- Loading overlay (optional include) -->
-    <include
-        android:id="@+id/showloading"
-        layout="@layout/laod_animation"
-        android:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

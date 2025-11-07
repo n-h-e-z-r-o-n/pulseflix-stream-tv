@@ -846,6 +846,11 @@ class NotificationAdapter(
         val showTitle: TextView = view.findViewById(R.id.notification_title)
         val message: TextView = view.findViewById(R.id.notification_message)
 
+        val imageContainer: ImageView = view.findViewById(R.id.notification_icon)
+
+
+
+
 
         init {
 
@@ -883,21 +888,26 @@ class NotificationAdapter(
         holder.showTitle.text =  title
         holder.message.text =  info
 
-        /*
+
         Glide.with(holder.itemView.context)
             .load(imageUrl)
             .centerInside()
-            .into(holder.Movie_image)
-
-         */
+            .into(holder.imageContainer)
 
 
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
-            val intent = android.content.Intent(context, Watch_Page::class.java)
-            intent.putExtra("imdb_code", imdbCode)
-            intent.putExtra("type", type)
-            context.startActivity(intent)
+            if(type == "anime"){
+                val intent = Intent(context, Watch_Anime_Page::class.java)
+                intent.putExtra("anime_code", imdbCode)
+                intent.putExtra("anime_poster", imageUrl)
+                context.startActivity(intent)
+            }else {
+                val intent = Intent(context, Watch_Page::class.java)
+                intent.putExtra("imdb_code", imdbCode)
+                intent.putExtra("type", type)
+                context.startActivity(intent)
+            }
 
             NotificationHelper.updateNotification(context, imdbCode, updateSeason, updateEpisode)
             //call updateNotification

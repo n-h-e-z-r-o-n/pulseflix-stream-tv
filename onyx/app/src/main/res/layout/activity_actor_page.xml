@@ -46,6 +46,6 @@
     </FrameLayout>
 
 
-
+    <include layout="@layout/laod_animation"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

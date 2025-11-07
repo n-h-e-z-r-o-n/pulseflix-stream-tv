@@ -27,6 +27,7 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Calendar
+import com.example.onyx.BuildConfig
 
 class Home_Page : AppCompatActivity() {
 
@@ -55,6 +56,8 @@ class Home_Page : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_home_page)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        LoadingAnimation.setup(this, R.raw.b)
+        LoadingAnimation.show(this)
 
 
 
@@ -131,7 +134,7 @@ class Home_Page : AppCompatActivity() {
                     connection.setRequestProperty("accept", "application/json")
                     connection.setRequestProperty(
                         "Authorization",
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                        "Bearer ${BuildConfig.TM_K}"
                     )
 
                     val response = connection.inputStream.bufferedReader().use { it.readText() }
@@ -145,7 +148,7 @@ class Home_Page : AppCompatActivity() {
                     connection2.setRequestProperty("accept", "application/json")
                     connection2.setRequestProperty(
                         "Authorization",
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                        "Bearer ${BuildConfig.TM_K}"
                     )
 
                     val response2 = connection2.inputStream.bufferedReader().use { it.readText() }
@@ -161,7 +164,7 @@ class Home_Page : AppCompatActivity() {
                     connection3.setRequestProperty("accept", "application/json")
                     connection3.setRequestProperty(
                         "Authorization",
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                        "Bearer ${BuildConfig.TM_K}"
                     )
 
                     val response3 = connection3.inputStream.bufferedReader().use { it.readText() }
@@ -333,7 +336,6 @@ class Home_Page : AppCompatActivity() {
                         val recyclerView = findViewById<RecyclerView>(R.id.Slider_widget)
                         val adapter = CardSwiper(movies, R.layout.card_layout)
 
-
                         val layoutManager = LinearLayoutManager(
                             this@Home_Page,
                             LinearLayoutManager.HORIZONTAL, // 👈 makes it horizontal
@@ -341,7 +343,7 @@ class Home_Page : AppCompatActivity() {
                         )
                         recyclerView.layoutManager = layoutManager
                         recyclerView.adapter = adapter
-
+                        LoadingAnimation.hide(this@Home_Page)
                     }
 
                     return@launch
@@ -388,7 +390,7 @@ class Home_Page : AppCompatActivity() {
                         detailsConn.setRequestProperty("accept", "application/json")
                         detailsConn.setRequestProperty(
                             "Authorization",
-                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                            "Bearer ${BuildConfig.TM_K}"
                         )
 
                         val detailsResponse = detailsConn.inputStream.bufferedReader().use { it.readText() }
@@ -492,7 +494,7 @@ class Home_Page : AppCompatActivity() {
                         connection.setRequestProperty("accept", "application/json")
                         connection.setRequestProperty(
                             "Authorization",
-                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                            "Bearer ${BuildConfig.TM_K}"
                         )
                         val response = connection.inputStream.bufferedReader().use { it.readText() }
                         val jsonObject = org.json.JSONObject(response)
@@ -610,7 +612,7 @@ class Home_Page : AppCompatActivity() {
                         connection.setRequestProperty("accept", "application/json")
                         connection.setRequestProperty(
                             "Authorization",
-                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                            "Bearer ${BuildConfig.TM_K}"
                         )
 
                         val response = connection.inputStream.bufferedReader().use { it.readText() }

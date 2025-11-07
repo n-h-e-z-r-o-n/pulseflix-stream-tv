@@ -18,6 +18,7 @@ import java.net.URL
 import kotlin.String
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.example.onyx.BuildConfig
 
 object NotificationHelper {
 
@@ -90,6 +91,68 @@ object NotificationHelper {
             obj.has("first_air_date") && !obj.optString("first_air_date").isNullOrEmpty()
         }
 
+        val animeList = list.filter { obj ->
+            obj.has("anime")
+        }
+
+        Log.e("NotificationHelper", "animeList:  ${animeList.toString()}")
+
+        for (item in animeList) {
+            val animeId = item.getJSONObject("anime").getJSONObject("info").getString("id")
+            val name = item.getJSONObject("anime").getJSONObject("info").getString("name")
+            val poster = item.getJSONObject("anime").getJSONObject("info").getString("poster")
+
+            //val subStored = item.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("sub", "").toIntOrNull() ?: 0
+            //val dubStored = item.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("dub", "").toIntOrNull() ?: 0
+            //val seasonsStored  = item.getJSONArray("seasons").length()
+
+
+            val savedData = getStoredNotification(context, animeId)
+            val subStored = savedData?.season ?: 0
+            val dubStored = savedData?.episode ?: 0
+
+
+            val url = "${BuildConfig.A_K}/api/v2/hianime/anime/$animeId"
+
+            val connection = URL(url).openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.setRequestProperty("accept", "application/json")
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            val jsonObject = org.json.JSONObject(response)
+            val data = jsonObject.getJSONObject("data")
+
+            val subFetched = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("sub", "").toIntOrNull() ?: 0
+            val dubFetched = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("dub", "").toIntOrNull() ?: 0
+            //val seasonsFetched = data.getJSONArray("seasons").length()
+
+            var info  = ""
+
+            if (subFetched > subStored) {
+                val cal = subFetched - subStored
+                info = info + "$cal SUB added\n"
+            }
+            if (dubFetched > dubStored) {
+                val cal = dubFetched - dubStored
+                info = info + "$cal DUB added\n"
+            }
+
+
+
+            if (info.isEmpty()) {
+                continue
+            }
+            val itemData = NotificationItem(
+                imdbCode = animeId,
+                title = name,
+                imageUrl = poster,
+                info = info,
+                type = "anime",
+                newSeason = subFetched,
+                newEpisode = dubFetched
+            )
+            results.add(itemData)
+
+        }
 
         for (item in tvList) {
 
@@ -109,7 +172,7 @@ object NotificationHelper {
                 connection.setRequestProperty("accept", "application/json")
                 connection.setRequestProperty(
                     "Authorization",
-                    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw"
+                    "Bearer ${BuildConfig.TM_K}"
                 )
 
                 val response = connection.inputStream.bufferedReader().use { it.readText() }
