@@ -41,23 +41,35 @@
                 />
 
             <!-- Floating popup -->
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:id="@+id/floatingPopup"
-                android:layout_width="289dp"
+                android:layout_width="113dp"
                 android:layout_height="170dp"
-                android:orientation="vertical"
-                android:padding="12dp"
-                android:elevation="20dp"
-                android:background="?attr/AccentColor"
-                android:visibility="visible">
-
-                <ImageView
+                app:cardCornerRadius="10dp"
+                app:cardBackgroundColor="?attr/AccentColor"
+                android:foreground="@drawable/background_focus"
+                android:padding="10dp"
+                android:elevation="5dp" >
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/floatingPopupImg"
-                    android:src="@raw/test"/>
+                    android:orientation="vertical"
+                    android:elevation="20dp"
+                    android:background="?attr/AccentColor"
+                    android:visibility="visible">
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/floatingPopupImg"
+                        android:scaleType="fitXY"
+                        android:src="@raw/test2"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
 
             <LinearLayout
                 android:id="@+id/searchContainerHome"

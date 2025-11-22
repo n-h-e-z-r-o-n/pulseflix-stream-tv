@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Process
 import android.util.Log
-
 /**
  * Global utility class containing shared functions and data management
  * that can be used across all activities in the Onyx app
@@ -288,6 +287,15 @@ object GlobalUtils {
         val uiModeManager = context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
         return uiModeManager.currentModeType == Configuration.UI_MODE_TYPE_TELEVISION
     }
+
+    fun calculateSpanCount(context: Context, itemWidthDp: Int): Int {
+        val displayMetrics = context.resources.displayMetrics
+        val screenWidthPx = displayMetrics.widthPixels
+        val itemWidthPx = (itemWidthDp * displayMetrics.density).toInt()
+        return (screenWidthPx / itemWidthPx).coerceAtLeast(1)
+    }
+
+
 
 
 }

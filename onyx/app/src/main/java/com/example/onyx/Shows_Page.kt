@@ -7,6 +7,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -19,6 +20,7 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -166,8 +168,9 @@ class Shows_Page : AppCompatActivity() {
 
     private fun setupRecyclerViews() {
         // 🎬 Movies
+        val item_grid2_width = 289
         movieRecyclerView = findViewById(R.id.MoviesRecyclerView)
-        movieRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, 3)
+        movieRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, item_grid2_width))
 
         val movieSpacing = (15 * resources.displayMetrics.density).toInt()
         movieRecyclerView.addItemDecoration(EqualSpaceItemDecoration(movieSpacing))
@@ -176,13 +179,19 @@ class Shows_Page : AppCompatActivity() {
         movieRecyclerView.adapter = movieAdapter
         movieAdapter.onAddMoreClicked = { loadMoreMovies() }
         movieAdapter.onItemFocused = { view, item ->
-            showPopupBeside(view, item)
+            //showPopupBeside(view, item)
+            view.waitForDraw  {
+                showPopupBeside(view, item)
+            }
         }
 
 
         // 📺 TV Shows
         tvRecyclerView = findViewById(R.id.TVsRecyclerView)
-        tvRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, 3)
+        tvRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, item_grid2_width) )
+
+
+
 
         val tvSpacing = (16 * resources.displayMetrics.density).toInt()
         tvRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
@@ -203,8 +212,31 @@ class Shows_Page : AppCompatActivity() {
     }
 
 
+    fun View.waitForDraw(onDraw: () -> Unit) {
+        if (isShown) {
+            val vto = viewTreeObserver
+            vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    viewTreeObserver.removeOnPreDrawListener(this)
+                    onDraw()
+                    return true
+                }
+            })
+        } else {
+            post { waitForDraw(onDraw) }
+        }
+    }
+
+
+
     private fun showPopupBeside(targetView: View, item: MovieItemOne) {
-        val popup = findViewById<LinearLayout>(R.id.floatingPopup)
+        val popup = findViewById<CardView>(R.id.floatingPopup)
+
+        // If view is not laid out yet → wait
+        if (targetView.width == 0 || targetView.height == 0) {
+            targetView.post { showPopupBeside(targetView, item) }
+            return
+        }
 
         // Set popup text
         //findViewById<TextView>(R.id.popupTitle).text = item.posterUlr
@@ -215,7 +247,7 @@ class Shows_Page : AppCompatActivity() {
             .centerCrop()
             .into(imageC)
 
-        val margin = 7.dp(targetView.context)
+        val margin = 0.dp(targetView.context)
 
         // Get item location
         val location = IntArray(2)
