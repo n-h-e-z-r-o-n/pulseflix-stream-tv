@@ -19,7 +19,7 @@ object NavAction {
     fun setupSidebar(activity: Activity) {
         val btnHome = activity.findViewById<ImageButton>(R.id.btnHome)
         //val btnMovies = activity.findViewById<ImageButton>(R.id.btnMovies)
-        //val btnTvShows = activity.findViewById<ImageButton>(R.id.btnTvShow)
+        val btnTvMv = activity.findViewById<ImageButton>(R.id.btnMvTv)
         val btnAnime = activity.findViewById<ImageButton>(R.id.btnAnime)
         val btnFav = activity.findViewById<ImageButton>(R.id.btnFav)
         val btnNotification = activity.findViewById<ImageButton>(R.id.btnNotification)
@@ -29,19 +29,19 @@ object NavAction {
         val sidebar = activity.findViewById<LinearLayout>(R.id.sideBar)
         val labelHome = activity.findViewById<TextView>(R.id.labelHome)
         //val labelMovies = activity.findViewById<TextView>(R.id.labelMovies)
-        //val labelTvShow = activity.findViewById<TextView>(R.id.labelTvShow)
+        val labelMvTv = activity.findViewById<TextView>(R.id.labelMvTv)
         val labelAnime = activity.findViewById<TextView>(R.id.labelAnime)
         val labelFav = activity.findViewById<TextView>(R.id.labelFav)
         val labelNotification = activity.findViewById<TextView>(R.id.labelNotification)
         val labelProfile = activity.findViewById<TextView>(R.id.labelProfile)
 
-        val buttons = listOf(btnHome,   btnAnime,  btnFav, btnNotification, btnProfile)
-        val labels = listOf(labelHome,  labelAnime,  labelFav, labelNotification, labelProfile )
+        val buttons = listOf(btnHome, btnTvMv,  btnAnime,  btnFav, btnNotification, btnProfile)
+        val labels = listOf(labelHome, labelMvTv, labelAnime,  labelFav, labelNotification, labelProfile )
 
         val navigationMap = mapOf(
             btnHome to Home_Page::class.java,
             //btnMovies to Movie_Page::class.java,
-            //btnTvShows to Tv_Page::class.java,
+            btnTvMv to Shows_Page::class.java,
             btnAnime to Anime_Page::class.java,
             btnFav to Favorite_Page::class.java,
             btnNotification to Notification_Page::class.java,
@@ -55,6 +55,7 @@ object NavAction {
         // Highlight based on current activity
         val activeButton: ImageButton? = when (activity) {
             is Home_Page -> btnHome
+            is Shows_Page -> btnTvMv
             is Anime_Page -> btnAnime
             is Favorite_Page -> btnFav
             is Notification_Page -> btnNotification

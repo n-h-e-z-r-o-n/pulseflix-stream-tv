@@ -19,7 +19,7 @@ import com.bumptech.glide.request.target.Target
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GridAdapter(
-    private val items: MutableList<MovieItem>,
+    private val items: MutableList<MovieItemOne>,
     private val layoutResId: Int
 ) : RecyclerView.Adapter<GridAdapter.ViewHolder>() {
 
@@ -32,6 +32,8 @@ class GridAdapter(
 
     // Callback for the "Add More" button
     var onAddMoreClicked: (() -> Unit)? = null
+    // 👇 THIS is the correct place for the focus callback
+    var onItemFocused: ((View, MovieItemOne) -> Unit)? = null
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val Movie_image: ImageView? = view.findViewById(R.id.itemImage)
@@ -59,6 +61,7 @@ class GridAdapter(
         }
 
         val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
+
         return ViewHolder(view)
     }
 
@@ -73,7 +76,7 @@ class GridAdapter(
 
         val currentItem = items[position]
         val title = currentItem.title
-        val imageUrl = currentItem.imageUrl
+        val imageUrl = currentItem.backdropUrl
         val imdbCode = currentItem.imdbCode
         val type = currentItem.type
         val year = currentItem.year
@@ -97,6 +100,12 @@ class GridAdapter(
             intent.putExtra("imdb_code", imdbCode)
             intent.putExtra("type", type)
             context.startActivity(intent)
+        }
+
+        holder.itemView.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                onItemFocused?.invoke(v, currentItem)
+            }
         }
 
 
@@ -125,12 +134,12 @@ class GridAdapter(
         return items.size + 1
     }
 
-    fun addItem(item: MovieItem) {
+    fun addItem(item: MovieItemOne) {
         items.add(item)
         notifyItemInserted(items.size - 1)
     }
 
-    fun addItems(newItems: List<MovieItem>) {
+    fun addItems(newItems: List<MovieItemOne>) {
         val startPos = items.size
         items.addAll(newItems)
         notifyItemRangeInserted(startPos, newItems.size)
@@ -142,6 +151,19 @@ class GridAdapter(
 }
 
 
+data class MovieItemOne(
+    val title: String = "",
+    val backdropUrl: String= "",
+    val posterUlr: String= "",
+    val imdbCode: String= "",
+    val type: String = "",
+    val year: String = "",
+    val rating: String = "",
+    val runtime: String = ""
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class OtherAdapter(
     private val  items: MutableList<MovieItem>,   // ✅ mutable now,

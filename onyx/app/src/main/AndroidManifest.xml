@@ -25,6 +25,9 @@
         android:theme="@style/Theme.Onyx.Dark"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Shows_Page"
+            android:exported="false" />
+        <activity
             android:name=".Instraction"
             android:exported="false" />
         <activity
@@ -44,14 +47,11 @@
             android:exported="false" />
         <activity
             android:name=".Favorite_Page"
-            android:exported="false"             />
-
+            android:exported="false" />
         <activity
             android:name=".Actor_Page"
             android:exported="false"
             android:launchMode="singleTop" />
-
-
         <activity
             android:name=".Home_Page"
             android:exported="false"

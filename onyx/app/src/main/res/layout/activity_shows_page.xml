@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/BG_color"
+    tools:context=".Shows_Page">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@raw/test2"
+                android:visibility="gone"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/TVsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:scrollbars="none"
+                tools:ignore="RtlSymmetry"
+                android:layout_marginStart="30dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/MoviesRecyclerView"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:clipToPadding="false"
+                android:scrollbars="none"
+                tools:ignore="RtlSymmetry"
+                android:layout_marginStart="30dp"
+                />
+
+            <!-- Floating popup -->
+            <LinearLayout
+                android:id="@+id/floatingPopup"
+                android:layout_width="289dp"
+                android:layout_height="170dp"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:elevation="20dp"
+                android:background="?attr/AccentColor"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/floatingPopupImg"
+                    android:src="@raw/test"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/searchContainerHome"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/BG_color"
+                android:layout_marginStart="50dp"
+                android:orientation="vertical"
+                android:nextFocusLeft="@+id/searchContainerHome"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="400dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="51dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="12dp"
+                    android:focusableInTouchMode="true">
+
+                    <!-- Search Icon -->
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="?attr/FG_color"
+                        tools:ignore="ContentDescription" />
+
+                    <!-- Space -->
+                    <Space
+                        android:layout_width="8dp"
+                        android:layout_height="match_parent" />
+
+                    <!-- Search Text Input -->
+                    <EditText
+                        android:id="@+id/HomeSearchInput"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:hint="Search movies,shows,people..."
+                        android:textColor="?attr/FG_color"
+                        android:textColorHint="?attr/FG_color"
+                        android:padding = "9dp"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:nextFocusLeft="@+id/HomeSearchInput"
+                        android:nextFocusRight="@+id/HomeSearchInput"
+                        android:nextFocusUp="@+id/HomeSearchInput"
+                        android:nextFocusDown="@+id/SearchResults"
+                        android:background="@drawable/search_background"
+                        android:imeOptions="actionSearch"
+                        tools:ignore="Autofill,HardcodedText" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Show Search Results"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/d"
+                    android:textSize="13sp"
+                    android:textColor="?attr/AccentColor"
+                    tools:ignore="HardcodedText"
+                    android:layout_marginTop="7dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/SearchResults"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    tools:ignore="NestedWeights"
+                    android:nextFocusUp="@+id/Anime_Trending_widget"
+                    android:nextFocusDown="@+id/Anime_Airing_widget"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+                android:layout_gravity="center_vertical"
+                android:gravity="center">
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70sp"
+                        android:background="@drawable/right_rounded"
+                        android:gravity="center"
+                        android:id="@+id/MoviesButtonLayout">
+                        <TextView
+                            android:id="@+id/MoviesButtonText"
+                            android:layout_width="wrap_content"
+                            android:text="Mv"
+                            android:layout_gravity="center"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/a"
+                            android:textSize="15sp"
+                            android:textColor="?attr/FG_color"
+                            tools:ignore="HardcodedText" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70sp"
+                        android:background="@drawable/right_rounded"
+                        android:gravity="center"
+                        android:id="@+id/TvButtonLayout">
+                        <TextView
+                            android:id="@+id/TvButtonText"
+                            android:layout_width="wrap_content"
+                            android:text="Tv"
+                            android:layout_gravity="center"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:textColor="?attr/FG_color"
+                            android:fontFamily="@font/a"
+                            tools:ignore="HardcodedText" />
+
+
+                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70sp"
+                    android:background="@drawable/right_rounded"
+                    android:gravity="center"
+                    android:id="@+id/SearchButtonLayout">
+                    <ImageView
+                        android:id="@+id/SearchButtonImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_search"
+                        android:background="@android:color/transparent"
+                        app:tint="?attr/FG_color"
+                        />
+
+                </LinearLayout>
+
+                </LinearLayout>
+
+                <include layout="@layout/laod_animation"/>
+
+
+    </FrameLayout>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
