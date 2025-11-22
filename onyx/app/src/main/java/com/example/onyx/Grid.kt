@@ -32,8 +32,8 @@ class GridAdapter(
 
     // Callback for the "Add More" button
     var onAddMoreClicked: (() -> Unit)? = null
-    // 👇 THIS is the correct place for the focus callback
     var onItemFocused: ((View, MovieItemOne) -> Unit)? = null
+    var onItemFocusLost: (() -> Unit)? = null
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val Movie_image: ImageView? = view.findViewById(R.id.itemImage)
@@ -105,6 +105,9 @@ class GridAdapter(
         holder.itemView.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 onItemFocused?.invoke(v, currentItem)
+            }
+            else {
+                onItemFocusLost?.invoke()   // hide popup
             }
         }
 

@@ -43,15 +43,14 @@
             <!-- Floating popup -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/floatingPopup"
-                android:layout_width="113dp"
+                android:layout_width="wrap_content"
                 android:layout_height="170dp"
                 app:cardCornerRadius="10dp"
                 app:cardBackgroundColor="?attr/AccentColor"
                 android:foreground="@drawable/background_focus"
-                android:padding="10dp"
                 android:elevation="5dp" >
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:elevation="20dp"
@@ -59,11 +58,11 @@
                     android:visibility="visible">
 
                     <ImageView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
                         android:id="@+id/floatingPopupImg"
-                        android:scaleType="fitXY"
-                        android:src="@raw/test2"
+                        android:scaleType="fitCenter"
                         tools:ignore="ContentDescription" />
 
                 </LinearLayout>

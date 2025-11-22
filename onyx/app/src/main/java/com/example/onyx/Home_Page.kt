@@ -326,7 +326,6 @@ class Home_Page : AppCompatActivity() {
     private fun setupBackPressedCallback() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-
                     findViewById<ImageButton>(R.id.btnHome).requestFocus()
 
             }

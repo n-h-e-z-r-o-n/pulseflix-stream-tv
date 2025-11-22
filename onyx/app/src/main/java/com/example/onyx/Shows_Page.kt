@@ -7,7 +7,6 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -36,7 +35,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
-
+import com.bumptech.glide.request.target.Target
 class Shows_Page : AppCompatActivity() {
     private var currentMoviePage = 1
     private var isLoadingMoreMovies = false
@@ -69,8 +68,8 @@ class Shows_Page : AppCompatActivity() {
         LoadingAnimation.setup(this, R.raw.b)
         //LoadingAnimation.show(this)
 
-
         NavAction.setupSidebar(this)
+        setupBackPressedCallback()
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         moviesBtn = findViewById(R.id.MoviesButtonLayout)
@@ -94,7 +93,7 @@ class Shows_Page : AppCompatActivity() {
             showSearch()
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
-        setupBackPressedCallback()
+
         setupRecyclerViews()
         showMovies()
         fetchMovies()
@@ -179,10 +178,10 @@ class Shows_Page : AppCompatActivity() {
         movieRecyclerView.adapter = movieAdapter
         movieAdapter.onAddMoreClicked = { loadMoreMovies() }
         movieAdapter.onItemFocused = { view, item ->
-            //showPopupBeside(view, item)
-            view.waitForDraw  {
-                showPopupBeside(view, item)
-            }
+            showPopupBeside(view, item)
+        }
+        movieAdapter.onItemFocusLost = {
+            hidePopup()
         }
 
 
@@ -199,11 +198,17 @@ class Shows_Page : AppCompatActivity() {
         tvAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2)
         tvRecyclerView.adapter = tvAdapter
         tvAdapter.onAddMoreClicked = { loadMoreTv() }
+        tvAdapter.onItemFocused = { view, item ->
+            showPopupBeside(view, item)
+        }
+        tvAdapter.onItemFocusLost = {
+            hidePopup()
+        }
 
 
         searchAdapter = GridAdapter2(mutableListOf(), R.layout.item_grid)
         val searchRecyclerView = findViewById<RecyclerView>(R.id.SearchResults)
-        searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, 6)
+        searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, 130))
         searchRecyclerView.adapter = searchAdapter
         val spacing = (19 * resources.displayMetrics.density).toInt()
         searchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
@@ -212,39 +217,15 @@ class Shows_Page : AppCompatActivity() {
     }
 
 
-    fun View.waitForDraw(onDraw: () -> Unit) {
-        if (isShown) {
-            val vto = viewTreeObserver
-            vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    viewTreeObserver.removeOnPreDrawListener(this)
-                    onDraw()
-                    return true
-                }
-            })
-        } else {
-            post { waitForDraw(onDraw) }
-        }
-    }
-
-
-
     private fun showPopupBeside(targetView: View, item: MovieItemOne) {
         val popup = findViewById<CardView>(R.id.floatingPopup)
 
-        // If view is not laid out yet → wait
-        if (targetView.width == 0 || targetView.height == 0) {
-            targetView.post { showPopupBeside(targetView, item) }
-            return
-        }
-
-        // Set popup text
         //findViewById<TextView>(R.id.popupTitle).text = item.posterUlr
         val imageC = findViewById<ImageView>(R.id.floatingPopupImg)
 
         Glide.with(targetView.context)
             .load(item.posterUlr)
-            .centerCrop()
+            .override(Target.SIZE_ORIGINAL, popup.height) // scale height to container
             .into(imageC)
 
         val margin = 0.dp(targetView.context)
@@ -277,6 +258,16 @@ class Shows_Page : AppCompatActivity() {
         popup.visibility = View.VISIBLE
         popup.alpha = 0f
         popup.animate().alpha(1f).setDuration(150).start()
+    }
+    private fun hidePopup() {
+        val popup = findViewById<CardView>(R.id.floatingPopup)
+        if (popup.visibility == View.VISIBLE) {
+            popup.animate()
+                .alpha(0f)
+                .setDuration(120)
+                .withEndAction { popup.visibility = View.GONE }
+                .start()
+        }
     }
 
 
@@ -672,9 +663,7 @@ class Shows_Page : AppCompatActivity() {
     private fun setupBackPressedCallback() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-
                 findViewById<ImageButton>(R.id.btnMvTv).requestFocus()
-
             }
         })
     }
