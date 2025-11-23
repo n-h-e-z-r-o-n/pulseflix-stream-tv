@@ -34,6 +34,11 @@ class GridAdapter(
     var onAddMoreClicked: (() -> Unit)? = null
     var onItemFocused: ((View, MovieItemOne) -> Unit)? = null
     var onItemFocusLost: (() -> Unit)? = null
+    var isLoadingMore = false
+        set(value) {
+            field = value
+            notifyItemChanged(items.size) // refresh the "Add More" item only
+        }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val Movie_image: ImageView? = view.findViewById(R.id.itemImage)
@@ -67,6 +72,21 @@ class GridAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_ADD_BUTTON) {
+
+            val content = holder.itemView.findViewById<View>(R.id.addMoreContent)
+            val loading = holder.itemView.findViewById<View>(R.id.addMoreLoading)
+
+            if (isLoadingMore) {
+                content.visibility = View.GONE
+                loading.visibility = View.VISIBLE
+                holder.itemView.isClickable = false
+                holder.itemView.isFocusable = false
+            } else {
+                content.visibility = View.VISIBLE
+                loading.visibility = View.GONE
+                holder.itemView.isClickable = true
+                holder.itemView.isFocusable = true
+            }
             // Handle the Add More button
             holder.itemView.setOnClickListener {
                 onAddMoreClicked?.invoke()

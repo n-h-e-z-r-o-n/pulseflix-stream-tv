@@ -223,6 +223,8 @@
                 </LinearLayout>
 
                 <include layout="@layout/laod_animation"/>
+                <include layout="@layout/side_bar"/>
+
 
 
     </FrameLayout>

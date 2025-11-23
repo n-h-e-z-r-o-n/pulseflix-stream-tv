@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 if (isSubscriptionActive()) {
                     startActivity(Intent(this, Home_Page::class.java))
                 } else {
-                    startActivity(Intent(this, PayWall::class.java))
+                    startActivity(Intent(this, Home_Page::class.java))
                 }
             }
             finish()

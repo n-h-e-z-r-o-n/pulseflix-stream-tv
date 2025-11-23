@@ -81,9 +81,10 @@ object NotificationHelper {
     }
 
     fun getNotifications(context: Context) : List<NotificationItem>{
+
         // Clear previous results to avoid duplicates
         results.clear()
-        
+
         val list = FavoritesManager.getFavorites(context).toMutableList()
 
         // keep only TV shows
@@ -98,59 +99,69 @@ object NotificationHelper {
         Log.e("NotificationHelper", "animeList:  ${animeList.toString()}")
 
         for (item in animeList) {
-            val animeId = item.getJSONObject("anime").getJSONObject("info").getString("id")
-            val name = item.getJSONObject("anime").getJSONObject("info").getString("name")
-            val poster = item.getJSONObject("anime").getJSONObject("info").getString("poster")
+            try{
+                val animeId = item.getJSONObject("anime").getJSONObject("info").getString("id")
+                val name = item.getJSONObject("anime").getJSONObject("info").getString("name")
+                val poster = item.getJSONObject("anime").getJSONObject("info").getString("poster")
 
-            //val subStored = item.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("sub", "").toIntOrNull() ?: 0
-            //val dubStored = item.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("dub", "").toIntOrNull() ?: 0
-            //val seasonsStored  = item.getJSONArray("seasons").length()
-
-
-            val savedData = getStoredNotification(context, animeId)
-            val subStored = savedData?.season ?: 0
-            val dubStored = savedData?.episode ?: 0
+                //val subStored = item.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("sub", "").toIntOrNull() ?: 0
+                //val dubStored = item.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("dub", "").toIntOrNull() ?: 0
+                //val seasonsStored  = item.getJSONArray("seasons").length()
 
 
-            val url = "${BuildConfig.A_K}/api/v2/hianime/anime/$animeId"
+                val savedData = getStoredNotification(context, animeId)
+                val subStored = savedData?.season ?: 0
+                val dubStored = savedData?.episode ?: 0
 
-            val connection = URL(url).openConnection() as HttpURLConnection
-            connection.requestMethod = "GET"
-            connection.setRequestProperty("accept", "application/json")
-            val response = connection.inputStream.bufferedReader().use { it.readText() }
-            val jsonObject = org.json.JSONObject(response)
-            val data = jsonObject.getJSONObject("data")
 
-            val subFetched = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("sub", "").toIntOrNull() ?: 0
-            val dubFetched = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("dub", "").toIntOrNull() ?: 0
-            //val seasonsFetched = data.getJSONArray("seasons").length()
+                val url = "${BuildConfig.A_K}/api/v2/hianime/anime/$animeId"
 
-            var info  = ""
+                val connection = URL(url).openConnection() as HttpURLConnection
+                connection.requestMethod = "GET"
+                connection.setRequestProperty("accept", "application/json")
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                val jsonObject = org.json.JSONObject(response)
+                val data = jsonObject.getJSONObject("data")
 
-            if (subFetched > subStored) {
-                val cal = subFetched - subStored
-                info = info + "$cal SUB added\n"
+                val subFetched =
+                    data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats")
+                        .getJSONObject("episodes").optString("sub", "").toIntOrNull() ?: 0
+                val dubFetched =
+                    data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats")
+                        .getJSONObject("episodes").optString("dub", "").toIntOrNull() ?: 0
+                //val seasonsFetched = data.getJSONArray("seasons").length()
+
+                var info = ""
+
+                if (subFetched > subStored) {
+                    val cal = subFetched - subStored
+                    info = info + "$cal SUB added\n"
+                }
+                if (dubFetched > dubStored) {
+                    val cal = dubFetched - dubStored
+                    info = info + "$cal DUB added\n"
+                }
+
+
+
+                if (info.isEmpty()) {
+                    continue
+                }
+                val itemData = NotificationItem(
+                    imdbCode = animeId,
+                    title = name,
+                    imageUrl = poster,
+                    info = info,
+                    type = "anime",
+                    newSeason = subFetched,
+                    newEpisode = dubFetched
+                )
+
+                results.add(itemData)
+
+            }catch (e: Exception) {
+                Log.e("NotificationHelper", "Error for item: ${e.message}")
             }
-            if (dubFetched > dubStored) {
-                val cal = dubFetched - dubStored
-                info = info + "$cal DUB added\n"
-            }
-
-
-
-            if (info.isEmpty()) {
-                continue
-            }
-            val itemData = NotificationItem(
-                imdbCode = animeId,
-                title = name,
-                imageUrl = poster,
-                info = info,
-                type = "anime",
-                newSeason = subFetched,
-                newEpisode = dubFetched
-            )
-            results.add(itemData)
 
         }
 

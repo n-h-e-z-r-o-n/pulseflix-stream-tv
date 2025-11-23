@@ -12,6 +12,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 
 import android.graphics.Typeface
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
+import androidx.compose.ui.focus.requestFocus
 
 
 object NavAction {
@@ -63,6 +67,13 @@ object NavAction {
             else -> btnHome
         }
 
+        // --- MODIFICATION: Call setupBackPressedCallback here if the activity is a ComponentActivity ---
+        if (activity is ComponentActivity) {
+            setupBackPrdessedCallback(activity, activeButton)
+        }
+        // ------------------------------------------------------------------------------------------
+
+
         highlightActive(activeButton, buttons)
         activeButton?.post { activeButton.requestFocus() }          // Request focus on the active button for TV D-pad usability
 
@@ -103,6 +114,21 @@ object NavAction {
                 // Sidebar expand/collapse
                 sidebar?.let { bar ->
                     val anyFocused = buttons.any { it?.hasFocus() == true }
+
+                    if (anyFocused) {
+                        setLabelsVisible(labels, true)
+                        expandSidebar(activity, bar, true)
+
+                        bar.visibility = View.VISIBLE
+                    }else{
+                        setLabelsVisible(labels, false)
+                        expandSidebar(activity, bar, false)
+                        bar.visibility = View.GONE
+
+                    }
+
+                    /*
+
                     if (anyFocused) {
                         expandSidebar(activity, bar, true)
                         setLabelsVisible(labels, true)
@@ -114,6 +140,8 @@ object NavAction {
                             }
                         }
                     }
+
+                     */
                 }
             }
         }
@@ -139,7 +167,7 @@ object NavAction {
     }
 
     private fun expandSidebar(context: Context, sidebar: LinearLayout, expand: Boolean) {
-        val collapsed = 1.dpToPx(context)
+        val collapsed = 41.dpToPx(context)
         val expanded = 610.dpToPx(context)
         val start = sidebar.layoutParams.width
         val end = if (expand) expanded else collapsed
@@ -161,6 +189,26 @@ object NavAction {
         labels.forEach { label ->
             label?.visibility = if (visible) View.VISIBLE else View.GONE
         }
+    }
+
+
+
+
+    private fun setupBackPrdessedCallback(activity: ComponentActivity, activeButton: ImageButton?) {
+        activity.onBackPressedDispatcher.addCallback(activity, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val sidebar = activity.findViewById<LinearLayout>(R.id.sideBar)
+
+                if (sidebar.visibility != View.VISIBLE) {
+                    // When back is pressed and sidebar is hidden, show it and focus the active button
+                    sidebar.visibility = View.VISIBLE
+                    activeButton?.requestFocus()
+                } else {
+                    // If the sidebar is already visible, hide it
+                    sidebar.visibility = View.GONE
+                }
+            }
+        })
     }
 
 

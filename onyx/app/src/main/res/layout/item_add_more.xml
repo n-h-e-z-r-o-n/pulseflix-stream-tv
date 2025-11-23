@@ -19,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/addMoreContent">
 
             <ImageView
                 android:layout_width="70dp"
@@ -40,5 +41,15 @@
                 android:textColor="?attr/AccentColor"
                 tools:ignore="HardcodedText" />
     </LinearLayout>
+    <!-- LOADING SPINNER -->
+    <ProgressBar
+        android:id="@+id/addMoreLoading"
+        style="?android:attr/progressBarStyleLarge"
+        android:indeterminateTint="?attr/AccentColor"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
 
 </androidx.cardview.widget.CardView>

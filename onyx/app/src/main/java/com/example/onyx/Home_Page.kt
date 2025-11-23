@@ -32,22 +32,6 @@ import com.example.onyx.BuildConfig
 class Home_Page : AppCompatActivity() {
 
 
-    private var currentMoviePage = 1
-    private var isLoadingMoreMovies = false
-    private lateinit var movieAdapter: GridAdapter
-    private lateinit var movieRecyclerView : RecyclerView
-
-    private var currentTvPage = 1
-    private var isLoadingMoreTv = false
-    private lateinit var tvAdapter: GridAdapter
-    private lateinit var searchAdapter: GridAdapter2
-
-    private lateinit var tvRecyclerView : RecyclerView
-
-    private var isSearchContainerHomeVisible = false
-
-    private var lastRefreshTime: Long = 0L
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +47,7 @@ class Home_Page : AppCompatActivity() {
 
         NavAction.setupSidebar(this)
 
-        setupBackPressedCallback()
+        //setupBackPressedCallback()
 
         setupRecyclerViews()
         sliderData()
@@ -323,11 +307,21 @@ class Home_Page : AppCompatActivity() {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
     private fun setupBackPressedCallback() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                    findViewById<ImageButton>(R.id.btnHome).requestFocus()
 
+                val sidebar = findViewById<LinearLayout>(R.id.sideBar)
+                val homeBtn = findViewById<ImageButton>(R.id.btnHome)
+
+                if (sidebar.visibility != View.VISIBLE) {
+                    // Sidebar is hidden → show it and focus home button
+                    sidebar.visibility = View.VISIBLE
+                    homeBtn.requestFocus()
+                } else {
+                    sidebar.visibility = View.GONE
+                }
             }
         })
     }

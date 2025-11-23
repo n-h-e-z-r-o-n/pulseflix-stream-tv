@@ -69,7 +69,6 @@ class Shows_Page : AppCompatActivity() {
         //LoadingAnimation.show(this)
 
         NavAction.setupSidebar(this)
-        setupBackPressedCallback()
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         moviesBtn = findViewById(R.id.MoviesButtonLayout)
@@ -278,6 +277,7 @@ class Shows_Page : AppCompatActivity() {
     private fun fetchMovies() {
         if (isLoadingMoreMovies) return
         isLoadingMoreMovies = true
+        movieAdapter.isLoadingMore = true
 
         CoroutineScope(Dispatchers.IO).launch {
             repeat(3) { attempt ->
@@ -356,6 +356,7 @@ class Shows_Page : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         movieAdapter.addItems(movies)
                         isLoadingMoreMovies = false
+                        movieAdapter.isLoadingMore = false
                     }
 
                     return@launch // success → stop repeating
@@ -367,6 +368,7 @@ class Shows_Page : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
                 isLoadingMoreMovies = false
+                movieAdapter.isLoadingMore = false
             }
         }
     }
@@ -380,6 +382,7 @@ class Shows_Page : AppCompatActivity() {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     private fun fetchTvShows() {
         isLoadingMoreTv = true
+        tvAdapter.isLoadingMore = true
         CoroutineScope(Dispatchers.IO).launch {
 
             repeat(5) { attempt ->
@@ -469,6 +472,7 @@ class Shows_Page : AppCompatActivity() {
                         withContext(Dispatchers.Main) {
                             tvAdapter.addItem(MovieItemOne)
                             isLoadingMoreTv = false
+                            tvAdapter.isLoadingMore = false
                         }
 
 
@@ -483,6 +487,7 @@ class Shows_Page : AppCompatActivity() {
                 }
                 withContext(Dispatchers.Main) {
                     isLoadingMoreTv = false
+                    tvAdapter.isLoadingMore = false
                 }
             }
         }
@@ -660,13 +665,8 @@ class Shows_Page : AppCompatActivity() {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private fun setupBackPressedCallback() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findViewById<ImageButton>(R.id.btnMvTv).requestFocus()
-            }
-        })
-    }
+
+
 
 
 }
