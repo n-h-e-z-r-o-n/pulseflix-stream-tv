@@ -33,6 +33,7 @@
                         android:id="@+id/Slider_widget"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:clipToPadding="false"
                         android:scrollbars="none" />
 
@@ -41,54 +42,18 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=" Movies"
-                            android:paddingStart="5dp"
-                            android:height="13sp"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/d"
-                            android:textSize="13sp"
-                            android:textColor="?attr/AccentColor"
-                            tools:ignore="HardcodedText,RtlSymmetry"
-                            android:layout_marginTop="13sp"
-                            />
-
-
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/MoviesRecyclerView"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/CategoryRecyclerView"
+                            android:layout_height="140dp"
                             android:layout_width="match_parent"
+                            android:layout_gravity="bottom"
                             android:clipToPadding="false"
                             android:scrollbars="none"
 
                             tools:ignore="RtlSymmetry" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=" Tv Series"
-                            android:paddingStart="5dp"
-                            android:height="13sp"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/d"
-                            android:textSize="13sp"
-                            android:layout_marginTop="13sp"
-                            android:textColor="?attr/AccentColor"
-                            tools:ignore="HardcodedText,RtlSymmetry"
-                            />
 
-
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/TVsRecyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clipToPadding="false"
-                            android:scrollbars="none"
-                            tools:ignore="RtlSymmetry" />
 
                     </LinearLayout>
 

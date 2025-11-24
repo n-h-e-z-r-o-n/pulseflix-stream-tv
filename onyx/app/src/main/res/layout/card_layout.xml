@@ -259,8 +259,8 @@
                 android:clickable="true"
                 android:background="@drawable/tv_button_selector"
                 android:nextFocusUp="@+id/spotlightMovie"
-                android:nextFocusLeft="@+id/SliderButton"
-                android:nextFocusRight="@+id/SliderButton"
+                android:nextFocusLeft="@+id/spotlightMovie"
+                android:nextFocusRight="@+id/spotlightMovie"
                 android:nextFocusDown="@+id/itemGrid2"
 
                 android:gravity="center">

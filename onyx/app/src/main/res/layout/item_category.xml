@@ -1,0 +1,42 @@
+<!-- res/layout/item_grid.xml -->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="130dp"
+
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="2dp"
+    card_view:cardBackgroundColor="@android:color/white"
+    android:foreground="@drawable/card_focus"
+    android:id="@+id/categoryView">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/categoryImage"
+            android:layout_width="wrap_content"
+            android:maxWidth="300dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@raw/test2"
+            />
+
+    </FrameLayout>
+
+
+
+</androidx.cardview.widget.CardView>
+
+
+
+

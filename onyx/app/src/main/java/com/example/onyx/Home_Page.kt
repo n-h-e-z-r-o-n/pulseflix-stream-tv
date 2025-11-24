@@ -28,6 +28,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Calendar
 import com.example.onyx.BuildConfig
+import java.util.Locale
 
 class Home_Page : AppCompatActivity() {
 
@@ -49,14 +50,11 @@ class Home_Page : AppCompatActivity() {
 
         //setupBackPressedCallback()
 
-        setupRecyclerViews()
         sliderData()
+        categoryShow()
 
     }
 
-    private fun setupRecyclerViews() {
-
-    }
 
 
 
@@ -118,6 +116,9 @@ class Home_Page : AppCompatActivity() {
                     val jsonObject3 = org.json.JSONObject(response3)
                     val moviesArray3 = jsonObject3.getJSONArray("results")
 
+                    Log.e("DEBUG_MAIN_Slider raw", moviesArray3.toString())
+
+
 
                     var movies = mutableListOf<SliderItem>()
                     for (i in 0 until moviesArray.length()) {
@@ -167,7 +168,6 @@ class Home_Page : AppCompatActivity() {
                             )
 
                         )
-                        Log.e("DEBUG_MAIN_Slider 1", movies.toString())
                     }
 
 
@@ -308,22 +308,56 @@ class Home_Page : AppCompatActivity() {
 
 
 
-    private fun setupBackPressedCallback() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
+    private fun categoryShow() {
+        val company_show = mapOf(
+            "Marvel Studios" to Pair(420, "https://image.tmdb.org/t/p/w1280/hUzeosd33nzE5MCNsZxCGEKTXaQ.png"),
+            "Marvel Animation" to Pair(13252, "https://image.tmdb.org/t/p/w1280/1gKwYyTDNhumwBKUlKqoxXRUdpC.png"),
+            "DC Films" to Pair(128064, "https://image.tmdb.org/t/p/w1280/13F3Jf7EFAcREU0xzZqJnVnyGXu.png"),
+            "Walt Disney Pictures" to Pair(2, "https://image.tmdb.org/t/p/w1280/wdrCwmRnLFJhEoH8GSfymY85KHT.png"),
+            "Walt Disney Television" to Pair(670, "https://image.tmdb.org/t/p/w1280/rRGi5UkwvdOPSfr5Xf42RZUsYgd.png"),
+            "Warner Bros. Pictures" to Pair(174, "https://image.tmdb.org/t/p/w1280/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png"),
+            "Universal Pictures" to Pair(33, "https://image.tmdb.org/t/p/w1280/3wwjVpkZtnog6lSKzWDjvw2Yi00.png"),
+            "Paramount Pictures" to Pair(4, "https://image.tmdb.org/t/p/w1280/gz66EfNoYPqHTYI4q9UEN4CbHRc.png"),
+            "Sony Pictures Entertainment" to Pair(34, "https://image.tmdb.org/t/p/w1280/mtp1fvZbe4H991Ka1HOORl572VH.png"),
+            "Lionsgate " to Pair(1632, "https://image.tmdb.org/t/p/w1280/cisLn1YAUuptXVBa0xjq7ST9cH0.png"),
+            "DreamWorks Animation " to Pair(521, "https://image.tmdb.org/t/p/w1280/3BPX5VGBov8SDqTV7wC1L1xShAS.png"),
+            "Netflix Animation " to Pair(171251, "https://image.tmdb.org/t/p/w1280/AqUAfMC270bGGK09Nh3mycwT1hY.png"),
+            "Netflix" to Pair(178464, "https://image.tmdb.org/t/p/w1280/tyHnxjQJLH6h4iDQKhN5iqebWmX.png"),
+            "Pixar" to Pair(3, "https://image.tmdb.org/t/p/w1280/1TjvGVDMYsj6JBxOAkUHpPEwLf7.png"),
+            "Illumination" to Pair(6704, "https://image.tmdb.org/t/p/w1280/fOG2oY4m1YuYTQh4bMqqZkmgOAI.png"),
+            "Blue Sky Studios" to Pair(9383, "https://image.tmdb.org/t/p/w1280/ppeMh4iZJQUMm1nAjRALeNhWDfU.png"),
+            "Laika" to Pair(11537, "https://image.tmdb.org/t/p/w1280/AgCkAk8EpUG9fTmK6mWcaJA2Zwh.png"),
+            "Amazon Studios" to Pair(20580, "https://image.tmdb.org/t/p/w1280/oRR9EXVoKP9szDkVKlze5HVJS7g.png"),
+            "HBO" to Pair(3268, "https://image.tmdb.org/t/p/w1280/tuomPhY2UtuPTqqFnKMVHvSb724.png"),
+            "Apple" to Pair(14801, "https://image.tmdb.org/t/p/w1280/bnlD5KJ5oSzBYbEpDkwi6w8SoBO.png")
+        )
 
-                val sidebar = findViewById<LinearLayout>(R.id.sideBar)
-                val homeBtn = findViewById<ImageButton>(R.id.btnHome)
+        // Convert map to list of categoryItem objects
+        val categoryItems = mutableListOf<categoryItem>()
+        company_show.forEach { (_, pair) ->
+            categoryItems.add(
+                categoryItem(
+                    cCode = pair.first.toString(),
+                    cImg = pair.second
+                )
+            )
+        }
 
-                if (sidebar.visibility != View.VISIBLE) {
-                    // Sidebar is hidden → show it and focus home button
-                    sidebar.visibility = View.VISIBLE
-                    homeBtn.requestFocus()
-                } else {
-                    sidebar.visibility = View.GONE
-                }
-            }
-        })
+        // Setup RecyclerView
+        val recyclerView = findViewById<RecyclerView>(R.id.CategoryRecyclerView)
+        val adapter = CategoryAdapter(categoryItems, R.layout.item_category)
+
+        val tvSpacing = (10 * resources.displayMetrics.density).toInt()
+        recyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+
+        val layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
+
     }
 
 

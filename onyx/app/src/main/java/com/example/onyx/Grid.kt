@@ -262,6 +262,81 @@ class OtherAdapter(
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+class CategoryAdapter(
+    private val  items: MutableList<categoryItem>,   // ✅ mutable now,
+    private val layoutResId: Int   // 👈 pass in the layout resource
+) :  RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+
+        val CardViewSquare: CardView = view.findViewById(R.id.categoryView)
+        val category_image: ImageView = view.findViewById(R.id.categoryImage)
+
+
+
+        init {
+            itemView.setOnFocusChangeListener { v, hasFocus ->
+                // Scale animation
+                v.animate()
+                    .scaleX(if (hasFocus) 1.02f else 1f)
+                    .scaleY(if (hasFocus) 1.02f else 1f)
+                    .setDuration(150)
+                    .start()
+            }
+        }
+
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(layoutResId, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val currentItem = items[position]
+        val imageUrl = currentItem.cImg
+        val imdbCode = currentItem.cCode
+
+
+
+
+        Glide.with(holder.itemView.context)
+            .load(imageUrl)
+            .override(Target.SIZE_ORIGINAL, holder.category_image.height) // scale height to container
+            .into(holder.category_image)
+
+
+        holder.CardViewSquare.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, Watch_Page::class.java).apply {
+                putExtra("imdb_code", imdbCode)
+            }
+            context.startActivity(intent)
+        }
+    }
+
+    override fun getItemCount() = items.size
+
+    fun addItem(item: categoryItem) {
+        items.add(item)
+        notifyItemInserted(items.size - 1)
+
+    }
+}
+
+data class categoryItem(
+    val cCode: String = "",
+    val cImg: String= "",
+
+)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 class GridAdapter2(
     private val  items: MutableList<MovieItem>,   // ✅ mutable now,
     private val layoutResId: Int   // 👈 pass in the layout resource
@@ -715,6 +790,33 @@ data class FavItem(
 )
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class EqualSxpaceItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: android.graphics.Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        val position = parent.getChildAdapterPosition(view)
+        val spanCount = (parent.layoutManager as? GridLayoutManager)?.spanCount ?: 1
+
+        // Apply equal spacing on all sides
+        outRect.left = space / 2
+        outRect.right = space / 2
+        outRect.top = space / 2
+        outRect.bottom = space / 2
+
+        // Optional: extra space for first/last rows & columns so edges are even
+        if (position < spanCount) {
+            outRect.top = space // first row
+        }
+        if (position % spanCount == 0) {
+            outRect.left = space // first column
+        }
+    }
+}
+
 
 class EqualSpaceItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
