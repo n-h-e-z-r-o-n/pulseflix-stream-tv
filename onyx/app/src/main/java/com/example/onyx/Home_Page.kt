@@ -60,13 +60,14 @@ class Home_Page : AppCompatActivity() {
 
 
     private fun sliderData() {
+
         val displayMetrics = resources.displayMetrics
         val screenWidth = displayMetrics.widthPixels     // in pixels
         val screenHeight = displayMetrics.heightPixels    // in pixels
 
         val recyclerView = findViewById<RecyclerView>(R.id.Slider_widget)
         val params = recyclerView.layoutParams
-        params.height = (screenHeight * 0.75).toInt()
+        params.height = (screenHeight * 0.80).toInt()
         recyclerView.layoutParams = params
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -334,11 +335,12 @@ class Home_Page : AppCompatActivity() {
 
         // Convert map to list of categoryItem objects
         val categoryItems = mutableListOf<categoryItem>()
-        company_show.forEach { (_, pair) ->
+        company_show.forEach { (name, pair) ->
             categoryItems.add(
                 categoryItem(
                     cCode = pair.first.toString(),
-                    cImg = pair.second
+                    cImg = pair.second,
+                    cName = name
                 )
             )
         }

@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 import com.bumptech.glide.request.target.Target
+import com.example.onyx.GridAdapter.Companion.lastKeyTime
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GridAdapter(
@@ -30,7 +32,6 @@ class GridAdapter(
         private val KEY_DEBOUNCE_DELAY = 350L // ms
     }
 
-    // Callback for the "Add More" button
     var onAddMoreClicked: (() -> Unit)? = null
     var onItemFocused: ((View, MovieItemOne) -> Unit)? = null
     var onItemFocusLost: (() -> Unit)? = null
@@ -265,13 +266,20 @@ class OtherAdapter(
 class CategoryAdapter(
     private val  items: MutableList<categoryItem>,   // ✅ mutable now,
     private val layoutResId: Int   // 👈 pass in the layout resource
+
 ) :  RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+
+    companion object {
+        private var lastKeyTime = 0L
+        private val KEY_DEBOUNCE_DELAY = 400L // ms
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 
         val CardViewSquare: CardView = view.findViewById(R.id.categoryView)
         val category_image: ImageView = view.findViewById(R.id.categoryImage)
+
 
 
 
@@ -299,22 +307,47 @@ class CategoryAdapter(
         val currentItem = items[position]
         val imageUrl = currentItem.cImg
         val imdbCode = currentItem.cCode
+        val companyName = currentItem.cName
 
+        // ✅ wait until ImageView is measured
+        holder.category_image.post {
+            val currentHeight = holder.category_image.height
+            val finalHeight = if (currentHeight > 230) 230 else currentHeight
 
-
-
-        Glide.with(holder.itemView.context)
-            .load(imageUrl)
-            .override(Target.SIZE_ORIGINAL, holder.category_image.height) // scale height to container
-            .into(holder.category_image)
+            Glide.with(holder.itemView.context)
+                .load(imageUrl)
+                .override(Target.SIZE_ORIGINAL, finalHeight)
+                .into(holder.category_image)
+        }
 
 
         holder.CardViewSquare.setOnClickListener {
             val context = holder.itemView.context
-            val intent = Intent(context, Watch_Page::class.java).apply {
-                putExtra("imdb_code", imdbCode)
+            val intent = Intent(context, Category_Page::class.java).apply {
+                putExtra("company_id", imdbCode)
+                putExtra("company_name", companyName)
             }
             context.startActivity(intent)
+        }
+
+
+        holder.CardViewSquare.setOnKeyListener { v, keyCode, event ->
+
+            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+            val now = System.currentTimeMillis()
+            if (now - lastKeyTime < KEY_DEBOUNCE_DELAY) return@setOnKeyListener true
+            lastKeyTime = now
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    if (position == 0) return@setOnKeyListener true
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    if (position == items.size-1) return@setOnKeyListener true
+                }
+            }
+
+            false
         }
     }
 
@@ -330,7 +363,7 @@ class CategoryAdapter(
 data class categoryItem(
     val cCode: String = "",
     val cImg: String= "",
-
+    val cName: String = ""
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

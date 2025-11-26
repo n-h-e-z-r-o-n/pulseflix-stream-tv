@@ -3,6 +3,7 @@
     <string name="trending">Trending</string>
     <string name="Popular">Populor</string>
     <string name="seasons_episodes">Seasons / Episodes</string>
+    <string name="category_subtitle">Movies &amp; TV by %1$s</string>
 
 
     <string-array name="payment_countries">

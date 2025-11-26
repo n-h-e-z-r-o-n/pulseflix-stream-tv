@@ -8,6 +8,7 @@
 
     android:clickable="true"
     android:focusable="true"
+    android:focusableInTouchMode="true"
     android:gravity="center"
     android:orientation="vertical"
     card_view:cardCornerRadius="12dp"
@@ -24,7 +25,6 @@
         <ImageView
             android:id="@+id/categoryImage"
             android:layout_width="wrap_content"
-            android:maxWidth="300dp"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"

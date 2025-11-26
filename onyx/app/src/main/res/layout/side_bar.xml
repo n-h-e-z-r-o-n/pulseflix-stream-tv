@@ -173,7 +173,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="Movies / Series"
+                    android:text="Movies &amp; Series"
                     android:textColor="?attr/FG_color"
                     android:textSize="14sp"
                     android:visibility="gone"
