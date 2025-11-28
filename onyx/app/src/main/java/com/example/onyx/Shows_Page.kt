@@ -18,6 +18,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
@@ -39,23 +40,46 @@ import com.bumptech.glide.request.target.Target
 class Shows_Page : AppCompatActivity() {
     private var currentMoviePage = 1
     private var isLoadingMoreMovies = false
-    private lateinit var movieAdapter: GridAdapter
-    private lateinit var movieRecyclerView : RecyclerView
+
+
 
     private var currentTvPage = 1
     private var isLoadingMoreTv = false
-    private lateinit var tvAdapter: GridAdapter
-    private lateinit var tvRecyclerView : RecyclerView
+
+
 
     private lateinit var moviesBtn: LinearLayout
     private lateinit var tvBtn: LinearLayout
     private lateinit var SearchBtn: LinearLayout
-    private lateinit var searchContainer: LinearLayout
-    private lateinit var tvBtnText: TextView
-    private lateinit var SearchBtnText: TextView
-    private lateinit var searchContainerImg: ImageView
+    private lateinit var filterBtn: LinearLayout
 
+
+    private lateinit var mvBtnText: TextView
+    private lateinit var tvBtnText: TextView
+
+
+    private lateinit var searchContainerImg: ImageView
+    private lateinit var filterContainerImg: ImageView
+
+    private lateinit var searchContainer: LinearLayout
+    private lateinit var fliterContainer: LinearLayout
+
+
+    //Adapters
+    private lateinit var movieAdapter: GridAdapter
+    private lateinit var tvAdapter: GridAdapter
     private lateinit var searchAdapter: GridAdapter2
+    private lateinit var filterAdapter: FilterAdapter
+
+
+    //RecyclerViews
+    private lateinit var tvRecyclerView : RecyclerView
+    private lateinit var movieRecyclerView : RecyclerView
+    private lateinit var searchRecyclerView : RecyclerView
+    private lateinit var fliterRecyclerView : RecyclerView
+
+
+
 
 
 
@@ -75,11 +99,19 @@ class Shows_Page : AppCompatActivity() {
         moviesBtn = findViewById(R.id.MoviesButtonLayout)
         tvBtn = findViewById(R.id.TvButtonLayout)
         SearchBtn  =  findViewById(R.id.SearchButtonLayout)
-        searchContainer  =  findViewById(R.id.searchContainerHome)
+        filterBtn = findViewById(R.id.FilterButtonLayout)
 
-        tvBtnText = findViewById(R.id.MoviesButtonText)
-        SearchBtnText = findViewById(R.id.TvButtonText)
+
+
+
+        mvBtnText = findViewById(R.id.MoviesButtonText)
+        tvBtnText = findViewById(R.id.TvButtonText)
+
+        searchContainer  =  findViewById(R.id.searchContainerHome)
         searchContainerImg = findViewById(R.id.SearchButtonImg)
+
+        fliterContainer  =  findViewById(R.id.FilterContainer)
+        filterContainerImg= findViewById(R.id.FilterButtonImg)
 
 
 
@@ -92,24 +124,28 @@ class Shows_Page : AppCompatActivity() {
         SearchBtn.setOnClickListener {
             showSearch()
         }
+        filterBtn.setOnClickListener {
+            showFilter()
+        }
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         setupRecyclerViews()
         showMovies()
         fetchMovies()
         fetchTvShows()
-
-
-
+        filter()
     }
 
     private fun showMovies() {
         movieRecyclerView.visibility = View.VISIBLE
         tvRecyclerView.visibility = View.GONE
         searchContainer.visibility = View.GONE
+        fliterContainer.visibility = View.GONE
+
         moviesBtn.alpha = 1f
         tvBtn.alpha = 0.5f
         SearchBtn.alpha = 0.5f
+        filterBtn.alpha = 0.5f
 
         moviesBtn.isSelected = true
         tvBtn.isSelected = false
@@ -118,9 +154,10 @@ class Shows_Page : AppCompatActivity() {
         val fgColor = getThemeColor(R.attr.FG_color)
         val accentColor = getThemeColor(R.attr.AccentColor)
 
-        tvBtnText.setTextColor(accentColor)
-        SearchBtnText.setTextColor(fgColor)
+        tvBtnText.setTextColor(fgColor)
+        mvBtnText.setTextColor(accentColor )
         searchContainerImg.setColorFilter(fgColor)
+        filterContainerImg.setColorFilter(fgColor)
 
     }
 
@@ -128,35 +165,64 @@ class Shows_Page : AppCompatActivity() {
         movieRecyclerView.visibility = View.GONE
         tvRecyclerView.visibility = View.VISIBLE
         searchContainer.visibility = View.GONE
+        fliterContainer.visibility = View.GONE
 
         moviesBtn.alpha = 0.5f
         tvBtn.alpha = 1f
         SearchBtn.alpha = 0.5f
+        filterBtn.alpha = 0.5f
 
 
         val fgColor = getThemeColor(R.attr.FG_color)
         val accentColor = getThemeColor(R.attr.AccentColor)
 
-        tvBtnText.setTextColor(fgColor)
-        SearchBtnText.setTextColor(accentColor)
+        tvBtnText.setTextColor(accentColor )
+        mvBtnText.setTextColor(fgColor)
         searchContainerImg.setColorFilter(fgColor)
+        filterContainerImg.setColorFilter(fgColor)
+
+    }
+
+    private fun showFilter() {
+        movieRecyclerView.visibility = View.GONE
+        tvRecyclerView.visibility = View.GONE
+        searchContainer.visibility = View.GONE
+        fliterContainer.visibility = View.VISIBLE
+
+        moviesBtn.alpha = 0.5f
+        tvBtn.alpha = 0.5f
+        SearchBtn.alpha = 0.5f
+        filterBtn.alpha = 1f
+
+
+        val fgColor = getThemeColor(R.attr.FG_color)
+        val accentColor = getThemeColor(R.attr.AccentColor)
+
+        tvBtnText.setTextColor(fgColor )
+        mvBtnText.setTextColor(fgColor)
+        searchContainerImg.setColorFilter(fgColor)
+        filterContainerImg.setColorFilter(accentColor)
 
     }
     private fun showSearch() {
         movieRecyclerView.visibility = View.GONE
         tvRecyclerView.visibility = View.GONE
         searchContainer.visibility = View.VISIBLE
+        fliterContainer.visibility = View.GONE
+
         moviesBtn.alpha = 0.5f
         tvBtn.alpha = 0.5f
         SearchBtn.alpha = 1f
+        filterBtn.alpha = 0.5f
 
 
         val fgColor = getThemeColor(R.attr.FG_color)
         val accentColor = getThemeColor(R.attr.AccentColor)
 
         tvBtnText.setTextColor(fgColor)
-        SearchBtnText.setTextColor(fgColor)
+        mvBtnText.setTextColor(fgColor)
         searchContainerImg.setColorFilter(accentColor)
+        filterContainerImg.setColorFilter(fgColor)
 
     }
     private fun getThemeColor(attr: Int): Int {
@@ -166,19 +232,22 @@ class Shows_Page : AppCompatActivity() {
     }
 
     private fun setupRecyclerViews() {
-        // 🎬 Movies
+
+        val Spacing = (16 * resources.displayMetrics.density).toInt()
         val item_grid2_width = 289
+
+
+        // 🎬 Movies
         movieRecyclerView = findViewById(R.id.MoviesRecyclerView)
         movieRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, item_grid2_width))
 
-        val movieSpacing = (15 * resources.displayMetrics.density).toInt()
-        movieRecyclerView.addItemDecoration(EqualSpaceItemDecoration(movieSpacing))
+        movieRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
 
         movieAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2)
         movieRecyclerView.adapter = movieAdapter
         movieAdapter.onAddMoreClicked = { loadMoreMovies() }
         movieAdapter.onItemFocused = { view, item ->
-            showPopupBeside(view, item)
+            showPopupBeside(view, item.posterUlr, 170)
         }
         movieAdapter.onItemFocusLost = {
             hidePopup()
@@ -190,41 +259,57 @@ class Shows_Page : AppCompatActivity() {
         tvRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, item_grid2_width) )
 
 
-
-
-        val tvSpacing = (16 * resources.displayMetrics.density).toInt()
-        tvRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+        tvRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
 
         tvAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2)
         tvRecyclerView.adapter = tvAdapter
         tvAdapter.onAddMoreClicked = { loadMoreTv() }
         tvAdapter.onItemFocused = { view, item ->
-            showPopupBeside(view, item)
+            showPopupBeside(view, item.posterUlr, 170)
         }
         tvAdapter.onItemFocusLost = {
             hidePopup()
         }
 
+        //  Search
 
         searchAdapter = GridAdapter2(mutableListOf(), R.layout.item_grid)
-        val searchRecyclerView = findViewById<RecyclerView>(R.id.SearchResults)
-        searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, 130))
+        searchRecyclerView = findViewById<RecyclerView>(R.id.SearchResults)
+        searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, 140))
         searchRecyclerView.adapter = searchAdapter
-        val spacing = (19 * resources.displayMetrics.density).toInt()
-        searchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
+        searchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
         setupSearchUi()
+
+        // Filter
+        filterAdapter = FilterAdapter(mutableListOf(), R.layout.item_filter)
+        filterAdapter.onItemFocused = { view, item ->
+            showPopupBeside(view, item.posterUlr, 195)
+        }
+        filterAdapter.onItemFocusLost = {
+            hidePopup()
+        }
+        fliterRecyclerView = findViewById<RecyclerView>(R.id.filterResults)
+        fliterRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, 140))
+        fliterRecyclerView.adapter = filterAdapter
+        fliterRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
+
+
 
     }
 
 
-    private fun showPopupBeside(targetView: View, item: MovieItemOne) {
+    private fun showPopupBeside(targetView: View, imageUrl: String, popupHeightDp: Int = 0) {
         val popup = findViewById<CardView>(R.id.floatingPopup)
+
+        val popupHeightPx = (popupHeightDp * targetView.context.resources.displayMetrics.density).toInt()
+        popup.layoutParams.height = popupHeightPx
+        popup.requestLayout()
 
         //findViewById<TextView>(R.id.popupTitle).text = item.posterUlr
         val imageC = findViewById<ImageView>(R.id.floatingPopupImg)
 
         Glide.with(targetView.context)
-            .load(item.posterUlr)
+            .load(imageUrl)
             .override(Target.SIZE_ORIGINAL, popup.height) // scale height to container
             .into(imageC)
 
@@ -466,7 +551,7 @@ class Shows_Page : AppCompatActivity() {
 
                         val id = jsonObject.getString("id")
                         val type = "tv"
-                        movies.add(MovieItemOne(title=title, backdropUrl = imgUrl, posterUlr = imgUrl2, imdbCode=id, type=type, year="", rating="", runtime=""))
+                        //movies.add(MovieItemOne(title=title, backdropUrl = imgUrl, posterUlr = imgUrl2, imdbCode=id, type=type, year="", rating="", runtime=""))
 
                         val MovieItemOne = MovieItemOne(title=title, backdropUrl = imgUrl, posterUlr = imgUrl2, imdbCode=id, type=type, year=firstAirDate, rating=voteAverage, runtime=showD)
 
@@ -667,6 +752,358 @@ class Shows_Page : AppCompatActivity() {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private fun filter(){
+        //filter options buttons
+        val filterTypeBtn = findViewById<TextView>(R.id.FilterTypeBtn)
+        val filterCountryBtn = findViewById<TextView>(R.id.FilterCountryBtn)
+        val filterSortBtn = findViewById<TextView>(R.id.FilterSortBtn)
+        val filterGenreBtn = findViewById<TextView>(R.id.FilterGenreBtn)
+        val filterYearBtn = findViewById<TextView>(R.id.FilterYearBtn)
+
+
+        val typeOptions = listOf("Movie", "TV", "All")
+
+
+        val countryOptions = listOf(
+            FilterChoice("AR", "Argentina"),
+            FilterChoice("AT", "Austria"),
+            FilterChoice("BR", "Brazil"),
+            FilterChoice("FI", "Finland"),
+            FilterChoice("AR", "Argentina"),
+            FilterChoice("AR", "Argentina")
+        )
+
+        val sortOptions = listOf(
+            FilterChoice("original_title.asc", "Original Title ↑ Ascending"),
+            FilterChoice("original_title.desc", "Original Title ↓ Descending"),
+            FilterChoice("popularity.asc", "Popularity ↑ Ascending"),
+            FilterChoice("popularity.desc", "Popularity ↓ Descending"),
+            FilterChoice("revenue.asc", "Revenue ↑ Ascending"),
+            FilterChoice("revenue.desc", "Revenue ↓ Descending")
+        )
+
+        val genreOptions = listOf(
+            FilterChoice("28", "Action"),
+            FilterChoice("12", "Adventure"),
+            FilterChoice("16", "Animation"),
+            FilterChoice("35", "Comedy"),
+            FilterChoice("80", "Crime"),
+            FilterChoice("99", "Documentary"),
+            FilterChoice("18", "Drama"),
+            FilterChoice("10751", "Family"),
+            FilterChoice("9648", "Mystery"),
+            FilterChoice("10749", "Romance"),
+            FilterChoice("878", "Sci-Fi"),
+            FilterChoice("10770", "TV Movie"),
+            FilterChoice("53", "Thriller"),
+            FilterChoice("37", "Western"),
+            FilterChoice("10752", "War")
+        )
+
+        val yearOptions = listOf(
+            FilterChoice("2025", "2025"),
+            FilterChoice("2024", "2024"),
+            FilterChoice("2023", "2023"),
+            FilterChoice("2022", "2022"),
+            FilterChoice("2021", "2021")
+        )
+        var selectedType: String? = null
+        val selectedGenres = mutableSetOf<String>()
+        val selectedCountries = mutableSetOf<String>()
+        val selectedsortOptions = mutableSetOf<String>()
+        val selectedyearOptions   = mutableSetOf<String>()
+
+        val filterDisplay = findViewById<TextView>(R.id.FilterDisplay)
+        var movieUrl: String
+        var tvUrl: String
+        var filterPage = 1
+        var isLoadingFliter = false
+
+        fun updateFilterDisplay() {
+            isLoadingFliter = true
+            filterAdapter.isLoadingMore = true
+            //filterAdapter.clearItems()
+
+            //Reset attributes
+            movieUrl = "https://api.themoviedb.org/3/discover/movie?"
+            tvUrl = "https://api.themoviedb.org/3/discover/tv?"
+
+
+            /*
+            val parts = mutableListOf<String>()
+            //selectedType?.let { parts.add("Type: ${it.label}") }
+            if (selectedGenres.isNotEmpty()) parts.add("Genres: ${selectedGenres.joinToString()}")
+            if (selectedCountries.isNotEmpty()) parts.add("Country: ${selectedCountries.joinToString()}")
+            if (selectedsortOptions.isNotEmpty()) parts.add("Sort: ${selectedsortOptions.joinToString()}")
+            if (selectedyearOptions.isNotEmpty()) parts.add("Year: ${selectedyearOptions.joinToString()}")
+
+            filterDisplay.text = if (parts.isEmpty()) "Filter Results ($default)" else parts.joinToString(" | ")
+
+             */
+
+            if (selectedGenres.isNotEmpty()) {
+                val genres = selectedGenres.joinToString(",")
+                movieUrl += "&with_genres=$genres"
+                tvUrl += "&with_genres=$genres"
+            }
+
+            if (selectedyearOptions.isNotEmpty()) {
+                val year = selectedyearOptions.first()
+                movieUrl += "&year=$year"
+                tvUrl += "&year=$year"
+            }
+
+            if (selectedCountries.isNotEmpty()) {
+                val country = selectedCountries.first()
+                movieUrl += "&with_origin_country=$country"
+                tvUrl += "&with_origin_country=$country"
+            }
+
+            if (selectedsortOptions.isNotEmpty()) {
+                val sort = selectedsortOptions.first()
+                movieUrl += "&sort_by=$sort"
+                tvUrl += "&sort_by=$sort"
+            }
+
+            if(selectedType == "Movies"){
+                tvUrl = ""
+            } else if(selectedType == "Tv"){
+                movieUrl = ""
+            } else {}
+
+            CoroutineScope(Dispatchers.IO).launch {
+
+                val urlM = "$movieUrl&page=$filterPage"
+                val urlT = "$tvUrl&page=$filterPage"
+
+                val movieList = mutableListOf<JSONObject>()
+                val tvList = mutableListOf<JSONObject>()
+
+                Log.e("Filter Results urlM", urlM.toString())
+                Log.e("Filter Results urlT", urlT.toString())
+
+                // ------------------ MOVIES ------------------
+                try {
+                    val connection2 = URL(urlM).openConnection() as HttpURLConnection
+                    connection2.requestMethod = "GET"
+                    connection2.setRequestProperty("accept", "application/json")
+                    connection2.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response2 = connection2.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject2 = org.json.JSONObject(response2)
+                    val mvData = jsonObject2.getJSONArray("results")
+
+                    for (i in 0 until mvData.length()) {
+                        movieList.add(mvData.getJSONObject(i))
+                    }
+
+
+
+                    Log.e("Filter Results mvData", mvData.toString())
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                // ------------------ TV SHOWS ------------------
+                try {
+                    val connection2 = URL(urlT).openConnection() as HttpURLConnection
+                    connection2.requestMethod = "GET"
+                    connection2.setRequestProperty("accept", "application/json")
+                    connection2.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response2 = connection2.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject2 = org.json.JSONObject(response2)
+                    val tvData = jsonObject2.getJSONArray("results")
+
+                    for (i in 0 until tvData.length()) {
+                        tvList.add(tvData.getJSONObject(i))
+                    }
+
+                    Log.e("Filter Results tvData", tvData.toString())
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                // Merge movie + tv
+                val combined = (movieList + tvList).shuffled()
+                for (i in 0 until combined.size) {
+                    val current = combined[i]
+
+                    val backdrop_path = current.optString("backdrop_path", "")
+                    val poster_path = current.optString("poster_path", "")
+
+
+
+                    val vote_average = current.optString("vote_average", "")
+                    val title = current.optString("title", "")
+                    //val overview = current.optString("overview", "")
+                    val id = current.optString("id", "")
+                    val original_title = current.optString("original_title", "")
+                    //val original_name = current.optString("original_name", "")
+
+                    val type: String
+                    var date: String
+                    var showD: String = ""
+
+                    val imgPost =  "https://image.tmdb.org/t/p/w780$poster_path"
+                    val imgback  = "https://image.tmdb.org/t/p/w1280$backdrop_path"
+
+                    if (original_title == "") {
+                        type = "tv";
+                        date = if (current.getString("first_air_date").length >= 4) {
+                            current.getString("first_air_date").substring(0, 4)
+                        } else{
+                            current.getString("first_air_date")}
+                    } else {
+                        type = "mv"
+                        date = if (current.getString("release_date").length >= 4) {
+                            current.getString("release_date").substring(0, 4)
+                        } else{
+                            current.getString("release_date")}
+                    }
+
+                    val Item = filterItemOne(title=title, backdropUrl = imgPost, posterUlr =  imgback , imdbCode=id, type=type, year=date, rating=vote_average, runtime=showD)
+
+                    withContext(Dispatchers.Main) {
+                        filterAdapter.addItem(Item)
+                        isLoadingFliter = false
+                        filterAdapter.isLoadingMore = false
+
+
+                    }
+
+                }
+
+            }
+
+
+        }
+        fun loadMoreFilter() {
+            if (isLoadingFliter) return // Prevent multiple rapid clicks
+            filterPage++
+            updateFilterDisplay()
+        }
+
+        filterAdapter.onAddMoreClicked = { loadMoreFilter() }
+        updateFilterDisplay() //Default
+
+        filterTypeBtn.setOnClickListener {
+            showSingleChoiceDialog(
+                title = "Select Type",
+                options = typeOptions,
+                currentSelection = typeOptions.indexOf(selectedType ?: "")
+            ) { selected ->
+                selectedType = selected   // <— this is just a STRING
+                filterPage = 1
+                filterAdapter.clearItems()
+                updateFilterDisplay()
+            }
+        }
+
+        filterGenreBtn.setOnClickListener {
+            showMultiChoiceDialog(
+                title = "Select Genres",
+                options = genreOptions,
+                selectedKeys = selectedGenres
+            ) { selected ->
+                filterPage = 1
+                filterAdapter.clearItems()
+                updateFilterDisplay()
+            }
+        }
+
+        filterCountryBtn.setOnClickListener {
+            showMultiChoiceDialog(
+                title = "Select Genres",
+                options = countryOptions,
+                selectedKeys = selectedCountries
+            ) { selected ->
+                filterPage = 1
+                filterAdapter.clearItems()
+                updateFilterDisplay()
+            }
+        }
+
+        filterSortBtn.setOnClickListener {
+            showMultiChoiceDialog(
+                title = "Select Genres",
+                options = sortOptions,
+                selectedKeys = selectedsortOptions
+            ) { selected ->
+                filterPage = 1
+                filterAdapter.clearItems()
+                updateFilterDisplay()
+            }
+        }
+
+        filterYearBtn.setOnClickListener {
+            showMultiChoiceDialog(
+                title = "Select Genres",
+                options = yearOptions,
+                selectedKeys = selectedyearOptions
+            ) { selected ->
+                filterPage = 1
+                filterAdapter.clearItems()
+                updateFilterDisplay()
+            }
+        }
+
+    }
+    data  class FilterChoice(
+        val value: String,
+        val label: String
+    )
+
+    private fun showSingleChoiceDialog(
+        title: String,
+        options: List<String>,
+        currentSelection: Int,
+        onDone: (String) -> Unit
+    ) {
+        val builder = AlertDialog.Builder(this, R.style.CustomDialogTheme)
+        builder.setTitle(title)
+
+        builder.setSingleChoiceItems(options.toTypedArray(), currentSelection) { dialog, which ->
+            onDone(options[which])
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancel", null)
+        builder.show()
+    }
+
+    private fun showMultiChoiceDialog(
+        title: String,
+        options: List<FilterChoice>,
+        selectedKeys: MutableSet<String>,
+        onDone: (Set<String>) -> Unit
+    ) {
+        val labels = options.map { it.label }.toTypedArray()
+        val checkedItems = options.map { selectedKeys.contains(it.value) }.toBooleanArray()
+
+        val builder = AlertDialog.Builder(this, R.style.CustomDialogTheme)
+        builder.setTitle(title)
+
+        builder.setMultiChoiceItems(labels, checkedItems) { _, index, isChecked ->
+            // Ensure you reference the options list inside the lambda
+            val selectedKey = options[index].value
+            if (isChecked) selectedKeys.add(selectedKey)
+            else selectedKeys.remove(selectedKey)
+        }
+
+        builder.setPositiveButton("Apply") { _, _ ->
+            onDone(selectedKeys)
+        }
+
+        builder.setNegativeButton("Cancel", null)
+        builder.show()
+    }
 
 
 

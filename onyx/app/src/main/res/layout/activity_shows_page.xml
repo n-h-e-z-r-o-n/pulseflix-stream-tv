@@ -152,6 +152,167 @@
 
             </LinearLayout>
 
+             <LinearLayout
+                android:id="@+id/FilterContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/BG_color"
+                android:layout_marginStart="50dp"
+                android:orientation="vertical"
+                android:nextFocusLeft="@+id/FilterContainer"
+                android:visibility="visible">
+
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginTop="5dp"
+                     android:layout_marginBottom="10dp">
+
+
+                         <TextView
+                             android:id="@+id/FilterTypeBtn"
+                             android:background ="@drawable/filter_button"
+                             android:layout_width="100dp"
+                             android:layout_height="30dp"
+                             android:gravity="center"
+                             android:padding="5dp"
+                             android:textColor="?attr/FG_color"
+                             android:fontFamily="serif-monospace"
+                             android:text="Type ¬"
+                             android:textSize="15sp"
+                             android:textStyle="bold"
+                             android:layout_gravity="center"
+                             tools:ignore="HardcodedText"
+                             android:clickable="true"
+                             android:focusable="true"
+                             android:focusableInTouchMode="true"/>
+
+
+                         <TextView
+                             android:id="@+id/FilterCountryBtn"
+                             android:background ="@drawable/filter_button"
+                             android:layout_marginStart="9dp"
+                             android:layout_width="100dp"
+                             android:layout_height="30dp"
+                             android:gravity="center"
+                             android:padding="5dp"
+                             android:text="Country ¬"
+                             android:fontFamily="serif-monospace"
+                             android:textSize="15sp"
+                             android:textColor="?attr/FG_color"
+                             android:textStyle="bold"
+                             android:layout_gravity="center"
+                             tools:ignore="HardcodedText"
+                             android:clickable="true"
+                             android:focusable="true"
+                             android:focusableInTouchMode="true"
+                             />
+
+
+                         <TextView
+                             android:id="@+id/FilterSortBtn"
+                             android:background ="@drawable/filter_button"
+                             android:layout_marginStart="9dp"
+                             android:layout_width="100dp"
+                             android:layout_height="30dp"
+                             android:gravity="center"
+                             android:padding="5dp"
+                             android:text="Sort By ¬"
+                             android:textSize="15sp"
+                             android:fontFamily="serif-monospace"
+                             android:textColor="?attr/FG_color"
+                             android:textStyle="bold"
+                             android:layout_gravity="center"
+                             tools:ignore="HardcodedText"
+                             android:clickable="true"
+                             android:focusable="true"
+                             android:focusableInTouchMode="true"/>
+
+
+
+                         <TextView
+                             android:id="@+id/FilterGenreBtn"
+                             android:background ="@drawable/filter_button"
+                             android:layout_marginStart="9dp"
+                             android:layout_width="100dp"
+                             android:layout_height="30dp"
+                             android:gravity="center"
+                             android:padding="5dp"
+                             android:text="Genres ¬"
+                             android:fontFamily="serif-monospace"
+                             android:textSize="15sp"
+                             android:textColor="?attr/FG_color"
+                             android:textStyle="bold"
+                             android:layout_gravity="center"
+                             tools:ignore="HardcodedText"
+                             android:clickable="true"
+                             android:focusable="true"
+                             android:focusableInTouchMode="true"
+                             />
+
+
+
+                         <TextView
+                             android:id="@+id/FilterYearBtn"
+                             android:background ="@drawable/filter_button"
+                             android:layout_marginStart="9dp"
+                             android:layout_width="100dp"
+                             android:layout_height="30dp"
+                             android:gravity="center"
+                             android:text="Year ¬"
+                             android:textSize="15sp"
+                             android:fontFamily="serif-monospace"
+                             android:textStyle="bold"
+                             android:textColor="?attr/FG_color"
+                             android:layout_gravity="center"
+                             tools:ignore="HardcodedText"
+                             android:clickable="true"
+                             android:focusable="true"
+                             android:focusableInTouchMode="true"/>
+
+
+                         <TextView
+                             android:id="@+id/FilterBtn"
+                             android:background ="@drawable/filter_button"
+                             android:layout_marginStart="40dp"
+                             android:layout_width="100dp"
+                             android:layout_height="30dp"
+                             android:gravity="center"
+                             android:text="Filter"
+                             android:textSize="13sp"
+                             android:fontFamily="serif-monospace"
+                             android:textStyle="bold"
+                             android:textColor="?attr/FG_color"
+                             android:layout_gravity="center"
+                             tools:ignore="HardcodedText"
+                             android:clickable="true"
+                             android:focusable="true"
+                             android:focusableInTouchMode="true"/>
+
+
+                 </LinearLayout>
+                 <TextView
+                     android:id="@+id/FilterDisplay"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:text="Filter Results"
+                     android:textColor="?attr/SidebarFocus"
+                     tools:ignore="HardcodedText"
+                     android:textStyle="bold"
+                     android:fontFamily="serif-monospace"/>
+
+
+                 <androidx.recyclerview.widget.RecyclerView
+                     android:id="@+id/filterResults"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:clipToPadding="false"
+                     android:overScrollMode="never"
+                     android:scrollbars="none"
+                     tools:ignore="NestedWeights" />
+
+             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="30dp"
@@ -219,11 +380,27 @@
                         />
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70sp"
+                    android:background="@drawable/right_rounded"
+                    android:gravity="center"
+                    android:id="@+id/FilterButtonLayout">
+                    <ImageView
+                        android:id="@+id/FilterButtonImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_filter"
+                        android:background="@android:color/transparent"
+                        app:tint="?attr/FG_color"
+                        />
+
+                </LinearLayout>
 
                 </LinearLayout>
 
                 <include layout="@layout/laod_animation"/>
-                <include layout="@layout/side_bar"/>
+                <include layout="@layout/side_bar" android:visibility="gone"/>
 
 
 

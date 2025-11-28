@@ -185,7 +185,173 @@ data class MovieItemOne(
     val rating: String = "",
     val runtime: String = ""
 )
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
+class FilterAdapter(
+    private val items: MutableList<filterItemOne>,
+    private val layoutResId: Int
+) : RecyclerView.Adapter<FilterAdapter.ViewHolder>() {
+
+    companion object {
+        private const val VIEW_TYPE_MOVIE = 0
+        private const val VIEW_TYPE_ADD_BUTTON = 1
+        private var lastKeyTime = 0L
+        private val KEY_DEBOUNCE_DELAY = 350L // ms
+    }
+
+    var onAddMoreClicked: (() -> Unit)? = null
+    var onItemFocused: ((View, filterItemOne) -> Unit)? = null
+    var onItemFocusLost: (() -> Unit)? = null
+    var isLoadingMore = false
+        set(value) {
+            field = value
+            notifyItemChanged(items.size) // refresh the "Add More" item only
+        }
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val Movie_image: ImageView? = view.findViewById(R.id.itemImage)
+        val showYear: TextView? = view.findViewById(R.id.itemText)
+        val showTitle: TextView? = view.findViewById(R.id.showTitle)
+        val showRating: TextView? = view.findViewById(R.id.showRating)
+        val showRS: TextView? = view.findViewById(R.id.showRS)
+        val showType: TextView? = view.findViewById(R.id.showType)
+
+        init {
+
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        // The last item is the "Add More" button
+        return if (position == items.size) VIEW_TYPE_ADD_BUTTON else VIEW_TYPE_MOVIE
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val layoutId = if (viewType == VIEW_TYPE_ADD_BUTTON) {
+            R.layout.item_add_more // 👈 Create this layout separately
+        } else {
+            layoutResId
+        }
+
+        val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
+
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (getItemViewType(position) == VIEW_TYPE_ADD_BUTTON) {
+
+            val content = holder.itemView.findViewById<View>(R.id.addMoreContent)
+            val loading = holder.itemView.findViewById<View>(R.id.addMoreLoading)
+
+            if (isLoadingMore) {
+                content.visibility = View.GONE
+                loading.visibility = View.VISIBLE
+                holder.itemView.isClickable = false
+                holder.itemView.isFocusable = false
+            } else {
+                content.visibility = View.VISIBLE
+                loading.visibility = View.GONE
+                holder.itemView.isClickable = true
+                holder.itemView.isFocusable = true
+            }
+            // Handle the Add More button
+            holder.itemView.setOnClickListener {
+                onAddMoreClicked?.invoke()
+            }
+            return
+        }
+
+        val currentItem = items[position]
+        val title = currentItem.title
+        val imageUrl = currentItem.backdropUrl
+        val imdbCode = currentItem.imdbCode
+        val type = currentItem.type
+        val year = currentItem.year
+        val rating = currentItem.rating
+        val runtime = currentItem.runtime
+
+        holder.showYear?.text = year
+        holder.showTitle?.text = title
+        holder.showRating?.text = rating
+        holder.showRS?.text = runtime
+        holder.showType?.text = type
+
+        Glide.with(holder.itemView.context)
+            .load(imageUrl)
+            .centerInside()
+            .into(holder.Movie_image!!)
+
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, Watch_Page::class.java)
+            intent.putExtra("imdb_code", imdbCode)
+            intent.putExtra("type", type)
+            context.startActivity(intent)
+        }
+
+        holder.itemView.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                onItemFocused?.invoke(v, currentItem)
+            }
+            else {
+                onItemFocusLost?.invoke()   // hide popup
+            }
+        }
+
+
+
+        holder.itemView.setOnKeyListener { v, keyCode, event ->
+            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+            val now = System.currentTimeMillis()
+            if (now - lastKeyTime < KEY_DEBOUNCE_DELAY) return@setOnKeyListener true
+            lastKeyTime = now
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    if (position == 0) return@setOnKeyListener true
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    if (position == items.size) return@setOnKeyListener true
+                }
+            }
+
+            false
+        }
+    }
+
+    override fun getItemCount(): Int {
+        // Total items = movies + the add button
+        return items.size + 1
+    }
+
+    fun addItem(item: filterItemOne) {
+        items.add(item)
+        notifyItemInserted(items.size - 1)
+    }
+
+    fun addItems(newItems: List<filterItemOne>) {
+        val startPos = items.size
+        items.addAll(newItems)
+        notifyItemRangeInserted(startPos, newItems.size)
+    }
+    fun clearItems() {
+        items.clear()
+        notifyDataSetChanged()
+    }
+}
+
+
+data class filterItemOne(
+    val title: String = "",
+    val backdropUrl: String= "",
+    val posterUlr: String= "",
+    val imdbCode: String= "",
+    val type: String = "",
+    val year: String = "",
+    val rating: String = "",
+    val runtime: String = ""
+)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
