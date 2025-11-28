@@ -142,10 +142,6 @@ class Shows_Page : AppCompatActivity() {
         searchContainer.visibility = View.GONE
         fliterContainer.visibility = View.GONE
 
-        moviesBtn.alpha = 1f
-        tvBtn.alpha = 0.5f
-        SearchBtn.alpha = 0.5f
-        filterBtn.alpha = 0.5f
 
         moviesBtn.isSelected = true
         tvBtn.isSelected = false
@@ -167,10 +163,7 @@ class Shows_Page : AppCompatActivity() {
         searchContainer.visibility = View.GONE
         fliterContainer.visibility = View.GONE
 
-        moviesBtn.alpha = 0.5f
-        tvBtn.alpha = 1f
-        SearchBtn.alpha = 0.5f
-        filterBtn.alpha = 0.5f
+
 
 
         val fgColor = getThemeColor(R.attr.FG_color)
@@ -189,10 +182,6 @@ class Shows_Page : AppCompatActivity() {
         searchContainer.visibility = View.GONE
         fliterContainer.visibility = View.VISIBLE
 
-        moviesBtn.alpha = 0.5f
-        tvBtn.alpha = 0.5f
-        SearchBtn.alpha = 0.5f
-        filterBtn.alpha = 1f
 
 
         val fgColor = getThemeColor(R.attr.FG_color)
@@ -210,10 +199,6 @@ class Shows_Page : AppCompatActivity() {
         searchContainer.visibility = View.VISIBLE
         fliterContainer.visibility = View.GONE
 
-        moviesBtn.alpha = 0.5f
-        tvBtn.alpha = 0.5f
-        SearchBtn.alpha = 1f
-        filterBtn.alpha = 0.5f
 
 
         val fgColor = getThemeColor(R.attr.FG_color)
@@ -753,6 +738,7 @@ class Shows_Page : AppCompatActivity() {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private fun filter(){
+
         //filter options buttons
         val filterTypeBtn = findViewById<TextView>(R.id.FilterTypeBtn)
         val filterCountryBtn = findViewById<TextView>(R.id.FilterCountryBtn)
@@ -761,9 +747,8 @@ class Shows_Page : AppCompatActivity() {
         val filterYearBtn = findViewById<TextView>(R.id.FilterYearBtn)
 
 
+        // Filter data
         val typeOptions = listOf("Movie", "TV", "All")
-
-
         val countryOptions = listOf(
             FilterChoice("AR", "Argentina"),
             FilterChoice("AT", "Austria"),
@@ -807,6 +792,8 @@ class Shows_Page : AppCompatActivity() {
             FilterChoice("2022", "2022"),
             FilterChoice("2021", "2021")
         )
+
+        // Filter state
         var selectedType: String? = null
         val selectedGenres = mutableSetOf<String>()
         val selectedCountries = mutableSetOf<String>()
@@ -824,7 +811,7 @@ class Shows_Page : AppCompatActivity() {
             filterAdapter.isLoadingMore = true
             //filterAdapter.clearItems()
 
-            //Reset attributes
+            // Reset attributes
             movieUrl = "https://api.themoviedb.org/3/discover/movie?"
             tvUrl = "https://api.themoviedb.org/3/discover/tv?"
 

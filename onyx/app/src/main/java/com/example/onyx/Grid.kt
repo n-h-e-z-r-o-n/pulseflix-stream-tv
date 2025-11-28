@@ -196,7 +196,7 @@ class FilterAdapter(
         private const val VIEW_TYPE_MOVIE = 0
         private const val VIEW_TYPE_ADD_BUTTON = 1
         private var lastKeyTime = 0L
-        private val KEY_DEBOUNCE_DELAY = 350L // ms
+        private val KEY_DEBOUNCE_DELAY = 270L // ms
     }
 
     var onAddMoreClicked: (() -> Unit)? = null

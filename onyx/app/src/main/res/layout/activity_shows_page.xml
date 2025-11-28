@@ -349,6 +349,7 @@
                         android:layout_height="70sp"
                         android:background="@drawable/right_rounded"
                         android:gravity="center"
+                        android:layout_marginTop="10dp"
                         android:id="@+id/TvButtonLayout">
                         <TextView
                             android:id="@+id/TvButtonText"
@@ -369,6 +370,7 @@
                     android:layout_height="70sp"
                     android:background="@drawable/right_rounded"
                     android:gravity="center"
+                    android:layout_marginTop="10dp"
                     android:id="@+id/SearchButtonLayout">
                     <ImageView
                         android:id="@+id/SearchButtonImg"
@@ -385,6 +387,7 @@
                     android:layout_height="70sp"
                     android:background="@drawable/right_rounded"
                     android:gravity="center"
+                    android:layout_marginTop="10dp"
                     android:id="@+id/FilterButtonLayout">
                     <ImageView
                         android:id="@+id/FilterButtonImg"

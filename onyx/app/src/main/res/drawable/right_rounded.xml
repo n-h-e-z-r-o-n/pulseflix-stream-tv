@@ -10,19 +10,32 @@
                 android:topLeftRadius="0dp"
                 android:bottomLeftRadius="0dp" />
 
-            <solid android:color="?attr/SidebarFocus"/>
+            <gradient
+                android:type="linear"
+                android:gradientRadius="800dp"
+                android:startColor="@android:color/transparent"
+                android:endColor="?attr/AccentColor"
+                />
+
         </shape>
     </item>
 
     <item>
-        <shape android:shape="rectangle">
+        <shape android:shape="rectangle" >
             <corners
                 android:topRightRadius="10dp"
                 android:bottomRightRadius="10dp"
                 android:topLeftRadius="0dp"
                 android:bottomLeftRadius="0dp" />
 
-            <solid android:color="?attr/BG_color_up"/>
+            <gradient
+                android:type="linear"
+                android:gradientRadius="800dp"
+                android:startColor="@android:color/transparent"
+                android:endColor="?attr/SidebarFocus"
+                />
+
+
         </shape>
     </item>
 </selector>
