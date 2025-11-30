@@ -66,8 +66,7 @@ class Category_Page : AppCompatActivity() {
         setContentView(R.layout.activity_category_page)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         LoadingAnimation.setup(this, R.raw.b)
-
-        NavAction.setupSidebar(this)
+        LoadingAnimation.show(this)
 
         moviesButton = findViewById(R.id.CategoryMoviesButtonLayout)
         tvButton = findViewById(R.id.CategoryTvButtonLayout)
@@ -414,6 +413,7 @@ class Category_Page : AppCompatActivity() {
                         currentTvPage++
                         isLoadingTv = false
                         tvAdapter.isLoadingMore = false
+                        LoadingAnimation.hide(this@Category_Page)
                     }
                     return@launch
                 } catch (e: Exception) {

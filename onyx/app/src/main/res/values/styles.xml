@@ -11,21 +11,23 @@
     </style>
 
     <style name="KeyboardKey">
-        <item name="android:layout_width">35dp</item>
-        <item name="android:layout_height">35dp</item>
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">30dp</item>
         <item name="android:layout_margin">0.5dp</item>
-        <item name="android:background">@drawable/filter_button</item>
-        <item name="android:textSize">10sp</item>
+        <item name="android:background">@drawable/keyboard_buttons</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">?attr/AccentColor</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
     </style>
 
     <style name="KeyboardKeySpecial">
-        <item name="android:layout_width">70dp</item>
-        <item name="android:layout_height">35dp</item>
-        <item name="android:textSize">17sp</item>
-        <item name="android:background">@drawable/filter_button</item>
+        <item name="android:layout_width">53dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:background">@drawable/keyboard_buttons</item>
         <item name="android:textColor">?attr/FG_color</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
@@ -33,11 +35,11 @@
 
     <style name="KeyboardKeySpace">
         <item name="android:layout_width">130dp</item>
-        <item name="android:layout_height">40dp</item>
-        <item name="android:layout_margin">4dp</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">?attr/FG_color</item>
-        <item name="android:background">@drawable/filter_button</item>
+        <item name="android:background">@drawable/keyboard_buttons</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
     </style>

@@ -652,6 +652,11 @@ class GridAdapter2(
         notifyItemInserted(items.size - 1)
 
     }
+
+    fun clearItems() {
+        items.clear()
+        notifyDataSetChanged()
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

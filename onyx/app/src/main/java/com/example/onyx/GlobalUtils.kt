@@ -295,6 +295,28 @@ object GlobalUtils {
         return (screenWidthPx / itemWidthPx).coerceAtLeast(1)
     }
 
+    fun calculateSpanCountV2(
+        context: Context,
+        itemWidthDp: Int,
+        reservedWidthDp: Int = 0
+    ): Int {
+        val displayMetrics = context.resources.displayMetrics
+
+        val screenWidthPx = displayMetrics.widthPixels
+
+        // Convert dp → px
+        val itemWidthPx = (itemWidthDp * displayMetrics.density).toInt()
+        val reservedWidthPx = (reservedWidthDp * displayMetrics.density).toInt()
+
+        // Available screen width after subtracting sidebar / margin / extra UI
+        val availableWidthPx = (screenWidthPx - reservedWidthPx).coerceAtLeast(0)
+
+        // Calculate span count
+        return (availableWidthPx / itemWidthPx).coerceAtLeast(1)
+    }
+
+
+
 
 
 

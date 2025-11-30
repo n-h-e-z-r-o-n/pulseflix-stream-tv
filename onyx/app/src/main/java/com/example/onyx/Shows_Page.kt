@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -255,7 +256,8 @@ class Shows_Page : AppCompatActivity() {
         //  Search
         searchAdapter = GridAdapter2(mutableListOf(), R.layout.item_grid)
         searchRecyclerView = findViewById<RecyclerView>(R.id.SearchResults)
-        searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, 140))
+        searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this, 140,320 ))
+
         searchRecyclerView.adapter = searchAdapter
         searchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
         setupSearchUi()
@@ -609,14 +611,17 @@ class Shows_Page : AppCompatActivity() {
     private fun setupSearchUi() {
 
         val searchInput = findViewById<EditText>(R.id.HomeSearchInput)
-        val keyboardLayout = findViewById<LinearLayout>(R.id.keyboard_layout) // Make sure your keyboard has this ID
+        val keyboardLayout = findViewById<LinearLayout>(R.id.keyboard_layout)
         val keyboardManager = CustomKeyboardManager(
             this, 
             searchInput, 
             keyboardLayout,
             object : OnSearchListener {
                 override fun EnterActionTrigger(query: String) {
-                    performSearch(query)
+                    val searchTerm  = query.trim()
+                    if (searchTerm.isNotEmpty()) {
+                        performSearch(searchTerm)
+                    }
                 }
             }
         )
@@ -635,7 +640,7 @@ class Shows_Page : AppCompatActivity() {
 
                     // --- Background work (network request) ---
                     val url =
-                        "https://api.themoviedb.org/3/search/multi?include_adult=true&query=$searchTerm"
+                        "https://api.themoviedb.org/3/search/multi?include_adult=false&query=$searchTerm"
                     val connection = URL(url).openConnection() as HttpURLConnection
                     connection.requestMethod = "GET"
                     connection.setRequestProperty("accept", "application/json")
@@ -651,6 +656,13 @@ class Shows_Page : AppCompatActivity() {
                     val moviesArray = jsonObject.getJSONArray("results")
 
                     //Log.e("SEARCH RESULTS", moviesArray.toString())
+
+
+                    withContext(Dispatchers.Main)  {
+                        val find = findViewById<TextView>(R.id.searchResultsDisplay)
+                        find.text = "Search Results for: $searchTerm (${moviesArray.length()})"
+                        searchAdapter.clearItems()
+                    }
 
                     for (i in 0 until moviesArray.length()) {
                         val current = moviesArray.getJSONObject(i)
@@ -740,6 +752,9 @@ class Shows_Page : AppCompatActivity() {
                         withContext(Dispatchers.Main) {
                             searchAdapter.addItem(movieItem)
                         }
+
+
+
 
                     }
 

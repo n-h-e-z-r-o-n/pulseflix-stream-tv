@@ -3,7 +3,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="10dp"
+        android:padding="4dp"
         android:background="@drawable/keyboard_background"
         android:layout_gravity="center"
         android:id="@+id/keyboard_layout"
@@ -131,6 +131,10 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <Button android:id="@+id/key_clear" android:text="Clear"
+                android:fontFamily="serif-monospace"
+                style="@style/KeyboardKeySpecial" />
+
             <Button android:id="@+id/key_space" android:text="Space"
                 style="@style/KeyboardKeySpace" />
 
@@ -138,9 +142,7 @@
                 android:fontFamily="serif-monospace"
                 style="@style/KeyboardKeySpecial" />
 
-            <Button android:id="@+id/key_clear" android:text="Clear"
-                android:fontFamily="serif-monospace"
-                style="@style/KeyboardKeySpecial" />
+
 
         </LinearLayout>
 

@@ -32,7 +32,7 @@
                 android:type="linear"
                 android:gradientRadius="800dp"
                 android:startColor="@android:color/transparent"
-                android:endColor="?attr/SidebarFocus"
+                android:endColor="?attr/FG_color"
                 />
 
 
