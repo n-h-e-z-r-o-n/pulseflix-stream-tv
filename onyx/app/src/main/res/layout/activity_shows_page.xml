@@ -142,7 +142,7 @@
                             android:fontFamily="@font/d"
                             android:textSize="13sp"
                             android:paddingStart="10dp"
-                            android:textColor="?attr/AccentColor"
+                            android:textColor="?attr/FG_color"
                             tools:ignore="HardcodedText,RtlSymmetry"
                             android:layout_marginTop="7dp"/>
 
@@ -293,7 +293,7 @@
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:text="Filter Results"
-                     android:textColor="?attr/SidebarFocus"
+                     android:textColor="?attr/FG_color"
                      tools:ignore="HardcodedText"
                      android:textStyle="bold"
                      android:fontFamily="serif-monospace"/>

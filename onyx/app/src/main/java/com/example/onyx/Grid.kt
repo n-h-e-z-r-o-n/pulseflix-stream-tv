@@ -478,7 +478,7 @@ class CategoryAdapter(
         // ✅ wait until ImageView is measured
         holder.category_image.post {
             val currentHeight = holder.category_image.height
-            val finalHeight = if (currentHeight > 230) 230 else currentHeight
+            val finalHeight = if (currentHeight > 200) 200 else currentHeight
 
             Glide.with(holder.itemView.context)
                 .load(imageUrl)

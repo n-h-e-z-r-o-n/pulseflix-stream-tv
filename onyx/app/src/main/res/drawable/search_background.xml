@@ -22,13 +22,13 @@
             android:centerX="50%"
             android:centerY="50%"
             android:gradientRadius="900dp"
-            android:startColor="#333333"
-            android:endColor="#333333"
+            android:startColor="?attr/BG_color"
+            android:endColor="?attr/BG_color"
             />
         <corners android:radius="4dp" />
         <stroke
             android:width="1dp"
-            android:color="#333333"  />
+            android:color="?attr/BG_color_up"  />
     </shape>
 </item>
 </selector>
