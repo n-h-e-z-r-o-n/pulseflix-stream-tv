@@ -17,7 +17,7 @@
         <item name="android:background">@drawable/keyboard_buttons</item>
         <item name="android:textSize">13sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?attr/AccentColor</item>
+        <item name="android:textColor">?attr/FG_color</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
     </style>

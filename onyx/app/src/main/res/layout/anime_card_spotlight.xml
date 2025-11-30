@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:nextFocusDown="@id/cardButton"
-    android:nextFocusUp="@+id/AnimeSearchInput"
+    android:nextFocusUp="@+id/searchBarAnime"
     android:focusable="true"
     android:descendantFocusability="beforeDescendants">
 
@@ -313,7 +313,7 @@
                 android:focusableInTouchMode="true"
                 android:clickable="true"
                 android:background="@drawable/tv_button_selector"
-                android:nextFocusUp="@+id/AnimeSearchInput"
+                android:nextFocusUp="@+id/searchBarAnime"
                 android:nextFocusDown="@+id/Anime_Trending_widget"
                 android:nextFocusRight="@+id/spotlightAnimesCard"
                 android:nextFocusLeft="@+id/spotlightAnimesCard"

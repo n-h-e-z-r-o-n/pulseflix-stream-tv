@@ -1,5 +1,6 @@
 package com.example.onyx
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.view.KeyEvent
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -562,6 +565,40 @@ class Anime_Page : AppCompatActivity() {
     private fun setupSearchUi() {
 
         val searchInput = findViewById<EditText>(R.id.AnimeSearchInput)
+        val searchBar = findViewById<LinearLayout>(R.id.searchBarAnime)
+
+        val focusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                expandSearchBar(searchBar)
+                searchBar.post {
+                    searchInput.requestFocus()
+                    showKeyboard(searchInput)
+                }
+            } else {
+                collapseSearchBar(searchBar)
+                hideKeyboard()
+            }
+        }
+
+        // Key listener to detect microphone button press (VOICE_ASSIST)
+        searchInput.setOnKeyListener { _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                when (keyCode) {
+                    KeyEvent.KEYCODE_VOICE_ASSIST -> {
+                        // Handle microphone button press here
+                        searchInput.requestFocus()
+                        showKeyboard(searchInput)
+                        true
+                    }
+                }
+            }
+            false
+        }
+
+        // Set focus listeners on both the search bar and the input field
+        searchBar.onFocusChangeListener = focusChangeListener
+        searchInput.onFocusChangeListener = focusChangeListener
+
         try{
             searchInput.setOnEditorActionListener { _, actionId, event ->
 
@@ -590,7 +627,48 @@ class Anime_Page : AppCompatActivity() {
             }
     }
 
-    private fun setupBackPressedCallback() {
+    private fun showKeyboard(view: View) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    private fun hideKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        currentFocus?.let {
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+    }
+
+    private fun expandSearchBar(searchBar: LinearLayout) {
+        val params = searchBar.layoutParams as ViewGroup.MarginLayoutParams
+        params.width = 400.dpToPx(this)
+        params.marginEnd = 0
+        searchBar.layoutParams = params
+
+        // Optional: Add some visual feedback
+        searchBar.elevation = 8f
+    }
+
+    private fun collapseSearchBar(searchBar: LinearLayout) {
+        val params = searchBar.layoutParams as ViewGroup.MarginLayoutParams
+        params.width =30.dpToPx(this) // Convert dp to pixels
+        searchBar.layoutParams = params
+
+        // Reset visual changes
+        searchBar.elevation = 0f
+    }
+    // Extension function to convert dp to pixels
+    private fun Int.dpToPx(context: Context): Int {
+        return (this * context.resources.displayMetrics.density).toInt()
+    }
+
+
+
+
+
+
+
+        private fun setupBackPressedCallback() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
 

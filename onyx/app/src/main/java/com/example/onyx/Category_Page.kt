@@ -136,8 +136,6 @@ class Category_Page : AppCompatActivity() {
         moviesRecyclerView.visibility = View.VISIBLE
         tvRecyclerView.visibility = View.GONE
 
-        moviesButton.alpha = 1f
-        tvButton.alpha = 0.5f
         moviesButton.isSelected = true
         tvButton.isSelected = false
 
@@ -154,8 +152,6 @@ class Category_Page : AppCompatActivity() {
         moviesRecyclerView.visibility = View.GONE
         tvRecyclerView.visibility = View.VISIBLE
 
-        moviesButton.alpha = 0.5f
-        tvButton.alpha = 1f
         moviesButton.isSelected = false
         tvButton.isSelected = true
 
