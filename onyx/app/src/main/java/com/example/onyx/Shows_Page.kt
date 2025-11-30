@@ -37,6 +37,8 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import com.bumptech.glide.request.target.Target
+import java.io.IOException
+
 class Shows_Page : AppCompatActivity() {
     private var currentMoviePage = 1
     private var isLoadingMoreMovies = false
@@ -91,8 +93,7 @@ class Shows_Page : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         LoadingAnimation.setup(this, R.raw.b)
-        //LoadingAnimation.show(this)
-
+        LoadingAnimation.show(this)
         NavAction.setupSidebar(this)
 
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,12 +223,10 @@ class Shows_Page : AppCompatActivity() {
         val item_grid2_width = 289
 
 
-        // 🎬 Movies
+        //  Movies
         movieRecyclerView = findViewById(R.id.MoviesRecyclerView)
         movieRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, item_grid2_width))
-
         movieRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
-
         movieAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2)
         movieRecyclerView.adapter = movieAdapter
         movieAdapter.onAddMoreClicked = { loadMoreMovies() }
@@ -239,13 +238,10 @@ class Shows_Page : AppCompatActivity() {
         }
 
 
-        // 📺 TV Shows
+        //  TV Shows
         tvRecyclerView = findViewById(R.id.TVsRecyclerView)
         tvRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, item_grid2_width) )
-
-
         tvRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
-
         tvAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2)
         tvRecyclerView.adapter = tvAdapter
         tvAdapter.onAddMoreClicked = { loadMoreTv() }
@@ -257,7 +253,6 @@ class Shows_Page : AppCompatActivity() {
         }
 
         //  Search
-
         searchAdapter = GridAdapter2(mutableListOf(), R.layout.item_grid)
         searchRecyclerView = findViewById<RecyclerView>(R.id.SearchResults)
         searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, 140))
@@ -428,9 +423,17 @@ class Shows_Page : AppCompatActivity() {
                         movieAdapter.addItems(movies)
                         isLoadingMoreMovies = false
                         movieAdapter.isLoadingMore = false
+                        LoadingAnimation.hide(this@Shows_Page)
                     }
 
                     return@launch // success → stop repeating
+                } catch (e: IOException) {
+                    withContext(Dispatchers.Main) {
+                        Log.e("DEBUG_SHOWS PAGE", "Network error ", e)
+                        LoadingAnimation.setup(this@Shows_Page, R.raw.error)
+                        LoadingAnimation.show(this@Shows_Page)
+                    }
+                    delay(30_000)
                 } catch (e: Exception) {
                     Log.e("DEBUG_MOVIES_ERROR", "Attempt ${attempt + 1} failed: ${e.message}", e)
                     delay(5000)
@@ -504,13 +507,24 @@ class Shows_Page : AppCompatActivity() {
                         Log.e("DEBUG_TAG_TvShows 3", jsonObject.toString())
 
                         val title = jsonObject.getString("name")
-                        val numberOfSeasons = try{jsonObject.getJSONObject("last_episode_to_air").getString("season_number")} catch (e: Exception) {""}
-                        val episodeNumber = try{jsonObject.getJSONObject("last_episode_to_air").getString("episode_number")} catch (e: Exception) {""}
+                        val numberOfSeasons = try {
+                            jsonObject.getJSONObject("last_episode_to_air")
+                                .getString("season_number")
+                        } catch (e: Exception) {
+                            ""
+                        }
+                        val episodeNumber = try {
+                            jsonObject.getJSONObject("last_episode_to_air")
+                                .getString("episode_number")
+                        } catch (e: Exception) {
+                            ""
+                        }
                         val showD = "SS$numberOfSeasons EPS$episodeNumber"
                         val firstAirDate = if (jsonObject.getString("first_air_date").length >= 4) {
                             jsonObject.getString("first_air_date").substring(0, 4)
-                        } else{
-                            jsonObject.getString("first_air_date")}
+                        } else {
+                            jsonObject.getString("first_air_date")
+                        }
 
                         val voteAverage = "☆" + jsonObject.getString("vote_average").substring(0, 3)
 
@@ -538,12 +552,22 @@ class Shows_Page : AppCompatActivity() {
                         val type = "tv"
                         //movies.add(MovieItemOne(title=title, backdropUrl = imgUrl, posterUlr = imgUrl2, imdbCode=id, type=type, year="", rating="", runtime=""))
 
-                        val MovieItemOne = MovieItemOne(title=title, backdropUrl = imgUrl, posterUlr = imgUrl2, imdbCode=id, type=type, year=firstAirDate, rating=voteAverage, runtime=showD)
+                        val MovieItemOne = MovieItemOne(
+                            title = title,
+                            backdropUrl = imgUrl,
+                            posterUlr = imgUrl2,
+                            imdbCode = id,
+                            type = type,
+                            year = firstAirDate,
+                            rating = voteAverage,
+                            runtime = showD
+                        )
 
                         withContext(Dispatchers.Main) {
                             tvAdapter.addItem(MovieItemOne)
                             isLoadingMoreTv = false
                             tvAdapter.isLoadingMore = false
+                            LoadingAnimation.hide(this@Shows_Page)
                         }
 
 
@@ -551,6 +575,14 @@ class Shows_Page : AppCompatActivity() {
                     Log.e("DEBUG_TAG_TvShows 4", movies.toString())
 
                     return@launch
+                } catch (e: IOException) {
+                        withContext(Dispatchers.Main) {
+                            Log.e("DEBUG_SHOWS PAGE", "Network error ", e)
+                            LoadingAnimation.setup(this@Shows_Page, R.raw.error)
+                            LoadingAnimation.show(this@Shows_Page)
+                        }
+                        delay(30_000)
+
                 } catch (e: Exception) {
                     Log.e("DEBUG_TAG_TvShows", "Attempt ${attempt+1} failed", e)
                     delay(10_000)
@@ -577,34 +609,21 @@ class Shows_Page : AppCompatActivity() {
     private fun setupSearchUi() {
 
         val searchInput = findViewById<EditText>(R.id.HomeSearchInput)
-        try{
-            searchInput.setOnEditorActionListener { _, actionId, event ->
-
-                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                    (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
-                ) {
-
-                    val searchTerm = searchInput.text.toString().trim()
-                    if (searchTerm.isNotEmpty()) {
-
-                        // Hide keyboard
-                        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(searchInput.windowToken, 0)
-
-                        performSearch(searchTerm)
-
-                    }
-
-                    true
-                } else {
-                    false
+        val keyboardLayout = findViewById<LinearLayout>(R.id.keyboard_layout) // Make sure your keyboard has this ID
+        val keyboardManager = CustomKeyboardManager(
+            this, 
+            searchInput, 
+            keyboardLayout,
+            object : OnSearchListener {
+                override fun EnterActionTrigger(query: String) {
+                    performSearch(query)
                 }
             }
+        )
+        keyboardManager.showKeyboard()
+        //keyboardManager.hideKeyboard()
+        keyboardManager.isKeyboardVisible()
 
-        }catch (e: Exception){
-            Log.e("ANIME_STATUS S-Error", "setupSearchUi() ", e)
-
-        }
     }
 
     private fun performSearch(searchTerm:String) {
@@ -948,7 +967,7 @@ class Shows_Page : AppCompatActivity() {
                         } else{
                             current.getString("first_air_date")}
                     } else {
-                        type = "mv"
+                        type = "movie"
                         date = if (current.getString("release_date").length >= 4) {
                             current.getString("release_date").substring(0, 4)
                         } else{

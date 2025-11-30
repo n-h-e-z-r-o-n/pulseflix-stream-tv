@@ -70,7 +70,7 @@
             </androidx.cardview.widget.CardView>
 
 
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/searchContainerHome"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -78,79 +78,88 @@
                 android:layout_marginStart="50dp"
                 android:orientation="vertical"
                 android:nextFocusLeft="@+id/searchContainerHome"
-                android:visibility="gone">
+                android:visibility="visible">
 
-                <LinearLayout
-                    android:layout_width="400dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="51dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="12dp"
-                    android:focusableInTouchMode="true">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                    <!-- Search Icon -->
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/ic_search"
-                        app:tint="?attr/FG_color"
-                        tools:ignore="ContentDescription" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingHorizontal="12dp"
+                            android:focusableInTouchMode="true">
 
-                    <!-- Space -->
-                    <Space
-                        android:layout_width="8dp"
-                        android:layout_height="match_parent" />
+                            <!-- Search Icon -->
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_microphone"
+                                app:tint="?attr/SidebarFocus"
+                                tools:ignore="ContentDescription" />
 
-                    <!-- Search Text Input -->
-                    <EditText
-                        android:id="@+id/HomeSearchInput"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:hint="Search movies,shows,people..."
-                        android:textColor="?attr/FG_color"
-                        android:textColorHint="?attr/FG_color"
-                        android:padding = "9dp"
-                        android:inputType="text"
-                        android:singleLine="true"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:nextFocusLeft="@+id/HomeSearchInput"
-                        android:nextFocusRight="@+id/HomeSearchInput"
-                        android:nextFocusUp="@+id/HomeSearchInput"
-                        android:nextFocusDown="@+id/SearchResults"
-                        android:background="@drawable/search_background"
-                        android:imeOptions="actionSearch"
-                        tools:ignore="Autofill,HardcodedText" />
+                            <!-- Space -->
+                            <Space
+                                android:layout_width="8dp"
+                                android:layout_height="match_parent" />
 
-                </LinearLayout>
+                            <!-- Search Text Input -->
+                            <EditText
+                                android:id="@+id/HomeSearchInput"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:hint="Search movies,shows,people..."
+                                android:textColor="?attr/FG_color"
+                                android:textColorHint="?attr/FG_color"
+                                android:padding = "9dp"
+                                android:inputType="text"
+                                android:singleLine="true"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:fontFamily="serif-monospace"
+                                android:focusableInTouchMode="true"
+                                android:background="@drawable/keyboard_background"
+                                android:imeOptions="actionSearch"
+                                tools:ignore="Autofill,HardcodedText" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Show Search Results"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/d"
-                    android:textSize="13sp"
-                    android:textColor="?attr/AccentColor"
-                    tools:ignore="HardcodedText"
-                    android:layout_marginTop="7dp"/>
+                        </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/SearchResults"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never"
-                    android:scrollbars="none"
-                    tools:ignore="NestedWeights"
-                    android:nextFocusUp="@+id/Anime_Trending_widget"
-                    android:nextFocusDown="@+id/Anime_Airing_widget"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Show Search Results"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/d"
+                            android:textSize="13sp"
+                            android:textColor="?attr/AccentColor"
+                            tools:ignore="HardcodedText"
+                            android:layout_marginTop="7dp"/>
 
-            </LinearLayout>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/SearchResults"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clipToPadding="false"
+                            android:overScrollMode="never"
+                            android:scrollbars="none"
+                            tools:ignore="NestedWeights"
+                            android:nextFocusUp="@+id/Anime_Trending_widget"
+                            android:nextFocusDown="@+id/Anime_Airing_widget"/>
+
+
+                    </LinearLayout>
+
+                <include layout="@layout/keyboard_layout"/>
+
+            </FrameLayout>
+
+
+
 
              <LinearLayout
                 android:id="@+id/FilterContainer"
@@ -160,10 +169,10 @@
                 android:layout_marginStart="50dp"
                 android:orientation="vertical"
                 android:nextFocusLeft="@+id/FilterContainer"
-                android:visibility="visible">
+                android:visibility="gone">
 
                  <LinearLayout
-                     android:layout_width="match_parent"
+                     android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_marginTop="5dp"
                      android:layout_marginBottom="10dp">
@@ -191,7 +200,7 @@
                          <TextView
                              android:id="@+id/FilterCountryBtn"
                              android:background ="@drawable/filter_button"
-                             android:layout_marginStart="9dp"
+                             android:layout_marginStart="12dp"
                              android:layout_width="100dp"
                              android:layout_height="30dp"
                              android:gravity="center"
@@ -212,7 +221,7 @@
                          <TextView
                              android:id="@+id/FilterSortBtn"
                              android:background ="@drawable/filter_button"
-                             android:layout_marginStart="9dp"
+                             android:layout_marginStart="12dp"
                              android:layout_width="100dp"
                              android:layout_height="30dp"
                              android:gravity="center"
@@ -233,7 +242,7 @@
                          <TextView
                              android:id="@+id/FilterGenreBtn"
                              android:background ="@drawable/filter_button"
-                             android:layout_marginStart="9dp"
+                             android:layout_marginStart="12dp"
                              android:layout_width="100dp"
                              android:layout_height="30dp"
                              android:gravity="center"
@@ -255,7 +264,7 @@
                          <TextView
                              android:id="@+id/FilterYearBtn"
                              android:background ="@drawable/filter_button"
-                             android:layout_marginStart="9dp"
+                             android:layout_marginStart="12dp"
                              android:layout_width="100dp"
                              android:layout_height="30dp"
                              android:gravity="center"
@@ -271,23 +280,7 @@
                              android:focusableInTouchMode="true"/>
 
 
-                         <TextView
-                             android:id="@+id/FilterBtn"
-                             android:background ="@drawable/filter_button"
-                             android:layout_marginStart="40dp"
-                             android:layout_width="100dp"
-                             android:layout_height="30dp"
-                             android:gravity="center"
-                             android:text="Filter"
-                             android:textSize="13sp"
-                             android:fontFamily="serif-monospace"
-                             android:textStyle="bold"
-                             android:textColor="?attr/FG_color"
-                             android:layout_gravity="center"
-                             tools:ignore="HardcodedText"
-                             android:clickable="true"
-                             android:focusable="true"
-                             android:focusableInTouchMode="true"/>
+
 
 
                  </LinearLayout>
@@ -329,6 +322,9 @@
                         android:layout_height="70sp"
                         android:background="@drawable/right_rounded"
                         android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:id="@+id/MoviesButtonLayout">
                         <TextView
                             android:id="@+id/MoviesButtonText"
@@ -349,6 +345,9 @@
                         android:layout_height="70sp"
                         android:background="@drawable/right_rounded"
                         android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:layout_marginTop="10dp"
                         android:id="@+id/TvButtonLayout">
                         <TextView
@@ -370,23 +369,9 @@
                     android:layout_height="70sp"
                     android:background="@drawable/right_rounded"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/SearchButtonLayout">
-                    <ImageView
-                        android:id="@+id/SearchButtonImg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_search"
-                        android:background="@android:color/transparent"
-                        app:tint="?attr/FG_color"
-                        />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="70sp"
-                    android:background="@drawable/right_rounded"
-                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:layout_marginTop="10dp"
                     android:id="@+id/FilterButtonLayout">
                     <ImageView
@@ -400,10 +385,32 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70sp"
+                    android:background="@drawable/right_rounded"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/SearchButtonLayout">
+                    <ImageView
+                        android:id="@+id/SearchButtonImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_search"
+                        android:background="@android:color/transparent"
+                        app:tint="?attr/FG_color"
+                        />
+
+                </LinearLayout>
+
+
                 </LinearLayout>
 
                 <include layout="@layout/laod_animation"/>
-                <include layout="@layout/side_bar" android:visibility="gone"/>
+                <include layout="@layout/side_bar"/>
 
 
 

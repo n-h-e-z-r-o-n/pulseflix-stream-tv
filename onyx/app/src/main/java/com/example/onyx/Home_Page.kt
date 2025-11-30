@@ -28,6 +28,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Calendar
 import com.example.onyx.BuildConfig
+import java.io.IOException
 import java.util.Locale
 
 class Home_Page : AppCompatActivity() {
@@ -295,6 +296,13 @@ class Home_Page : AppCompatActivity() {
                     }
 
                     return@launch
+                } catch (e: IOException) {
+                    withContext(Dispatchers.Main) {
+                        Log.e("DEBUG_MAINSliderPage", "Network error ", e)
+                        LoadingAnimation.setup(this@Home_Page, R.raw.error)
+                        LoadingAnimation.show(this@Home_Page)
+                    }
+                    delay(30_000)
                 } catch (e: Exception) {
                     delay(20_000)
                     Log.e("DEBUG_MAINSliderPage", "Error fetching data", e)

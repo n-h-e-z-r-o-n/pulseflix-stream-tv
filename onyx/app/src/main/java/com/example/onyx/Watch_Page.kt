@@ -36,6 +36,7 @@ import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import org.json.JSONObject
+import java.io.IOException
 import java.time.LocalDate
 import kotlin.text.ifEmpty
 
@@ -76,6 +77,9 @@ class Watch_Page : AppCompatActivity() {
         // Get extras from Intent
         val imdbCode = intent.getStringExtra("imdb_code")
         val type = intent.getStringExtra("type")
+
+        Log.e("DEBUG_WATCH", "imdbCode: $imdbCode, type: $type")
+
         if(!imdbCode.isNullOrEmpty()){
             fetchData(imdbCode.toString(), type.toString())
         }else{
@@ -90,8 +94,13 @@ class Watch_Page : AppCompatActivity() {
     private fun fetchData(id:String, type: String) {
         CoroutineScope(Dispatchers.IO).launch {
             var tmdbId = id // mutable copy
-            while (true) {
+            val maxRetries = 4
+            var attempts = 0
+
+            while (attempts < maxRetries) {
+                attempts++
                 try {
+                    // --- STEP 1: Convert IMDb → TMDB ID (if required)
                     if (id.startsWith("tt")) {
 
                         val url = "https://api.themoviedb.org/3/movie/$id/external_ids"
@@ -107,7 +116,7 @@ class Watch_Page : AppCompatActivity() {
                         tmdbId = jsonObject.getString("id")
                     }
 
-
+                    // --- STEP 2: Fetch main movie/TV details
                     val url = "https://api.themoviedb.org/3/$type/$tmdbId?language=en-US"
                     val connection = URL(url).openConnection() as HttpURLConnection
                     connection.requestMethod = "GET"
@@ -329,8 +338,21 @@ class Watch_Page : AppCompatActivity() {
                     Watch_Recomendation_Data(tmdbId.toString(), type.toString())
                     break
 
-                } catch (e: Exception) {
+                }  catch (e: IOException) {
+                    Log.e("DEBUG_WATCH", "Network error ($attempts)", e)
+
+                    withContext(Dispatchers.Main) {
+                        Log.e("DEBUG_SHOWS PAGE", "Network error ", e)
+                        LoadingAnimation.setup(this@Watch_Page, R.raw.error)
+                        LoadingAnimation.show(this@Watch_Page)
+                    }
+                    break
+
+                }  catch (e: Exception) {
                     Log.e("DEBUG_WATCH", "Error fetching data", e)
+                    withContext(Dispatchers.Main) {
+                      LoadingAnimation.show(this@Watch_Page)
+                    }
                 }
             }
         }
