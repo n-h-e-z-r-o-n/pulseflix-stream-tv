@@ -25,6 +25,9 @@
         android:theme="@style/Theme.Onyx.Dark"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Login_Page"
+            android:exported="false" />
+        <activity
             android:name=".Category_Page"
             android:exported="false" />
         <activity

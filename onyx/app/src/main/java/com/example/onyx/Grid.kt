@@ -847,6 +847,213 @@ data class CastItem(
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class ProfileAdapter (
+    private val  items: MutableList<profileItem>,   // ✅ mutable now,
+    private val layoutResId: Int   // 👈 pass in the layout resource
+) :  RecyclerView.Adapter<ProfileAdapter .ViewHolder>() {
+
+    var onProfileSelected: ((profileItem) -> Unit)? = null
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val CardViewcontiner: CardView = view.findViewById(R.id.profileCardContiner)
+        val profileImageWidget: ImageView = view.findViewById(R.id.itemUserAvatar)
+        val usernameWidget: TextView = view.findViewById(R.id.itemUsername)
+
+
+
+        init {
+
+            itemView.setOnFocusChangeListener { v, hasFocus ->
+                // Scale animation
+                v.animate()
+                    .scaleX(if (hasFocus) 1.02f else 1f)
+                    .scaleY(if (hasFocus) 1.02f else 1f)
+                    .setDuration(150)
+                    .start()
+
+            }
+        }
+
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(layoutResId, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val currentItem = items[position]
+
+        val username = currentItem.username
+        val userid = currentItem.userid
+        val avatarImg = currentItem.avatar
+
+
+        holder.usernameWidget.text = username
+
+        // Handle "Create Profile" button appearance
+        if (userid == "CREATE") {
+            holder.profileImageWidget.setImageResource(android.R.drawable.ic_input_add)
+            holder.profileImageWidget.scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
+            holder.profileImageWidget.setBackgroundColor(android.graphics.Color.parseColor("#00000000"))
+        } else {
+            // Handle avatar loading - if empty, use placeholder
+            if (avatarImg.isNotEmpty()) {
+
+                val assetPath = "file:///android_asset/$avatarImg"
+                Glide.with(holder.itemView.context)
+                    .load(assetPath)
+                    .centerCrop()
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .into(holder.profileImageWidget)
+            } else {
+                holder.profileImageWidget.setImageResource(android.R.drawable.ic_menu_gallery)
+            }
+        }
+
+        holder.CardViewcontiner.setOnClickListener {
+            onProfileSelected?.invoke(currentItem) ?: run {
+                // Fallback to default behavior if callback not set
+                val context = holder.itemView.context
+                val intent = Intent(context, Home_Page::class.java)
+                intent.putExtra("UserId", userid)
+                context.startActivity(intent)
+            }
+        }
+
+        holder.CardViewcontiner.setOnKeyListener { v, keyCode, event ->
+            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    if (position == 0) {
+                        // First item - stop focus from moving out to the left
+                        return@setOnKeyListener true
+                    }
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    if (position == items.size - 1) {
+                        // Last item - stop focus from moving out to the right
+                        return@setOnKeyListener true
+                    }
+                }
+            }
+
+            false
+        }
+
+
+    }
+
+    override fun getItemCount() = items.size
+
+    fun addItem(item: profileItem) {
+        items.add(item)
+        notifyItemInserted(items.size - 1)
+
+    }
+    
+    fun clearItems() {
+        items.clear()
+        notifyDataSetChanged()
+    }
+
+}
+
+
+data class profileItem(
+    val username: String = "",
+    val avatar: String= "",
+    val userid: String= "",
+    )
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// AvatarAdapter - for selecting profile avatars from assets
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class AvatarAdapter(
+    private val avatarPaths: List<String>,
+    private val layoutResId: Int
+) : RecyclerView.Adapter<AvatarAdapter.ViewHolder>() {
+
+    var onAvatarSelected: ((String) -> Unit)? = null
+    private var selectedPosition: Int = -1
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val avatarImage: ImageView = view.findViewById(R.id.avatarImage)
+        val avatarCardView: CardView = view.findViewById(R.id.avatarCardView)
+
+        init {
+            itemView.setOnFocusChangeListener { v, hasFocus ->
+                // Scale animation on focus
+                v.animate()
+                    .scaleX(if (hasFocus) 1.05f else 1f)
+                    .scaleY(if (hasFocus) 1.05f else 1f)
+                    .setDuration(150)
+                    .start()
+            }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(layoutResId, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val avatarPath = avatarPaths[position]
+        val context = holder.itemView.context
+
+        // Load image from assets using Glide
+        try {
+            val assetPath = "file:///android_asset/$avatarPath"
+            Glide.with(context)
+                .load(assetPath)
+                .centerCrop()
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .into(holder.avatarImage)
+        } catch (e: Exception) {
+            Log.e("AvatarAdapter", "Error loading avatar: ${e.message}", e)
+            holder.avatarImage.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
+
+        // Highlight selected avatar
+        if (position == selectedPosition) {
+            holder.avatarCardView.setCardBackgroundColor(
+                android.graphics.Color.parseColor("#4CAF50")
+            )
+        } else {
+            holder.avatarCardView.setCardBackgroundColor(
+                android.graphics.Color.TRANSPARENT
+            )
+        }
+
+        // Handle click
+        holder.avatarCardView.setOnClickListener {
+            val previousPosition = selectedPosition
+            selectedPosition = holder.adapterPosition
+            
+            // Notify changes for selection highlight
+            notifyItemChanged(previousPosition)
+            notifyItemChanged(selectedPosition)
+            
+            // Invoke callback
+            onAvatarSelected?.invoke(avatarPath)
+        }
+
+        // Handle focus for TV/remote control
+        holder.itemView.isFocusable = true
+        holder.itemView.isFocusableInTouchMode = false
+    }
+
+    override fun getItemCount() = avatarPaths.size
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class FavAdapter(
     private val  items: MutableList<FavItem>,

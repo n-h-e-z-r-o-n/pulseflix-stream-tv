@@ -45,12 +45,9 @@ class Home_Page : AppCompatActivity() {
         LoadingAnimation.setup(this, R.raw.b)
         LoadingAnimation.show(this)
 
-
-
         NavAction.setupSidebar(this)
 
         //setupBackPressedCallback()
-
         sliderData()
         categoryShow()
 

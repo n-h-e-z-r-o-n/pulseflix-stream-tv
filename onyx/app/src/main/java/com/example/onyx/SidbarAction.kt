@@ -16,6 +16,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.compose.ui.focus.requestFocus
+import com.bumptech.glide.Glide
+import com.example.onyx.Database.SessionManger
+
 
 
 object NavAction {
@@ -71,8 +74,18 @@ object NavAction {
         if (activity is ComponentActivity) {
             setupBackPrdessedCallback(activity, activeButton)
         }
-        // ------------------------------------------------------------------------------------------
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        val sm = SessionManger(activity)         // Initialize database
+        val profileImage = activity.findViewById<ImageButton>(R.id.btnProfile)
+        val assetPath = "file:///android_asset/${sm.getUserAvatar()}"
 
+        Glide.with(activity)
+            .load(assetPath)
+            .placeholder(R.drawable.ic_person) // optional
+            .error(R.drawable.ic_person) // optional
+            .into(profileImage)
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
         highlightActive(activeButton, buttons)
         activeButton?.post { activeButton.requestFocus() }          // Request focus on the active button for TV D-pad usability

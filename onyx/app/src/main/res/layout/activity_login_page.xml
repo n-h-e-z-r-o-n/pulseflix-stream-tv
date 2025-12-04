@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/BG_color"
+    tools:context=".Login_Page">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/profileContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="50dp"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profileRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clipToPadding="false"
+                android:padding="20dp" />
+
+            <TextView
+                android:id="@+id/ErrorBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
+                android:layout_gravity="center"
+                android:fontFamily="serif-monospace"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:textColor="?attr/FG_color"
+                android:background="@drawable/rounded_background"
+                android:text=" "
+                tools:ignore="HardcodedText"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:id="@+id/CreateProfileContainer"
+            android:visibility="gone">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="?attr/BG_color_up"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/createTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Create New Profile"
+                        android:fontFamily="@font/e"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="?attr/FG_color"
+                        android:layout_marginBottom="20dp"
+                        tools:ignore="HardcodedText" />
+
+                    <EditText
+                        android:id="@+id/usernameInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Username"
+                        android:padding="10dp"
+                        android:textColor="?attr/FG_color"
+                        android:textColorHint="?attr/FG_color"
+                        android:background="@drawable/input_background"
+                        android:fontFamily="serif-monospace"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:nextFocusUp="@+id/createProfileBtn"
+                        android:nextFocusLeft="@+id/usernameGenderInput"
+                        android:nextFocusRight="@+id/usernameGenderInput"
+                        android:nextFocusDown="@+id/usernameGenderInput"
+                        android:focusableInTouchMode="true"
+                        android:layout_marginBottom="10dp"
+                        tools:ignore="HardcodedText" />
+
+                    <EditText
+                        android:id="@+id/usernameGenderInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Gender (Male/Female)"
+                        android:padding="10dp"
+                        android:textColor="?attr/FG_color"
+                        android:textColorHint="?attr/FG_color"
+                        android:background="@drawable/input_background"
+                        android:fontFamily="serif-monospace"
+                        android:focusable="true"
+                        android:nextFocusUp="@+id/usernameInput"
+                        android:nextFocusLeft="@+id/usernameInput"
+                        android:nextFocusRight="@+id/usernamePinInput"
+                        android:nextFocusDown="@+id/usernamePinInput"
+                        android:focusableInTouchMode="true"
+                        android:layout_marginBottom="10dp"
+                        tools:ignore="HardcodedText" />
+
+                    <EditText
+                        android:id="@+id/usernamePinInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Pin"
+                        android:padding="10dp"
+                        android:textColor="?attr/FG_color"
+                        android:textColorHint="?attr/FG_color"
+                        android:background="@drawable/input_background"
+                        android:fontFamily="serif-monospace"
+                        android:focusable="true"
+                        android:nextFocusUp="@+id/usernameGenderInput"
+                        android:nextFocusLeft="@+id/usernameGenderInput"
+                        android:nextFocusRight="@+id/usernameInput"
+                        android:focusableInTouchMode="true"
+                        android:layout_marginBottom="30dp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Select  an Avatar"
+                        android:gravity="center"
+                        android:alpha="0.5"
+                        android:fontFamily="@font/a"
+                        android:textColor="?attr/FG_color"
+                        tools:ignore="HardcodedText" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/avatarRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="103dp"/>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:id="@+id/createProfileBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:text="Create"
+                            android:fontFamily="serif-monospace"
+                            android:textStyle="bold"
+                            android:textColor="?attr/FG_color"
+                            android:background="@drawable/filter_button"
+                            android:focusable="true"
+                            android:textSize="19sp"
+                            android:focusableInTouchMode="true"
+                            android:clickable="true"
+                            android:nextFocusLeft="@+id/cancelProfileBtn"
+                            android:nextFocusRight="@+id/cancelProfileBtn"
+                            android:nextFocusDown="@+id/usernameInput"
+                            android:layout_marginEnd="10dp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/cancelProfileBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:text="Cancel"
+                            android:fontFamily="serif-monospace"
+                            android:textStyle="bold"
+                            android:textSize="19sp"
+                            android:textColor="?attr/FG_color"
+                            android:background="@drawable/filter_button"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:nextFocusLeft="@+id/createProfileBtn"
+                            android:nextFocusRight="@+id/createProfileBtn"
+                            android:nextFocusDown="@+id/usernameInput"
+                            android:focusableInTouchMode="true" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+
+
+
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
