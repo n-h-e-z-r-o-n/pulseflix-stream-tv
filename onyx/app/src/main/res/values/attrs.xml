@@ -8,6 +8,9 @@
     <attr name="SidebarDefault" format="color" />
     <attr name="SidebarActive" format="color" />
     <attr name="notBudge" format="color" />
+    <attr name="transparentEffect" format="color" />
+
+
 
 
 

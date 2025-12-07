@@ -7,11 +7,24 @@
     android:layout_height="match_parent"
     android:background="?attr/BG_color"
     tools:context=".Profile_Page">
-    
-    <FrameLayout
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:scaleType="fitXY"
+        android:src="@raw/test2"
+        tools:ignore="ContentDescription" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mainBox"
+        android:layout_margin="0dp"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="?attr/transparentEffect"
+        app:cardCornerRadius="0dp">
+
+
 
         <ScrollView
             android:layout_width="match_parent"
@@ -19,329 +32,253 @@
             android:fillViewport="true"
             android:scrollbars="none"
             android:overScrollMode="never"
-            android:paddingStart="55dp"
             tools:ignore="RtlSymmetry"
             android:nextFocusLeft="@id/btnProfile">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingEnd="20dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
+                android:orientation="horizontal"
                 tools:ignore="RtlSymmetry">
 
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:baselineAligned="false" android:orientation="horizontal"
-                    android:layout_marginBottom="30dp"
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:background="?attr/transparentEffect"
                     tools:ignore="DisableBaselineAlignment">
 
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:layout_gravity="center_horizontal"
+                        app:cardBackgroundColor="?attr/transparentEffect"
+                        android:layout_margin="14dp"
+                        android:elevation="4dp"
+                        app:cardCornerRadius="50dp">
+                        <ImageView
+                            android:id="@+id/ProfileImg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:importantForAccessibility="no"
+                          />
+
+                    </androidx.cardview.widget.CardView>
+                    
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:background="@drawable/rounded_background"
-                        android:padding="15dp"
-                        android:layout_marginEnd="10dp">
-
-                        <TextView
-                            android:id="@+id/moviesWatched"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="?attr/AccentColor"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Movies Watched"
-                            android:textColor="?attr/FG_color"
-                            android:textSize="14sp"
-                            android:layout_marginTop="4dp"
-                            tools:ignore="HardcodedText" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:background="@drawable/rounded_background"
-                        android:padding="15dp"
-                        android:layout_marginEnd="10dp">
-
-                        <TextView
-                            android:id="@+id/seriesWatched"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="?attr/AccentColor"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Episodes Watched"
-                            android:textColor="?attr/FG_color"
-                            android:textSize="14sp"
-                            android:layout_marginTop="4dp"
-                            tools:ignore="HardcodedText" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:background="@drawable/rounded_background"
-                        android:padding="15dp"
-                        android:layout_marginEnd="10dp">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" 
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
+                            android:layout_width="130dp"
+                            android:layout_height="80dp"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:background="@drawable/rounded_background"
+                            android:padding="10dp"
+                            android:layout_margin="4dp"
+                            android:layout_marginEnd="10dp">
 
                             <TextView
-                                android:id="@+id/SubscriptionLeft"
+                                android:id="@+id/moviesWatched"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
                                 android:textColor="?attr/AccentColor"
-                                android:textSize="24sp"
+                                android:textSize="17sp"
                                 android:textStyle="bold"
                                 tools:ignore="HardcodedText" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Days Left"
+                                android:text="Movies Watched"
                                 android:textColor="?attr/FG_color"
-                                android:textSize="14sp"
-                                android:textStyle="italic"
-                                android:paddingStart="5dp"
-                                android:alpha="0.5"
-                                tools:ignore="HardcodedText" />
+                                android:fontFamily="monospace"
+                                android:textStyle="bold"
+                                android:textSize="10sp"
+                                android:layout_marginTop="4dp"
+                                tools:ignore="HardcodedText,SmallSp" />
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="130dp"
+                            android:layout_height="80dp"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:background="@drawable/rounded_background"
+                            android:padding="15dp"
+                            android:layout_margin="4dp"
+                            >
+
+                            <TextView
+                                android:id="@+id/seriesWatched"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="?attr/AccentColor"
+                                android:textSize="17sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
 
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Episodes Watched"
+                                android:textColor="?attr/FG_color"
+                                android:fontFamily="monospace"
+                                android:textStyle="bold"
+                                android:textSize="10sp"
+                                android:layout_marginTop="4dp"
+                                tools:ignore="HardcodedText,SmallSp" />
+
+                        </LinearLayout>
+                        
+                    </LinearLayout>
 
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="20dp">
 
+                        <LinearLayout
+                            android:layout_width="130dp"
+                            android:layout_height="80dp"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:background="@drawable/rounded_background"
+                            android:padding="10dp"
+                            android:layout_margin="4dp"
+                            android:layout_marginEnd="10dp">
+
+                            <TextView
+                                android:id="@+id/animeWatched"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="?attr/AccentColor"
+                                android:textSize="17sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Anime Watched"
+                                android:textColor="?attr/FG_color"
+                                android:fontFamily="monospace"
+                                android:textStyle="bold"
+                                android:textSize="10sp"
+                                android:layout_marginTop="4dp"
+                                tools:ignore="HardcodedText,SmallSp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="130dp"
+                            android:layout_height="80dp"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:background="@drawable/rounded_background"
+                            android:padding="15dp"
+                            android:layout_margin="4dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                >
+
+
+                                <TextView
+                                    android:id="@+id/SubscriptionLeft"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textColor="@android:color/holo_green_light"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="HardcodedText" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Days Left"
+                                    android:textColor="?attr/FG_color"
+                                    android:textSize="12sp"
+                                    android:textStyle="italic"
+                                    android:paddingStart="5dp"
+                                    android:alpha="0.5"
+                                    tools:ignore="HardcodedText" />
+
+                            </LinearLayout>
+                            
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="TIER ACTIVATION"
+                                android:textColor="?attr/FG_color"
+                                android:fontFamily="monospace"
+                                android:textStyle="bold"
+                                android:textSize="10sp"
+                                android:layout_marginTop="4dp"
+                                tools:ignore="HardcodedText,SmallSp" />
+                        </LinearLayout>
+                        
+
+                        
+                        
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/logoutBtn"
+                        android:layout_width="wrap_content"
+                        android:background="@drawable/setting_item_background"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:layout_margin="4dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Subscription"
+                            android:textStyle="bold"
+                            android:textSize="14dp"
                             android:textColor="?attr/FG_color"
-                            android:textSize="14sp"
-                            android:layout_marginTop="4dp"
-                            tools:ignore="HardcodedText" />
-
+                            android:fontFamily="@font/f"
+                            android:text="Logout"
+                            tools:ignore="HardcodedText,SpUsage" />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_logout"
+                            android:layout_marginStart="14dp"
+                            app:tint="?attr/FG_color"/>
                     </LinearLayout>
+
+                    
+
+                    
 
                 </LinearLayout>
 
-                <!-- Settings Section -->
 
-                <!-- Settings Items -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:layout_marginBottom="30dp"
+                    android:gravity="center"
                     android:padding="10dp">
 
-                    <!-- Auto-play Setting -->
-                    <LinearLayout
-                        android:id="@+id/autoPlaySetting"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:padding="15dp"
-                        android:background="@drawable/setting_item_background"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
-                        android:focusable="true"
-                        android:clickable="true">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_play_arrow"
-                            android:contentDescription="Auto-play"
-                            app:tint="?attr/FG_color"
-                            tools:ignore="HardcodedText" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="15dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Auto-play"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="16sp"
-                                tools:ignore="HardcodedText" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Automatically play next episode"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="12sp"
-                                android:layout_marginTop="2dp"
-                                tools:ignore="HardcodedText" />
-
-                        </LinearLayout>
-
-                        <Switch
-                            android:id="@+id/autoPlaySwitch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-                    </LinearLayout>
-
-                    <!-- Notifications Setting -->
-                    <LinearLayout
-                        android:id="@+id/notificationsSetting"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:padding="15dp"
-                        android:background="@drawable/setting_item_background"
-                        android:layout_marginBottom="8dp"
-                        android:focusable="true"
-                        android:clickable="true"
-                        android:focusableInTouchMode="true">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_notification"
-                            android:contentDescription="Notifications"
-                            app:tint="?attr/FG_color"
-                            tools:ignore="HardcodedText" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="15dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Notifications"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="16sp"
-                                tools:ignore="HardcodedText" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Get notified about new releases"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="12sp"
-                                android:layout_marginTop="2dp"
-                                tools:ignore="HardcodedText" />
-
-                        </LinearLayout>
-
-                        <Switch
-                            android:id="@+id/notificationsSwitch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-                    </LinearLayout>
-
-                    <!-- Quality Setting -->
-                    <LinearLayout
-                        android:id="@+id/qualitySetting"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:padding="15dp"
-                        android:background="@drawable/setting_item_background"
-                        android:layout_marginBottom="8dp"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:clickable="true">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_hd"
-                            android:contentDescription="Video Quality"
-                            app:tint="?attr/FG_color"
-                            tools:ignore="HardcodedText" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="15dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Video Quality"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="16sp"
-                                tools:ignore="HardcodedText" />
-
-                            <TextView
-                                android:id="@+id/qualityValue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="1080p"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="12sp"
-                                android:layout_marginTop="2dp"
-                                tools:ignore="HardcodedText" />
-
-                        </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_arrow_forward"
-                            android:contentDescription="Navigate"
-                            app:tint="?attr/FG_color"
-                            tools:ignore="HardcodedText" />
-
-                    </LinearLayout>
-
-                    <!-- Theme Setting -->
+              
                     <LinearLayout
                         android:id="@+id/themeSetting"
                         android:layout_width="match_parent"
@@ -389,14 +326,6 @@
                                 tools:ignore="HardcodedText" />
 
                         </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_arrow_forward"
-                            android:contentDescription="Navigate"
-                            app:tint="?attr/FG_color"
-                            tools:ignore="HardcodedText" />
 
                     </LinearLayout>
 
@@ -666,8 +595,9 @@
         </ScrollView>
 
         <include layout="@layout/laod_animation"/>
-        <include layout="@layout/side_bar"/>
 
-    </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+    <include layout="@layout/side_bar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,103 +5,84 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Home_Page"
-    android:background="?attr/BG_color">
+    android:background="?attr/BG_color_up">
 
-    <FrameLayout
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:scaleType="fitXY"
+        android:src="@raw/test2"
+        tools:ignore="ContentDescription" />
 
-        <ScrollView
-            android:id="@+id/HomeContainer"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mainBox"
+        android:layout_margin="0dp"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="?attr/BG_color"
+        app:cardCornerRadius="0dp">
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:scrollbars="none"
-            android:clipToPadding="false"
-            android:overScrollMode="never">
+            android:orientation="horizontal">
 
 
 
-            <LinearLayout
+                <ScrollView
+                    android:id="@+id/HomeContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:scrollbars="none">
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:scrollbars="none"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/Slider_widget"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:clipToPadding="false"
-                        android:scrollbars="none" />
+
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/CategoryRecyclerView"
-                            android:layout_height="140dp"
                             android:layout_width="match_parent"
-                            android:layout_gravity="bottom"
-                            android:clipToPadding="false"
-                            android:scrollbars="none"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:scrollbars="none">
 
-                            tools:ignore="RtlSymmetry" />
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/Slider_widget"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:clipToPadding="false"
+                                android:scrollbars="none" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
 
 
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/CategoryRecyclerView"
+                                    android:layout_height="140dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_gravity="bottom"
+                                    android:clipToPadding="false"
+                                    android:scrollbars="none"
+
+                                    tools:ignore="RtlSymmetry" />
+
+
+
+                            </LinearLayout>
 
                     </LinearLayout>
-
-            </LinearLayout>
-        </ScrollView>
-
-
-
-
-        <LinearLayout
-            android:id="@+id/searchContainerHome"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/BG_color"
-            android:layout_marginStart="50dp"
-            android:orientation="vertical"
-            android:nextFocusLeft="@+id/searchContainerHome"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Show Search Results"
-                android:textStyle="bold"
-                android:fontFamily="@font/d"
-                android:textSize="13sp"
-                android:textColor="?attr/AccentColor"
-                tools:ignore="HardcodedText"
-                android:layout_marginTop="70dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/SearchResults"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                tools:ignore="NestedWeights"
-                android:nextFocusUp="@+id/Anime_Trending_widget"
-                android:nextFocusDown="@+id/Anime_Airing_widget"/>
-
-        </LinearLayout>
-
-
-
-
+                </ScrollView>
+        </FrameLayout>
         <include layout="@layout/laod_animation"/>
-        <include layout="@layout/side_bar"/>
-    </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <include layout="@layout/side_bar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

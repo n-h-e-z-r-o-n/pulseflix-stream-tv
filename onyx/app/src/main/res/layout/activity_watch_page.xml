@@ -111,6 +111,13 @@
                         android:paddingBottom="0dp"
                         tools:ignore="RtlSymmetry">
 
+                        <ImageView
+                            android:id="@+id/cShowLogo"
+                            android:layout_width="400dp"
+                            android:layout_height="wrap_content"
+                            android:scaleType="fitXY"
+                            tools:ignore="ContentDescription" />
+
 
 
 

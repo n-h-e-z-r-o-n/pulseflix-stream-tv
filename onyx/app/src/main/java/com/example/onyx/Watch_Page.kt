@@ -35,6 +35,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.Target
 import org.json.JSONObject
 import java.io.IOException
 import java.time.LocalDate
@@ -83,7 +84,7 @@ class Watch_Page : AppCompatActivity() {
         if(!imdbCode.isNullOrEmpty()){
             fetchData(imdbCode.toString(), type.toString())
         }else{
-            fetchData("63926 ", "tv")
+            fetchData("1242898 ", "movie")
         }
 
     }
@@ -115,6 +116,55 @@ class Watch_Page : AppCompatActivity() {
                         val jsonObject = JSONObject(response)
                         tmdbId = jsonObject.getString("id")
                     }
+
+
+                    val logosUrl = " https://api.themoviedb.org/3/$type/$tmdbId/images"
+                    val logosConnection = URL(logosUrl).openConnection() as HttpURLConnection
+                    logosConnection.requestMethod = "GET"
+                    logosConnection.setRequestProperty("accept", "application/json")
+                    logosConnection.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val logosResponse = logosConnection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObjectImg = JSONObject(logosResponse)
+
+                    Log.e("DEBUG_Watch_Images", jsonObjectImg.toString())
+                    val logos = jsonObjectImg.getJSONArray("logos")
+                    Log.e("DEBUG_Watch_Images", logos.toString())
+                    for (i in 0 until logos.length()) {
+                        val logo = logos.getJSONObject(i)
+                        val logoUrl = "https://image.tmdb.org/t/p/original/"  + logo.getString("file_path")
+                        val languageCode = logo.getString("iso_3166_1")
+                        val width = logo.getString("width")
+
+                        if (languageCode == "US") {
+
+                            withContext(Dispatchers.Main) {
+                                val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
+                                val textLogo = findViewById<TextView>(R.id.title_widget)
+
+                                textLogo.visibility = View.GONE
+
+
+                                Glide.with(this@Watch_Page)
+                                    .load(logoUrl)
+                                    .centerCrop()
+                                    //.override(400, Target.SIZE_ORIGINAL)
+                                    .fitCenter()
+                                    .into(cShowLogo)
+                            }
+                            break
+
+                        }
+
+                        Log.e("DEBUG_Watch_Images", logoUrl)
+                    }
+
+
+
+
 
                     // --- STEP 2: Fetch main movie/TV details
                     val url = "https://api.themoviedb.org/3/$type/$tmdbId?language=en-US"

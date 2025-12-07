@@ -6,10 +6,23 @@
     android:layout_height="match_parent"
     android:background="?attr/BG_color">
 
-    <FrameLayout
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:scaleType="fitXY"
+        android:src="@raw/test2"
+        tools:ignore="ContentDescription" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mainBox"
+        android:layout_margin="0dp"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="?attr/BG_color"
+        app:cardCornerRadius="0dp">
+
+
 
 
                 <FrameLayout
@@ -240,6 +253,7 @@
                         android:scrollbars="none"
                         android:layout_marginBottom="5dp"/>
 
+
                     <TextView
                         android:id="@+id/emptyState"
                         android:layout_width="match_parent"
@@ -273,10 +287,10 @@
 
                 </FrameLayout>
 
-        <include layout="@layout/side_bar"/>
 
+    </androidx.cardview.widget.CardView>
 
-    </FrameLayout>
+    <include layout="@layout/side_bar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

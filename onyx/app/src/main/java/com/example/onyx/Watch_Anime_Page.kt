@@ -33,18 +33,25 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import com.example.onyx.BuildConfig
+import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
 
 
 class Watch_Anime_Page : AppCompatActivity() {
     private lateinit var FaveButton :ImageButton
-
     private var urlHome = BuildConfig.A_K
+    private lateinit var db: AppDatabase
+    private lateinit var  sm: SessionManger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GlobalUtils.applyTheme(this)
         enableEdgeToEdge()
         setContentView(R.layout.activity_watch_anime_page)
+
+        db = AppDatabase(this)
+        sm = SessionManger(this)
+
         LoadingAnimation.setup(this@Watch_Anime_Page, R.raw.b)
         LoadingAnimation.show(this@Watch_Anime_Page)
 
@@ -116,9 +123,21 @@ class Watch_Anime_Page : AppCompatActivity() {
 
                     setupFavoriteButton(
                         button = FaveButton,
-                        data = saveData,
-                        id = id,
-                        type = "anime"
+                        animeId = id,
+                        name = name,
+                        type = type,
+                        anilistId = anilistId,
+                        malId = malId,
+                        description = description,
+                        rating = rating,
+                        quality = quality,
+                        duration = duration,
+                        poster = poster,
+                        sub=sub,
+                        dub=dub,
+                        aired=aired,
+                        genre=genre,
+                        seasons = seasons.toString()
                     )
 
 
@@ -380,15 +399,30 @@ class Watch_Anime_Page : AppCompatActivity() {
 
     private fun setupFavoriteButton(
         button: ImageButton,   // 👈 Changed to ImageButton
-        data: JSONObject,
-        id: String,
-        type: String
+        animeId :String,
+        name:String,
+        type :String,
+        anilistId :String,
+        malId :String,
+        description:String,
+        rating :String,
+        quality :String,
+        duration :String,
+        poster :String,
+        sub:String,
+        dub:String,
+        aired:String,
+        genre:String,
+        seasons:String,
+
+
     ) {
+        val userId = sm.getUserId()
 
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun applyIcon() {
-            val isFav = FavoritesManager.isFavorite(this@Watch_Anime_Page, id, type)
+            val isFav = db.isFavoriteAnime(userId, animeId)
             if (isFav) {
                 button.setImageResource(R.drawable.ic_tickfave)  // ❤️ e.g. filled heart icon
                 button.tooltipText = "Remove from Favorites"
@@ -401,11 +435,28 @@ class Watch_Anime_Page : AppCompatActivity() {
         applyIcon()
 
         button.setOnClickListener {
-            val isFav = FavoritesManager.isFavorite(this@Watch_Anime_Page, id, type)
+            val isFav = db.isFavoriteAnime(userId, animeId)
             if (isFav) {
-                FavoritesManager.removeFavorite(this@Watch_Anime_Page, id, type)
+                db.removeFavoriteAnime(userId, animeId)
             } else {
-                FavoritesManager.addFavorite(this@Watch_Anime_Page,id ,type, data)
+                db.addFavoriteAnime(
+                    userId,
+                    animeId,
+                    name,
+                    type,
+                    anilistId,
+                    malId,
+                    description,
+                    rating,
+                    quality,
+                    duration,
+                    poster,
+                    sub,
+                    dub,
+                    aired,
+                    genre,
+                    seasons
+                )
             }
             applyIcon()
         }

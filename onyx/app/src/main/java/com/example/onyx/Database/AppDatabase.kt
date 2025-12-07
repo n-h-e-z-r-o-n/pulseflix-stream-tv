@@ -19,7 +19,7 @@ class AppDatabase(context: Context) :
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE,
         gender TEXT,
-                pin TEXT,
+        pin TEXT,
         avatar TEXT
     )"""
         )
@@ -67,6 +67,11 @@ class AppDatabase(context: Context) :
         series_id TEXT,
         title TEXT,
         poster TEXT,
+        backdrop TEXT,
+        overview TEXT,
+        date TEXT,
+        duration TEXT,
+        rating TEXT,
         UNIQUE(user_id, series_id),
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     )"""
@@ -75,15 +80,30 @@ class AppDatabase(context: Context) :
 
 // 5. Favorites Anime
         db.execSQL(
-            """CREATE TABLE favorites_anime (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        anime_id TEXT,
-        title TEXT,
-        poster TEXT,
-        UNIQUE(user_id, anime_id),
-        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-    )"""
+            """
+                CREATE TABLE favorites_anime (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER,
+                    anime_id TEXT,
+                    name TEXT,
+                    type TEXT,
+                    anilistId TEXT,
+                    malId TEXT,
+                    description TEXT,
+                    rating TEXT,
+                    quality TEXT,
+                    duration TEXT,
+                    poster TEXT,
+                    sub TEXT,
+                    dub TEXT,
+                    aired TEXT,
+                    genre TEXT,
+                    seasons TEXT,
+                    UNIQUE(user_id, anime_id),
+                    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+                )
+
+            """.trimIndent()
         )
 
 
@@ -199,14 +219,43 @@ class AppDatabase(context: Context) :
 
     //////////////////////////////// FAVORITES ANIME FUNCTIONS ///////////////////////////////////////
 
-    fun addFavoriteAnime(userId: Int, animeId: String, title: String, poster: String): Boolean {
+    fun addFavoriteAnime(
+        userId: Int,
+        animeId: String,
+        name: String,
+        type: String,
+        anilistId: String,
+        malId: String,
+        description: String,
+        rating: String,
+        quality: String,
+        duration: String,
+        poster: String,
+        sub: String,
+        dub: String,
+        aired: String,
+        genre: String,
+        seasons: String
+    ): Boolean {
         val db = writableDatabase
         val cv = ContentValues()
 
         cv.put("user_id", userId)
         cv.put("anime_id", animeId)
-        cv.put("title", title)
+        cv.put("name", name)
+        cv.put("type", type)
+        cv.put("anilistId", anilistId)
+        cv.put("malId", malId)
+        cv.put("description", description)
+        cv.put("rating", rating)
+        cv.put("quality", quality)
+        cv.put("duration", duration)
         cv.put("poster", poster)
+        cv.put("sub", sub)
+        cv.put("dub", dub)
+        cv.put("aired", aired)
+        cv.put("genre", genre)
+        cv.put("seasons", seasons)
 
         return try {
             db.insertOrThrow("favorites_anime", null, cv) > 0
@@ -223,14 +272,79 @@ class AppDatabase(context: Context) :
         ) > 0
     }
 
-    fun getFavoriteAnime(userId: Int): Cursor {
+    fun isFavoriteAnime(userId: Int, animeId: String): Boolean {
         val db = readableDatabase
-        return db.rawQuery(
+
+        val cursor = db.rawQuery(
+            "SELECT 1 FROM favorites_anime WHERE user_id=? AND anime_id=? LIMIT 1",
+            arrayOf(userId.toString(), animeId)
+        )
+
+        val exists = cursor.moveToFirst()
+        cursor.close()
+
+        return exists
+    }
+
+    fun getFavoriteAnime(userId: Int): List<FavoriteAnimeModel> {
+        val db = readableDatabase
+        val list = mutableListOf<FavoriteAnimeModel>()
+
+        val cursor = db.rawQuery(
             "SELECT * FROM favorites_anime WHERE user_id=?",
             arrayOf(userId.toString())
         )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val seasonsString = cursor.getString(cursor.getColumnIndexOrThrow("seasons"))
+                val seasonsArray = seasonsString.split(",")  // Convert back to list
+
+                list.add(
+                    FavoriteAnimeModel(
+                        userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id")),
+                        animeId = cursor.getString(cursor.getColumnIndexOrThrow("anime_id")),
+                        name = cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                        type = cursor.getString(cursor.getColumnIndexOrThrow("type")),
+                        anilistId = cursor.getString(cursor.getColumnIndexOrThrow("anilistId")),
+                        malId = cursor.getString(cursor.getColumnIndexOrThrow("malId")),
+                        description = cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                        rating = cursor.getString(cursor.getColumnIndexOrThrow("rating")),
+                        quality = cursor.getString(cursor.getColumnIndexOrThrow("quality")),
+                        duration = cursor.getString(cursor.getColumnIndexOrThrow("duration")),
+                        poster = cursor.getString(cursor.getColumnIndexOrThrow("poster")),
+                        sub = cursor.getString(cursor.getColumnIndexOrThrow("sub")),
+                        dub = cursor.getString(cursor.getColumnIndexOrThrow("dub")),
+                        aired = cursor.getString(cursor.getColumnIndexOrThrow("aired")),
+                        genre = cursor.getString(cursor.getColumnIndexOrThrow("genre")),
+                        seasons = seasonsArray      // <-- ARRAY restored
+                    )
+                )
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        return list
     }
 
+    data class FavoriteAnimeModel(
+        val userId: Int,
+        val animeId: String,
+        val name: String,
+        val type: String,
+        val anilistId: String,
+        val malId: String,
+        val description: String,
+        val rating: String,
+        val quality: String,
+        val duration: String,
+        val poster: String,
+        val sub: String,
+        val dub: String,
+        val aired: String,
+        val genre: String,
+        val seasons: List<String> // SEASONS as ARRAY
+    )
 
     ////////////////////////////////////// WATCHLIST FUNCTIONS //////////////////////////////////////
 

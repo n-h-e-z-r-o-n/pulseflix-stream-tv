@@ -1,6 +1,7 @@
 package com.example.onyx
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -13,9 +14,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.json.JSONArray
 import kotlin.text.ifEmpty
-
+import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
 
 class Favorite_Page : AppCompatActivity() {
+    private lateinit var db: AppDatabase
+    private lateinit var  sm: SessionManger
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: FavAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +27,9 @@ class Favorite_Page : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_favorite_page)
+
+        db = AppDatabase(this)         // Initialize database
+        sm = SessionManger(this)
 
         NavAction.setupSidebar(this@Favorite_Page)
         setupBackPressedCallback()
@@ -38,8 +45,12 @@ class Favorite_Page : AppCompatActivity() {
     }
 
     private fun loadFavorites(){
+        val userId = sm.getUserId()
+        val animeFavData = db.getFavoriteAnime(userId)
+        Log.e("Favorite_Page", "loadFavorites: $animeFavData")
+
+
         recyclerView = findViewById<RecyclerView>(R.id.favoritesRecycler)
-        val FaveData = findViewById<LinearLayout>(R.id.FaveData)
         val emptyState = findViewById<TextView>(R.id.emptyState)
 
 
@@ -59,12 +70,8 @@ class Favorite_Page : AppCompatActivity() {
 
 
         if (favorites.isEmpty()) {
-            recyclerView.visibility = View.GONE
-            FaveData.visibility = View.GONE
             emptyState.visibility = View.VISIBLE
         } else {
-            FaveData.visibility = View.VISIBLE
-            recyclerView.visibility = View.VISIBLE
             emptyState.visibility = View.GONE
 
             val items = favorites.map { obj ->

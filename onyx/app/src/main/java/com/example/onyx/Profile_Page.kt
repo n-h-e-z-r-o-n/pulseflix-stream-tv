@@ -10,9 +10,11 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
@@ -26,6 +28,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,10 +39,16 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
+import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
+
+
+
 class Profile_Page : AppCompatActivity() {
-    
-    private lateinit var autoPlaySwitch: Switch
-    private lateinit var notificationsSwitch: Switch
+
+    private lateinit var db: AppDatabase
+    private lateinit var  sm: SessionManger
+
     private lateinit var moviesWatchedText: TextView
     private lateinit var seriesWatchedText: TextView
     private lateinit var qualityValueText: TextView
@@ -70,8 +79,30 @@ class Profile_Page : AppCompatActivity() {
         setContentView(R.layout.activity_profile_page)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        db = AppDatabase(this)         // Initialize database
+        sm = SessionManger(this)         // Initialize session manager
+
         NavAction.setupSidebar(this)
-        setupBackPressedCallback()
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        val profileImage = findViewById<ImageView>(R.id.ProfileImg)
+        val assetPath = "file:///android_asset/${sm.getUserAvatar()}"
+        Glide.with(this)
+            .load(assetPath)
+            .placeholder(R.drawable.ic_person)
+            .into(profileImage)
+
+        val logoutBtn = findViewById<LinearLayout>(R.id.logoutBtn)
+        logoutBtn.setOnClickListener {
+            sm.clearSession()
+            val intent = Intent(this, Login_Page::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
+            finish()
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
         // Initialize views
         initializeViews()
@@ -92,11 +123,8 @@ class Profile_Page : AppCompatActivity() {
     }
     
     private fun initializeViews() {
-        autoPlaySwitch = findViewById(R.id.autoPlaySwitch)
-        notificationsSwitch = findViewById(R.id.notificationsSwitch)
         moviesWatchedText = findViewById(R.id.moviesWatched)
         seriesWatchedText = findViewById(R.id.seriesWatched)
-        qualityValueText = findViewById(R.id.qualityValue)
         themeValueText = findViewById(R.id.themeValue)
         appVersionText = findViewById(R.id.appVersion)
         
@@ -105,39 +133,16 @@ class Profile_Page : AppCompatActivity() {
     }
     
     private fun loadSettings() {
-        // Load auto-play setting using GlobalUtils
-        autoPlaySwitch.isChecked = GlobalUtils.isAutoPlayEnabled(this)
-        
-        // Load notifications setting using GlobalUtils
-        notificationsSwitch.isChecked = GlobalUtils.areNotificationsEnabled(this)
-        
-        // Load video quality setting using GlobalUtils
-        qualityValueText.text = GlobalUtils.getVideoQuality(this)
-        
+
+
         // Load theme setting using GlobalUtils
         val currentTheme = GlobalUtils.getAppTheme(this)
         themeValueText.text = currentTheme.replaceFirstChar { it.uppercase() }
     }
     
     private fun setupClickListeners() {
-        // Auto-play switch
-        autoPlaySwitch.setOnCheckedChangeListener { _, isChecked ->
-            GlobalUtils.setAutoPlay(this, isChecked)
-            Toast.makeText(this, "Auto-play ${if (isChecked) "enabled" else "disabled"}", Toast.LENGTH_SHORT).show()
-        }
-        
-        // Notifications switch
-        notificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
-            GlobalUtils.setNotifications(this, isChecked)
-            Toast.makeText(this, "Notifications ${if (isChecked) "enabled" else "disabled"}", Toast.LENGTH_SHORT).show()
-        }
-        
-        // Quality setting click
-        val qualitySetting = findViewById<LinearLayout>(R.id.qualitySetting)
-        qualitySetting.setOnClickListener {
-            showQualityDialog()
-        }
-        
+
+
         // Theme setting click
         val themeSetting = findViewById<LinearLayout>(R.id.themeSetting)
         themeSetting.setOnClickListener {
@@ -378,9 +383,6 @@ class Profile_Page : AppCompatActivity() {
     private fun setupFocusHandling() {
         // Setup focus handling for TV remote navigation
         val focusableViews = listOf(
-            findViewById<LinearLayout>(R.id.autoPlaySetting),
-            findViewById<LinearLayout>(R.id.notificationsSetting),
-            findViewById<LinearLayout>(R.id.qualitySetting),
             findViewById<LinearLayout>(R.id.themeSetting),
             findViewById<LinearLayout>(R.id.versionInfo),
             findViewById<LinearLayout>(R.id.clearCache),
@@ -402,9 +404,7 @@ class Profile_Page : AppCompatActivity() {
                 }
             }
         }
-        
-        // Set initial focus
-        findViewById<LinearLayout>(R.id.autoPlaySetting).requestFocus()
+
     }
     
     override fun onRequestPermissionsResult(
@@ -463,13 +463,7 @@ class Profile_Page : AppCompatActivity() {
         subscriptionWidget.text = displayText
     }
 
-    private fun setupBackPressedCallback() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findViewById<ImageButton>(R.id.btnProfile).requestFocus()
-            }
-        })
-    }
+
 
 
 }

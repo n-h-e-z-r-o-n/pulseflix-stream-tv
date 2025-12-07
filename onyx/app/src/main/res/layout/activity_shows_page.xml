@@ -5,20 +5,32 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/BG_color"
+    android:background="?attr/BG_color_up"
     tools:context=".Shows_Page">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@raw/test2"
+        tools:ignore="ContentDescription" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mainBox"
+        android:layout_margin="0dp"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="?attr/BG_color"
+        app:cardCornerRadius="0dp">
+
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:src="@raw/test2"
-                android:visibility="gone"
-                />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/TVsRecyclerView"
@@ -413,12 +425,15 @@
 
                 </LinearLayout>
 
-                <include layout="@layout/laod_animation"/>
-                <include layout="@layout/side_bar"/>
+
 
 
 
     </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+    <include layout="@layout/laod_animation"/>
+    <include layout="@layout/side_bar"/>
 
 
 

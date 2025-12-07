@@ -41,7 +41,8 @@ class Login_Page : AppCompatActivity() {
 
 
         db = AppDatabase(this)         // Initialize database
-        sm = SessionManger(this)         // Initialize database
+        sm = SessionManger(this)         // Initialize session manager
+        //db.resetDatabase()
         val userId = sm.getUserId()
 
         if (userId == -1) {
@@ -50,7 +51,7 @@ class Login_Page : AppCompatActivity() {
             startActivity(Intent(this, Home_Page::class.java))
             finish()
         }
-        //db.resetDatabase()
+
         InitializeWindgets()         // Setup
         loadProfiles()         // Load existing profiles
 

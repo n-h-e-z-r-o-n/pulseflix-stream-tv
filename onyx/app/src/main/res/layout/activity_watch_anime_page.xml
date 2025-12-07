@@ -450,9 +450,8 @@
             android:padding="10dp"
             android:scrollbars="none"
             android:focusable="false"
-            android:focusableInTouchMode="true"
+            android:focusableInTouchMode="false"
             android:descendantFocusability="afterDescendants"
-            android:nextFocusLeft="@id/btnMovies"
             android:nestedScrollingEnabled="false"
             tools:ignore="RtlSymmetry" />
 
