@@ -13,8 +13,6 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.coroutines.CoroutineScope
@@ -28,19 +26,19 @@ import java.net.URL
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.RadioButton
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import org.json.JSONObject
-import kotlin.concurrent.thread
 import android.os.Handler
+import android.view.Gravity
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.AdapterView
-import java.util.concurrent.Executor
+import com.example.onyx.Database.AppDatabase
+
 
 class PayWall : AppCompatActivity() {
-
+    private lateinit var db: AppDatabase
 
     private var isProcessing: Boolean = false
     private var slideshowJob: Job? = null
@@ -58,9 +56,6 @@ class PayWall : AppCompatActivity() {
 
 
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
@@ -68,7 +63,9 @@ class PayWall : AppCompatActivity() {
         setContentView(R.layout.activity_pay_wall)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+
         loadTrendingMovies()
+        db = AppDatabase(this)
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         progressBar =  findViewById<ProgressBar>(R.id.MpesaProgressBar)
@@ -98,11 +95,21 @@ class PayWall : AppCompatActivity() {
         etMpesaPhone  = findViewById<EditText>(R.id.etMpesaPhone)
         spCountry  = findViewById<Spinner>(R.id.spCountry)
 
+        animateCardViewScale(PaymentContainer, 0.6f, 0.6f)
+        val params = btnPurchase.layoutParams as LinearLayout.LayoutParams
+        params.gravity = Gravity.CENTER_HORIZONTAL
+        btnPurchase.layoutParams = params
+
+        PaymentContainer.post {
+            PaymentContainer.pivotX = PaymentContainer.width / 2f
+            PaymentContainer.pivotY = 0f
+        }
 
 
         btnPurchase.setOnClickListener {
             PaymentContainer.visibility = View.VISIBLE
             payInfo.visibility = View.GONE
+
         }
 
         fun updateDisplayedPrice(country: String) {
@@ -235,7 +242,7 @@ class PayWall : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if(phone == "0756435127"){
+            if(phone == "0000000000"){
                 navigateToHome()
             }
 
@@ -564,26 +571,30 @@ class PayWall : AppCompatActivity() {
     private fun navigateToHome() {
         showLoading(false)
         // compute expiry based on selected plan
-        val days = when (selectedPlan) {
-            Plan.MONTHLY -> 30
-            Plan.QUARTERLY -> 90
-            Plan.YEARLY -> 365
+        val subType = when (selectedPlan) {
+            Plan.MONTHLY -> "MONTHLY"
+            Plan.QUARTERLY -> "3MONTH"
+            Plan.YEARLY -> "YEARLY"
         }
-        saveSubscriptionTime(days)
+
+        // Save subscription using your function
+        db.setSubscription(
+            type = subType,
+            paymentRef = ""
+        )
+
         val intent = Intent(this, Home_Page::class.java)
         startActivity(intent)
         finish()
     }
 
-    private fun saveSubscriptionTime(planDays: Int) {
-        val now = System.currentTimeMillis()
-        val expiry = now + planDays * 24L * 60L * 60L * 1000L
-        val prefs = getSharedPreferences("SubscriptionPrefs", Context.MODE_PRIVATE)
-        prefs.edit()
-            .putLong("lastPaymentTime", now)
-            .putLong("expiryTime", expiry)
-            .putString("plan", selectedPlan.name)
-            .apply()
+    private fun animateCardViewScale(view: View, scaleX: Float, scaleY: Float) {
+        view.animate()
+            .scaleX(scaleX)
+            .scaleY(scaleY)
+            .setDuration(200)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .start()
     }
 
 

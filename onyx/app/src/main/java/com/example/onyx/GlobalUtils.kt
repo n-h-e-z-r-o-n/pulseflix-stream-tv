@@ -8,34 +8,7 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Process
 import android.util.Log
-/**
- * Global utility class containing shared functions and data management
- * that can be used across all activities in the Onyx app
- * 
- * USAGE EXAMPLES:
- * 
- * // Statistics tracking
- * GlobalUtils.incrementMoviesWatched(this)
- * GlobalUtils.incrementSeriesWatched(this)
- * val moviesCount = GlobalUtils.getMoviesWatched(this)
- * 
- * // Settings management
- * GlobalUtils.setAutoPlay(this, true)
- * val isAutoPlayEnabled = GlobalUtils.isAutoPlayEnabled(this)
- * GlobalUtils.setVideoQuality(this, "1080p")
- * 
- * // Cache management
- * val success = GlobalUtils.clearAppCache(this)
- * 
- * // App info
- * val version = GlobalUtils.getAppVersion(this)
- * val deviceInfo = GlobalUtils.getDeviceInfo(this)
- * 
- * // Utility functions
- * val formattedTime = GlobalUtils.formatDuration(125) // "02:05"
- * val formattedSize = GlobalUtils.formatFileSize(1024000) // "1.0 MB"
- * val isValidEmail = GlobalUtils.isValidEmail("user@example.com")
- */
+
 object GlobalUtils {
     
     // SharedPreferences key constants
@@ -51,9 +24,7 @@ object GlobalUtils {
     private const val DEFAULT_VIDEO_QUALITY = "1080p"
     private const val DEFAULT_THEME = "dark"
     
-    /**
-     * Get SharedPreferences instance
-     */
+
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
@@ -226,9 +197,8 @@ object GlobalUtils {
     
     // ==================== UTILITY FUNCTIONS ====================
     
-    /**
-     * Get app version name
-     */
+    ///  Get app version name
+
     fun getAppVersion(context: Context): String {
         return try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
@@ -240,9 +210,9 @@ object GlobalUtils {
 
     // ==================== APP MANAGEMENT ====================
     
-    /**
-     * Restart the application
-     */
+
+
+    ///Restart the application
     fun restartApp(context: Context) {
         try {
             Log.d("GlobalUtils", "Restarting application...")
@@ -278,11 +248,9 @@ object GlobalUtils {
             if (minutes > 0) append("${minutes} min")
         }.trim()
     }
-    /**
-     * Checks if the app is running on a TV device.
-     * @param context The application context.
-     * @return True if the device is a TV, false otherwise.
-     */
+
+
+    ///Checks if the app is running on a TV device.
     fun isTv(context: Context): Boolean {
         val uiModeManager = context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
         return uiModeManager.currentModeType == Configuration.UI_MODE_TYPE_TELEVISION

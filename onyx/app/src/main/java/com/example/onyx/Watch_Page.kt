@@ -1,5 +1,6 @@
 package com.example.onyx
 
+import android.R.attr.textAllCaps
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -28,20 +29,34 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.delay
 import org.json.JSONArray
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.TooltipCompat
+import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
+
+
 import org.json.JSONObject
 import java.io.IOException
 import java.time.LocalDate
 import kotlin.text.ifEmpty
 
+import com.example.onyx.FetchData.TMDBapi
+import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
+
+
+
 class Watch_Page : AppCompatActivity() {
+
+    private lateinit var  fetch: TMDBapi
+    private lateinit var db: AppDatabase
+    private lateinit var  sm: SessionManger
     
     private var currentServerIndex = 0
     private val servers = listOf(
@@ -65,6 +80,21 @@ class Watch_Page : AppCompatActivity() {
         LoadingAnimation.setup(this@Watch_Page, R.raw.b)
         LoadingAnimation.show(this@Watch_Page)
 
+        fetch = TMDBapi(this)
+        db = AppDatabase(this)
+        sm = SessionManger(this)
+
+
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels     // in pixels
+
+        val screenHeight = displayMetrics.heightPixels    // in pixels
+        val recyclerView = findViewById<FrameLayout>(R.id.widget_1)
+        val params = recyclerView.layoutParams
+        params.height = (screenHeight * 1).toInt()
+        recyclerView.layoutParams = params
+
+
 
         episodes_recycler = findViewById<RecyclerView>(R.id.episodes_recycler)
         //episodes_recycler.layoutManager = GridLayoutManager(this@Watch_Page, 4)
@@ -84,7 +114,7 @@ class Watch_Page : AppCompatActivity() {
         if(!imdbCode.isNullOrEmpty()){
             fetchData(imdbCode.toString(), type.toString())
         }else{
-            fetchData("1242898 ", "movie")
+            fetchData("66732 ", "tv")
         }
 
     }
@@ -118,49 +148,10 @@ class Watch_Page : AppCompatActivity() {
                     }
 
 
-                    val logosUrl = " https://api.themoviedb.org/3/$type/$tmdbId/images"
-                    val logosConnection = URL(logosUrl).openConnection() as HttpURLConnection
-                    logosConnection.requestMethod = "GET"
-                    logosConnection.setRequestProperty("accept", "application/json")
-                    logosConnection.setRequestProperty(
-                        "Authorization",
-                        "Bearer ${BuildConfig.TM_K}"
-                    )
+                    val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
+                    val textLogo = findViewById<TextView>(R.id.title_widget)
+                    fetch.fetchLogos(type, tmdbId, cShowLogo, textLogo)
 
-                    val logosResponse = logosConnection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObjectImg = JSONObject(logosResponse)
-
-                    Log.e("DEBUG_Watch_Images", jsonObjectImg.toString())
-                    val logos = jsonObjectImg.getJSONArray("logos")
-                    Log.e("DEBUG_Watch_Images", logos.toString())
-                    for (i in 0 until logos.length()) {
-                        val logo = logos.getJSONObject(i)
-                        val logoUrl = "https://image.tmdb.org/t/p/original/"  + logo.getString("file_path")
-                        val languageCode = logo.getString("iso_3166_1")
-                        val width = logo.getString("width")
-
-                        if (languageCode == "US") {
-
-                            withContext(Dispatchers.Main) {
-                                val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
-                                val textLogo = findViewById<TextView>(R.id.title_widget)
-
-                                textLogo.visibility = View.GONE
-
-
-                                Glide.with(this@Watch_Page)
-                                    .load(logoUrl)
-                                    .centerCrop()
-                                    //.override(400, Target.SIZE_ORIGINAL)
-                                    .fitCenter()
-                                    .into(cShowLogo)
-                            }
-                            break
-
-                        }
-
-                        Log.e("DEBUG_Watch_Images", logoUrl)
-                    }
 
 
 
@@ -181,28 +172,38 @@ class Watch_Page : AppCompatActivity() {
                     Log.e("DEBUG_Watch", jsonObject.toString())
 
 
-                    val backdrop_Url = if (jsonObject.has("backdrop_path") && !jsonObject.isNull("backdrop_path")) {
-                        "https://image.tmdb.org/t/p/w1280${jsonObject.getString("backdrop_path")}"
-                    } else if (jsonObject.has("poster_path") && !jsonObject.isNull("poster_path")) {
-                        "https://image.tmdb.org/t/p/w780${jsonObject.getString("poster_path")}"
-                    } else { "" }
 
-                    val poster_Url =
-                        "https://image.tmdb.org/t/p/w780${jsonObject.getString("poster_path")}"
 
-                    val original_title: String
+                    val originalTitle: String
+                    val backdropUrl: String
+                    val posterUrl: String
                     val overview: String
-                    val release_date: String
+                    val releaseDate: String
                     val runtime: String
                     val vote_average: String
                     val genres: String
                     val production_C:String
                     val PG: String
-                    var no_of_season: Int = 1
+                    var voteCount:String
                     val validSeasons = mutableListOf<JSONObject>()
+                    var no_of_season: Int = 0
+                    var lastSeason :Int = 0
+                    var lastEpisode:Int = 0
 
 
-                    original_title = jsonObject.optString("name").ifEmpty {
+                    overview = jsonObject.getString("overview")
+
+                    vote_average = jsonObject.getString("vote_average")
+
+                    backdropUrl = if (jsonObject.has("backdrop_path") && !jsonObject.isNull("backdrop_path")) {
+                        "https://image.tmdb.org/t/p/w1280${jsonObject.getString("backdrop_path")}"
+                    } else if (jsonObject.has("poster_path") && !jsonObject.isNull("poster_path")) {
+                        "https://image.tmdb.org/t/p/w780${jsonObject.getString("poster_path")}"
+                    } else { "" }
+
+                    posterUrl =  "https://image.tmdb.org/t/p/w780${jsonObject.getString("poster_path")}"
+
+                    originalTitle  = jsonObject.optString("name").ifEmpty {
                         jsonObject.optString("title")
                     }
 
@@ -213,7 +214,7 @@ class Watch_Page : AppCompatActivity() {
                         "13"
                     }
 
-                    release_date = jsonObject.optString("release_date").ifEmpty {
+                    releaseDate = jsonObject.optString("release_date").ifEmpty {
                         jsonObject.optString("first_air_date")
                     }.substring(0, 4)
 
@@ -229,10 +230,6 @@ class Watch_Page : AppCompatActivity() {
                     }
 
 
-                    overview = jsonObject.getString("overview")
-
-                    vote_average = jsonObject.getString("vote_average")
-
                     val genresArray = jsonObject.getJSONArray("genres") //[{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"}]
                     val genresList = mutableListOf<String>()
                     for (i in 0 until genresArray.length()) {
@@ -245,6 +242,7 @@ class Watch_Page : AppCompatActivity() {
 
                     val production_companies = jsonObject.getJSONArray("production_companies") //[{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"}]
                     val productionList = mutableListOf<String>()
+
                     for (i in 0 until production_companies.length()) {
                         val productionObject = production_companies.getJSONObject(i)
                         val genreName = productionObject.getString("name")
@@ -252,12 +250,14 @@ class Watch_Page : AppCompatActivity() {
                     }
                     production_C = productionList.joinToString("  - ")
 
-
-
-
+                    voteCount =jsonObject.getString("vote_count")
 
 
                     if (type == "tv") {
+                        try{
+                            lastEpisode = jsonObject.getJSONObject("last_episode_to_air").optInt("episode_number", 0)
+                            lastSeason = jsonObject.getJSONObject("last_episode_to_air").optInt("season_number", 0)
+                        }catch (e:Exception){}
 
                         val seasonsArray = jsonObject.getJSONArray("seasons")
                         for (i in 0 until seasonsArray.length()) {
@@ -284,68 +284,37 @@ class Watch_Page : AppCompatActivity() {
                         val PG_widget = findViewById<TextView>(R.id.PG_widget)
 
 
-                        title_widget.text = original_title
-                        year_widget.text = release_date
-
+                        title_widget.text = originalTitle
+                        year_widget.text = releaseDate
+                        Overview_widget.text = overview
                         Genres_widget.text = genres
                         Production_widget.text = production_C
 
-
-                        Rating_widget.text = "${vote_average}/10"
+                        Rating_widget.text = "${vote_average}"
                         Runtime_widget.text = "${runtime} min"
                         PG_widget.text = PG
 
-                        Overview_widget.text = overview
 
 
-                        Picasso.get()
-                            .load(backdrop_Url)
-                            .fit()
+
+                        Glide.with(this@Watch_Page)
+                            .load(backdropUrl)
                             .centerInside()
                             .into(backdrop_Widget)
 
 
-                        Picasso.get()
-                            .load(poster_Url)
-                            .fit()
+
+
+                        Glide.with(this@Watch_Page)
+                            .load(posterUrl)
                             .centerInside()
                             .into(poster_widget)
 
 
-                        val watchButton = findViewById<ImageButton>(R.id.watchNowButton)
-                        val FaveButton = findViewById<ImageButton>(R.id.favoriteButton)
-                        val TrailerButton = findViewById<ImageButton>(R.id.TrailerButton)
-                        val serverButton = findViewById<ImageButton>(R.id.serverButton)
+                        val watchButton = findViewById<LinearLayout>(R.id.watchNowButton)
+                        val trailerButton = findViewById<LinearLayout>(R.id.TrailerButton)
+                        val serverButton = findViewById<LinearLayout>(R.id.serverButton)
 
-                        watchButton.setOnFocusChangeListener { v, hasFocus ->
-                            if (hasFocus) {
-                                TooltipCompat.setTooltipText(v, "Play")  // ensure tooltip text is set
-                                v.post {
-                                    v.performLongClick() // 👈 This forces the tooltip to show
-                                }
-                            }
-                        }
-                        FaveButton.setOnFocusChangeListener { v, hasFocus ->
-                            if (hasFocus) {
-                                v.post {
-                                    v.performLongClick() // 👈 This forces the tooltip to show
-                                }
-                            }
-                        }
-                        TrailerButton.setOnFocusChangeListener { v, hasFocus ->
-                            if (hasFocus) {
-                                v.post {
-                                    v.performLongClick() // 👈 This forces the tooltip to show
-                                }
-                            }
-                        }
-                        serverButton.setOnFocusChangeListener { v, hasFocus ->
-                            if (hasFocus) {
-                                v.post {
-                                    v.performLongClick() // 👈 This forces the tooltip to show
-                                }
-                            }
-                        }
 
 
 
@@ -364,19 +333,31 @@ class Watch_Page : AppCompatActivity() {
 
 
                         setupFavoriteButton(
-                            button = FaveButton,
-                            data = jsonObject,
-                            id =  tmdbId,
-                            type = type
+                            showId =  tmdbId,
+                            type = type,
+                            title = originalTitle,
+                            voteAverage = vote_average,
+                            genres = genres,
+                            overview = overview,
+                            runtime =runtime,
+                            year= releaseDate,
+                            voteCount = voteCount,
+                            pg = PG,
+                            poster = posterUrl,
+                            backdrop = backdropUrl,
+                            noOfSeason = no_of_season,
+                            lastSeason = lastSeason,
+                            lastEpisode = lastEpisode
                         )
+
 
                         if(type=="tv"){
                             watchButton.visibility = View.GONE
                             val Season_widget = findViewById<LinearLayout>(R.id.Season_widget)
                             Season_widget.visibility = View.VISIBLE
 
-                            val season_count_widget = findViewById<TextView>(R.id.season_count_text)
-                            season_count_widget.text = "$no_of_season Seasons"
+                            //val season_count_widget = findViewById<TextView>(R.id.season_count_text)
+                            //season_count_widget.text = "$no_of_season Seasons"
                             createSeasonButtons( no_of_season, validSeasons, tmdbId, jsonObject)
                         }
                         LoadingAnimation.hide(this@Watch_Page)
@@ -442,19 +423,22 @@ class Watch_Page : AppCompatActivity() {
                 isClickable = true
                 setTypeface(typeface, Typeface.BOLD)
                 stateListAnimator = null
-                background = ContextCompat.getDrawable(context, R.drawable.tv_button_selector)
+                isAllCaps = false
+                typeface = ResourcesCompat.getFont(context, R.font.p)
+                background = ContextCompat.getDrawable(context, R.drawable.season_selector)
                 layoutParams = LinearLayout.LayoutParams(
                     dpToPx(120),
-                    dpToPx(48)
-                ).apply { marginEnd = dpToPx(8) }
+                    dpToPx(38)
+                ).apply { marginEnd = dpToPx(0) }
                 setTextColor(resolveAttrColor(context, R.attr.FG_color))
+
             }
 
             seasonButton.setOnClickListener {
                 selectedSeasonButton?.let { previous ->
                     previous.background = ContextCompat.getDrawable(
                         this,
-                        R.drawable.tv_button_selector
+                        R.drawable.season_selector
                     )
                     previous.setTextColor(resolveAttrColor(this, R.attr.FG_color))
                 }
@@ -496,7 +480,7 @@ class Watch_Page : AppCompatActivity() {
                         }
 
                         KeyEvent.KEYCODE_DPAD_UP -> {
-                            findViewById<ImageButton>(R.id.serverButton)?.requestFocus()
+                            findViewById<LinearLayout>(R.id.serverButton)?.requestFocus()
                             return@setOnKeyListener true
                         }
                     }
@@ -546,9 +530,9 @@ class Watch_Page : AppCompatActivity() {
         val season_CWidget = findViewById<TextView>(R.id.season_C)
 
 
-        val currentSeasonTitle = findViewById<TextView>(R.id.current_season_title)
-        val episodeCountText = findViewById<TextView>(R.id.episode_count_text)
-        val seasonYearText = findViewById<TextView>(R.id.season_year_text)
+        //val currentSeasonTitle = findViewById<TextView>(R.id.current_season_title)
+        //val episodeCountText = findViewById<TextView>(R.id.episode_count_text)
+        //val seasonYearText = findViewById<TextView>(R.id.season_year_text)
 
         //Log.e("DEBUG_Each Selecteds", SelectedSeasons.toString())
         //Log.e("DEBUG_Each seasonData", seasonData.toString())
@@ -575,10 +559,10 @@ class Watch_Page : AppCompatActivity() {
 
 
 
-        currentSeasonTitle.text = "Season $SelectedSeasons"
+        //currentSeasonTitle.text = "Season $SelectedSeasons"
         season_CWidget.text = "Season $SelectedSeasons"
-        episodeCountText.text = "$episodeCount Episodes"
-        seasonYearText.text = airDate.take(4)
+        //episodeCountText.text = "$episodeCount Episodes"
+        //seasonYearText.text = airDate.take(4)
 
 
         ratingWidget.text = "$selectedSeasonRating/10"
@@ -653,8 +637,6 @@ class Watch_Page : AppCompatActivity() {
                         val runtime = if (runtimeRaw.isNullOrEmpty() || runtimeRaw == "null") "0" else runtimeRaw
 
 
-
-
                         episodesList.add(
 
                             EpisodeItem(
@@ -668,8 +650,6 @@ class Watch_Page : AppCompatActivity() {
                                 seasonNumber = episodes.optString("season_number", ""),
                             )
                         )
-
-
                     }
 
 
@@ -839,35 +819,72 @@ class Watch_Page : AppCompatActivity() {
 
 
     private fun setupFavoriteButton(
-        button: ImageButton,   // 👈 Changed to ImageButton
-        data: JSONObject,
-        id: String,
-        type: String
+        showId :String,
+        type :String,
+        title:String,
+        voteAverage :String,
+        genres :String,
+        overview :String,
+        runtime :String,
+        year:String,
+        voteCount :String,
+        pg:String,
+        poster:String,
+        backdrop:String,
+        noOfSeason:Int,
+        lastSeason: Int,
+        lastEpisode:Int
     ) {
+
+        val faveButton = findViewById<LinearLayout>(R.id.favoriteButton)
+        val faveButtonImg = findViewById<ImageView>(R.id.favoriteButtonImg)
+        val faveButtonText = findViewById<TextView>(R.id.favoriteButtonText)
+
+        val userId = sm.getUserId()
 
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun applyIcon() {
-            val isFav = FavoritesManager.isFavorite(this@Watch_Page, id, type)
+            val isFav = db.isFavoriteShow(userId, showId, type)
             if (isFav) {
-                button.setImageResource(R.drawable.ic_tickfave)  // ❤️ e.g. filled heart icon
-                button.tooltipText = "Remove from Favorites"
+                faveButtonImg.setImageResource(R.drawable.ic_tickfave)
+                faveButtonText.text = "Remove from Favorites"
             } else {
-                button.setImageResource(R.drawable.ic_addfave) // 🤍 outline heart icon
-                button.tooltipText = "Add to Favorites"
+                faveButtonImg.setImageResource(R.drawable.ic_addfave)
+                faveButtonText.text = "Add to Favorites"
             }
         }
 
         applyIcon()
 
-        button.setOnClickListener {
-            val isFav = FavoritesManager.isFavorite(this@Watch_Page, id, type)
+        faveButton.setOnClickListener {
+            val isFav = db.isFavoriteShow(userId, showId, type)
             if (isFav) {
-                FavoritesManager.removeFavorite(this@Watch_Page, id, type)
+
+                db.removeFavoriteShow(userId, showId, type)
+                applyIcon()
+
             } else {
-                FavoritesManager.addFavorite(this@Watch_Page,id ,type, data)
+                db.addFavoriteShow(
+                    userId = userId,
+                    showId = showId,
+                    type = type,
+                    title = title,
+                    rating = voteAverage,
+                    genres = genres,
+                    overview = overview,
+                    runtime = runtime,
+                    year = year,
+                    voteCount = voteCount,
+                    pg = pg,
+                    poster = poster,
+                    backdrop = backdrop ,
+                    noOfSeason = noOfSeason,
+                    lastSeason =lastSeason,
+                    lastEpisode =lastEpisode
+                )
+                applyIcon()
             }
-            applyIcon()
         }
     }
 
@@ -883,7 +900,7 @@ class Watch_Page : AppCompatActivity() {
             .setSingleChoiceItems(servers.toTypedArray(), currentServerIndex) { dialog, which ->
                 currentServerIndex = which
                 // Update server button display
-                val serverButton = findViewById<ImageButton>(R.id.serverButton)
+                //val serverButton = findViewById<ImageButton>(R.id.serverButton)
 
                 Toast.makeText(this, "Server changed to: ${servers[currentServerIndex]}", Toast.LENGTH_SHORT).show()
                 dialog.dismiss() // Auto-close dialog when option is selected

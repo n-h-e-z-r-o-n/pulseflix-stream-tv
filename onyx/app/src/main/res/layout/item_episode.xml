@@ -1,14 +1,14 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="200dp"
+    android:layout_width="wrap_content"
     android:layout_height="140dp"
     android:layout_margin="6dp"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:clickable="true"
     android:foreground="@drawable/item_episode_focus"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="9dp"
     app:cardElevation="2dp"
     app:cardBackgroundColor="?attr/BG_color_up">
 
@@ -37,30 +37,12 @@
             android:padding="8dp">
 
 
-
-
-
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:orientation="horizontal"
-                android:layout_marginTop="2dp">
-
-                <TextView
-                    android:id="@+id/episode_Number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ep 2"
-                    android:textColor="?attr/FG_color"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:shadowColor="?attr/AccentColor"
-                    android:shadowDx="2"
-                    android:shadowDy="3"
-                    android:shadowRadius="4"
-                    tools:ignore="HardcodedText" />
+                android:visibility="gone">
 
 
                 <TextView
@@ -68,31 +50,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
-                    android:text="45 min"
-                    android:textColor="?attr/FG_color"
-                    android:textSize="10sp"
-                    tools:ignore="HardcodedText,RtlSymmetry,SmallSp"
                     android:shadowColor="?attr/AccentColor"
                     android:shadowDx="2"
                     android:shadowDy="4"
-                    android:shadowRadius="4"/>
+                    android:shadowRadius="4"
+                    android:text="45 min"
+                    android:textColor="?attr/FG_color"
+                    android:textSize="10sp"
+                    tools:ignore="HardcodedText,RtlSymmetry,SmallSp" />
 
                 <TextView
                     android:id="@+id/episode_Rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|end"
-                    android:text="7.5 ★"
-                    android:gravity="end"
                     android:layout_weight="1"
-                    android:textColor="?attr/AccentColor"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText,InefficientWeight,SmallSp"
+                    android:gravity="end"
                     android:shadowColor="#80000000"
                     android:shadowDx="2"
                     android:shadowDy="3"
-                    android:shadowRadius="4"/>
+                    android:shadowRadius="4"
+                    android:text="7.5 ★"
+                    android:textColor="?attr/AccentColor"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,InefficientWeight,SmallSp" />
 
             </LinearLayout>
 
@@ -101,32 +83,47 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="3"
                 android:text="Short episode description goes here..."
                 android:textColor="?attr/FG_color"
                 android:textSize="9sp"
-                android:ellipsize="end"
                 android:visibility="gone"
-                android:maxLines="3"
                 tools:ignore="HardcodedText,SmallSp" />
+
+            <TextView
+                android:id="@+id/episode_Number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="20dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/o"
+                android:maxLines="1"
+                android:text="S1-E2"
+                android:textColor="?attr/FG_color"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/episode_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:gravity="bottom"
                 android:ellipsize="end"
+                android:fontFamily="@font/o"
+                android:gravity="bottom"
                 android:maxLines="1"
-                android:text="Episode Title"
-                android:textColor="?attr/FG_color"
-                android:fontFamily="@font/e"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText,SmallSp"
                 android:shadowColor="#80000000"
                 android:shadowDx="3"
                 android:shadowDy="4"
-                android:shadowRadius="4"/>
+                android:shadowRadius="4"
+                android:text="Episode Title"
+                android:textColor="?attr/FG_color"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText,SmallSp" />
         </FrameLayout>
 
     </FrameLayout>

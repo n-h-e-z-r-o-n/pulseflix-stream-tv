@@ -35,14 +35,13 @@
 
 
         <androidx.cardview.widget.CardView
-            android:layout_width="34dp"
-            android:layout_height="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="17dp"
             app:cardCornerRadius="4dp"
             app:cardElevation="1dp"
             app:cardBackgroundColor="@android:color/transparent"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            >
+            android:layout_marginTop="10dp">
             <TextView
                 android:id="@+id/itemText"
                 android:layout_width="match_parent"
@@ -51,12 +50,12 @@
                 android:ellipsize="end"
                 android:text="2015"
                 android:gravity="center"
-                android:padding="1dp"
+                android:paddingHorizontal="4dp"
                 android:rotationX="0"
-                android:fontFamily="@font/i"
+                android:fontFamily="@font/p"
                 android:singleLine="true"
                 android:textColor="?attr/FG_color"
-                android:textSize="9sp"
+                android:textSize="12sp"
                 tools:ignore="HardcodedText,SmallSp" />
 
         </androidx.cardview.widget.CardView>
@@ -79,7 +78,7 @@
                 android:rotationX="0"
                 android:singleLine="true"
                 android:textColor="?attr/FG_color"
-                android:textSize="9sp"
+                android:textSize="12sp"
                 tools:ignore="HardcodedText,SmallSp" />
 
 
@@ -92,13 +91,12 @@
                 android:layout_marginStart="5dp"
                 android:gravity="center"
                 android:layout_marginTop="10dp"
-
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="7.5 imdb"
                 android:textColor="?attr/FG_color"
-                android:textSize="6sp"
-                android:fontFamily="@font/b"
+                android:textSize="12sp"
+                android:fontFamily="@font/p"
                 tools:ignore="HardcodedText,SmallSp"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
@@ -121,6 +119,7 @@
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
                 android:gravity="center|end"
+                android:visibility="gone"
                 />
         </LinearLayout>
 
@@ -148,22 +147,34 @@
 
         <TextView
             android:id="@+id/showTitle"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@android:color/transparent"
             android:ellipsize="end"
             android:text="Tekdss"
-            android:fontFamily="@font/f"
+            android:fontFamily="@font/o"
             android:padding="8dp"
             android:rotationX="0"
-            android:singleLine="true"
+            android:singleLine="false"
+            android:maxLines="3"
             android:shadowColor="#80000000"
             android:shadowDx="2"
             android:shadowDy="4"
             android:shadowRadius="4"
             android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/itemLogo"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:maxHeight="200dp"
+            android:scaleType="fitXY"
+            tools:ignore="ContentDescription"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="bottom"/>
 
     </FrameLayout>
 

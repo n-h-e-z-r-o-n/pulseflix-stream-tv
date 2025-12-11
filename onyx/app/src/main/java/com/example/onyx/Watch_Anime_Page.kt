@@ -323,9 +323,6 @@ class Watch_Anime_Page : AppCompatActivity() {
             val dub = item.getJSONObject("episodes").optString("dub", "")
 
 
-
-
-
             RecommendationItems.add(
                 AiringAnimeItem(
                     id,

@@ -93,14 +93,15 @@
                         android:fontFamily="sans-serif-medium"
                         android:text="Premium Plan"
                         android:textColor="?attr/FG_color"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:id="@+id/headerBadgeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:background="?attr/BG_color_up"
+                        android:background="?attr/transparentEffect"
                         android:fontFamily="sans-serif-medium"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
@@ -109,7 +110,7 @@
                         android:text="BEST VALUE"
                         android:textColor="?attr/FG_color"
                         android:textSize="11sp"
-                        tools:ignore="SmallSp" />
+                        tools:ignore="HardcodedText,SmallSp" />
 
                 </LinearLayout>
 
@@ -135,7 +136,7 @@
                         android:id="@+id/priceAmountText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
+                        android:fontFamily="@font/n"
                         android:text="20"
                         android:textColor="?attr/FG_color"
                         android:textSize="34sp"
@@ -304,10 +305,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/PaymentContainer"
-        android:layout_width="450dp"
-        android:layout_height="wrap_content"
+        android:layout_width="550dp"
+        android:layout_height="match_parent"
         app:cardBackgroundColor="?attr/BG_color_up"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center_horizontal"
         android:layout_marginStart="0dp"
         android:elevation="6dp"
         app:cardCornerRadius="16dp"
@@ -317,6 +318,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
+            android:background="?attr/transparentEffect"
             android:scrollbars="none">
 
             <LinearLayout

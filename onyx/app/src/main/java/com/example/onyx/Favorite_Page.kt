@@ -44,10 +44,33 @@ class Favorite_Page : AppCompatActivity() {
         loadFavorites()
     }
 
-    private fun loadFavorites(){
+    /*
+    private fun loadFaDvorites(){
         val userId = sm.getUserId()
+
         val animeFavData = db.getFavoriteAnime(userId)
-        Log.e("Favorite_Page", "loadFavorites: $animeFavData")
+        val movies = db.getFavoriteShowsByType(userId, "movie")
+        val tvs = db.getFavoriteShowsByType(userId, "tv")
+
+        Log.d("FAVORITE", "Movies: ${movies.size}")
+        Log.d("FAVORITE", "TV Shows: ${tvs.size}")
+        Log.d("FAVORITE", "Anime: ${animeFavData.size}")
+
+        for (movie in movies) {
+            val title = movie["title"]
+            val poster = movie["poster"]
+            val rating = movie["rating"]
+
+            Log.d("FAVORITE", "Movie: $title Rating: $rating")
+        }
+
+        for (series in tvs) {
+            val title = series["title"]
+            val poster = series["poster"]
+            val rating = series["rating"]
+
+            Log.d("FAVORITE", "Movie: $title Rating: $rating")
+        }
 
 
         recyclerView = findViewById<RecyclerView>(R.id.favoritesRecycler)
@@ -65,14 +88,14 @@ class Favorite_Page : AppCompatActivity() {
 
 
 
-        val favorites = FavoritesManager.getFavorites(this)
 
 
 
-        if (favorites.isEmpty()) {
+
+        if (movies.isEmpty() || tvs.isEmpty() || animeFavData.isEmpty() ) {
             emptyState.visibility = View.VISIBLE
         } else {
-            emptyState.visibility = View.GONE
+
 
             val items = favorites.map { obj ->
                 var originalTitle: String
@@ -218,6 +241,134 @@ class Favorite_Page : AppCompatActivity() {
             recyclerView.adapter = adapter
         }
     }
+    */
+
+    private fun loadFavorites() {
+
+        val userId = sm.getUserId()
+
+        val animeFavData = db.getFavoriteAnime(userId)
+        val movies = db.getFavoriteShowsByType(userId, "movie")
+        val tvs = db.getFavoriteShowsByType(userId, "tv")
+
+        Log.d("FAVORITE", "Movies: ${movies.size}")
+        Log.d("FAVORITE", "TV Shows: ${tvs.size}")
+        Log.d("FAVORITE", "Anime: ${animeFavData.size}")
+
+        recyclerView = findViewById(R.id.favoritesRecycler)
+        val emptyState = findViewById<TextView>(R.id.emptyState)
+
+        recyclerView.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        val spacing = (5 * resources.displayMetrics.density).toInt()
+        recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
+
+        // SHOW EMPTY STATE ONLY IF ALL FAVORITES ARE EMPTY
+        if (movies.isEmpty() && tvs.isEmpty() && animeFavData.isEmpty()) {
+            emptyState.visibility = View.VISIBLE
+            return
+        } else {
+            emptyState.visibility = View.GONE
+        }
+
+        // -----------------------------------------------
+        // 🔥 COMBINE ALL FAVORITE ITEMS INTO ONE LIST
+        // -----------------------------------------------
+
+        val items = mutableListOf<FavItem>()
+
+        // ---------- MOVIES ----------
+        for (movie in movies) {
+            items.add(
+                FavItem(
+                    title = movie["title"] ?: "",
+                    posterUrl = movie["poster"] ?: "",
+                    backdropUrl = movie["backdrop"] ?: "",
+                    releaseDate = movie["year"] ?: "",
+                    runtime = movie["runtime"] ?: "",
+                    overview = movie["overview"] ?: "",
+                    voteAverage = "${movie["rating"] ?: ""}",
+                    genres = movie["genres"] ?: "",
+                    production = "",
+                    parentalGuide = movie["pg"] ?: "",
+                    imdbCode = movie["show_id"] ?: "",
+                    showType = "movie"
+                )
+            )
+        }
+
+        // ---------- TV SHOWS ----------
+        for (show in tvs) {
+            items.add(
+                FavItem(
+                    title = show["title"] ?: "",
+                    posterUrl = show["poster"] ?: "",
+                    backdropUrl = show["backdrop"] ?: "",
+                    releaseDate = show["year"] ?: "",
+                    runtime = show["runtime"] ?: "",
+                    overview = show["overview"] ?: "",
+                    voteAverage = "${show["rating"] ?: ""}",
+                    genres = show["genres"] ?: "",
+                    production = "",
+                    parentalGuide = show["pg"] ?: "",
+                    imdbCode = show["show_id"] ?: "",
+                    showType = "tv"
+                )
+            )
+        }
+
+        // ---------- ANIME ----------
+        for (anime in animeFavData) {
+            val genres = anime["genre"] ?: ""
+            items.add(
+                FavItem(
+                    title = anime["name"] ?: "",
+                    posterUrl = anime["poster"] ?: "",
+                    backdropUrl = anime["poster"] ?: "",
+                    releaseDate = anime["aired"] ?: "",
+                    runtime = anime["duration"] ?: "",
+                    overview = anime["description"] ?: "",
+                    voteAverage = anime["rating"] ?: "",
+                    genres = genres,
+                    production = "",
+                    parentalGuide = anime["rating"] ?: "",
+                    imdbCode = anime["anime_id"] ?: "",
+                    showType = "anime"
+                )
+            )
+        }
+
+        // -----------------------------------------------
+        // ADAPTER SETUP
+        // -----------------------------------------------
+        val FavBackdrop: ImageView = findViewById(R.id.FavBackdrop)
+        val FavTitle: TextView = findViewById(R.id.FavTitle)
+        val FavGenre: TextView = findViewById(R.id.FavGenre)
+        val FavType: TextView = findViewById(R.id.FavType)
+        val FavRating: TextView = findViewById(R.id.FavRating)
+        val FavYear: TextView = findViewById(R.id.FavYear)
+        val FavOverview: TextView = findViewById(R.id.FavOverview)
+        val RemoveFaveItem: LinearLayout = findViewById(R.id.RemoveFaveItem)
+
+        adapter = FavAdapter(
+            items,
+            R.layout.square_card,
+            FavBackdrop,
+            FavTitle,
+            FavGenre,
+            FavType,
+            FavRating,
+            FavYear,
+            FavOverview,
+            RemoveFaveItem
+        )
+
+        recyclerView.adapter = adapter
+    }
+
 
     private fun setupBackPressedCallback() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {

@@ -35,7 +35,6 @@ class Anime_Page : AppCompatActivity() {
     private var isSearchContainerAnimeVisible = false
     private var currentAnimePage = 0
     private var isLoadingMoreDubbed = false
-
     private var currentRecentlyAnimePage = 0
     private var isLoadingMoreRecently = false
 
@@ -52,14 +51,11 @@ class Anime_Page : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_anime_page)
         NavAction.setupSidebar(this@Anime_Page)
-        LoadingAnimation.setup(this@Anime_Page, R.raw.b)
         LoadingAnimation.show(this@Anime_Page)
 
 
 
-        animeHomeData()
-        setupSearchUi()
-        setupBackPressedCallback()
+
 
         val tvSpacing = (8 * resources.displayMetrics.density).toInt()
         //------------------------------------------------------------------------------------------
@@ -88,8 +84,12 @@ class Anime_Page : AppCompatActivity() {
         RecentlyAdapter.onAddMoreClicked = { loadDubbedAnime() }
         //------------------------------------------------------------------------------------------
 
+        animeHomeData()
+
         loadDubbedAnime()
         loadRecentlyAnime()
+        setupSearchUi()
+        setupBackPressedCallback()
     }
 
 
@@ -103,8 +103,13 @@ class Anime_Page : AppCompatActivity() {
         params.height = (screenHeight * 0.75).toInt()
         recyclerView.layoutParams = params
 
+        LoadingAnimation.setup(this@Anime_Page, R.raw.b)
+
         CoroutineScope(Dispatchers.IO).launch {
-            repeat(1) { attempt ->
+            var attempt = 0
+            while (attempt < 5) {
+                attempt++
+
                 try {
 
                     val url = "$urlHome/api/v2/hianime/home"
@@ -195,12 +200,35 @@ class Anime_Page : AppCompatActivity() {
                         LoadingAnimation.hide(this@Anime_Page)
                     }
 
-                    return@launch
+
+
+                } catch (e: java.net.ConnectException) {
+                    Log.e("ANIME_ERROR", "Connection failed", e)
+                    withContext(Dispatchers.Main) {
+                        LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                    }
+                    currentRecentlyAnimePage--
+
+                    break // Stop retry attempts safely
+
+                } catch (e: java.io.FileNotFoundException) {
+                    Log.e("ANIME_ERROR", "404 Not Found", e)
+                    withContext(Dispatchers.Main) {
+                        LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                    }
+                    currentRecentlyAnimePage--
+
+                    break // Stop attempts safely
+
                 } catch (e: Exception) {
-                    delay(20_000)
-                    Log.e("ANIME_STATUS HOME 1", "Error fetching data", e)
-                    return@launch
+                    Log.e("ANIME_ERROR", "General error", e)
+                    delay(10_000)
+                    currentRecentlyAnimePage--
+
+                    continue // Try again safely
                 }
+
+                return@launch
 
 
 
@@ -212,20 +240,14 @@ class Anime_Page : AppCompatActivity() {
     private fun showTrending( trending: JSONArray){
 
         var trendingItems = mutableListOf<TrendingAnimeItem>()
-
         for (i in 0 until trending.length()) {
 
 
             val item = trending.getJSONObject(i)
-
             val title = item.getString("name")
-
             val imageUrl = item.getString("poster")
-
             val id = item.getString("id")
-
             val ranking = "0"+item.getString("rank")
-
 
 
             trendingItems.add(
@@ -378,8 +400,15 @@ class Anime_Page : AppCompatActivity() {
                     }
 
                     return@launch
+                } catch (e: java.net.ConnectException) {
+                    withContext(Dispatchers.Main) {
+                        LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                    }
+                    Log.e("DEBUG_TAG_ANIME dubbed", "Connect Error", e)
+                    currentRecentlyAnimePage--
+                    return@repeat
                 } catch (e: Exception) {
-                    Log.e("DEBUG_TAG_TvShows", "Attempt ${attempt+1} failed", e)
+                    Log.e("DEBUG_TAG_ANIME dubbed", "Attempt ${attempt+1} failed", e)
                     delay(10_000)
                     currentAnimePage--
                 }
@@ -459,8 +488,23 @@ class Anime_Page : AppCompatActivity() {
                     }
 
                     return@launch
-                } catch (e: Exception) {
-                    Log.e("DEBUG_TAG_TvShows", "Attempt ${attempt+1} failed", e)
+                } catch (e: java.net.ConnectException) {
+                    withContext(Dispatchers.Main) {
+                        LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                    }
+                    Log.e("DEBUG_TAG_ANIME recent", "Connect Error", e)
+                    currentRecentlyAnimePage--
+                    return@repeat
+
+                }catch (e: java.io.FileNotFoundException) {
+                    withContext(Dispatchers.Main) {
+                        LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                    }
+                    Log.e("DEBUG_TAG_ANIME recent", "URL Not Found (404/403) at page $currentRecentlyAnimePage", e)
+                    currentRecentlyAnimePage--
+                    return@repeat
+                }catch (e: Exception) {
+                    Log.e("DEBUG_TAG_ANIME recent", "Attempt ${attempt+1} failed", e)
                     delay(10_000)
                     currentRecentlyAnimePage--
                 }

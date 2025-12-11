@@ -9,10 +9,17 @@
     tools:context=".Watch_Page"
     android:background="?attr/BG_color">
 
+
+
     <ScrollView
+        android:id="@+id/mainr"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:background="?attr/BG_color">
 
         <LinearLayout
@@ -22,20 +29,16 @@
 
 
 
-            <!-- Poster + title block -->
+
             <FrameLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="430dp">
-
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:focusable="true"/>
+                android:layout_height="match_parent"
+                android:id="@+id/widget_1">
 
                 <!-- Backdrop image -->
                 <FrameLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="right"
                     tools:ignore="RtlHardcoded">
@@ -43,12 +46,13 @@
                     <!-- Backdrop image -->
                     <ImageView
                         android:id="@+id/backdropImageView"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        />
+                        android:src="@raw/test3"
+                        tools:ignore="ContentDescription" />
 
-                    <!-- Gradient overlay -->
+                    <!-- Gradient overlay left-->
                     <LinearLayout
                         android:layout_width="300dp"
                         android:layout_height="match_parent"
@@ -57,48 +61,35 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="100dp"
                         android:layout_gravity="bottom"
-                        android:background="@drawable/overlay_bottom_gradient"
-                        android:alpha="1"/>
+                        android:alpha="1"
+                        android:background="@drawable/overlay_bottom_gradient" />
 
                 </FrameLayout>
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:paddingStart="16dp"
                     android:paddingTop="16dp"
                     android:paddingEnd="16dp"
-                    android:paddingBottom="0dp"
                     android:gravity="center"
-                    tools:ignore="RtlSymmetry"
+                    tools:ignore="RtlSymmetry">
 
-                    >
 
-                    <androidx.cardview.widget.CardView
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="200dp"
-                        android:layout_height="330dp"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        card_view:cardCornerRadius="14dp"
-                        card_view:cardElevation="0dp"
-                        card_view:cardBackgroundColor="@android:color/transparent"
-                        android:foreground="@drawable/card_focus"
-                        android:visibility="gone">
 
-                        <ImageView
-                            android:id="@+id/posterImageView"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitXY"
-                            android:background="@android:color/transparent"
-                            />
-                    </androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:id="@+id/posterImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:visibility="gone"
+                        android:background="@android:color/transparent"
+                        tools:ignore="ContentDescription" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -107,14 +98,13 @@
                         android:orientation="vertical"
                         android:paddingStart="20dp"
                         android:paddingTop="16dp"
-                        android:paddingEnd="16dp"
-                        android:paddingBottom="0dp"
-                        tools:ignore="RtlSymmetry">
+                            tools:ignore="RtlSymmetry">
 
                         <ImageView
                             android:id="@+id/cShowLogo"
-                            android:layout_width="400dp"
+                            android:layout_width="300dp"
                             android:layout_height="wrap_content"
+                            android:maxHeight="200dp"
                             android:scaleType="fitXY"
                             tools:ignore="ContentDescription" />
 
@@ -131,7 +121,7 @@
                             android:maxWidth="400dp"
                             android:text="Movie Title"
                             android:textColor="?attr/FG_color"
-                            android:fontFamily="@font/b"
+                            android:fontFamily="@font/p"
                             android:textSize="40sp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText"
@@ -140,29 +130,20 @@
                             android:shadowDy="6"
                             android:shadowRadius="4"/>
 
+
+
+
                         <TextView
-                            android:id="@+id/season_C"
+                            android:id="@+id/Production_widget"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="0dp"
-                            android:text=""
-                            android:textStyle="italic|bold"
-                            android:textColor="?attr/BG_color_up"
+                            android:alpha="0.8"
+                            android:text="- Marvel    - DC   - action"
+                            android:textColor="?attr/FG_color"
                             android:textSize="9sp"
-                            tools:ignore="SmallSp"
-                            android:layout_marginBottom="10dp"/>
-
-
-                            <TextView
-                                android:id="@+id/Production_widget"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="- Marvel    - DC   - action"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="9sp"
-                                android:textStyle="italic"
-                                tools:ignore="HardcodedText,SmallSp"
-                                android:alpha="0.8"/>
+                            android:textStyle="italic"
+                            android:visibility="gone"
+                            tools:ignore="HardcodedText,SmallSp" />
 
 <!-- ========================================================================================    -->
                         <LinearLayout
@@ -173,34 +154,7 @@
                             android:orientation="horizontal"
                             android:paddingEnd="0dp" >
 
-                            <!-- VoteCount -->
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:gravity="start"
-                                android:orientation="horizontal"
-                                android:layout_marginEnd="15dp"
-                                android:alpha="0.5">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="★★★★☆ "
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="15sp"
-                                    android:textStyle="bold"
-                                    tools:ignore="HardcodedText" />
-                                <TextView
-                                    android:id="@+id/VoteCount_widget"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="342323"
-                                    android:textColor="#FFFFFF"
-                                    android:textStyle="bold"
-                                    android:textSize="11sp"
-                                    tools:ignore="HardcodedText" />
-                            </LinearLayout>
 
                             <!-- Rating -->
                             <LinearLayout
@@ -209,28 +163,74 @@
                                 android:layout_gravity="center"
                                 android:gravity="start"
                                 android:orientation="horizontal"
-                                android:layout_marginEnd="15dp"
-                                android:alpha="0.5">
 
-                                <TextView
+                                >
+
+                                <androidx.cardview.widget.CardView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="IMDB "
-                                    android:textColor="#FFFFFF"
+                                    app:cardCornerRadius="3dp"
+                                    android:text="IMDB"
+
                                     android:textSize="11sp"
+                                    app:cardBackgroundColor="#DAA520"
                                     tools:ignore="HardcodedText"
-                                    android:textStyle="bold"/>
+                                    android:textStyle="bold">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="IMDb"
+                                        android:paddingVertical="2dp"
+                                        android:paddingHorizontal="5dp"
+                                        android:textColor="#000000"
+                                        android:textStyle="bold"
+                                        android:textSize="11sp"
+                                        android:fontFamily="@font/p"
+                                        tools:ignore="HardcodedText" />
+
+                                </androidx.cardview.widget.CardView>
                                 <TextView
                                     android:id="@+id/Rating_widget"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="8.5/10"
+                                    android:layout_marginStart="2dp"
+                                    android:text="8.5"
+                                    android:layout_gravity="center"
                                     android:textColor="#FFFFFF"
                                     android:textStyle="bold"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText" />
 
                             </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:background="#FFFFFF"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:alpha="0.5"/>
+
+                            <TextView
+                                android:id="@+id/season_C"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textColor="#FFFFFF"
+                                android:fontFamily="@font/q"
+                                android:textSize="11sp"
+                                tools:ignore="HardcodedText,SmallSp"/>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:background="#FFFFFF"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:alpha="0.5"/>
 
                             <!-- Runtime -->
                             <LinearLayout
@@ -240,7 +240,7 @@
                                 android:gravity="start"
                                 android:orientation="horizontal"
                                 android:paddingEnd="0dp"
-                                android:alpha="0.5">
+                                >
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -260,15 +260,21 @@
                                     tools:ignore="HardcodedText" />
                             </LinearLayout>
 
+                            <View
+                                android:layout_width="1dp"
+                                android:background="#FFFFFF"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:alpha="0.5"/>
+
                             <!-- Year -->
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:gravity="start"
-                                android:orientation="horizontal"
-                                android:layout_marginStart="15dp"
-                                android:alpha="0.5">
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:id="@+id/year_widget"
@@ -282,21 +288,28 @@
                                     android:textStyle="bold"    />
                             </LinearLayout>
 
+                            <View
+                                android:layout_width="1dp"
+                                android:background="#FFFFFF"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:alpha="0.5"/>
+
                             <!-- Pg -->
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:gravity="start"
-                                android:orientation="horizontal"
-                                android:layout_marginStart="15dp"
-                                android:alpha="0.5">
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="PG "
                                     android:textColor="#FFFFFF"
+                                    android:fontFamily="@font/d"
                                     android:textStyle="bold"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText" />
@@ -306,12 +319,22 @@
                                     android:layout_height="wrap_content"
                                     android:text="13"
                                     android:textColor="#FFFFFF"
+                                    android:fontFamily="@font/p"
                                     android:textStyle="bold"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText" />
                             </LinearLayout>
 
-                            <!-- Runtime -->
+                            <View
+                                android:layout_width="1dp"
+                                android:background="#FFFFFF"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="5dp"
+                                android:alpha="0.5"/>
+
+
+
 
                                 <ImageView
                                     android:layout_marginStart="10dp"
@@ -334,6 +357,35 @@
 
                         </LinearLayout>
 
+                        <!-- VoteCount -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal"
+                            android:layout_marginEnd="15dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="★★☆ "
+                                android:textColor="#FFFFFF"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
+                            <TextView
+                                android:id="@+id/VoteCount_widget"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="342323"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/n"
+                                android:textSize="14sp"
+                                tools:ignore="HardcodedText" />
+                        </LinearLayout>
+
                         <TextView
                             android:id="@+id/Genres_widget"
                             android:layout_width="wrap_content"
@@ -342,6 +394,7 @@
                             android:textColor="?attr/FG_color"
                             android:textSize="11sp"
                             tools:ignore="HardcodedText"
+                            android:fontFamily="@font/n"
                             android:textStyle="bold"/>
 
                         <LinearLayout
@@ -372,17 +425,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:ellipsize="end"
-                                android:maxLines="6"
+                                android:maxLines="4"
                                 android:singleLine="false"
                                 android:text="An assassin, trained in the ways of the Ruska Roma, embarks on a quest for vengeance following the death of her father."
                                 android:textColor="?attr/FG_color"
-                                android:textSize="12sp"
-                                android:textStyle="bold"
+                                android:textSize="13sp"
+                                android:fontFamily="@font/p"
                                 tools:ignore="HardcodedText"
-                                android:shadowColor="#80000000"
-                                android:shadowDx="5"
-                                android:shadowDy="6"
-                                android:shadowRadius="4"/>
+                                />
 
                         </LinearLayout>
 
@@ -390,296 +440,248 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="left"
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:paddingEnd="0dp">
 
                             <!-- This is our custom expanding button -->
-                            <ImageButton
+                            <LinearLayout
                                 android:id="@+id/watchNowButton"
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
-                                android:background="@drawable/tv_button_selector"
-                                android:focusable="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/watch_button"
                                 android:focusableInTouchMode="true"
-                                android:src="@drawable/ic_play"
-                                app:tint="?attr/AccentColor"
-                                android:textAllCaps="false"
+                                android:focusable="true"
+                                android:clickable="true"
+                                android:paddingHorizontal="14dp"
                                 android:nextFocusLeft="@+id/serverButton"
                                 android:nextFocusRight="@+id/TrailerButton"
-                                android:tooltipText="Play"
                                 android:elevation="2dp"
-                                tools:ignore="UnusedAttribute" />
+                                android:layout_marginEnd="10dp">
+
 
                             <ImageButton
+                                android:layout_width="34dp"
+                                android:layout_height="34dp"
+                                android:background="@android:color/transparent"
+                                android:src="@drawable/ic_play"
+                                app:tint="?attr/FG_color"
+                                android:textAllCaps="false"
+                                tools:ignore="ContentDescription,UnusedAttribute" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Play"
+                                android:textSize="15sp"
+                                android:fontFamily="@font/o"
+                                android:textColor="?attr/FG_color"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:id="@+id/TrailerButton"
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/watch_button"
+                                android:focusableInTouchMode="true"
+                                android:focusable="true"
+                                android:clickable="true"
+                                android:paddingHorizontal="14dp"
+                                android:nextFocusLeft="@+id/watchNowButton"
+                                android:nextFocusRight="@+id/favoriteButton"
+                                android:elevation="2dp"
+                                android:visibility="gone">
+
+                                <ImageButton
+                                android:layout_width="34dp"
+                                android:layout_height="34dp"
                                 android:layout_marginStart="12dp"
                                 android:background="@drawable/tv_button_selector"
-                                android:focusable="true"
-                                android:focusableInTouchMode="true"
                                 android:src="@drawable/ic_trailer"
                                 app:tint="?attr/AccentColor"                                android:textSize="14sp"
                                 android:textAllCaps="false"
-                                android:nextFocusLeft="@+id/watchNowButton"
-                                android:nextFocusRight="@+id/favoriteButton"
-                                android:tooltipText="Trailer"
                                 android:elevation="2dp"
-                                tools:ignore="UnusedAttribute"
-                                android:visibility="gone"/>
+                                tools:ignore="ContentDescription,UnusedAttribute"
+/>
+                            </LinearLayout>
 
-                            <ImageButton
+                            <LinearLayout
                                 android:id="@+id/favoriteButton"
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
-                                android:layout_marginStart="12dp"
-                                android:background="@drawable/tv_button_selector"
-                                android:focusable="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/watch_button"
                                 android:focusableInTouchMode="true"
-                                android:src="@drawable/ic_addfave"
-                                app:tint="?attr/AccentColor"
-                                android:textColor="?attr/AccentColor"
-                                android:textAllCaps="false"
-                                android:tooltipText="Add to Favorites"
+                                android:focusable="true"
+                                android:clickable="true"
+                                android:layout_marginEnd="10dp"
+                                android:paddingHorizontal="14dp"
                                 android:nextFocusLeft="@+id/TrailerButton"
                                 android:nextFocusRight="@+id/serverButton"
-                                android:elevation="4dp"
-                                tools:ignore="UnusedAttribute" />
+                                android:elevation="2dp" >
 
-                            <ImageButton
+
+
+                                <ImageButton
+                                    android:id="@+id/favoriteButtonImg"
+                                    android:layout_width="34dp"
+                                    android:layout_height="34dp"
+                                    android:src="@drawable/ic_addfave"
+                                    app:tint="?attr/FG_color"
+                                    android:background="@android:color/transparent"
+                                    android:textColor="?attr/FG_color"
+                                    android:textAllCaps="false"
+                                    android:tooltipText="Add to Favorites"
+                                    tools:ignore="UnusedAttribute" />
+
+                                <TextView
+                                    android:id="@+id/favoriteButtonText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="favorite"
+                                    android:textSize="15sp"
+                                    android:fontFamily="@font/o"
+                                    android:textColor="?attr/FG_color"
+                                    android:textStyle="bold"
+                                    tools:ignore="HardcodedText" />
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
                                 android:id="@+id/serverButton"
-                                android:layout_width="44dp"
-                                android:layout_height="44dp"
-                                android:layout_marginStart="12dp"
-                                android:background="@drawable/tv_button_selector"
-                                android:focusable="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/watch_button"
                                 android:focusableInTouchMode="true"
-                                android:src="@drawable/ic_server"
-                                app:tint="?attr/AccentColor"
-                                android:textAllCaps="false"
-                                android:tooltipText="Change Server"
+                                android:focusable="true"
+                                android:clickable="true"
+                                android:paddingHorizontal="14dp"
                                 android:nextFocusLeft="@+id/favoriteButton"
                                 android:nextFocusRight="@+id/watchNowButton"
                                 android:elevation="2dp"
-                                tools:targetApi="26" />
+                                android:layout_marginEnd="10dp">
+
+                                <ImageButton
+                                    android:layout_width="34dp"
+                                    android:layout_height="34dp"
+                                    android:background="@android:color/transparent"
+                                    android:src="@drawable/ic_server"
+                                    app:tint="?attr/FG_color"
+                                    android:textAllCaps="false"
+                                    tools:ignore="ContentDescription" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Server"
+                                    android:textSize="15sp"
+                                    android:fontFamily="@font/o"
+                                    android:textColor="?attr/FG_color"
+                                    android:textStyle="bold"
+                                    tools:ignore="HardcodedText" />
+
+                            </LinearLayout>
+
                         </LinearLayout>
 
-                </LinearLayout>
-
-                </LinearLayout>
 
 
-            </FrameLayout>
-
-
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="24dp"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:id="@+id/Season_widget"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:visibility="gone">
-
-                    <!-- Season Header -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingBottom="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Seasons"
-                            android:textColor="?attr/AccentColor"
-                            android:fontFamily="@font/d"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText"
-                            android:alpha="0.8"/>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1"
-                            android:layout_marginStart="16dp"
-                            android:background="?attr/BG_color_up" />
-
-                        <TextView
-                            android:id="@+id/season_count_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="3 Seasons"
-                            android:alpha="0.7"
-                            android:fontFamily="@font/g"
-                            android:textColor="?attr/FG_color"
-                            android:textSize="11sp"
-                            android:textStyle="italic|bold"
-                            tools:ignore="HardcodedText" />
                     </LinearLayout>
 
 
-
-
-
-
-                    <!-- Episodes List -->
-
-
-
-                    <androidx.cardview.widget.CardView
+                    <LinearLayout
+                        android:id="@+id/Season_widget"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="20dp"
-                        android:layout_gravity="center_horizontal"
-                        android:elevation="0dp"
-                        android:padding="20dp"
-                        android:descendantFocusability="afterDescendants"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        app:cardBackgroundColor="?attr/BG_color">
+                        android:layout_height="200dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-                        <LinearLayout
+
+                        <!-- ✅ Season Selector goes here -->
+                        <HorizontalScrollView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:background="?attr/BG_color"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp">
+                            android:layout_height="wrap_content"
+                            android:scrollbars="none"
+                            android:clipToPadding="false"
+                            android:paddingVertical="1dp">
 
-                            <!-- ✅ Season Selector goes here -->
-                            <HorizontalScrollView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:scrollbars="none"
-                                android:clipToPadding="false"
-                                android:paddingVertical="8dp">
-
-                                <LinearLayout
-                                    android:id="@+id/season_selector_container"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
-                                    <Button
-                                        android:id="@+id/season_1_btn"
-                                        android:layout_width="120dp"
-                                        android:layout_height="48dp"
-                                        android:layout_marginEnd="8dp"
-                                        android:text="Season 1"
-
-                                        android:textColor="?attr/FG_color"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:background="@drawable/tv_button_selector"
-                                        android:focusable="true"
-                                        android:focusableInTouchMode="true"
-                                        android:stateListAnimator="@null"
-                                        tools:ignore="HardcodedText,TooDeepLayout" />
-
-                                    <!-- Add more season buttons dynamically or here -->
-
-                                </LinearLayout>
-                            </HorizontalScrollView>
-                            <!-- ✅ End Season Selector -->
-
-                            <!-- Season Info -->
                             <LinearLayout
-                                android:id="@+id/season_info_container"
-                                android:layout_width="match_parent"
+                                android:id="@+id/season_selector_container"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:paddingTop="4dp"
-                                android:paddingBottom="4dp">
+                                android:orientation="horizontal">
 
-                                <TextView
-                                    android:id="@+id/current_season_title"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:textColor="?attr/AccentColor"
-                                    android:textSize="15sp"
-                                    android:text=""
-                                    android:fontFamily="@font/b"
+                                <Button
+                                    android:id="@+id/season_1_btn"
+                                    android:layout_width="120dp"
+                                    android:layout_height="48dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:text="Season"
+
+                                    android:textColor="?attr/FG_color"
+                                    android:textSize="14sp"
                                     android:textStyle="bold"
-                                    android:ellipsize="end"
-                                    android:maxLines="1"
-                                    tools:ignore="HardcodedText" />
+                                    android:fontFamily="@font/p"
+                                    android:background="@drawable/season_selector"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
+                                    android:stateListAnimator="@null"
+                                    android:textAllCaps="false"
+                                    tools:ignore="HardcodedText,TooDeepLayout" />
 
-                                <TextView
-                                    android:id="@+id/episode_count_text"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:textColor="?attr/FG_color"
-                                    android:text=""
-                                    android:textSize="12sp"
-                                    android:textStyle="italic"
-                                    android:alpha="0.5"
-                                    tools:ignore="HardcodedText" />
+                                <!-- Add more season buttons dynamically or here -->
 
-                                <TextView
-                                    android:id="@+id/season_year_text"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:textColor="?attr/FG_color"
-                                    android:text=""
-                                    android:textSize="12sp"
-                                    android:textStyle="italic"
-                                    android:alpha="0.5"
-                                    tools:ignore="HardcodedText" />
                             </LinearLayout>
+                        </HorizontalScrollView>
 
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginBottom="6dp"
-                                android:background="?attr/AccentColor"
-                                android:alpha="0.3" />
 
-                            <include android:layout_height="50dp" layout="@layout/laod_animation"
-                                tools:ignore="IncludeLayoutParam" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/AccentColor"
+                            android:alpha="0.3" />
 
-                            <!-- Episodes Recycler -->
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/episodes_recycler"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:clipToPadding="false"
-                                android:scrollbars="none"
-                                android:focusable="false"
-                                android:nextFocusUp="@id/TrailerButton"
-                                android:nextFocusDown="@id/Cast_widget"
-                                android:descendantFocusability="afterDescendants"/>
+                        <include android:layout_height="50dp" layout="@layout/laod_animation"
+                            tools:ignore="IncludeLayoutParam" />
 
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
+                        <!-- Episodes Recycler -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/episodes_recycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:clipToPadding="false"
+                            android:scrollbars="none"
+                            android:focusable="false"
+                            android:nextFocusUp="@id/TrailerButton"
+                            android:nextFocusDown="@id/Cast_widget"
+                            android:descendantFocusability="afterDescendants"/>
 
+
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
 
             </FrameLayout>
 
+
+
+
+
+
+
+
+
             <!-- Cast   -->
-
-
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/Cast_widget"

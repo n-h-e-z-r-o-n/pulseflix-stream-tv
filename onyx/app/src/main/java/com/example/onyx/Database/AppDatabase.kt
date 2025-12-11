@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.Cursor
+import java.util.concurrent.TimeUnit
 
 class AppDatabase(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -25,57 +26,40 @@ class AppDatabase(context: Context) :
         )
 
 
-// 2. Watchlist
-        db.execSQL(
-            """CREATE TABLE watchlist (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        item_id TEXT,
-        item_type TEXT,
-        title TEXT,
-        poster TEXT,
-        backdrop TEXT,
-        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-    )"""
-        )
+
 
 
 // 3. Favorites Movie
         db.execSQL(
-            """CREATE TABLE favorites_movies (
+            """CREATE TABLE favorites_shows (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
-        movie_id TEXT,
+        show_id TEXT,
+        type TEXT,
         title TEXT,
+        rating TEXT,
+        genres TEXT,
+        overview TEXT,
+        runtime TEXT,
+        year TEXT,
+        voteCount TEXT,
+        pg TEXT,
         poster TEXT,
         backdrop TEXT,
-        overview TEXT,
-        date TEXT,
-        duration TEXT,
-        rating TEXT,
-        UNIQUE(user_id, movie_id),
+        noOfSeason INTEGER,
+        lastSeason INTEGER,
+        lastEpisode INTEGER,
+
+        UNIQUE(user_id, show_id, type),
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     )"""
         )
 
 
-// 4. Favorites Series
-        db.execSQL(
-            """CREATE TABLE favorites_series (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        series_id TEXT,
-        title TEXT,
-        poster TEXT,
-        backdrop TEXT,
-        overview TEXT,
-        date TEXT,
-        duration TEXT,
-        rating TEXT,
-        UNIQUE(user_id, series_id),
-        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-    )"""
-        )
+
+
+
+
 
 
 // 5. Favorites Anime
@@ -129,8 +113,10 @@ class AppDatabase(context: Context) :
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         item_id TEXT,
+        type Text,
         title TEXT,
         poster TEXT,
+        backdrop Text,
         last_position INTEGER,
         duration INTEGER,
         updated_at INTEGER,
@@ -139,22 +125,24 @@ class AppDatabase(context: Context) :
     )"""
         )
 
-    // 8. App Settings (General App Info – NOT linked to users)
-    db.execSQL(
-        """CREATE TABLE app_settings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            is_paid INTEGER DEFAULT 0,
-            subscription_type TEXT,
-            subscription_expiry INTEGER,
-            payment_reference TEXT,
-            license_key TEXT
-        )"""
-    )
+        // 8. App Settings (General App Info – NOT linked to users)
+        db.execSQL(
+            """CREATE TABLE app_settings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                is_paid INTEGER DEFAULT 0,               -- 0 = false, 1 = true
+                subscription_type TEXT DEFAULT 'NONE',   -- e.g., "MONTHLY", "YEARLY", "NONE"
+                subscription_start INTEGER DEFAULT 0,    -- Unix timestamp when subscription started
+                subscription_expiry INTEGER DEFAULT 0,   -- Unix timestamp when subscription expires
+                payment_reference TEXT DEFAULT '',       -- Payment ref if any
+                last_checked INTEGER DEFAULT 0           -- Unix timestamp when last checked
+            )"""
+        )
 
-    db.execSQL(
-        """INSERT INTO app_settings (is_paid, subscription_type, subscription_expiry, payment_reference, license_key)
-           VALUES (0, 'NONE', 0, '', '')"""
-    )
+        // Insert default row (only one row is needed for app settings)
+        db.execSQL(
+            """INSERT INTO app_settings (is_paid, subscription_type, subscription_start, subscription_expiry, payment_reference, last_checked)
+                VALUES (0, 'NONE', 0, 0, '', 0);"""
+        )
 
     }
 
@@ -167,7 +155,6 @@ class AppDatabase(context: Context) :
         db.execSQL("DROP TABLE IF EXISTS favorites_anime")
         db.execSQL("DROP TABLE IF EXISTS downloads")
         db.execSQL("DROP TABLE IF EXISTS continue_watching")
-        db.execSQL("DROP TABLE IF EXISTS app_settings")
         onCreate(db)
     }
 
@@ -286,9 +273,9 @@ class AppDatabase(context: Context) :
         return exists
     }
 
-    fun getFavoriteAnime(userId: Int): List<FavoriteAnimeModel> {
+    fun getFavoriteAnime(userId: Int): ArrayList<HashMap<String, String>> {
         val db = readableDatabase
-        val list = mutableListOf<FavoriteAnimeModel>()
+        val list = ArrayList<HashMap<String, String>>()
 
         val cursor = db.rawQuery(
             "SELECT * FROM favorites_anime WHERE user_id=?",
@@ -297,29 +284,34 @@ class AppDatabase(context: Context) :
 
         if (cursor.moveToFirst()) {
             do {
-                val seasonsString = cursor.getString(cursor.getColumnIndexOrThrow("seasons"))
-                val seasonsArray = seasonsString.split(",")  // Convert back to list
 
-                list.add(
-                    FavoriteAnimeModel(
-                        userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id")),
-                        animeId = cursor.getString(cursor.getColumnIndexOrThrow("anime_id")),
-                        name = cursor.getString(cursor.getColumnIndexOrThrow("name")),
-                        type = cursor.getString(cursor.getColumnIndexOrThrow("type")),
-                        anilistId = cursor.getString(cursor.getColumnIndexOrThrow("anilistId")),
-                        malId = cursor.getString(cursor.getColumnIndexOrThrow("malId")),
-                        description = cursor.getString(cursor.getColumnIndexOrThrow("description")),
-                        rating = cursor.getString(cursor.getColumnIndexOrThrow("rating")),
-                        quality = cursor.getString(cursor.getColumnIndexOrThrow("quality")),
-                        duration = cursor.getString(cursor.getColumnIndexOrThrow("duration")),
-                        poster = cursor.getString(cursor.getColumnIndexOrThrow("poster")),
-                        sub = cursor.getString(cursor.getColumnIndexOrThrow("sub")),
-                        dub = cursor.getString(cursor.getColumnIndexOrThrow("dub")),
-                        aired = cursor.getString(cursor.getColumnIndexOrThrow("aired")),
-                        genre = cursor.getString(cursor.getColumnIndexOrThrow("genre")),
-                        seasons = seasonsArray      // <-- ARRAY restored
-                    )
-                )
+                val map = HashMap<String, String>()
+
+                map["user_id"] = cursor.getInt(cursor.getColumnIndexOrThrow("user_id")).toString()
+                map["anime_id"] = cursor.getString(cursor.getColumnIndexOrThrow("anime_id"))
+                map["name"] = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                map["type"] = cursor.getString(cursor.getColumnIndexOrThrow("type"))
+                map["anilistId"] = cursor.getString(cursor.getColumnIndexOrThrow("anilistId"))
+                map["malId"] = cursor.getString(cursor.getColumnIndexOrThrow("malId"))
+                map["description"] = cursor.getString(cursor.getColumnIndexOrThrow("description"))
+                map["rating"] = cursor.getString(cursor.getColumnIndexOrThrow("rating"))
+                map["quality"] = cursor.getString(cursor.getColumnIndexOrThrow("quality"))
+                map["duration"] = cursor.getString(cursor.getColumnIndexOrThrow("duration"))
+                map["poster"] = cursor.getString(cursor.getColumnIndexOrThrow("poster"))
+                map["sub"] = cursor.getString(cursor.getColumnIndexOrThrow("sub"))
+                map["dub"] = cursor.getString(cursor.getColumnIndexOrThrow("dub"))
+                map["aired"] = cursor.getString(cursor.getColumnIndexOrThrow("aired"))
+                map["genre"] = cursor.getString(cursor.getColumnIndexOrThrow("genre"))
+
+                // Convert "seasons" from comma text → array string
+                val seasonsString = cursor.getString(cursor.getColumnIndexOrThrow("seasons"))
+                map["seasons"] = seasonsString   // keep original string
+                // If you want array list form:
+                // val seasonsArray = seasonsString.split(",")
+                // map["seasonsArray"] = seasonsArray.toString()
+
+                list.add(map)
+
             } while (cursor.moveToNext())
         }
 
@@ -327,24 +319,166 @@ class AppDatabase(context: Context) :
         return list
     }
 
-    data class FavoriteAnimeModel(
-        val userId: Int,
-        val animeId: String,
-        val name: String,
-        val type: String,
-        val anilistId: String,
-        val malId: String,
-        val description: String,
-        val rating: String,
-        val quality: String,
-        val duration: String,
-        val poster: String,
-        val sub: String,
-        val dub: String,
-        val aired: String,
-        val genre: String,
-        val seasons: List<String> // SEASONS as ARRAY
-    )
+
+    //////////////////////////////// FAVORITES SHOWS FUNCTIONS ///////////////////////////////////////
+
+    fun addFavoriteShow(
+        userId: Int,
+        showId: String,
+        type: String,
+        title: String,
+        rating: String,
+        genres: String,
+        overview: String,
+        runtime: String,
+        year: String,
+        voteCount: String,
+        pg: String,
+        poster: String,
+        backdrop: String,
+        noOfSeason: Int,
+        lastSeason: Int,
+        lastEpisode: Int
+    ): Boolean {
+
+        val db = writableDatabase
+        val cv = ContentValues()
+
+        cv.put("user_id", userId)
+        cv.put("show_id", showId)
+        cv.put("type", type)
+        cv.put("title", title)
+        cv.put("rating", rating)
+        cv.put("genres", genres)
+        cv.put("overview", overview)
+        cv.put("runtime", runtime)
+        cv.put("year", year)
+        cv.put("voteCount", voteCount)
+        cv.put("pg", pg)
+        cv.put("poster", poster)
+        cv.put("backdrop", backdrop)
+        cv.put("noOfSeason", noOfSeason)
+        cv.put("lastSeason", lastSeason)
+        cv.put("lastEpisode", lastEpisode)
+
+        return try {
+            db.insertOrThrow("favorites_shows", null, cv) > 0
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun removeFavoriteShow(userId: Int, showId: String, type: String): Boolean {
+        return try {
+            val db = writableDatabase
+            db.delete(
+                "favorites_shows",
+                "user_id=? AND show_id=? AND type=?",
+                arrayOf(userId.toString(), showId, type)
+            )
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    fun isFavoriteShow(userId: Int, showId: String, type: String): Boolean {
+        val db = readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT id FROM favorites_shows WHERE user_id=? AND show_id=? AND type=? LIMIT 1",
+            arrayOf(userId.toString(), showId, type)
+        )
+
+        val exists = cursor.moveToFirst()
+        cursor.close()
+        return exists
+    }
+
+    fun getFavoriteShows(userId: Int): ArrayList<HashMap<String, String>> {
+        val list = ArrayList<HashMap<String, String>>()
+        val db = readableDatabase
+
+        val cursor = db.rawQuery(
+            "SELECT * FROM favorites_shows WHERE user_id=? ORDER BY id DESC",
+            arrayOf(userId.toString())
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val map = HashMap<String, String>()
+                map["id"] = cursor.getInt(cursor.getColumnIndexOrThrow("id")).toString()
+                map["show_id"] = cursor.getString(cursor.getColumnIndexOrThrow("show_id"))
+                map["type"] = cursor.getString(cursor.getColumnIndexOrThrow("type"))
+                map["title"] = cursor.getString(cursor.getColumnIndexOrThrow("title"))
+                map["rating"] = cursor.getString(cursor.getColumnIndexOrThrow("rating"))
+                map["genres"] = cursor.getString(cursor.getColumnIndexOrThrow("genres"))
+                map["overview"] = cursor.getString(cursor.getColumnIndexOrThrow("overview"))
+                map["runtime"] = cursor.getString(cursor.getColumnIndexOrThrow("runtime"))
+                map["year"] = cursor.getString(cursor.getColumnIndexOrThrow("year"))
+                map["voteCount"] = cursor.getString(cursor.getColumnIndexOrThrow("voteCount"))
+                map["pg"] = cursor.getString(cursor.getColumnIndexOrThrow("pg"))
+                map["poster"] = cursor.getString(cursor.getColumnIndexOrThrow("poster"))
+                map["backdrop"] = cursor.getString(cursor.getColumnIndexOrThrow("backdrop"))
+                map["noOfSeason"] = cursor.getString(cursor.getColumnIndexOrThrow("noOfSeason"))
+                map["lastSeason"] = cursor.getString(cursor.getColumnIndexOrThrow("lastSeason"))
+                map["lastEpisode"] = cursor.getString(cursor.getColumnIndexOrThrow("lastEpisode"))
+
+                list.add(map)
+
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        return list
+    }
+
+    fun getFavoriteShowsByType(userId: Int, type: String): ArrayList<HashMap<String, String>> {
+        val list = ArrayList<HashMap<String, String>>()
+        val db = readableDatabase
+
+        val cursor = db.rawQuery(
+            "SELECT * FROM favorites_shows WHERE user_id=? AND type=? ORDER BY id DESC",
+            arrayOf(userId.toString(), type)
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val map = HashMap<String, String>()
+                map["id"] = cursor.getInt(cursor.getColumnIndexOrThrow("id")).toString()
+                map["show_id"] = cursor.getString(cursor.getColumnIndexOrThrow("show_id"))
+                map["type"] = cursor.getString(cursor.getColumnIndexOrThrow("type"))
+                map["title"] = cursor.getString(cursor.getColumnIndexOrThrow("title"))
+                map["rating"] = cursor.getString(cursor.getColumnIndexOrThrow("rating"))
+                map["genres"] = cursor.getString(cursor.getColumnIndexOrThrow("genres"))
+                map["overview"] = cursor.getString(cursor.getColumnIndexOrThrow("overview"))
+                map["runtime"] = cursor.getString(cursor.getColumnIndexOrThrow("runtime"))
+                map["year"] = cursor.getString(cursor.getColumnIndexOrThrow("year"))
+                map["voteCount"] = cursor.getString(cursor.getColumnIndexOrThrow("voteCount"))
+                map["pg"] = cursor.getString(cursor.getColumnIndexOrThrow("pg"))
+                map["poster"] = cursor.getString(cursor.getColumnIndexOrThrow("poster"))
+                map["backdrop"] = cursor.getString(cursor.getColumnIndexOrThrow("backdrop"))
+                map["noOfSeason"] = cursor.getString(cursor.getColumnIndexOrThrow("noOfSeason"))
+                map["lastSeason"] = cursor.getString(cursor.getColumnIndexOrThrow("lastSeason"))
+                map["lastEpisode"] = cursor.getString(cursor.getColumnIndexOrThrow("lastEpisode"))
+
+                list.add(map)
+
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        return list
+    }
+
+
+    fun clearFavoriteShows(userId: Int) {
+        val db = writableDatabase
+        db.delete("favorites_shows", "user_id=?", arrayOf(userId.toString()))
+    }
+
+
+
 
     ////////////////////////////////////// WATCHLIST FUNCTIONS //////////////////////////////////////
 
@@ -363,6 +497,88 @@ class AppDatabase(context: Context) :
 
         // Recreate database schema
         onCreate(db)
+    }
+
+    ////////////////////////////////// APP SETTING FUNCTIONS ///////////////////////////////////////
+
+    fun setSubscription(type: String, paymentRef: String = "") {
+        val db = writableDatabase
+
+        // Current time
+        val now = System.currentTimeMillis()
+
+        // Calculate expiry based on type
+        val expiry = when(type.uppercase()) {
+            "MONTHLY" -> now + TimeUnit.DAYS.toMillis(32)
+            "3MONTH" -> now + TimeUnit.DAYS.toMillis(92)
+            "YEARLY" -> now + TimeUnit.DAYS.toMillis(367)
+            else -> 0L
+        }
+
+        val values = ContentValues().apply {
+            put("is_paid", if (expiry > 0) 1 else 0)
+            put("subscription_type", type.uppercase())
+            put("subscription_start", now)
+            put("subscription_expiry", expiry)
+            put("payment_reference", paymentRef)
+            put("last_checked", now)
+        }
+
+        db.update("app_settings", values, "id = ?", arrayOf("1"))
+    }
+
+    fun isSubscriptionActive(): Boolean {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT subscription_expiry FROM app_settings WHERE id = 1", null)
+        var active = false
+
+        if (cursor.moveToFirst()) {
+            val expiry = cursor.getLong(cursor.getColumnIndexOrThrow("subscription_expiry"))
+            active = expiry > System.currentTimeMillis()
+        }
+        cursor.close()
+        return active
+    }
+
+    fun getSubscriptionDaysLeft(): Long {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT subscription_expiry FROM app_settings WHERE id = 1", null)
+        var daysLeft = 0L
+
+        if (cursor.moveToFirst()) {
+            val expiry = cursor.getLong(cursor.getColumnIndexOrThrow("subscription_expiry"))
+            val now = System.currentTimeMillis()
+            if (expiry > now) {
+                daysLeft = TimeUnit.MILLISECONDS.toDays(expiry - now)
+            } else {
+                daysLeft = 0
+            }
+        }
+
+        cursor.close()
+        return daysLeft
+    }
+
+    fun resetExpiredSubscription() {
+        val db = writableDatabase
+        val now = System.currentTimeMillis()
+        val cursor = db.rawQuery("SELECT subscription_expiry FROM app_settings WHERE id = 1", null)
+
+        if (cursor.moveToFirst()) {
+            val expiry = cursor.getLong(cursor.getColumnIndexOrThrow("subscription_expiry"))
+            if (expiry <= now) {
+                val values = ContentValues().apply {
+                    put("is_paid", 0)
+                    put("subscription_type", "NONE")
+                    put("subscription_start", 0)
+                    put("subscription_expiry", 0)
+                    put("payment_reference", "")
+                    put("last_checked", now)
+                }
+                db.update("app_settings", values, "id = ?", arrayOf("1"))
+            }
+        }
+        cursor.close()
     }
 
 

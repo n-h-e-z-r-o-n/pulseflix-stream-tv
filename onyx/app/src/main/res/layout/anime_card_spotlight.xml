@@ -71,7 +71,7 @@
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="5dp"
-                android:fontFamily="@font/tre"
+                android:fontFamily="@font/u"
                 android:shadowColor="#80000000"
                 android:shadowDx="5"
                 android:shadowDy="6"

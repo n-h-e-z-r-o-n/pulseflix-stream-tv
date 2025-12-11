@@ -433,31 +433,13 @@ class Profile_Page : AppCompatActivity() {
 
 
     private fun getRemainingDays() {
-        val subscriptionWidget =  findViewById<TextView>(R.id.SubscriptionLeft)
-        val prefs = getSharedPreferences("SubscriptionPrefs", Context.MODE_PRIVATE)
-        val now = System.currentTimeMillis()
+        val subscriptionWidget = findViewById<TextView>(R.id.SubscriptionLeft)
 
-        val storedExpiry = prefs.getLong("expiryTime", 0L)
-        val displayText = if (storedExpiry > 0L) {
-            if (now >= storedExpiry) {
-                "expired"
-            } else {
-                val remainingDays = ((storedExpiry - now) / (24L * 60L * 60L * 1000L)).toInt()
-                remainingDays.toString()
-            }
-        } else {
-            val lastPaymentTime = prefs.getLong("lastPaymentTime", 0L)
-            if (lastPaymentTime == 0L) {
-                "(user never paid)"
-            } else {
-                val fallbackExpiry = lastPaymentTime + 30L * 24L * 60L * 60L * 1000L
-                if (now >= fallbackExpiry) {
-                    "expired"
-                } else {
-                    val remainingDays = ((fallbackExpiry - now) / (24L * 60L * 60L * 1000L)).toInt()
-                    remainingDays.toString()
-                }
-            }
+        val remainingDays = db.getSubscriptionDaysLeft()  // <-- NEW DB function
+
+        val displayText = when {
+            remainingDays <= 0 -> "expired"
+            else -> remainingDays.toString()
         }
 
         subscriptionWidget.text = displayText

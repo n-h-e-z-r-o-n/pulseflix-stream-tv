@@ -16,13 +16,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 import com.bumptech.glide.request.target.Target
+import com.example.onyx.FetchData.TMDBapi
 import com.example.onyx.GridAdapter.Companion.lastKeyTime
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class GridAdapter(
     private val items: MutableList<MovieItemOne>,
-    private val layoutResId: Int
+    private val layoutResId: Int,
+
 ) : RecyclerView.Adapter<GridAdapter.ViewHolder>() {
 
     companion object {
@@ -48,6 +51,10 @@ class GridAdapter(
         val showRating: TextView? = view.findViewById(R.id.showRating)
         val showRS: TextView? = view.findViewById(R.id.showRS)
         val showType: TextView? = view.findViewById(R.id.showType)
+
+        val Logo_image: ImageView? = view.findViewById(R.id.itemLogo)
+
+
 
         init {
 
@@ -104,11 +111,20 @@ class GridAdapter(
         val rating = currentItem.rating
         val runtime = currentItem.runtime
 
-        holder.showYear?.text = year
+        holder.showYear?.text = year.substring(1, 4)
         holder.showTitle?.text = title
         holder.showRating?.text = rating
         holder.showRS?.text = runtime
         holder.showType?.text = type
+
+
+        val fetch = TMDBapi(holder.itemView.context)
+
+        fetch.fetchLogos(type, imdbCode, holder.Logo_image as ImageView, holder.showTitle as TextView)
+
+
+
+
 
         Glide.with(holder.itemView.context)
             .load(imageUrl)
@@ -1079,14 +1095,14 @@ class FavAdapter(
         init {
             itemView.setOnFocusChangeListener { _, hasFocus ->
 
-                /*Scale animation
+                //Scale animation
                 itemView.animate()
                     .scaleX(if (hasFocus) 1.02f else 1f)
                     .scaleY(if (hasFocus) 1.02f else 1f)
                     .setDuration(150)
                     .start()
 
-                 */
+
 
                 if (hasFocus) {
                     val pos = bindingAdapterPosition
@@ -1116,10 +1132,6 @@ class FavAdapter(
                                 notifyItemRemoved(pos)
                             }
                         }
-
-
-
-
                     }
                 }
             }
@@ -1285,7 +1297,7 @@ class EpisodesAdapter(
         val ep = episodes[position]
 
 
-        holder.epNoView.text = "Eps ${ep.episodesNumber}"
+        holder.epNoView.text = "S${ep.seasonNumber}-E${ep.episodesNumber}"
         holder.titleView.text = ep.episodesName
         holder.durationView.text = "⏱ ${ep.episodesRuntime} min"
         holder.ratingView.text = "★ ${ep.episodesRating}"

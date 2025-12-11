@@ -3,9 +3,14 @@ package com.example.onyx
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.MotionEvent
+import android.view.View
 import android.webkit.*
+import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
@@ -45,6 +50,11 @@ class Play : AppCompatActivity() {
         }
 
         val webView = findViewById<WebView>(R.id.webView)
+
+        // Set WebView background color to avoid white flash before content loads
+        val typedValue = TypedValue()
+        theme.resolveAttribute(R.attr.BG_color, typedValue, true)
+        webView.setBackgroundColor(typedValue.data)
 
         // Setup WebView
         webView.webChromeClient = WebChromeClient()
@@ -234,6 +244,7 @@ class Play : AppCompatActivity() {
         Log.d("DEBUG_WEBVIEW", "imdbCode: $imdbCode - type: $type -seasonNo:  $seasonNo - episodeNo: $episodeNo - server: $server ")
         Log.d("DEBUG_WEBVIEW", "url: $url ")
 
+        setupBackPressedCallback()
 
 
 
@@ -376,5 +387,24 @@ class Play : AppCompatActivity() {
             "vidking" -> 6
             else -> 1 // Default to VidSrc.to
         }
+    }
+
+    private fun setupBackPressedCallback() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                    clearWebViewData()
+                    finish()
+                }
+            }
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        clearWebViewData()
+        finish()
     }
 }

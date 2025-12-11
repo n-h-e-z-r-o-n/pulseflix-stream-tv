@@ -228,7 +228,7 @@ class Shows_Page : AppCompatActivity() {
         movieRecyclerView = findViewById(R.id.MoviesRecyclerView)
         movieRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, item_grid2_width))
         movieRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
-        movieAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2)
+        movieAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2, )
         movieRecyclerView.adapter = movieAdapter
         movieAdapter.onAddMoreClicked = { loadMoreMovies() }
         movieAdapter.onItemFocused = { view, item ->
@@ -265,13 +265,13 @@ class Shows_Page : AppCompatActivity() {
         // Filter
         filterAdapter = FilterAdapter(mutableListOf(), R.layout.item_filter)
         filterAdapter.onItemFocused = { view, item ->
-            showPopupBeside(view, item.posterUlr, 195)
+            showPopupBeside(view, item.posterUlr, 240)
         }
         filterAdapter.onItemFocusLost = {
             hidePopup()
         }
         fliterRecyclerView = findViewById<RecyclerView>(R.id.filterResults)
-        fliterRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, 140))
+        fliterRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, 170))
         fliterRecyclerView.adapter = filterAdapter
         fliterRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
 
