@@ -85,14 +85,7 @@ class Watch_Page : AppCompatActivity() {
         sm = SessionManger(this)
 
 
-        val displayMetrics = resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels     // in pixels
 
-        val screenHeight = displayMetrics.heightPixels    // in pixels
-        val recyclerView = findViewById<FrameLayout>(R.id.widget_1)
-        val params = recyclerView.layoutParams
-        params.height = (screenHeight * 1).toInt()
-        recyclerView.layoutParams = params
 
 
 
@@ -352,6 +345,16 @@ class Watch_Page : AppCompatActivity() {
 
 
                         if(type=="tv"){
+
+                            val displayMetrics = resources.displayMetrics
+                            val screenWidth = displayMetrics.widthPixels     // in pixels
+
+                            val screenHeight = displayMetrics.heightPixels    // in pixels
+                            val recyclerView = findViewById<FrameLayout>(R.id.widget_1)
+                            val params = recyclerView.layoutParams
+                            params.height = (screenHeight * 1).toInt()
+                            recyclerView.layoutParams = params
+
                             watchButton.visibility = View.GONE
                             val Season_widget = findViewById<LinearLayout>(R.id.Season_widget)
                             Season_widget.visibility = View.VISIBLE

@@ -49,7 +49,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@raw/test3"
+                        android:src="@raw/test4"
                         tools:ignore="ContentDescription" />
 
                     <!-- Gradient overlay left-->
@@ -96,13 +96,13 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:orientation="vertical"
-                        android:paddingStart="20dp"
-                        android:paddingTop="16dp"
+                        android:paddingStart="0dp"
+                        android:paddingBottom="20dp"
                             tools:ignore="RtlSymmetry">
 
                         <ImageView
                             android:id="@+id/cShowLogo"
-                            android:layout_width="300dp"
+                            android:layout_width="410dp"
                             android:layout_height="wrap_content"
                             android:maxHeight="200dp"
                             android:scaleType="fitXY"
@@ -424,8 +424,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
+                                android:layout_marginBottom="18dp"
                                 android:ellipsize="end"
-                                android:maxLines="4"
+                                android:maxLines="6"
                                 android:singleLine="false"
                                 android:text="An assassin, trained in the ways of the Ruska Roma, embarks on a quest for vengeance following the death of her father."
                                 android:textColor="?attr/FG_color"

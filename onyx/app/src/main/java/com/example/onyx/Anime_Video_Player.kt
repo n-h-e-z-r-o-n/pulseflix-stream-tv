@@ -53,13 +53,23 @@ import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
+import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
+
 @UnstableApi
 class Anime_Video_Player : AppCompatActivity(), Player.Listener {
+
+    private lateinit var db: AppDatabase
+    private lateinit var  sm: SessionManger
+    private  var  userId: Int? = null
 
     private  var urlHome ="https://corsproxy.io/https://aniwatch-api-r4uo.vercel.app/"
     private var currentEpisodeId: String? = null
     private var currentEpisodeNumber: String? = null
     private var currentEpisodeView: View? = null
+    private var currentEpisodeTitle: String? = null
+    private var currentPoster: String? = null
+    private var currentSeasonId: String? = null
 
 
     private lateinit var playerView: PlayerView
@@ -97,6 +107,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     private var tapCount = 0
     private var progressHandler = Handler(Looper.getMainLooper())
     private var progressRunnable: Runnable? = null
+    private var progressUpdateCount = 0
 
     // Playback speeds
     private val playbackSpeeds = listOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f)
@@ -114,6 +125,11 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         GlobalUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime_video_player)
+
+        db = AppDatabase(this)         // Initialize database
+        sm = SessionManger(this)
+
+        userId = sm.getUserId()
 
         // Prevent screen from sleeping while this Activity is visible
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -157,15 +173,31 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         val episodeId = intent.getStringExtra("episodeId")
         val episodesJson = intent.getStringExtra("episodes")
         val episodesNumber = intent.getStringExtra("episodesNumber")
+        val poster = intent.getStringExtra("poster")
+        val episodesTitle = intent.getStringExtra("episodesTitle")
+        val seasonId = intent.getStringExtra("seasonNumber")
+
+
+
 
         val episodesArray = if (episodesJson != null) {
             JSONArray(episodesJson)
         } else {
             JSONArray()
         }
-        Log.d("ANIME WATCH id", "$episodeId")
-        Log.d("ANIME WATCH number", "$episodesNumber")
-        Log.d("ANIME WATCH Array", "$episodesArray")
+        Log.d("ANIME Player eid", "$episodeId")
+        Log.d("ANIME Player sNumber", "$seasonId")
+        Log.d("ANIME Player eNumber", "$episodesNumber")
+        Log.d("ANIME Player eTitle", "$episodesTitle")
+        Log.d("ANIME Player poster", "$poster")
+        Log.d("ANIME Player Array", "$episodesArray")
+
+        // Store episode info for continue watching tracking
+        currentEpisodeId = episodeId
+        currentEpisodeNumber = episodesNumber
+        currentEpisodeTitle = episodesTitle
+        currentPoster = poster
+        currentSeasonId = seasonId
 
         fetchStreamingLinks(episodeId.toString())
         displayEpisode(episodesArray, episodesNumber.toString())
@@ -878,9 +910,15 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
     private fun startProgressTracking() {
         stopProgressTracking() // Stop any existing tracking
+        progressUpdateCount = 0
         progressRunnable = object : Runnable {
             override fun run() {
                 updateSeekBar()
+                progressUpdateCount++
+                // Track continue watching every 5 seconds
+                if (progressUpdateCount % 5 == 0) {
+                    trackContinueWatching()
+                }
                 progressHandler.postDelayed(this, 1000) // Update every second
             }
         }
@@ -904,9 +942,39 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         }
     }
 
+    private fun trackContinueWatching() {
+        exoPlayer?.let { player ->
+            val duration = player.duration.toInt()
+            val lastPosition = player.currentPosition.toInt()
+            
+            if (duration > 0 && lastPosition >= 0 && userId != null && currentEpisodeId != null) {
+                val currentTime = System.currentTimeMillis()
+                val timeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                val formattedTime = timeFormat.format(Date(currentTime))
+                
+                Log.e("ContinueWatching", "Duration: $duration ms, Last Position: $lastPosition ms, Logged at: $formattedTime")
+                
+                // Update database
+                db.addOrUpdateContinueWatching(
+                    userId = userId!!,
+                    itemId = currentEpisodeId!!,
+                    type = "anime",
+                    title = currentEpisodeTitle ?: "",
+                    poster = currentPoster ?: "",
+                    backdrop = currentPoster ?: "",
+                    seasonNumber = currentSeasonId ?: "",
+                    episodeNumber = currentEpisodeNumber ?: "",
+                    lastPosition = lastPosition,
+                    duration = duration
+                )
+            }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         stopProgressTracking()
+        trackContinueWatching()
         releasePlayerWithAudioFocus()
         finish()
     }
@@ -915,6 +983,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         super.onPause()
         exoPlayer?.pause()
         stopProgressTracking()
+        trackContinueWatching()
     }
 
     override fun onResume() {
@@ -949,11 +1018,16 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     // ===== PlayerManager functionality merged into this class =====
 
     companion object {
-        fun playVideoExternally(context: Context, episodeId: String, episodes: JSONArray, episodesNumber: String) {
+        fun playVideoExternally(context: Context, episodeId: String, episodes: JSONArray, episodesNumber: String, poster: String, seasonNumber: String, episodesTitle:String) {
             val intent = Intent(context, Anime_Video_Player::class.java).apply {
                 putExtra("episodeId", episodeId)
                 putExtra("episodes", episodes.toString())
                 putExtra("episodesNumber", episodesNumber.toString())
+                putExtra("poster", poster)
+                putExtra("seasonNumber", seasonNumber)
+                putExtra("episodesTitle", episodesTitle)
+
+
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
             context.startActivity(intent)

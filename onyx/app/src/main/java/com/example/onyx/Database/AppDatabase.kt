@@ -110,20 +110,23 @@ class AppDatabase(context: Context) :
 // 7. Continue Watching
         db.execSQL(
             """CREATE TABLE continue_watching (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        item_id TEXT,
-        type Text,
-        title TEXT,
-        poster TEXT,
-        backdrop Text,
-        last_position INTEGER,
-        duration INTEGER,
-        updated_at INTEGER,
-        UNIQUE(user_id, item_id),
-        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-    )"""
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER,
+                    item_id TEXT,                 -- movieId, episodeId, animeEpisodeId etc
+                    type TEXT,                    -- movie, tv_episode, anime_episode
+                    title TEXT,
+                    poster TEXT,
+                    backdrop TEXT,        
+                    season_number TEXT,  -- for tv/anime
+                    episode_number TEXT, -- for tv/anime
+                    last_position INTEGER DEFAULT 0,  -- last playback position in ms
+                    duration INTEGER DEFAULT 0,       -- total duration in ms
+                    updated_at INTEGER,               -- last update time
+                    UNIQUE(user_id, item_id, type),
+                    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+                )"""
         )
+
 
         // 8. App Settings (General App Info – NOT linked to users)
         db.execSQL(
@@ -482,22 +485,125 @@ class AppDatabase(context: Context) :
 
     ////////////////////////////////////// WATCHLIST FUNCTIONS //////////////////////////////////////
 
-    fun resetDatabase() {
+    fun addOrUpdateContinueWatching(
+        userId: Int,
+        itemId: String,
+        type: String,
+        title: String,
+        poster: String,
+        backdrop: String,
+        seasonNumber: String,
+        episodeNumber: String,
+        lastPosition: Int,
+        duration: Int
+    ) {
         val db = writableDatabase
+        val now = System.currentTimeMillis()
 
-        // Drop all tables
-        db.execSQL("DROP TABLE IF EXISTS users")
-        db.execSQL("DROP TABLE IF EXISTS watchlist")
-        db.execSQL("DROP TABLE IF EXISTS favorites_movies")
-        db.execSQL("DROP TABLE IF EXISTS favorites_series")
-        db.execSQL("DROP TABLE IF EXISTS favorites_anime")
-        db.execSQL("DROP TABLE IF EXISTS downloads")
-        db.execSQL("DROP TABLE IF EXISTS continue_watching")
-        db.execSQL("DROP TABLE IF EXISTS app_settings")
+        val values = ContentValues().apply {
+            put("user_id", userId)
+            put("item_id", itemId)
+            put("type", type)
+            put("title", title)
+            put("poster", poster)
+            put("backdrop", backdrop)
+            put("season_number", seasonNumber)
+            put("episode_number", episodeNumber)
+            put("last_position", lastPosition)
+            put("duration", duration)
+            put("updated_at", now)
+        }
 
-        // Recreate database schema
-        onCreate(db)
+        db.insertWithOnConflict(
+            "continue_watching",
+            null,
+            values,
+            SQLiteDatabase.CONFLICT_REPLACE
+        )
     }
+    //Get all continue watching items sorted by updated time
+    fun getContinueWatching(userId: Int): ArrayList<HashMap<String, String>> {
+        val db = readableDatabase
+        val list = ArrayList<HashMap<String, String>>()
+
+        val cursor = db.rawQuery(
+            """
+        SELECT * FROM continue_watching
+        WHERE user_id = ?
+        ORDER BY updated_at DESC
+        """,
+            arrayOf(userId.toString())
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val map = HashMap<String, String>()
+
+                map["item_id"] = cursor.getString(cursor.getColumnIndexOrThrow("item_id"))
+                map["type"] = cursor.getString(cursor.getColumnIndexOrThrow("type"))
+                map["title"] = cursor.getString(cursor.getColumnIndexOrThrow("title"))
+                map["poster"] = cursor.getString(cursor.getColumnIndexOrThrow("poster"))
+                map["backdrop"] = cursor.getString(cursor.getColumnIndexOrThrow("backdrop"))
+                map["season_number"] = cursor.getString(cursor.getColumnIndexOrThrow("season_number"))
+                map["episode_number"] = cursor.getString(cursor.getColumnIndexOrThrow("episode_number"))
+                map["last_position"] = cursor.getInt(cursor.getColumnIndexOrThrow("last_position")).toString()
+                map["duration"] = cursor.getInt(cursor.getColumnIndexOrThrow("duration")).toString()
+                map["updated_at"] = cursor.getLong(cursor.getColumnIndexOrThrow("updated_at")).toString()
+
+                list.add(map)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        return list
+    }
+
+    fun getContinueWatchingItem(userId: Int, itemId: String, type: String): HashMap<String, String>? {
+        val db = readableDatabase
+
+        val cursor = db.rawQuery(
+            """
+        SELECT * FROM continue_watching
+        WHERE user_id = ? AND item_id = ? AND type = ?
+        """,
+            arrayOf(userId.toString(), itemId, type)
+        )
+
+        if (!cursor.moveToFirst()) {
+            cursor.close()
+            return null
+        }
+
+        val map = HashMap<String, String>()
+        map["item_id"] = cursor.getString(cursor.getColumnIndexOrThrow("item_id"))
+        map["type"] = cursor.getString(cursor.getColumnIndexOrThrow("type"))
+        map["title"] = cursor.getString(cursor.getColumnIndexOrThrow("title"))
+        map["poster"] = cursor.getString(cursor.getColumnIndexOrThrow("poster"))
+        map["backdrop"] = cursor.getString(cursor.getColumnIndexOrThrow("backdrop"))
+        map["season_number"] = cursor.getString(cursor.getColumnIndexOrThrow("season_number"))
+        map["episode_number"] = cursor.getString(cursor.getColumnIndexOrThrow("episode_number"))
+        map["last_position"] = cursor.getInt(cursor.getColumnIndexOrThrow("last_position")).toString()
+        map["duration"] = cursor.getInt(cursor.getColumnIndexOrThrow("duration")).toString()
+        map["updated_at"] = cursor.getLong(cursor.getColumnIndexOrThrow("updated_at")).toString()
+
+        cursor.close()
+        return map
+    }
+
+    fun removeContinueWatching(userId: Int, itemId: String, type: String) {
+        val db = writableDatabase
+        db.delete(
+            "continue_watching",
+            "user_id=? AND item_id=? AND type=?",
+            arrayOf(userId.toString(), itemId, type)
+        )
+    }
+
+
+
+
+
+
 
     ////////////////////////////////// APP SETTING FUNCTIONS ///////////////////////////////////////
 
@@ -579,6 +685,26 @@ class AppDatabase(context: Context) :
             }
         }
         cursor.close()
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    fun resetDatabase() {
+        val db = writableDatabase
+
+        // Drop all tables
+        db.execSQL("DROP TABLE IF EXISTS users")
+        db.execSQL("DROP TABLE IF EXISTS watchlist")
+        db.execSQL("DROP TABLE IF EXISTS favorites_movies")
+        db.execSQL("DROP TABLE IF EXISTS favorites_series")
+        db.execSQL("DROP TABLE IF EXISTS favorites_anime")
+        db.execSQL("DROP TABLE IF EXISTS downloads")
+        db.execSQL("DROP TABLE IF EXISTS continue_watching")
+        db.execSQL("DROP TABLE IF EXISTS app_settings")
+
+        // Recreate database schema
+        onCreate(db)
     }
 
 

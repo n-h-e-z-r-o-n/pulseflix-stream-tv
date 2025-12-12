@@ -1,10 +1,10 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Focused state -->
-    <item android:color="?attr/SidebarFocus" android:state_focused="true"/>
+    <item android:color="?attr/FG_color" android:state_focused="true"/>
     <!-- Pressed (optional) -->
     <item android:color="?attr/AccentColor" android:state_selected="true"/>
     <!-- Default -->
-    <item android:color="?attr/SidebarDefault"/>
+    <item android:color="@android:color/darker_gray"/>
 </selector>
 
 

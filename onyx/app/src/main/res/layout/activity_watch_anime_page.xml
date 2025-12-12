@@ -19,17 +19,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/transparentEffect"
         android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:background="?attr/transparentEffect"
+            android:layout_height="400dp">
+
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/backdrop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -51,22 +55,29 @@
                     android:background="@drawable/overlay_bottom_gradient"
                     android:layout_gravity="bottom"/>
 
-
-
             </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
 
-
-                <ImageView
-                    android:id="@+id/WatchImage"
-                    android:layout_width="170dp"
-                    android:layout_height="250dp"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="210dp"
+                    android:layout_height="315dp"
                     android:layout_margin="15dp"
-                    tools:ignore="ContentDescription,ImageContrastCheck" />
+                    android:layout_gravity="center_vertical"
+                    app:cardBackgroundColor="?attr/transparentEffect"
+                    app:cardCornerRadius="15dp">
+                        <ImageView
+                            android:id="@+id/WatchImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@raw/test4"
+                            tools:ignore="ContentDescription,ImageContrastCheck" />
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -79,9 +90,9 @@
                         android:id="@+id/watchTitle" android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:textSize="25sp"
-                        android:fontFamily="@font/f"
-                        android:text=""
+                        android:textSize="34sp"
+                        android:fontFamily="@font/p"
+                        android:text="Campfire Cooking in Another World with My Absurd Skill Season 2"
                         android:textColor="?attr/FG_color"
                         tools:ignore="HardcodedText"
                         android:shadowColor="#80000000"
@@ -94,9 +105,8 @@
                         android:id="@+id/watchGenres"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textStyle="italic"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/e"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/l"
                         android:text=""
                         android:textColor="?attr/FG_color"
                         tools:ignore="HardcodedText,SmallSp" />
@@ -107,85 +117,39 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:orientation="horizontal"
                         android:layout_marginTop="10dp">
 
-                        <TextView
-                            android:id="@+id/watchRating"
-                            android:layout_width="wrap_content"
-                            android:layout_height="18dp"
-                            android:layout_gravity="center"
-                            android:ellipsize="end"
-                            android:gravity="center"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:text=""
-                            android:textColor="?attr/FG_color"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText,SmallSp,Suspicious0dp"  />
-
-
-
-
-                        <TextView
-                            android:id="@+id/watchType"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text=""
-                            android:singleLine="true"
-                            android:textColor="?attr/FG_color"
-                            android:textSize="10sp"
-                            android:alpha="0.7"
-                            tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
-                            android:gravity="center"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="12dp"
-                            />
-
-
-
-                        <TextView
-                            android:id="@+id/watchRuntime"
+                        <androidx.cardview.widget.CardView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_gravity="bottom"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:layout_marginStart="9dp"
-                            android:text=""
-                            android:singleLine="false"
-                            android:textColor="?attr/FG_color"
-                            android:textSize="10sp"
-                            android:textStyle="italic"
-                            android:alpha="0.7"
-                            tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
-                            android:gravity="center"/>
+                            app:cardCornerRadius="5dp"
+                            android:layout_gravity="center_horizontal"
+                            app:cardBackgroundColor="@android:color/darker_gray"
+                            android:elevation="0dp">
+                              <TextView
+                                    android:id="@+id/watchRating"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:ellipsize="end"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:text="PG-13"
+                                    android:fontFamily="@font/p"
+                                    android:layout_marginHorizontal="4dp"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="HardcodedText,SmallSp,Suspicious0dp"  />
 
+                        </androidx.cardview.widget.CardView>
 
-
-                        <TextView
-                            android:id="@+id/watchYear"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="bottom"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text=""
-                            android:singleLine="false"
-                            android:textColor="?attr/FG_color"
-                            android:textSize="10sp"
-                            android:textStyle="italic"
-                            tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
-                            android:gravity="center"
-                            android:alpha="0.7"
-                            android:layout_marginStart="9dp"/>
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="30dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             app:cardCornerRadius="5dp"
                             android:layout_gravity="center_horizontal"
@@ -196,17 +160,18 @@
 
                             <TextView
                                 android:id="@+id/watchQuality"
-                                android:layout_width="11dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:ellipsize="end"
                                 android:gravity="center"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text=""
+                                android:text="HD"
+                                android:fontFamily="@font/p"
                                 android:textColor="?attr/FG_color"
-                                android:textSize="11sp"
-                                android:textStyle="bold"
+                                android:textSize="18sp"
+                                android:layout_marginHorizontal="4dp"
                                 tools:ignore="HardcodedText,Suspicious0dp" />
 
                         </androidx.cardview.widget.CardView>
@@ -233,9 +198,10 @@
 
 
                                 <ImageView
-                                    android:layout_width="14dp"
-                                    android:layout_height="14dp"
+                                    android:layout_width="20dp"
+                                    android:layout_height="match_parent"
                                     android:src="@drawable/ic_sub"
+                                    android:scaleType="centerCrop"
                                     app:tint="?attr/FG_color"
                                     tools:ignore="ContentDescription,TooDeepLayout" />
 
@@ -248,11 +214,12 @@
                                     android:text=""
                                     android:singleLine="true"
                                     android:textColor="?attr/FG_color"
-                                    android:textSize="10sp"
+                                    android:fontFamily="@font/p"
+                                    android:textSize="18sp"
+                                    android:layout_marginHorizontal="4dp"
                                     tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                                     android:gravity="center"
                                     android:layout_gravity="center"
-                                    android:textStyle="bold"
                                     />
 
                             </LinearLayout>
@@ -278,8 +245,8 @@
 
 
                                 <ImageView
-                                    android:layout_width="10dp"
-                                    android:layout_height="10dp"
+                                    android:layout_width="20dp"
+                                    android:layout_height="match_parent"
                                     android:src="@drawable/ic_dub"
                                     app:tint="?attr/FG_color"
                                     tools:ignore="ContentDescription" />
@@ -293,16 +260,107 @@
                                     android:text=""
                                     android:singleLine="true"
                                     android:textColor="?attr/FG_color"
-                                    android:textSize="10sp"
+                                    android:fontFamily="@font/p"
+                                    android:textSize="18sp"
+                                    android:layout_marginHorizontal="4dp"
                                     tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                                     android:gravity="center"
                                     android:layout_gravity="center"
-                                    android:textStyle="bold"
                                     />
 
                             </LinearLayout>
 
                         </androidx.cardview.widget.CardView>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/darker_gray"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:layout_marginHorizontal="25dp"
+                            />
+
+
+
+
+                        <TextView
+                            android:id="@+id/watchType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Tv"
+                            android:singleLine="true"
+                            android:textColor="?attr/FG_color"
+                            android:textSize="18sp"
+                            android:fontFamily="@font/n"
+                            android:alpha="0.7"
+                            tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/darker_gray"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:layout_marginHorizontal="25dp"
+                            />
+
+
+
+                        <TextView
+                            android:id="@+id/watchRuntime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:layout_marginStart="9dp"
+                            android:text=""
+                            android:singleLine="false"
+                            android:textColor="?attr/FG_color"
+                            android:textSize="18sp"
+                            android:fontFamily="@font/n"
+                            android:alpha="0.7"
+                            tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
+                            android:gravity="center"/>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/darker_gray"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:layout_marginHorizontal="25dp"
+                            />
+
+
+
+                        <TextView
+                            android:id="@+id/watchYear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text=""
+                            android:singleLine="false"
+                            android:textColor="?attr/FG_color"
+                            android:textSize="18sp"
+                            android:fontFamily="@font/n"
+                            tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
+                            android:gravity="center"
+                            android:alpha="0.7"
+                            android:layout_marginStart="9dp"/>
+
+
 
 
                     </LinearLayout>
@@ -310,33 +368,65 @@
                     <TextView
                         android:id="@+id/watchOverview"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text=""
+                        android:layout_marginBottom="10dp"
+                        android:ellipsize="end"
+                        android:maxLines="6"
                         android:layout_marginTop="20dp"
                         android:textColor="?FG_color"
-                        android:textSize="10sp"
-                        tools:ignore="SmallSp" />
+                        android:textSize="15sp"
+                        tools:ignore="NestedWeights,SmallSp" />
 
-                    <ImageButton
+
+                    <LinearLayout
                         android:id="@+id/favoriteButton"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:layout_marginStart="12dp"
-                        android:background="@drawable/tv_button_selector"
-                        android:elevation="4dp"
-                        android:focusable="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/watch_button"
                         android:focusableInTouchMode="true"
-                        android:nextFocusLeft="@+id/TrailerButton"
-                        android:nextFocusRight="@+id/serverButton"
-                        android:src="@drawable/ic_addfave"
-                        android:textAllCaps="false"
-                        android:textColor="?attr/AccentColor"
-                        android:tooltipText="Add to Favorites"
-                        app:tint="?attr/AccentColor"
-                        tools:ignore="ContentDescription,UnusedAttribute,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:paddingHorizontal="14dp"
+                        android:elevation="2dp" >
+
+
+
+                        <ImageButton
+                            android:id="@+id/favoriteButtonImg"
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:src="@drawable/ic_addfave"
+                            app:tint="?attr/FG_color"
+                            android:background="@android:color/transparent"
+                            android:textColor="?attr/FG_color"
+                            android:textAllCaps="false"
+                            android:tooltipText="Add to Favorites"
+                            tools:ignore="UnusedAttribute" />
+
+                        <TextView
+                            android:id="@+id/favoriteButtonText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Add to Fav"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/o"
+                            android:textColor="?attr/FG_color"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
             </LinearLayout>
+
+
 
         </FrameLayout>
 
@@ -350,11 +440,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Watch more seasons of this anime"
-                android:textColor="?attr/AccentColor"
+                android:textColor="?attr/FG_color"
                 android:paddingHorizontal="5dp"
                 android:textSize="23sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/e"
+                android:fontFamily="@font/n"
                 tools:ignore="HardcodedText" />
 
             <HorizontalScrollView
@@ -386,7 +476,7 @@
                     android:paddingStart="5dp"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:fontFamily="@font/e"
+                    android:fontFamily="serif-monospace"
                     tools:ignore="HardcodedText,RtlSymmetry" />
                 <TextView
                     android:id="@+id/selected_seasonShow"
@@ -433,11 +523,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Recommended  Animes"
-            android:fontFamily="@font/e"
+            android:fontFamily="@font/n"
             android:textSize="25sp"
             android:textStyle="bold"
             android:layout_marginTop="20dp"
-            android:textColor="?attr/AccentColor"
+            android:textColor="?attr/FG_color"
             tools:ignore="HardcodedText" />
 
 

@@ -35,13 +35,15 @@ import java.net.URL
 import com.example.onyx.BuildConfig
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import java.io.IOException
 
 
 class Watch_Anime_Page : AppCompatActivity() {
-    private lateinit var FaveButton :ImageButton
     private var urlHome = BuildConfig.A_K
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
+
+    private lateinit var poster :String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,11 +55,8 @@ class Watch_Anime_Page : AppCompatActivity() {
         sm = SessionManger(this)
 
         LoadingAnimation.setup(this@Watch_Anime_Page, R.raw.b)
-        LoadingAnimation.show(this@Watch_Anime_Page)
 
-        FaveButton =  findViewById(R.id.favoriteButton)
         val animeCode = intent.getStringExtra("anime_code")
-        val poster = intent.getStringExtra("anime_poster")
 
         Log.e("ANIME_Watch id", animeCode.toString())
 
@@ -71,6 +70,9 @@ class Watch_Anime_Page : AppCompatActivity() {
 
 
     private fun getInfo(id: String){
+
+        LoadingAnimation.show(this@Watch_Anime_Page)
+
         CoroutineScope(Dispatchers.IO).launch {
             repeat(1) { attempt ->
                 try {
@@ -92,7 +94,7 @@ class Watch_Anime_Page : AppCompatActivity() {
                     val anilistId = data.getJSONObject("anime").getJSONObject("info").getString("anilistId")
                     val malId = data.getJSONObject("anime").getJSONObject("info").getString("malId")
                     val name = data.getJSONObject("anime").getJSONObject("info").getString("name")
-                    val poster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
+                    poster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
                     val description = data.getJSONObject("anime").getJSONObject("info").getString("description")
                     val rating = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getString("rating")
                     val quality = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getString("quality")
@@ -121,28 +123,6 @@ class Watch_Anime_Page : AppCompatActivity() {
 
 
 
-                    setupFavoriteButton(
-                        button = FaveButton,
-                        animeId = id,
-                        name = name,
-                        type = type,
-                        anilistId = anilistId,
-                        malId = malId,
-                        description = description,
-                        rating = rating,
-                        quality = quality,
-                        duration = duration,
-                        poster = poster,
-                        sub=sub,
-                        dub=dub,
-                        aired=aired,
-                        genre=genre,
-                        seasons = seasons.toString()
-                    )
-
-
-
-
                     withContext(Dispatchers.Main) {
 
                         findViewById<TextView>(R.id.watchTitle).text = name
@@ -159,7 +139,7 @@ class Watch_Anime_Page : AppCompatActivity() {
                         val posterWidget = findViewById<ImageView>(R.id.WatchImage)
                         Glide.with(posterWidget.context)
                             .load(poster)
-                            .centerInside()
+                            .fitCenter()
                             .into(posterWidget)
 
 
@@ -174,15 +154,61 @@ class Watch_Anime_Page : AppCompatActivity() {
                         showRecommendation(relatedAnimes, recommendedAnime)
                         LoadingAnimation.hide(this@Watch_Anime_Page)
 
+
+                        setupFavoriteButton(
+                            animeId = id,
+                            name = name,
+                            type = type,
+                            anilistId = anilistId,
+                            malId = malId,
+                            description = description,
+                            rating = rating,
+                            quality = quality,
+                            duration = duration,
+                            poster = poster,
+                            sub=sub,
+                            dub=dub,
+                            aired=aired,
+                            genre=genre,
+                            seasons = seasons.toString()
+                        )
+
                     }
 
-
-
                     return@launch
+
+                } catch (e: java.net.UnknownHostException) {
+                    Log.e("ANIME_Watch", "No Internet Connection", e)
+                    withContext(Dispatchers.Main) {
+                        LoadingAnimation.setup(this@Watch_Anime_Page, R.raw.error)
+                    }
+
+                } catch (e: java.net.SocketTimeoutException) {
+                    // Server timeout
+                    Log.e("ANIME_Watch", "Request timed out", e)
+                    withContext(Dispatchers.Main) {
+                        LoadingAnimation.show(this@Watch_Anime_Page)
+                    }
+                    return@repeat
+
+                } catch (e: javax.net.ssl.SSLException) {
+                    Log.e("ANIME_Watch", "SSL Error", e)
+                    withContext(Dispatchers.Main) {
+                        LoadingAnimation.setup(this@Watch_Anime_Page, R.raw.error)
+                    }
+                    return@repeat
+                } catch (e: IOException) {
+                    Log.e("ANIME_Watch", "Network IO Error", e)
+                    withContext(Dispatchers.Main) {
+                        LoadingAnimation.setup(this@Watch_Anime_Page, R.raw.error)
+                    }
+                    return@repeat
                 } catch (e: Exception) {
                     delay(20_000)
                     Log.e("ANIME_Watch 1", "Error fetching data", e)
-                    LoadingAnimation.show(this@Watch_Anime_Page)
+                    withContext(Dispatchers.Main) {
+                        LoadingAnimation.show(this@Watch_Anime_Page)
+                    }
                 }
             }
         }
@@ -221,6 +247,17 @@ class Watch_Anime_Page : AppCompatActivity() {
 
             cardView.setOnClickListener {
 
+                /*
+                val backdrop = findViewById<ImageView>(R.id.backdrop)
+
+                Glide.with(this)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .into(backdrop)
+
+                 */
+
+
                 val selected_seasonShow = findViewById<TextView>(R.id.selected_seasonShow)
                 selected_seasonShow.text = "List of episodes ($title)"
 
@@ -231,12 +268,12 @@ class Watch_Anime_Page : AppCompatActivity() {
         }
     }
     @OptIn(UnstableApi::class)
-    private fun getEpisodes(id: String){
+    private fun getEpisodes(season_id: String){
         CoroutineScope(Dispatchers.IO).launch {
             repeat(1) { attempt ->
                 try {
 
-                    val url = "$urlHome/api/v2/hianime/anime/$id/episodes"
+                    val url = "$urlHome/api/v2/hianime/anime/$season_id/episodes"
 
                     val connection = URL(url).openConnection() as HttpURLConnection
                     connection.requestMethod = "GET"
@@ -261,19 +298,19 @@ class Watch_Anime_Page : AppCompatActivity() {
                             val epTitle = cardView.findViewById<TextView>(R.id.episode_name)
                             val epNumber = cardView.findViewById<TextView>(R.id.episode_Number)
 
-                            val title = episode.optString("title", "${i + 1}")
-                            val number = episode.optString("number", "")
+                            val eTitle = episode.optString("title", "${i + 1}")
+                            val eNumber = episode.optString("number", "")
                             val episodeId = episode.optString("episodeId", "")
 
 
-                            epTitle.text = title
-                            epNumber.text = number
+                            epTitle.text = eTitle
+                            epNumber.text = eNumber
 
 
                             cardView.setOnClickListener {
                                 Log.e("ANIME_episodeId ", "episodeId: $episodeId")
 
-                                Anime_Video_Player.playVideoExternally(this@Watch_Anime_Page, episodeId, episodes, number)
+                                 Anime_Video_Player.playVideoExternally(this@Watch_Anime_Page, episodeId, episodes, eNumber, poster, season_id, eTitle)
 
                             }
 
@@ -338,7 +375,7 @@ class Watch_Anime_Page : AppCompatActivity() {
 
 
         val recyclerView = findViewById<RecyclerView>(R.id.animeWatchRecommendation)
-        recyclerView.layoutManager = GridLayoutManager(this@Watch_Anime_Page, 6)
+        recyclerView.layoutManager = GridLayoutManager(this@Watch_Anime_Page, GlobalUtils.calculateSpanCount(this@Watch_Anime_Page, 170))
         recyclerView.adapter = AnimeAiringAdapter(RecommendationItems, R.layout.anime_airing_item)
 
         val spacing = (19 * resources.displayMetrics.density).toInt() // 16dp to px
@@ -395,7 +432,6 @@ class Watch_Anime_Page : AppCompatActivity() {
     }
 
     private fun setupFavoriteButton(
-        button: ImageButton,   // 👈 Changed to ImageButton
         animeId :String,
         name:String,
         type :String,
@@ -415,23 +451,29 @@ class Watch_Anime_Page : AppCompatActivity() {
 
     ) {
         val userId = sm.getUserId()
+        val favoriteButton =  findViewById<LinearLayout>(R.id.favoriteButton)
+        val favoriteButtonImg =  findViewById<ImageButton>(R.id.favoriteButtonImg)
+        val favoriteButtonText =  findViewById<TextView>(R.id.favoriteButtonText)
+
+
+
 
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun applyIcon() {
             val isFav = db.isFavoriteAnime(userId, animeId)
             if (isFav) {
-                button.setImageResource(R.drawable.ic_tickfave)  // ❤️ e.g. filled heart icon
-                button.tooltipText = "Remove from Favorites"
+                favoriteButtonImg.setImageResource(R.drawable.ic_tickfave)
+                favoriteButtonText.text = "Remove from Fav"
             } else {
-                button.setImageResource(R.drawable.ic_addfave) // 🤍 outline heart icon
-                button.tooltipText = "Add to Favorites"
+                favoriteButtonImg.setImageResource(R.drawable.ic_addfave)
+                favoriteButtonText.text= "Add to Fav"
             }
         }
 
         applyIcon()
 
-        button.setOnClickListener {
+        favoriteButton.setOnClickListener {
             val isFav = db.isFavoriteAnime(userId, animeId)
             if (isFav) {
                 db.removeFavoriteAnime(userId, animeId)

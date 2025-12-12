@@ -30,7 +30,8 @@
             android:nextFocusDown="@id/btnHome"
             android:src="@drawable/ic_search"
             app:tint="@color/nav_icon_color_selector"
-            tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+            tools:ignore="HardcodedText,TouchTargetSizeCheck"
+            android:visibility="gone"/>
 
 
 
@@ -63,7 +64,7 @@
                             android:clickable="true"
                             android:contentDescription="Home"
                             android:focusable="true"
-                            android:nextFocusUp="@id/btnSearch"
+                            android:nextFocusUp="@id/btnProfile"
                             android:nextFocusDown="@id/btnMvTv"
                             android:src="@drawable/ic_home"
                             app:tint="@color/nav_icon_color_selector"
@@ -75,7 +76,6 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:ellipsize="end"
-                            android:fontFamily="@font/b"
                             android:maxLines="1"
                             android:text="Home"
                             android:textColor="?attr/FG_color"
@@ -115,7 +115,6 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:ellipsize="end"
-                            android:fontFamily="@font/b"
                             android:maxLines="1"
                             android:text="Shows"
                             android:textColor="?attr/FG_color"
@@ -152,7 +151,6 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:ellipsize="end"
-                                android:fontFamily="@font/b"
                                 android:maxLines="1"
                                 android:text="Anime"
                                 android:textColor="?attr/FG_color"
@@ -191,7 +189,6 @@
                             android:gravity="center"
                             android:ellipsize="end"
                             android:fontFamily="@font/b"
-                            android:maxLines="1"
                             android:text="Fav"
                             android:textColor="?attr/FG_color"
                             android:textSize="9sp"
@@ -247,7 +244,6 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:ellipsize="end"
-                            android:fontFamily="@font/b"
                             android:maxLines="1"
                             android:text="notifs"
                             android:textColor="?attr/FG_color"

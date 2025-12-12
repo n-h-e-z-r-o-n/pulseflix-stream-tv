@@ -583,7 +583,7 @@ class PayWall : AppCompatActivity() {
             paymentRef = ""
         )
 
-        val intent = Intent(this, Home_Page::class.java)
+        val intent = Intent(this, Login_Page::class.java)
         startActivity(intent)
         finish()
     }
