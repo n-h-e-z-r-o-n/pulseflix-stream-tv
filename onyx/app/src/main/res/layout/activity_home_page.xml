@@ -21,6 +21,8 @@
         android:id="@+id/mainBox"
         android:layout_margin="0dp"
         android:layout_gravity="center"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false"
         app:cardBackgroundColor="?attr/BG_color"
         app:cardCornerRadius="0dp">
 

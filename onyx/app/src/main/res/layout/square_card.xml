@@ -9,7 +9,7 @@
     android:focusableInTouchMode="true"
     android:gravity="center"
     android:orientation="vertical"
-    card_view:cardCornerRadius="12dp"
+    card_view:cardCornerRadius="5dp"
     card_view:cardElevation="2dp"
     android:foreground="@drawable/card_focus"
     android:id="@+id/CardViewSquare"
@@ -23,7 +23,7 @@
         android:layout_weight="1"
         android:src="@raw/test4"
         android:background="@android:color/transparent"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         tools:ignore="ContentDescription" />
 
     <TextView
