@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.example.onyx.FetchData.TMDBapi
 import com.example.onyx.GridAdapter.Companion.lastKeyTime
+import org.json.JSONArray
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1520,3 +1522,115 @@ data class NotificationItem(
     val newSeason: Int,
     val newEpisode: Int
 )
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class cWatchingAdapter(
+    private val items: MutableList<HashMap<String, String>>,
+    private val layoutResId: Int
+) : RecyclerView.Adapter<cWatchingAdapter.ViewHolder>() {
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        val rootCard: CardView = view.findViewById(R.id.rootCard)
+        val poster: ImageView = view.findViewById(R.id.itemImage)
+        val title: TextView = view.findViewById(R.id.watchItemTitle)
+        val episode: TextView = view.findViewById(R.id.watchItemEpisode)
+        val lastPosition: TextView = view.findViewById(R.id.watchItemLastPosition)
+        val duration: TextView = view.findViewById(R.id.watchItemDuration)
+        val seekBar: SeekBar = view.findViewById(R.id.cWatchSeek_bar)
+
+        init {
+            // TV focus animation
+            /*
+            itemView.setOnFocusChangeListener { v, hasFocus ->
+                v.animate()
+                    .scaleX(if (hasFocus) 1.05f else 1f)
+                    .scaleY(if (hasFocus) 1.05f else 1f)
+                    .setDuration(150)
+                    .start()
+            }
+
+             */
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(layoutResId, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val item = items[position]
+
+        val itemId = item["item_id"] ?: ""
+        val type = item["type"] ?: ""
+        val title = item["title"] ?: ""
+        val posterUrl = item["poster"] ?: ""
+        val episodeNumber = item["episode_number"] ?: ""
+        val seasonNumber = item["season_number"] ?: ""
+        val lastPos = item["last_position"]?.toLongOrNull() ?: 0L
+        val duration = item["duration"]?.toLongOrNull() ?: 1L
+
+        // ---------- UI ----------
+        holder.title.text = title
+
+
+        holder.lastPosition.text = formatTimeMillis(lastPos)
+        holder.duration.text = formatTimeMillis(duration)
+
+
+        val progress = ((lastPos.toDouble() / duration.toDouble()) * 1000).toInt()
+        holder.seekBar.progress = progress.coerceIn(0, 1000)
+
+        Glide.with(holder.itemView.context)
+            .load(posterUrl)
+            .centerCrop()
+            .into(holder.poster)
+
+        // ---------- CLICK → RESUME ----------
+        if(type=="anime"){
+            holder.episode.text = "E$episodeNumber"
+
+
+
+            holder.rootCard.setOnClickListener {
+                val context = holder.itemView.context
+
+                Anime_Video_Player.playVideoExternally(context, itemId, JSONArray(), episodeNumber, posterUrl, seasonNumber, title)
+            }
+
+        }
+
+    }
+
+    override fun getItemCount(): Int = items.size
+
+    fun updateItems(newItems: List<HashMap<String, String>>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
+    }
+
+    fun clearItems() {
+        items.clear()
+        notifyDataSetChanged()
+    }
+
+    // ---------- UTIL ----------
+    private fun formatTimeMillis(ms: Long): String {
+        val totalSeconds = ms / 1000
+        val hours = totalSeconds / 3600
+        val minutes = (totalSeconds % 3600) / 60
+        val seconds = totalSeconds % 60
+
+        return if (hours > 0)
+            String.format("%d:%02d:%02d", hours, minutes, seconds)
+        else
+            String.format("%02d:%02d", minutes, seconds)
+    }
+}
+

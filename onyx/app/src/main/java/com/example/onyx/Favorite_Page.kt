@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.json.JSONArray
 import kotlin.text.ifEmpty
@@ -22,6 +23,9 @@ class Favorite_Page : AppCompatActivity() {
     private lateinit var  sm: SessionManger
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: FavAdapter
+    private lateinit var watchRecyclerView: RecyclerView
+    private lateinit var watchAdapter: cWatchingAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
@@ -30,6 +34,53 @@ class Favorite_Page : AppCompatActivity() {
 
         db = AppDatabase(this)         // Initialize database
         sm = SessionManger(this)
+
+        val cWatchBtn = findViewById<LinearLayout>(R.id.cWatchBtn)
+        val favBtn = findViewById<LinearLayout>(R.id.FavBtn)
+
+        val favePage = findViewById<LinearLayout>(R.id.FavBox)
+        val cWatchPage = findViewById<LinearLayout>(R.id.watchingBox)
+
+        cWatchBtn.setOnClickListener {
+            favePage.visibility = View.GONE
+            cWatchPage.visibility = View.VISIBLE
+
+            cWatchBtn.alpha = 1f
+            favBtn.alpha = 0.5f
+
+        }
+        favBtn.setOnClickListener {
+            favePage.visibility = View.VISIBLE
+            cWatchPage.visibility = View.GONE
+
+            cWatchBtn.alpha = 0.5f
+            favBtn.alpha = 1f
+
+        }
+
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        recyclerView = findViewById(R.id.favoritesRecycler)
+        recyclerView.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        val spacing = (5 * resources.displayMetrics.density).toInt()
+        recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
+
+
+        watchRecyclerView = findViewById(R.id.watchingRecycler)
+        watchRecyclerView.layoutManager = GridLayoutManager(this@Favorite_Page, GlobalUtils.calculateSpanCountV2(this@Favorite_Page,170,160))
+        val Spacing = (16 * resources.displayMetrics.density).toInt()
+        watchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
         NavAction.setupSidebar(this@Favorite_Page)
         setupBackPressedCallback()
@@ -40,6 +91,9 @@ class Favorite_Page : AppCompatActivity() {
         super.onResume()
         if (this::adapter.isInitialized) {
             adapter.clearItems()
+        }
+        if (this::watchAdapter.isInitialized) {
+            watchAdapter.clearItems()
         }
         loadFavorites()
     }
@@ -53,7 +107,7 @@ class Favorite_Page : AppCompatActivity() {
         val animeFavData = db.getFavoriteAnime(userId)
         val movies = db.getFavoriteShowsByType(userId, "movie")
         val tvs = db.getFavoriteShowsByType(userId, "tv")
-        val cWatching = db.getContinueWatching(userId)
+        val cWatching = db.getContinueWatchingAll(userId)
 
         Log.d("FAVORITE", "Movies: ${movies.size}")
         Log.d("FAVORITE", "TV Shows: ${tvs.size}")
@@ -61,34 +115,19 @@ class Favorite_Page : AppCompatActivity() {
         Log.d("C_WATCHING", "watching: ${cWatching.size}")
 
 
-        for (item in cWatching) {
-            Log.d("C_WATCHING", "item: $item")
-            Log.d("C_WATCHING", "type: ${item["type"]}")
-            Log.d("C_WATCHING", "title: ${item["title"]}")
-            Log.d("C_WATCHING", "poster: ${item["poster"]}")
-            Log.d("C_WATCHING", "backdrop: ${item["backdrop"]}")
-            Log.d("C_WATCHING", "season_number: ${item["season_number"]}")
-            Log.d("C_WATCHING", "episode_number: ${item["episode_number"]}")
-            Log.d("C_WATCHING", "last_position: ${item["last_position"]}")
-            Log.d("C_WATCHING", "duration: ${item["duration"]}")
-            Log.d("C_WATCHING", "updated_at: ${item["updated_at"]}")
 
 
-        }
 
 
-        recyclerView = findViewById(R.id.favoritesRecycler)
-        val emptyState = findViewById<TextView>(R.id.emptyState)
 
-        recyclerView.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        val spacing = (5 * resources.displayMetrics.density).toInt()
-        recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
+
+
+
+
+
 
         // SHOW EMPTY STATE ONLY IF ALL FAVORITES ARE EMPTY
+        val emptyState = findViewById<TextView>(R.id.emptyState)
         if (movies.isEmpty() && tvs.isEmpty() && animeFavData.isEmpty()) {
             emptyState.visibility = View.VISIBLE
             return
@@ -162,20 +201,7 @@ class Favorite_Page : AppCompatActivity() {
                 )
             )
         }
-        for (item in cWatching) {
-            Log.d("C_WATCHING", "item: $item")
-            Log.d("C_WATCHING", "type: ${item["type"]}")
-            Log.d("C_WATCHING", "title: ${item["title"]}")
-            Log.d("C_WATCHING", "poster: ${item["poster"]}")
-            Log.d("C_WATCHING", "backdrop: ${item["backdrop"]}")
-            Log.d("C_WATCHING", "season_number: ${item["season_number"]}")
-            Log.d("C_WATCHING", "episode_number: ${item["episode_number"]}")
-            Log.d("C_WATCHING", "last_position: ${item["last_position"]}")
-            Log.d("C_WATCHING", "duration: ${item["duration"]}")
-            Log.d("C_WATCHING", "updated_at: ${item["updated_at"]}")
 
-
-        }
 
         // -----------------------------------------------
         // ADAPTER SETUP
@@ -204,6 +230,33 @@ class Favorite_Page : AppCompatActivity() {
         )
 
         recyclerView.adapter = adapter
+
+
+
+        for (item in cWatching) {
+            Log.d("C_WATCHING", "item: $item")
+            Log.d("C_WATCHING", "type: ${item["type"]}")
+            Log.d("C_WATCHING", "title: ${item["title"]}")
+            Log.d("C_WATCHING", "poster: ${item["poster"]}")
+            Log.d("C_WATCHING", "backdrop: ${item["backdrop"]}")
+            Log.d("C_WATCHING", "season_number: ${item["season_number"]}")
+            Log.d("C_WATCHING", "episode_number: ${item["episode_number"]}")
+            Log.d("C_WATCHING", "last_position: ${item["last_position"]}")
+            Log.d("C_WATCHING", "duration: ${item["duration"]}")
+            Log.d("C_WATCHING", "updated_at: ${item["updated_at"]}")
+
+
+        }
+
+
+        watchAdapter = cWatchingAdapter(
+            cWatching,
+            R.layout.item_watched
+        )
+        watchRecyclerView.adapter = watchAdapter
+
+
+
     }
 
 

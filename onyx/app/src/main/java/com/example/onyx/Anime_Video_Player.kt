@@ -177,14 +177,21 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         val episodesTitle = intent.getStringExtra("episodesTitle")
         val seasonId = intent.getStringExtra("seasonNumber")
 
+        currentEpisodeId = episodeId
+        currentEpisodeNumber = episodesNumber
+        currentEpisodeTitle = episodesTitle
+        currentPoster = poster
+        currentSeasonId = seasonId
 
 
 
-        val episodesArray = if (episodesJson != null) {
+
+        var episodesArray = if (episodesJson != null) {
             JSONArray(episodesJson)
         } else {
             JSONArray()
         }
+
         Log.d("ANIME Player eid", "$episodeId")
         Log.d("ANIME Player sNumber", "$seasonId")
         Log.d("ANIME Player eNumber", "$episodesNumber")
@@ -192,15 +199,41 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         Log.d("ANIME Player poster", "$poster")
         Log.d("ANIME Player Array", "$episodesArray")
 
-        // Store episode info for continue watching tracking
-        currentEpisodeId = episodeId
-        currentEpisodeNumber = episodesNumber
-        currentEpisodeTitle = episodesTitle
-        currentPoster = poster
-        currentSeasonId = seasonId
+        if (episodesArray.length() == 0 && !seasonId.isNullOrEmpty()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                repeat(1) { attempt ->
+                    try {
 
-        fetchStreamingLinks(episodeId.toString())
-        displayEpisode(episodesArray, episodesNumber.toString())
+                        val url = "$urlHome/api/v2/hianime/anime/$seasonId/episodes"
+
+                        val connection = URL(url).openConnection() as HttpURLConnection
+                        connection.requestMethod = "GET"
+                        connection.setRequestProperty("accept", "application/json")
+                        val response = connection.inputStream.bufferedReader().use { it.readText() }
+                        val jsonObject = org.json.JSONObject(response)
+                        val data = jsonObject.getJSONObject("data")
+                        val episodes = data.getJSONArray("episodes")
+
+                        withContext(Dispatchers.Main) {
+                            episodesArray = episodes
+                            fetchStreamingLinks(episodeId.toString())
+                            displayEpisode(episodesArray, episodesNumber.toString())
+                        }
+
+                    }catch (e:Exception){
+                        Log.e("Player", "Failed to load episodes", e)
+                    }
+                }
+            }
+        } else {
+            fetchStreamingLinks(episodeId.toString())
+            displayEpisode(episodesArray, episodesNumber.toString())
+        }
+
+
+
+
+
     }
 
     private fun fetchStreamingLinks(episodeId: String) {

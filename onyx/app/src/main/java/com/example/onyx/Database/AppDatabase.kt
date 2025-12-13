@@ -522,7 +522,7 @@ class AppDatabase(context: Context) :
         )
     }
     //Get all continue watching items sorted by updated time
-    fun getContinueWatching(userId: Int): ArrayList<HashMap<String, String>> {
+    fun getContinueWatchingAll(userId: Int): ArrayList<HashMap<String, String>> {
         val db = readableDatabase
         val list = ArrayList<HashMap<String, String>>()
 
