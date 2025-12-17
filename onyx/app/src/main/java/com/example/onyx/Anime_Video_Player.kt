@@ -62,6 +62,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
     private  var  userId: Int? = null
+    private var resumePosition: Long = 0L
 
     private  var urlHome ="https://corsproxy.io/https://aniwatch-api-r4uo.vercel.app/"
     private var currentEpisodeId: String? = null
@@ -176,6 +177,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         val poster = intent.getStringExtra("poster")
         val episodesTitle = intent.getStringExtra("episodesTitle")
         val seasonId = intent.getStringExtra("seasonNumber")
+        val cWatching = intent.getBooleanExtra("cWatching", false)
 
         currentEpisodeId = episodeId
         currentEpisodeNumber = episodesNumber
@@ -199,7 +201,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         Log.d("ANIME Player poster", "$poster")
         Log.d("ANIME Player Array", "$episodesArray")
 
-        if (episodesArray.length() == 0 && !seasonId.isNullOrEmpty()) {
+        if (cWatching) {
             CoroutineScope(Dispatchers.IO).launch {
                 repeat(1) { attempt ->
                     try {
@@ -218,6 +220,8 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                             episodesArray = episodes
                             fetchStreamingLinks(episodeId.toString())
                             displayEpisode(episodesArray, episodesNumber.toString())
+                            resumePosition = sm.getLastPosition(episodeId.toString())
+                            sm.clearLastPosition(episodeId.toString())
                         }
 
                     }catch (e:Exception){
@@ -901,7 +905,11 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                     seekBar.max = 1000
                     // Update quality display when video is ready
                     updateQualityButton()
-                    // Start progress tracking if playing
+                    if (resumePosition > 0) {
+                        exoPlayer?.seekTo(resumePosition)
+                        sm.clearLastPosition(currentEpisodeId.toString())
+                        resumePosition = 0
+                    }
                     if (exoPlayer?.isPlaying == true) {
                         startProgressTracking()
                     }
@@ -1051,7 +1059,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     // ===== PlayerManager functionality merged into this class =====
 
     companion object {
-        fun playVideoExternally(context: Context, episodeId: String, episodes: JSONArray, episodesNumber: String, poster: String, seasonNumber: String, episodesTitle:String) {
+        fun playVideoExternally(context: Context, episodeId: String, episodes: JSONArray, episodesNumber: String, poster: String, seasonNumber: String, episodesTitle:String, cWatching: Boolean) {
             val intent = Intent(context, Anime_Video_Player::class.java).apply {
                 putExtra("episodeId", episodeId)
                 putExtra("episodes", episodes.toString())
@@ -1059,6 +1067,9 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                 putExtra("poster", poster)
                 putExtra("seasonNumber", seasonNumber)
                 putExtra("episodesTitle", episodesTitle)
+                putExtra("cWatching", cWatching)
+
+
 
 
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP

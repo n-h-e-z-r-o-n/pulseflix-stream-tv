@@ -25,4 +25,26 @@ class SessionManger(context: Context) {
     fun clearSession() {
         pref.edit().clear().apply()
     }
+
+    /* ---------- CONTINUE WATCHING (SESSION) ---------- */
+
+    // ✅ Save last playback position
+    fun saveLastPosition(itemId: String, positionMs: Long) {
+        pref.edit()
+            .putLong("LAST_POS_$itemId", positionMs)
+            .apply()
+    }
+
+    // ✅ Get last playback position
+    fun getLastPosition(itemId: String): Long {
+        return pref.getLong("LAST_POS_$itemId", 0L)
+    }
+
+    // ✅ Clear position (when episode/movie finishes)
+    fun clearLastPosition(itemId: String) {
+        pref.edit()
+            .remove("LAST_POS_$itemId")
+            .apply()
+    }
+
 }

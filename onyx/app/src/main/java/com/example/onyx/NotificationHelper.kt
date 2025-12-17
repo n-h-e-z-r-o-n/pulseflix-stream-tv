@@ -19,8 +19,14 @@ import kotlin.String
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.example.onyx.BuildConfig
+import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
+
 
 object NotificationHelper {
+
+    private lateinit var db: AppDatabase
+    private lateinit var  sm: SessionManger
 
     private const val PREFS_NAME = "notification_prefs"
     private const val KEY_NOTIFICATIONS = "notifications_json"

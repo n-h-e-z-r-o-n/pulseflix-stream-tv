@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-
+import com.bumptech.glide.request.target.Target
 
 
 class AnimeSwiper(
@@ -228,7 +228,7 @@ class AnimeTrendingAdapter(
 
             when (keyCode) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    if (position == 0) return@setOnKeyListener true
+                    //if (position == 0) return@setOnKeyListener true
                 }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
                     if (position == items.size-1) return@setOnKeyListener true
@@ -258,6 +258,8 @@ data class TrendingAnimeItem(
     val imageUrl: String,
     val rank: String
 )
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class AnimeAiringAdapter(
     private val  items: MutableList<AiringAnimeItem>,   // ✅ mutable now,
@@ -337,6 +339,7 @@ class AnimeAiringAdapter(
             false
         }
 
+        /*
         holder.CardViewcontiner.setOnKeyListener { v, keyCode, event ->
             if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
             val now = System.currentTimeMillis()
@@ -355,18 +358,16 @@ class AnimeAiringAdapter(
             false
         }
 
-
+         */
     }
 
     override fun getItemCount() = items.size
 
-    // 👇 helper to add items one by one
+    // helper to add items one by one
     fun addItem(item: AiringAnimeItem) {
         items.add(item)
         notifyItemInserted(items.size - 1)
-
     }
-
 }
 
 data class AiringAnimeItem(
@@ -397,8 +398,6 @@ class AnimeSearchAdapter(
         val cardType: TextView = view.findViewById(R.id.cardType)
         val cardDub: TextView = view.findViewById(R.id.cardDub)
         val cardSub: TextView = view.findViewById(R.id.cardSub)
-
-
 
 
     }
@@ -466,6 +465,11 @@ class AnimeSearchAdapter(
     fun addItem(item: AnimeSearchItem) {
         items.add(item)
         notifyItemInserted(items.size - 1)
+    }
+
+    fun clearItems() {
+        items.clear()
+        notifyDataSetChanged()
     }
 
 }
@@ -614,6 +618,111 @@ class AnimeGridAdapter(
         notifyDataSetChanged()
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class animeFavAdapter(
+    private val  items: MutableList<animeFavItem>,
+    private val layoutResId: Int
+
+) :  RecyclerView.Adapter<animeFavAdapter.ViewHolder>() {
+
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val Movie_image: ImageView = view.findViewById(R.id.itemImage)
+        val itemText: TextView = view.findViewById(R.id.itemText)
+
+
+
+        init {
+            itemView.setOnFocusChangeListener { _, hasFocus ->
+
+                //Scale animation
+                itemView.animate()
+                    .scaleX(if (hasFocus) 1.02f else 1f)
+                    .scaleY(if (hasFocus) 1.02f else 1f)
+                    .setDuration(150)
+                    .start()
+
+            }
+
+
+        }
+
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(layoutResId, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val currentItem = items[position]
+
+        val posterUrl = currentItem.posterUrl
+        val imdbCode = currentItem.imdbCode
+        val type = currentItem.showType
+
+
+
+        Glide.with(holder.itemView.context)
+            .load(posterUrl)
+            .centerInside()
+            .into(holder.Movie_image)
+
+
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            if(type == "anime"){
+                val intent = Intent(context, Watch_Anime_Page::class.java)
+                intent.putExtra("anime_code", imdbCode)
+                intent.putExtra("anime_poster", posterUrl)
+                context.startActivity(intent)
+            }else {
+                val intent = Intent(context, Watch_Page::class.java)
+                intent.putExtra("imdb_code", imdbCode)
+                intent.putExtra("type", type)
+                context.startActivity(intent)
+            }
+        }
+
+
+    }
+
+    override fun getItemCount() = items.size
+
+    // 👇 helper to add items one by one
+    fun addItem(item: animeFavItem) {
+        items.add(item)
+        notifyItemInserted(items.size - 1)
+
+    }
+    fun clearItems() {
+        items.clear()
+        notifyDataSetChanged()  // Notify RecyclerView that data is cleared
+    }
+
+}
+
+
+data class animeFavItem(
+    val title: String,
+    val posterUrl: String,
+    val backdropUrl: String,
+    val releaseDate: String,
+    val runtime: String,
+    val overview: String,
+    val voteAverage: String,
+    val genres: String,
+    val production: String,
+    val parentalGuide: String,
+    val imdbCode: String,
+    val showType : String,
+)
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 

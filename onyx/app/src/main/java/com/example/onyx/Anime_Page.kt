@@ -17,6 +17,9 @@ import android.view.KeyEvent
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.cardview.widget.CardView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -27,707 +30,957 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.String
 import com.example.onyx.BuildConfig
+import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
+
+
 
 
 class Anime_Page : AppCompatActivity() {
-    //private var urlHome = "http://192.168.100.22:4000"
-    private var urlHome = BuildConfig.A_K
-    private var isSearchContainerAnimeVisible = false
-    private var currentAnimePage = 0
-    private var isLoadingMoreDubbed = false
-    private var currentRecentlyAnimePage = 0
-    private var isLoadingMoreRecently = false
 
-
-
-    private lateinit var dubbedAdapter: AnimeGridAdapter
-    private lateinit var dubbedRecyclerView : RecyclerView
-    private lateinit var RecentlyAdapter: AnimeGridAdapter
-    private lateinit var RecentlyRecyclerView : RecyclerView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        GlobalUtils.applyTheme(this)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_anime_page)
-        NavAction.setupSidebar(this@Anime_Page)
-        LoadingAnimation.show(this@Anime_Page)
+     private lateinit var db: AppDatabase
+     private lateinit var  sm: SessionManger
+     private var urlHome = BuildConfig.A_K      //private var urlHome = "http://192.168.100.22:4000"
 
 
 
 
+    //----------------------------------------------------------------------------------------------
 
-        val tvSpacing = (8 * resources.displayMetrics.density).toInt()
-        //------------------------------------------------------------------------------------------
 
-        dubbedRecyclerView = findViewById(R.id.Anime_Dubbed_widget)
-        dubbedRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false).apply {
-            isSmoothScrollbarEnabled = false
-            isItemPrefetchEnabled = false
+     private lateinit var dubbedAdapter: AnimeGridAdapter
+     private lateinit var dubbedRecyclerView: RecyclerView
+     private var currentDubbedAnimePage = 0
+     private var isLoadingMoreDubbed = false
+     //----------------------------------------------------------------------------------------------
+
+
+     private lateinit var popularAdapter: AnimeGridAdapter
+     private lateinit var popularRecyclerView: RecyclerView
+     private var currentPopularAnimePage = 0
+     private var isLoadingMorePopular = false
+
+     //----------------------------------------------------------------------------------------------
+
+     private lateinit var RecentlyAdapter: AnimeGridAdapter
+     private lateinit var RecentlyRecyclerView: RecyclerView
+     private var currentRecentlyAnimePage = 0
+     private var isLoadingMoreRecently = false
+
+     //---------------------------------------------------------------------------------------------
+     private lateinit var searchAdapter: AnimeSearchAdapter
+     private lateinit var searchRecyclerView: RecyclerView
+
+     //----------------------------------------------------------------------------------------------
+
+     private lateinit var watchRecyclerView: RecyclerView
+     private lateinit var watchAdapter: cWatchingAdapter
+
+
+    private lateinit var faveRecyclerView: RecyclerView
+    private lateinit var faveAdapter: FavAdapter
+
+
+     //---------------------------------------------------------------------------------------------
+
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         GlobalUtils.applyTheme(this)
+         enableEdgeToEdge()
+         setContentView(R.layout.activity_anime_page)
+
+
+         NavAction.setupSidebar(this@Anime_Page)
+         LoadingAnimation.show(this@Anime_Page)
+
+         db = AppDatabase(this)         // Initialize database
+         sm = SessionManger(this)
+
+
+         ////////////////////////////////////////////////////////////////////////////////////////
+
+
+         val homeAnimeBtn = findViewById<LinearLayout>(R.id.HomeAnimeBtn)
+         val favAnimeBtn = findViewById<LinearLayout>(R.id.FavAnimeBtn)
+         val searchAnimeBtn = findViewById<LinearLayout>(R.id.SearchAnimeBtn)
+         val cWatchAnimeBtn = findViewById<LinearLayout>(R.id.cWatchAnimeBtn)
+         val popularAnimeBtn = findViewById<LinearLayout>(R.id.PopularAnimeBtn)
+         val dubbedAnimeBtn = findViewById<LinearLayout>(R.id.DubbedAnimeBtn)
+
+         val homePageAnime = findViewById<LinearLayout>(R.id.HomePageAnime)
+         val dubbedPageAnime = findViewById<LinearLayout>(R.id.DubbedPageAnime)
+         val popularPageAnime = findViewById<LinearLayout>(R.id.PopularPageAnime)
+         val searchPageAnime = findViewById<LinearLayout>(R.id.SearchPageAnime)
+         val cWatchedPageAnime = findViewById<LinearLayout>(R.id.WatchedListPageAnime)
+         val favPageAnime = findViewById<LinearLayout>(R.id.FavPageAnime)
+
+
+
+
+
+         homeAnimeBtn.setOnClickListener {
+             homePageAnime.visibility = View.VISIBLE
+             dubbedPageAnime.visibility = View.GONE
+             popularPageAnime.visibility = View.GONE
+             searchPageAnime.visibility = View.GONE
+             cWatchedPageAnime.visibility = View.GONE
+             favPageAnime.visibility = View.GONE
+
+             homeAnimeBtn.isSelected = true
+             dubbedAnimeBtn.isSelected = false
+             popularAnimeBtn.isSelected = false
+             searchAnimeBtn.isSelected = false
+             favAnimeBtn.isSelected = false
+             cWatchAnimeBtn.isSelected = false
+
+
+         }
+
+         favAnimeBtn.setOnClickListener {
+             homePageAnime.visibility = View.GONE
+             dubbedPageAnime.visibility = View.GONE
+             popularPageAnime.visibility = View.GONE
+             searchPageAnime.visibility = View.GONE
+             cWatchedPageAnime.visibility = View.GONE
+             favPageAnime.visibility = View.VISIBLE
+
+             homeAnimeBtn.isSelected = false
+             dubbedAnimeBtn.isSelected = false
+             popularAnimeBtn.isSelected = false
+             searchAnimeBtn.isSelected = false
+             favAnimeBtn.isSelected = true
+             cWatchAnimeBtn.isSelected = false
+
+
+         }
+
+         searchAnimeBtn.setOnClickListener {
+             homePageAnime.visibility = View.GONE
+             dubbedPageAnime.visibility = View.GONE
+             popularPageAnime.visibility = View.GONE
+             searchPageAnime.visibility = View.VISIBLE
+             cWatchedPageAnime.visibility = View.GONE
+             favPageAnime.visibility = View.GONE
+
+             homeAnimeBtn.isSelected = false
+             dubbedAnimeBtn.isSelected = false
+             popularAnimeBtn.isSelected = false
+             searchAnimeBtn.isSelected = true
+             favAnimeBtn.isSelected = false
+             cWatchAnimeBtn.isSelected = false
+
+         }
+
+         cWatchAnimeBtn.setOnClickListener {
+             homePageAnime.visibility = View.GONE
+             dubbedPageAnime.visibility = View.GONE
+             popularPageAnime.visibility = View.GONE
+             searchPageAnime.visibility = View.GONE
+             cWatchedPageAnime.visibility = View.VISIBLE
+             favPageAnime.visibility = View.GONE
+
+             homeAnimeBtn.isSelected = false
+             dubbedAnimeBtn.isSelected = false
+             popularAnimeBtn.isSelected = false
+             searchAnimeBtn.isSelected = false
+             favAnimeBtn.isSelected = false
+             cWatchAnimeBtn.isSelected = true
+
+
+         }
+
+         popularAnimeBtn.setOnClickListener {
+             homePageAnime.visibility = View.GONE
+             dubbedPageAnime.visibility = View.GONE
+             popularPageAnime.visibility = View.VISIBLE
+             searchPageAnime.visibility = View.GONE
+             cWatchedPageAnime.visibility = View.GONE
+             favPageAnime.visibility = View.GONE
+
+             homeAnimeBtn.isSelected = false
+             dubbedAnimeBtn.isSelected = false
+             popularAnimeBtn.isSelected = true
+             searchAnimeBtn.isSelected = false
+             favAnimeBtn.isSelected = false
+             cWatchAnimeBtn.isSelected = false
+         }
+
+         dubbedAnimeBtn.setOnClickListener {
+             homePageAnime.visibility = View.GONE
+             dubbedPageAnime.visibility = View.VISIBLE
+             popularPageAnime.visibility = View.GONE
+             searchPageAnime.visibility = View.GONE
+             cWatchedPageAnime.visibility = View.GONE
+             favPageAnime.visibility = View.GONE
+
+             homeAnimeBtn.isSelected = false
+             dubbedAnimeBtn.isSelected = true
+             popularAnimeBtn.isSelected = false
+             searchAnimeBtn.isSelected = false
+             favAnimeBtn.isSelected = false
+             cWatchAnimeBtn.isSelected = false
+
+         }
+
+         ////////////////////////////////////////////////////////////////////////////////////////
+         ////////////////////////////////////////////////////////////////////////////////////////
+
+
+         val tvSpacing = (10 * resources.displayMetrics.density).toInt()
+         //------------------------------------------------------------------------------------------
+         val anime_airing_item_width = 150
+         dubbedRecyclerView = findViewById(R.id.dubbedRecycler)
+         dubbedRecyclerView.layoutManager = GridLayoutManager(
+             this@Anime_Page,
+             GlobalUtils.calculateSpanCountV2(this@Anime_Page, 160, anime_airing_item_width)
+         )
+         dubbedRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+         dubbedAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
+         dubbedRecyclerView.adapter = dubbedAdapter
+         dubbedAdapter.onAddMoreClicked = { loadDubbedAnime() }
+
+
+         popularRecyclerView = findViewById(R.id.popularRecycler)
+         popularRecyclerView.layoutManager = GridLayoutManager(
+             this@Anime_Page,
+             GlobalUtils.calculateSpanCountV2(this@Anime_Page, 160, anime_airing_item_width)
+         )
+         popularRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+         popularAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
+         popularRecyclerView.adapter = popularAdapter
+         popularAdapter.onAddMoreClicked = { loadPopularAnime() }
+
+         //------------------------------------------------------------------------------------------
+
+
+         RecentlyRecyclerView = findViewById(R.id.Anime_RecentlyUpdated_widget)
+         RecentlyRecyclerView.layoutManager =
+             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false).apply {
+                 isSmoothScrollbarEnabled = false
+                 isItemPrefetchEnabled = false
+             }
+         RecentlyRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+         RecentlyAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
+         RecentlyRecyclerView.adapter = RecentlyAdapter
+         RecentlyAdapter.onAddMoreClicked = { loadDubbedAnime() }
+
+
+
+         searchRecyclerView = findViewById(R.id.SearchRecycler)
+         searchRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page,GlobalUtils.calculateSpanCountV2(this@Anime_Page, 160, anime_airing_item_width))
+         searchAdapter  = AnimeSearchAdapter(mutableListOf(), R.layout.anime_airing_item)
+         searchRecyclerView.adapter = searchAdapter
+         searchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+
+
+         watchRecyclerView = findViewById(R.id.watchingRecycler)
+         watchRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,160,150))
+         watchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+
+         faveRecyclerView = findViewById(R.id.faveRecycler)
+         faveRecyclerView.layoutManager = LinearLayoutManager(
+             this,
+             LinearLayoutManager.HORIZONTAL,
+             false
+         )
+         faveRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+
+         ////////////////////////////////////////////////////////////////////////////////////////////
+         ////////////////////////////////////////////////////////////////////////////////////////////
+
+         animeHomeData()
+
+         loadDubbedAnime()
+         loadPopularAnime()
+         //loadRecentlyAnime()
+         setupSearchUi()
+         animeWatchedList()
+     }
+
+
+    override fun onResume() {
+        super.onResume()
+        if (this::watchAdapter.isInitialized) {
+            watchAdapter.clearItems()
         }
-        dubbedRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
-        dubbedAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
-        dubbedRecyclerView.adapter = dubbedAdapter
-        dubbedAdapter.onAddMoreClicked = { loadDubbedAnime() }
 
-        //------------------------------------------------------------------------------------------
-
-
-        RecentlyRecyclerView = findViewById(R.id.Anime_RecentlyUpdated_widget)
-        RecentlyRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false).apply {
-            isSmoothScrollbarEnabled = false
-            isItemPrefetchEnabled = false
+        if (this::faveAdapter.isInitialized) {
+            faveAdapter.clearItems()
         }
-        RecentlyRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
-        RecentlyAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
-        RecentlyRecyclerView.adapter = RecentlyAdapter
-        RecentlyAdapter.onAddMoreClicked = { loadDubbedAnime() }
-        //------------------------------------------------------------------------------------------
 
-        animeHomeData()
 
-        loadDubbedAnime()
-        loadRecentlyAnime()
-        setupSearchUi()
-        setupBackPressedCallback()
+        animeWatchedList()
+        animeFavoritesList()
     }
 
 
-    private fun animeHomeData() {
-        val displayMetrics = resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels     // in pixels
-        val screenHeight = displayMetrics.heightPixels    // in pixels
+     private fun animeHomeData() {
+         val displayMetrics = resources.displayMetrics
+         val screenWidth = displayMetrics.widthPixels     // in pixels
+         val screenHeight = displayMetrics.heightPixels    // in pixels
+         val recyclerView = findViewById<RecyclerView>(R.id.spotlightAnimes)
+         val params = recyclerView.layoutParams
+         params.height = (screenHeight * 0.75).toInt()
+         recyclerView.layoutParams = params
 
-        val recyclerView = findViewById<RecyclerView>(R.id.spotlightAnimes)
-        val params = recyclerView.layoutParams
-        params.height = (screenHeight * 0.75).toInt()
-        recyclerView.layoutParams = params
+         LoadingAnimation.setup(this@Anime_Page, R.raw.b)
 
-        LoadingAnimation.setup(this@Anime_Page, R.raw.b)
+         CoroutineScope(Dispatchers.IO).launch {
+             var attempt = 0
+             while (attempt < 5) {
+                 attempt++
 
-        CoroutineScope(Dispatchers.IO).launch {
-            var attempt = 0
-            while (attempt < 5) {
-                attempt++
+                 try {
 
-                try {
+                     val url = "$urlHome/api/v2/hianime/home"
+                     val connection = URL(url).openConnection() as HttpURLConnection
+                     connection.requestMethod = "GET"
+                     connection.setRequestProperty("accept", "application/json")
 
-                    val url = "$urlHome/api/v2/hianime/home"
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    connection.setRequestProperty("accept", "application/json")
+                     val response = connection.inputStream.bufferedReader().use { it.readText() }
+                     Log.e("ANIME_STATUS HOME 1", response.toString())
 
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    Log.e("ANIME_STATUS HOME 1", response.toString())
+                     val jsonObject = org.json.JSONObject(response)
 
-                    val jsonObject = org.json.JSONObject(response)
+                     Log.e("ANIME_STATUS HOME 2", jsonObject.toString())
 
-                    Log.e("ANIME_STATUS HOME 2", jsonObject.toString())
-
-                    val ShowHomeData = jsonObject.getJSONObject("data")
-                    Log.e("ANIME_STATUS HOME 3", ShowHomeData.toString())
-
-
-                    val  spotlightAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
-                    val  trendingAnimes = ShowHomeData.getJSONArray("trendingAnimes")
-                    val  latestEpisodeAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
-                    val  top10Animes = ShowHomeData.getJSONArray("spotlightAnimes")
-                    val  topAiringAnimes = ShowHomeData.getJSONArray("topAiringAnimes")
-                    val  latestCompletedAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
+                     val ShowHomeData = jsonObject.getJSONObject("data")
+                     Log.e("ANIME_STATUS HOME 3", ShowHomeData.toString())
 
 
-
-                    var spotlightAnimesitmes = mutableListOf<AnimeSliderItem>()
-
-                    for (i in 0 until spotlightAnimes.length()) {
-
-                        val item = spotlightAnimes.getJSONObject(i)
-
-                        val title = item.getString("name")
-
-                        val overview = item.getString("description")
+                     val spotlightAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
+                     val trendingAnimes = ShowHomeData.getJSONArray("trendingAnimes")
+                     val latestEpisodeAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
+                     val top10Animes = ShowHomeData.getJSONArray("spotlightAnimes")
+                     val topAiringAnimes = ShowHomeData.getJSONArray("topAiringAnimes")
+                     val latestCompletedAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
 
 
-                        val imageUrl = item.getString("poster")
+                     var spotlightAnimesitmes = mutableListOf<AnimeSliderItem>()
 
-                        val id = item.getString("id")
-                        val type = item.getString("type")
+                     for (i in 0 until spotlightAnimes.length()) {
+                         val item = spotlightAnimes.getJSONObject(i)
+                         val title = item.getString("name")
+                         val overview = item.getString("description")
+                         val imageUrl = item.getString("poster")
+                         val id = item.getString("id")
+                         val type = item.getString("type")
+                         val runtime = item.optJSONArray("otherInfo").optString(1, "")
+                         val release_date = item.optJSONArray("otherInfo").optString(2, "")
+                         val quality = item.optJSONArray("otherInfo").optString(3, "")
+                         val sub = item.getJSONObject("episodes").optString("sub", "")
+                         val dub = item.getJSONObject("episodes").optString("dub", "")
 
-                        val runtime = item.optJSONArray("otherInfo").optString(1, "")
-                        val release_date = item.optJSONArray("otherInfo").optString(2, "")
-                        val quality = item.optJSONArray("otherInfo").optString(3, "")
-                        val sub = item.getJSONObject("episodes").optString("sub", "")
-                        val dub = item.getJSONObject("episodes").optString("dub", "")
+                         spotlightAnimesitmes.add(
+                             AnimeSliderItem(
+                                 title,
+                                 imageUrl,
+                                 id,
+                                 type,
+                                 overview,
+                                 release_date,
+                                 runtime,
+                                 quality,
+                                 sub,
+                                 dub,
+                             )
+                         )
+                     }
 
+                     Log.e("DEBUG_MAIN_Slider 1", spotlightAnimesitmes.toString())
 
+                     withContext(Dispatchers.Main) {
+                         showTrending(trendingAnimes)
+                         showAiring(topAiringAnimes)
+                         LoadingAnimation.hide(this@Anime_Page)
+                         val recyclerView = findViewById<RecyclerView>(R.id.spotlightAnimes)
+                         recyclerView.layoutManager = LinearLayoutManager(
+                             this@Anime_Page,
+                             LinearLayoutManager.HORIZONTAL,
+                             false
+                         )
+                         recyclerView.adapter =
+                             AnimeSwiper(spotlightAnimesitmes, R.layout.anime_card_spotlight)
+                         LoadingAnimation.hide(this@Anime_Page)
+                     }
+                 } catch (e: java.net.ConnectException) {
+                     Log.e("ANIME_ERROR", "Connection failed", e)
+                     withContext(Dispatchers.Main) {
+                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                     }
+                     currentRecentlyAnimePage--
 
+                     break // Stop retry attempts safely
 
+                 } catch (e: java.io.FileNotFoundException) {
+                     Log.e("ANIME_ERROR", "404 Not Found", e)
+                     withContext(Dispatchers.Main) {
+                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                     }
+                     currentRecentlyAnimePage--
 
-                        spotlightAnimesitmes.add(
-                            AnimeSliderItem(
-                                title,
-                                imageUrl,
-                                id,
-                                type,
-                                overview,
-                                release_date,
-                                runtime,
-                                quality,
-                                sub,
-                                dub,
-                            )
-                        )
+                     break // Stop attempts safely
 
-                    }
+                 } catch (e: Exception) {
+                     Log.e("ANIME_ERROR", "General error", e)
+                     delay(10_000)
+                     currentRecentlyAnimePage--
 
-                    Log.e("DEBUG_MAIN_Slider 1", spotlightAnimesitmes.toString())
+                     continue // Try again safely
+                 }
 
-
-
-                    withContext(Dispatchers.Main) {
-
-                        showTrending( trendingAnimes)
-                        showAiring(topAiringAnimes)
-
-                        LoadingAnimation.hide(this@Anime_Page)
-                        val recyclerView = findViewById<RecyclerView>(R.id.spotlightAnimes)
-                        recyclerView.layoutManager = LinearLayoutManager(
-                            this@Anime_Page,
-                            LinearLayoutManager.HORIZONTAL,
-                            false
-                        )
-                        recyclerView.adapter = AnimeSwiper(spotlightAnimesitmes, R.layout.anime_card_spotlight)
-                        LoadingAnimation.hide(this@Anime_Page)
-                    }
-
-
-
-                } catch (e: java.net.ConnectException) {
-                    Log.e("ANIME_ERROR", "Connection failed", e)
-                    withContext(Dispatchers.Main) {
-                        LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                    }
-                    currentRecentlyAnimePage--
-
-                    break // Stop retry attempts safely
-
-                } catch (e: java.io.FileNotFoundException) {
-                    Log.e("ANIME_ERROR", "404 Not Found", e)
-                    withContext(Dispatchers.Main) {
-                        LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                    }
-                    currentRecentlyAnimePage--
-
-                    break // Stop attempts safely
-
-                } catch (e: Exception) {
-                    Log.e("ANIME_ERROR", "General error", e)
-                    delay(10_000)
-                    currentRecentlyAnimePage--
-
-                    continue // Try again safely
-                }
-
-                return@launch
+                 return@launch
 
 
+             }
+         }
+     }
 
-            }
+
+     private fun showTrending(trending: JSONArray) {
+
+         var trendingItems = mutableListOf<TrendingAnimeItem>()
+         for (i in 0 until trending.length()) {
+
+
+             val item = trending.getJSONObject(i)
+             val title = item.getString("name")
+             val imageUrl = item.getString("poster")
+             val id = item.getString("id")
+             val ranking = "0" + item.getString("rank")
+
+
+             trendingItems.add(
+                 TrendingAnimeItem(
+                     id,
+                     title,
+                     imageUrl,
+                     ranking
+                 )
+             )
+
+         }
+
+         Log.e("DEBUG_MAIN_Slider 1", trendingItems.toString())
+
+
+         LoadingAnimation.hide(this@Anime_Page)
+         val recyclerView = findViewById<RecyclerView>(R.id.Anime_Trending_widget)
+         recyclerView.layoutManager = LinearLayoutManager(
+             this@Anime_Page,
+             LinearLayoutManager.HORIZONTAL,
+             false
+         )
+         recyclerView.adapter = AnimeTrendingAdapter(trendingItems, R.layout.anime_trending_item)
+         val spacing = (9 * resources.displayMetrics.density).toInt() // 16dp to px
+         recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
+
+     }
+
+     private fun showAiring(Airing: JSONArray) {
+
+         var airingItems = mutableListOf<AiringAnimeItem>()
+
+         for (i in 0 until Airing.length()) {
+
+
+             val item = Airing.getJSONObject(i)
+             val title = item.getString("name")
+             val imageUrl = item.getString("poster")
+             val id = item.getString("id")
+             val type = item.getString("type")
+             val sub = item.getJSONObject("episodes").optString("sub", "")
+             val dub = item.getJSONObject("episodes").optString("dub", "")
+
+             airingItems.add(
+                 AiringAnimeItem(
+                     id,
+                     title,
+                     imageUrl,
+                     type,
+                     sub,
+                     dub
+                 )
+             )
+         }
+
+         Log.e("DEBUG_MAIN_Slider 1", airingItems.toString())
+
+         LoadingAnimation.hide(this@Anime_Page)
+         val recyclerView = findViewById<RecyclerView>(R.id.Anime_Airing_widget)
+         recyclerView.layoutManager = LinearLayoutManager(
+             this@Anime_Page,
+             LinearLayoutManager.HORIZONTAL,
+             false
+         )
+         recyclerView.adapter = AnimeAiringAdapter(airingItems, R.layout.anime_airing_item)
+         val spacing = (9 * resources.displayMetrics.density).toInt() // 16dp to px
+         recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
+     }
+
+     ////////////////////////////////////////////////////////////////////////////////////////////////
+     ////////////////////////////////////////////////////////////////////////////////////////////////
+
+     private fun loadDubbedAnime() {
+         if (isLoadingMoreDubbed) return // Prevent multiple rapid clicks
+         currentDubbedAnimePage++
+         fetchDubbedAnime()
+     }
+
+     private fun fetchDubbedAnime() {
+         isLoadingMoreDubbed = true
+         CoroutineScope(Dispatchers.IO).launch {
+
+             repeat(5) { attempt ->
+                 try {
+                     val url =
+                         "$urlHome/api/v2/hianime/category/dubbed-anime?page=$currentDubbedAnimePage"
+                     val connection = URL(url).openConnection() as HttpURLConnection
+                     connection.requestMethod = "GET"
+                     val response = connection.inputStream.bufferedReader().use { it.readText() }
+                     val jsonObject = org.json.JSONObject(response)
+                     val fData = jsonObject.getJSONObject("data")
+
+                     Log.e("DEBUG_DubbedAnime1", "${fData}")
+
+                     val dubbedAnime = fData.getJSONArray("animes")
+                     Log.e("DEBUG_DubbedAnime2", "${fData}")
+
+                     val airingItems = mutableListOf<AiringAnimeItem>()
+
+                     for (i in 0 until dubbedAnime.length()) {
+
+                         val item = dubbedAnime.getJSONObject(i)
+                         val title = item.getString("name")
+                         val imageUrl = item.getString("poster")
+                         val id = item.getString("id")
+                         val type = item.getString("type")
+                         val sub = item.getJSONObject("episodes").optString("sub", "")
+                         val dub = item.getJSONObject("episodes").optString("dub", "")
+
+                         airingItems.add(
+                             AiringAnimeItem(
+                                 id,
+                                 title,
+                                 imageUrl,
+                                 type,
+                                 sub,
+                                 dub
+                             )
+                         )
+
+                         val movieItem = AiringAnimeItem(
+                             id,
+                             title,
+                             imageUrl,
+                             type,
+                             sub,
+                             dub
+                         )
+
+                         withContext(Dispatchers.Main) {
+                             dubbedAdapter.addItem(movieItem)
+                             isLoadingMoreDubbed = false
+                         }
+                     }
+
+                     return@launch
+                 } catch (e: java.net.ConnectException) {
+                     withContext(Dispatchers.Main) {
+                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                     }
+                     Log.e("DEBUG_TAG_ANIME dubbed", "Connect Error", e)
+                     currentRecentlyAnimePage--
+                     return@repeat
+                 } catch (e: Exception) {
+                     Log.e("DEBUG_TAG_ANIME dubbed", "Attempt ${attempt + 1} failed", e)
+                     delay(10_000)
+                     currentDubbedAnimePage--
+                 }
+                 withContext(Dispatchers.Main) {
+                     isLoadingMoreDubbed = false
+                 }
+             }
+         }
+     }
+
+     ////////////////////////////////////////////////////////////////////////////////////////////////
+
+     private fun loadPopularAnime() {
+         if (isLoadingMorePopular) return // Prevent multiple rapid clicks
+         currentPopularAnimePage++
+         fetchPopularAnime()
+     }
+
+     private fun fetchPopularAnime() {
+         isLoadingMorePopular = true
+         CoroutineScope(Dispatchers.IO).launch {
+
+             repeat(5) { attempt ->
+                 try {
+                     val url =
+                         "$urlHome/api/v2/hianime/category/most-popular?page=$currentPopularAnimePage"
+                     val connection = URL(url).openConnection() as HttpURLConnection
+                     connection.requestMethod = "GET"
+                     val response = connection.inputStream.bufferedReader().use { it.readText() }
+                     val jsonObject = org.json.JSONObject(response)
+                     val fData = jsonObject.getJSONObject("data")
+
+                     val popularAnime = fData.getJSONArray("animes")
+                     //Log.e("DEBUG_TAG_ANIME Popular", "Data${fData}")
+
+                     val airingItems = mutableListOf<AiringAnimeItem>()
+
+                     for (i in 0 until popularAnime.length()) {
+
+                         val item = popularAnime.getJSONObject(i)
+                         val title = item.getString("name")
+                         val imageUrl = item.getString("poster")
+                         val id = item.getString("id")
+                         val type = item.getString("type")
+                         val sub = item.getJSONObject("episodes").optString("sub", "")
+                         val dub = item.getJSONObject("episodes").optString("dub", "")
+
+                         airingItems.add(
+                             AiringAnimeItem(
+                                 id,
+                                 title,
+                                 imageUrl,
+                                 type,
+                                 sub,
+                                 dub
+                             )
+                         )
+
+                         val movieItem = AiringAnimeItem(
+                             id,
+                             title,
+                             imageUrl,
+                             type,
+                             sub,
+                             dub
+                         )
+
+                         withContext(Dispatchers.Main) {
+                             popularAdapter.addItem(movieItem)
+                             isLoadingMorePopular = false
+                         }
+                     }
+
+                     return@launch
+                 } catch (e: java.net.ConnectException) {
+                     withContext(Dispatchers.Main) {
+                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                     }
+                     Log.e("DEBUG_TAG_ANIME Popular", "Connect Error", e)
+                     currentPopularAnimePage--
+                     return@repeat
+                 } catch (e: Exception) {
+                     Log.e("DEBUG_TAG_ANIME Popular", "Attempt ${attempt + 1} failed", e)
+                     delay(10_000)
+                     currentPopularAnimePage--
+                 }
+                 withContext(Dispatchers.Main) {
+                     isLoadingMorePopular = false
+                 }
+             }
+         }
+     }
+     ////////////////////////////////////////////////////////////////////////////////////////////////
+     ////////////////////////////////////////////////////////////////////////////////////////////////
+
+     private fun loadRecentlyAnime() {
+         if (isLoadingMoreRecently) return // Prevent multiple rapid clicks
+         currentRecentlyAnimePage++
+         fetchRecentlyAnime()
+     }
+
+
+     private fun fetchRecentlyAnime() {
+         isLoadingMoreDubbed = true
+         CoroutineScope(Dispatchers.IO).launch {
+
+             repeat(5) { attempt ->
+                 try {
+                     val url =
+                         "$urlHome/api/v2/hianime/category/recently-updated?page=$currentRecentlyAnimePage"
+                     val connection = URL(url).openConnection() as HttpURLConnection
+                     connection.requestMethod = "GET"
+                     val response = connection.inputStream.bufferedReader().use { it.readText() }
+                     val jsonObject = org.json.JSONObject(response)
+                     val fData = jsonObject.getJSONObject("data")
+
+                     Log.e("DEBUG_DubbedAnime1", "${fData}")
+                     val dubbedAnime = fData.getJSONArray("animes")
+                     Log.e("DEBUG_DubbedAnime2", "${fData}")
+                     val airingItems = mutableListOf<AiringAnimeItem>()
+                     for (i in 0 until dubbedAnime.length()) {
+                         val item = dubbedAnime.getJSONObject(i)
+                         val title = item.getString("name")
+                         val imageUrl = item.getString("poster")
+                         val id = item.getString("id")
+                         val type = item.getString("type")
+                         val sub = item.getJSONObject("episodes").optString("sub", "")
+                         val dub = item.getJSONObject("episodes").optString("dub", "")
+
+                         airingItems.add(
+                             AiringAnimeItem(
+                                 id,
+                                 title,
+                                 imageUrl,
+                                 type,
+                                 sub,
+                                 dub
+                             )
+                         )
+
+
+                         val movieItem = AiringAnimeItem(
+                             id,
+                             title,
+                             imageUrl,
+                             type,
+                             sub,
+                             dub
+                         )
+
+                         withContext(Dispatchers.Main) {
+                             RecentlyAdapter.addItem(movieItem)
+                             isLoadingMoreRecently = false
+                         }
+                     }
+
+                     return@launch
+                 } catch (e: java.net.ConnectException) {
+                     withContext(Dispatchers.Main) {
+                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                     }
+                     Log.e("DEBUG_TAG_ANIME recent", "Connect Error", e)
+                     currentRecentlyAnimePage--
+                     return@repeat
+
+                 } catch (e: java.io.FileNotFoundException) {
+                     withContext(Dispatchers.Main) {
+                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                     }
+                     Log.e(
+                         "DEBUG_TAG_ANIME recent",
+                         "URL Not Found (404/403) at page $currentRecentlyAnimePage",
+                         e
+                     )
+                     currentRecentlyAnimePage--
+                     return@repeat
+                 } catch (e: Exception) {
+                     Log.e("DEBUG_TAG_ANIME recent", "Attempt ${attempt + 1} failed", e)
+                     delay(10_000)
+                     currentRecentlyAnimePage--
+                 }
+                 withContext(Dispatchers.Main) {
+                 }
+             }
+         }
+
+     }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         private  fun searchAnimeFetch(searchTerm:String){
+             val searchTextDisplay = findViewById<TextView>(R.id.searchTextDisplay)
+
+             searchAdapter.clearItems()
+
+             CoroutineScope(Dispatchers.IO).launch {
+                 repeat(1) { attempt ->
+                     try {
+
+                         val url = "$urlHome/api/v2/hianime/search?q=$searchTerm&page=1"
+                         val connection = URL(url).openConnection() as HttpURLConnection
+                         connection.requestMethod = "GET"
+                         connection.setRequestProperty("accept", "application/json")
+
+                         val response = connection.inputStream.bufferedReader().use { it.readText() }
+                         Log.e("ANIME_STATUS search", response.toString())
+
+                         val jsonObject = org.json.JSONObject(response)
+                         Log.e("ANIME_STATUS search", jsonObject.toString())
+                         val dataFetch = jsonObject.getJSONObject("data")
+                         val  searchData = dataFetch.getJSONArray("animes")
+                         Log.e("ANIME_STATUS SEARCH-R", dataFetch.toString())
+                         var searchDataItmes = mutableListOf<AnimeSearchItem>()
+
+
+                         withContext(Dispatchers.Main) {
+                             if(searchData.length() == 0) {
+                                 searchTextDisplay.text = "No Results Found"
+                             }else{
+                                 searchTextDisplay.text = "Search results for: $searchTerm"
+                             }
+                         }
+
+
+
+                         for (i in 0 until searchData.length()) {
+                             val item = searchData.getJSONObject(i)
+                             val title = item.getString("name")
+                             val imageUrl = item.getString("poster")
+                             val id = item.getString("id")
+                             val type = item.getString("type")
+                             val sub = item.getJSONObject("episodes").optString("sub", "")
+                             val dub = item.getJSONObject("episodes").optString("dub", "")
+
+
+
+                             val searchItem = AnimeSearchItem(
+                                 id,
+                                 title,
+                                 imageUrl,
+                                 type,
+                                 sub,
+                                 dub,
+                             )
+
+                             withContext(Dispatchers.Main) {
+                                 searchAdapter.addItem(searchItem)
+                             }
+
+                         }
+
+
+                         return@launch
+                     } catch (e: Exception) {
+                         delay(20_000)
+                         Log.e("ANIME_STATUS S-Error", "Error fetching data", e)
+                         return@launch
+                     }
+
+                 }
+             }
+             isLoadingMoreRecently = false
+         }
+         private fun setupSearchUi() {
+             val searchInput = findViewById<EditText>(R.id.AnimeSearchInput)
+             val searchBar = findViewById<CardView>(R.id.searchBarAnime)
+
+             val focusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+                 if (hasFocus) {
+                     searchBar.post {
+                         searchInput.requestFocus()
+                         showKeyboard(searchInput)
+                     }
+                 } else {
+                     hideKeyboard()
+                 }
+             }
+
+
+             // Set focus listeners on both the search bar and the input field
+             searchBar.onFocusChangeListener = focusChangeListener
+             searchInput.onFocusChangeListener = focusChangeListener
+
+             try{
+                 searchInput.setOnEditorActionListener { _, actionId, event ->
+
+                     if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                         (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
+                     ) {
+
+                         val searchTerm = searchInput.text.toString().trim()
+                         if (searchTerm.isNotEmpty()) {
+                             searchAnimeFetch(searchTerm)
+                         }
+
+                         true
+                     } else {
+                         false
+                     }
+                 }
+
+             }catch (e: Exception){
+                 Log.e("ANIME_STATUS S-Error", "setupSearchUi() ", e)
+
+             }
+         }
+
+         private fun showKeyboard(view: View) {
+             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+         }
+
+         private fun hideKeyboard() {
+             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+             currentFocus?.let {
+                 imm.hideSoftInputFromWindow(it.windowToken, 0)
+             }
+         }
+
+     ///////////////////////////////////////////////////////////////////////////////////////////////
+     ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        private fun animeWatchedList(){
+
+            val userId = sm.getUserId()
+            val cWatching = db.getContinueWatchingAll(userId, "anime")
+
+            watchAdapter = cWatchingAdapter(
+                cWatching,
+                R.layout.item_watched
+            )
+            watchRecyclerView.adapter = watchAdapter
+
         }
-    }
 
+    private fun animeFavoritesList(){
 
-    private fun showTrending( trending: JSONArray){
+        val FavBackdrop: ImageView = findViewById(R.id.FavBackdrop)
+        val FavTitle: TextView = findViewById(R.id.FavTitle)
+        val FavGenre: TextView = findViewById(R.id.FavGenre)
+        val FavType: TextView = findViewById(R.id.FavType)
+        val FavRating: TextView = findViewById(R.id.FavRating)
+        val FavYear: TextView = findViewById(R.id.FavYear)
+        val FavOverview: TextView = findViewById(R.id.FavOverview)
+        val RemoveFaveItem: LinearLayout = findViewById(R.id.RemoveFaveItem)
 
-        var trendingItems = mutableListOf<TrendingAnimeItem>()
-        for (i in 0 until trending.length()) {
+        val userId = sm.getUserId()
+        val animeFavData = db.getFavoriteAnime(userId)
 
+        val items = mutableListOf<FavItem>()
 
-            val item = trending.getJSONObject(i)
-            val title = item.getString("name")
-            val imageUrl = item.getString("poster")
-            val id = item.getString("id")
-            val ranking = "0"+item.getString("rank")
-
-
-            trendingItems.add(
-                TrendingAnimeItem(
-                    id,
-                    title,
-                    imageUrl,
-                    ranking
+        for (anime in animeFavData) {
+            val genres = anime["genre"] ?: ""
+            items.add(
+                FavItem(
+                    title = anime["name"] ?: "",
+                    posterUrl = anime["poster"] ?: "",
+                    backdropUrl = anime["poster"] ?: "",
+                    releaseDate = anime["aired"] ?: "",
+                    runtime = anime["duration"] ?: "",
+                    overview = anime["description"] ?: "",
+                    voteAverage = anime["rating"] ?: "",
+                    genres = genres,
+                    production = "",
+                    parentalGuide = anime["rating"] ?: "",
+                    imdbCode = anime["anime_id"] ?: "",
+                    showType = "anime"
                 )
             )
-
         }
 
-             Log.e("DEBUG_MAIN_Slider 1", trendingItems.toString())
+        faveAdapter = FavAdapter(
+            items,
+            R.layout.square_card,
+            FavBackdrop,
+            FavTitle,
+            FavGenre,
+            FavType,
+            FavRating,
+            FavYear,
+            FavOverview,
+            RemoveFaveItem)
 
-
-            LoadingAnimation.hide(this@Anime_Page)
-            val recyclerView = findViewById<RecyclerView>(R.id.Anime_Trending_widget)
-            recyclerView.layoutManager = LinearLayoutManager(
-                this@Anime_Page,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            recyclerView.adapter = AnimeTrendingAdapter(trendingItems, R.layout.anime_trending_item)
-            val spacing = (9 * resources.displayMetrics.density).toInt() // 16dp to px
-            recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
-
-    }
-
-    private fun showAiring( Airing: JSONArray){
-
-        var airingItems = mutableListOf<AiringAnimeItem>()
-
-        for (i in 0 until Airing.length()) {
-
-
-            val item = Airing.getJSONObject(i)
-
-            val title = item.getString("name")
-
-            val imageUrl = item.getString("poster")
-
-            val id = item.getString("id")
-
-            val type = item.getString("type")
-
-            val sub = item.getJSONObject("episodes").optString("sub", "")
-            val dub = item.getJSONObject("episodes").optString("dub", "")
-
-
-
-
-
-            airingItems.add(
-                AiringAnimeItem(
-                    id,
-                    title,
-                    imageUrl,
-                    type,
-                    sub,
-                    dub
-                )
-            )
-
-        }
-
-        Log.e("DEBUG_MAIN_Slider 1", airingItems.toString())
-
-
-        LoadingAnimation.hide(this@Anime_Page)
-        val recyclerView = findViewById<RecyclerView>(R.id.Anime_Airing_widget)
-        recyclerView.layoutManager = LinearLayoutManager(
-            this@Anime_Page,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        recyclerView.adapter = AnimeAiringAdapter(airingItems, R.layout.anime_airing_item)
-        val spacing = (9 * resources.displayMetrics.density).toInt() // 16dp to px
-        recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
+        faveRecyclerView.adapter = faveAdapter
 
     }
 
 
-    private fun loadDubbedAnime() {
-        if (isLoadingMoreDubbed) return // Prevent multiple rapid clicks
-        currentAnimePage++
-        fetchDubbedAnime()
-    }
 
-    private fun fetchDubbedAnime() {
-        isLoadingMoreDubbed = true
-        CoroutineScope(Dispatchers.IO).launch {
-
-            repeat(5) { attempt ->
-                try {
-                    val url = "$urlHome/api/v2/hianime/category/dubbed-anime?page=$currentAnimePage"
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject = org.json.JSONObject(response)
-                    val fData = jsonObject.getJSONObject("data")
-
-                    Log.e("DEBUG_DubbedAnime1", "${fData}")
-
-                    val  dubbedAnime = fData.getJSONArray("animes")
-                    Log.e("DEBUG_DubbedAnime2", "${fData}")
-
-                    val airingItems = mutableListOf<AiringAnimeItem>()
-
-                    for (i in 0 until dubbedAnime.length()) {
-
-                        val item = dubbedAnime.getJSONObject(i)
-
-                        val title = item.getString("name")
-
-                        val imageUrl = item.getString("poster")
-
-                        val id = item.getString("id")
-
-                        val type = item.getString("type")
-
-                        val sub = item.getJSONObject("episodes").optString("sub", "")
-                        val dub = item.getJSONObject("episodes").optString("dub", "")
-
-                        airingItems.add(
-                            AiringAnimeItem(
-                                id,
-                                title,
-                                imageUrl,
-                                type,
-                                sub,
-                                dub
-                            )
-                        )
-
-
-                        val movieItem = AiringAnimeItem(
-                            id,
-                            title,
-                            imageUrl,
-                            type,
-                            sub,
-                            dub
-                        )
-
-                        withContext(Dispatchers.Main) {
-                            dubbedAdapter.addItem(movieItem)
-                            isLoadingMoreDubbed = false
-                        }
-                    }
-
-                    return@launch
-                } catch (e: java.net.ConnectException) {
-                    withContext(Dispatchers.Main) {
-                        LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                    }
-                    Log.e("DEBUG_TAG_ANIME dubbed", "Connect Error", e)
-                    currentRecentlyAnimePage--
-                    return@repeat
-                } catch (e: Exception) {
-                    Log.e("DEBUG_TAG_ANIME dubbed", "Attempt ${attempt+1} failed", e)
-                    delay(10_000)
-                    currentAnimePage--
-                }
-                withContext(Dispatchers.Main) {
-                    isLoadingMoreDubbed = false
-                }
-            }
-        }
-    }
-
-    private fun loadRecentlyAnime() {
-        if (isLoadingMoreRecently) return // Prevent multiple rapid clicks
-        currentRecentlyAnimePage++
-        fetchRecentlyAnime()
-    }
-
-    private fun fetchRecentlyAnime() {
-        isLoadingMoreDubbed = true
-        CoroutineScope(Dispatchers.IO).launch {
-
-            repeat(5) { attempt ->
-                try {
-                    val url = "$urlHome/api/v2/hianime/category/recently-updated?page=$currentRecentlyAnimePage"
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject = org.json.JSONObject(response)
-                    val fData = jsonObject.getJSONObject("data")
-
-                    Log.e("DEBUG_DubbedAnime1", "${fData}")
-
-                    val  dubbedAnime = fData.getJSONArray("animes")
-                    Log.e("DEBUG_DubbedAnime2", "${fData}")
-
-                    val airingItems = mutableListOf<AiringAnimeItem>()
-
-                    for (i in 0 until dubbedAnime.length()) {
-
-                        val item = dubbedAnime.getJSONObject(i)
-
-                        val title = item.getString("name")
-
-                        val imageUrl = item.getString("poster")
-
-                        val id = item.getString("id")
-
-                        val type = item.getString("type")
-
-                        val sub = item.getJSONObject("episodes").optString("sub", "")
-                        val dub = item.getJSONObject("episodes").optString("dub", "")
-
-                        airingItems.add(
-                            AiringAnimeItem(
-                                id,
-                                title,
-                                imageUrl,
-                                type,
-                                sub,
-                                dub
-                            )
-                        )
-
-
-                        val movieItem = AiringAnimeItem(
-                            id,
-                            title,
-                            imageUrl,
-                            type,
-                            sub,
-                            dub
-                        )
-
-                        withContext(Dispatchers.Main) {
-                            RecentlyAdapter.addItem(movieItem)
-                            isLoadingMoreRecently = false
-                        }
-                    }
-
-                    return@launch
-                } catch (e: java.net.ConnectException) {
-                    withContext(Dispatchers.Main) {
-                        LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                    }
-                    Log.e("DEBUG_TAG_ANIME recent", "Connect Error", e)
-                    currentRecentlyAnimePage--
-                    return@repeat
-
-                }catch (e: java.io.FileNotFoundException) {
-                    withContext(Dispatchers.Main) {
-                        LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                    }
-                    Log.e("DEBUG_TAG_ANIME recent", "URL Not Found (404/403) at page $currentRecentlyAnimePage", e)
-                    currentRecentlyAnimePage--
-                    return@repeat
-                }catch (e: Exception) {
-                    Log.e("DEBUG_TAG_ANIME recent", "Attempt ${attempt+1} failed", e)
-                    delay(10_000)
-                    currentRecentlyAnimePage--
-                }
-                withContext(Dispatchers.Main) {
-                    isLoadingMoreRecently = false
-                }
-            }
-        }
-    }
-
-
-
-    private fun searchAnimeFetch(searchTerm:String){
-
-        CoroutineScope(Dispatchers.IO).launch {
-            repeat(1) { attempt ->
-                try {
-
-                    val url = "$urlHome/api/v2/hianime/search?q=$searchTerm&page=1"
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    connection.setRequestProperty("accept", "application/json")
-
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    Log.e("ANIME_STATUS search", response.toString())
-
-                    val jsonObject = org.json.JSONObject(response)
-
-                    Log.e("ANIME_STATUS search", jsonObject.toString())
-
-                    val dataFetch = jsonObject.getJSONObject("data")
-
-
-
-                    val  searchData = dataFetch.getJSONArray("animes")
-                    Log.e("ANIME_STATUS SEARCH-R", dataFetch.toString())
-
-
-
-
-                    var searchDataItmes = mutableListOf<AnimeSearchItem>()
-
-                    for (i in 0 until searchData.length()) {
-
-                        val item = searchData.getJSONObject(i)
-
-                        val title = item.getString("name")
-                        val imageUrl = item.getString("poster")
-                        val id = item.getString("id")
-                        val type = item.getString("type")
-                        val sub = item.getJSONObject("episodes").optString("sub", "")
-                        val dub = item.getJSONObject("episodes").optString("dub", "")
-
-
-                        searchDataItmes.add(
-                            AnimeSearchItem(
-                                id,
-                                title,
-                                imageUrl,
-                                type,
-                                sub,
-                                dub,
-                            )
-                        )
-
-                    }
-
-
-
-                    withContext(Dispatchers.Main) {
-
-                        LoadingAnimation.hide(this@Anime_Page)
-                        val recyclerView = findViewById<RecyclerView>(R.id.AnimeSearch_widget)
-
-                        // Calculate span count dynamically
-                        val widthInPixels = this@Anime_Page.resources.getDimension(R.dimen.grid_item_width)
-                        val density = this@Anime_Page.resources.displayMetrics.density
-                        val widthInDp = widthInPixels / density
-                        val displayMetrics = resources.displayMetrics
-                        val screenWidthPx = displayMetrics.widthPixels
-                        val itemMinWidthPx = ((widthInDp + 19) * displayMetrics.density).toInt() // 160dp per item
-                        val spanCount = maxOf(1, screenWidthPx / itemMinWidthPx)
-
-                        recyclerView.layoutManager = GridLayoutManager(this@Anime_Page, spanCount)
-                        recyclerView.adapter = AnimeSearchAdapter(searchDataItmes, R.layout.anime_airing_item)
-                    }
-
-
-
-                    return@launch
-                } catch (e: Exception) {
-                    delay(20_000)
-                    Log.e("ANIME_STATUS S-Error", "Error fetching data", e)
-                    return@launch
-                }
-
-            }
-        }
-
-    }
-
-    private fun setupSearchUi() {
-
-        val searchInput = findViewById<EditText>(R.id.AnimeSearchInput)
-        val searchBar = findViewById<LinearLayout>(R.id.searchBarAnime)
-
-        val focusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                expandSearchBar(searchBar)
-                searchBar.post {
-                    searchInput.requestFocus()
-                    showKeyboard(searchInput)
-                }
-            } else {
-                collapseSearchBar(searchBar)
-                hideKeyboard()
-            }
-        }
-
-        // Key listener to detect microphone button press (VOICE_ASSIST)
-        searchInput.setOnKeyListener { _, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN) {
-                when (keyCode) {
-                    KeyEvent.KEYCODE_VOICE_ASSIST -> {
-                        // Handle microphone button press here
-                        searchInput.requestFocus()
-                        showKeyboard(searchInput)
-                        true
-                    }
-                }
-            }
-            false
-        }
-
-        // Set focus listeners on both the search bar and the input field
-        searchBar.onFocusChangeListener = focusChangeListener
-        searchInput.onFocusChangeListener = focusChangeListener
-
-        try{
-            searchInput.setOnEditorActionListener { _, actionId, event ->
-
-                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                    (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
-                ) {
-
-                    val searchTerm = searchInput.text.toString().trim()
-                    if (searchTerm.isNotEmpty()) {
-                        findViewById<LinearLayout>(R.id.searchContainerAnime).visibility = View.VISIBLE
-                        findViewById<LinearLayout>(R.id.AnimeHomeContainer).visibility = View.GONE
-                        findViewById<View>(R.id.AnimeSearchInput).nextFocusDownId = R.id.searchContainerAnime
-                        isSearchContainerAnimeVisible = true
-                        searchAnimeFetch(searchTerm)
-                    }
-
-                    true
-                } else {
-                    false
-                }
-            }
-
-            }catch (e: Exception){
-                Log.e("ANIME_STATUS S-Error", "setupSearchUi() ", e)
-
-            }
-    }
-
-    private fun showKeyboard(view: View) {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-    }
-
-    private fun hideKeyboard() {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        currentFocus?.let {
-            imm.hideSoftInputFromWindow(it.windowToken, 0)
-        }
-    }
-
-    private fun expandSearchBar(searchBar: LinearLayout) {
-        val params = searchBar.layoutParams as ViewGroup.MarginLayoutParams
-        params.width = 400.dpToPx(this)
-        params.marginEnd = 0
-        searchBar.layoutParams = params
-
-        // Optional: Add some visual feedback
-        searchBar.elevation = 8f
-    }
-
-    private fun collapseSearchBar(searchBar: LinearLayout) {
-        val params = searchBar.layoutParams as ViewGroup.MarginLayoutParams
-        params.width =30.dpToPx(this) // Convert dp to pixels
-        searchBar.layoutParams = params
-
-        // Reset visual changes
-        searchBar.elevation = 0f
-    }
-    // Extension function to convert dp to pixels
-    private fun Int.dpToPx(context: Context): Int {
-        return (this * context.resources.displayMetrics.density).toInt()
-    }
-
-
-
-
-
-
-
-        private fun setupBackPressedCallback() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-
-                if (isSearchContainerAnimeVisible) {
-                    findViewById<LinearLayout>(R.id.searchContainerAnime).visibility = View.GONE
-                    findViewById<LinearLayout>(R.id.AnimeHomeContainer).visibility = View.VISIBLE
-                    isSearchContainerAnimeVisible = false
-                    findViewById<View>(R.id.AnimeSearchInput).nextFocusDownId = R.id.spotlightAnimesCard
-
-                }else {
-                    findViewById<ImageButton>(R.id.btnAnime).requestFocus()
-                }
-            }
-        })
-    }
-
-
-}
+ }

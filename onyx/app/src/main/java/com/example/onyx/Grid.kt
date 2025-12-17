@@ -21,6 +21,11 @@ import com.example.onyx.FetchData.TMDBapi
 import com.example.onyx.GridAdapter.Companion.lastKeyTime
 import org.json.JSONArray
 
+import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1413,6 +1418,7 @@ class NotificationAdapter(
     private val layoutResId: Int   // 👈 pass in the layout resource
 ) :  RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
 
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         //val image: ImageView = view.findViewById(R.id.notification_title)
         val showTitle: TextView = view.findViewById(R.id.notification_title)
@@ -1531,6 +1537,11 @@ class cWatchingAdapter(
     private val layoutResId: Int
 ) : RecyclerView.Adapter<cWatchingAdapter.ViewHolder>() {
 
+    companion object {
+    }
+    private lateinit var sm: SessionManger
+
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val rootCard: CardView = view.findViewById(R.id.rootCard)
@@ -1600,7 +1611,10 @@ class cWatchingAdapter(
             holder.rootCard.setOnClickListener {
                 val context = holder.itemView.context
 
-                Anime_Video_Player.playVideoExternally(context, itemId, JSONArray(), episodeNumber, posterUrl, seasonNumber, title)
+                sm = SessionManger(context)
+                sm.saveLastPosition(itemId, lastPos)
+
+                Anime_Video_Player.playVideoExternally(context, itemId, JSONArray(), episodeNumber, posterUrl, seasonNumber, title, true)
             }
 
         }

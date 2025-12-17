@@ -4,30 +4,33 @@
         <shape android:shape="rectangle">
             <corners android:radius="10dp" />
             <gradient
-                android:type="radial"
+                android:type="linear"
+                android:angle="-90"
                 android:centerX="50%"
                 android:centerY="50%"
                 android:gradientRadius="900dp"
-                android:startColor="#353839"
+                android:startColor="@android:color/transparent"
                 android:endColor="?attr/AccentColor"
                 />
 
-            <stroke android:width="2dp" android:color="?attr/AccentColor" />
+            <stroke android:width="0dp" android:color="?attr/AccentColor" />
         </shape>
     </item>
     <item>
     <shape android:shape="rectangle">
+
         <gradient
-            android:type="radial"
+            android:type="linear"
+            android:angle="-90"
             android:centerX="50%"
             android:centerY="50%"
             android:gradientRadius="900dp"
-            android:startColor="?attr/BG_color"
-            android:endColor="?attr/BG_color"
+            android:startColor="@android:color/transparent"
+            android:endColor="@android:color/transparent"
             />
-        <corners android:radius="4dp" />
+
         <stroke
-            android:width="1dp"
+            android:width="0dp"
             android:color="?attr/BG_color_up"  />
     </shape>
 </item>

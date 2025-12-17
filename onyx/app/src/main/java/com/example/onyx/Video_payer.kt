@@ -31,8 +31,17 @@ import androidx.media3.common.util.UnstableApi
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
+
 @UnstableApi
 class Video_payer : AppCompatActivity(), Player.Listener {
+
+    private lateinit var db: AppDatabase
+    private lateinit var  sm: SessionManger
+    private  var  userId: Int? = null
+    private var resumePosition: Long = 0L
 
     private lateinit var playerView: PlayerView
     private lateinit var progressBar: ProgressBar
@@ -85,9 +94,13 @@ class Video_payer : AppCompatActivity(), Player.Listener {
         GlobalUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_payer)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)         // Prevent screen from sleeping while this Activity is visible
 
-        // Prevent screen from sleeping while this Activity is visible
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        db = AppDatabase(this)         // Initialize database
+        sm = SessionManger(this)
+
+        userId = sm.getUserId()
 
         initializeViews()
         setupPlayer()

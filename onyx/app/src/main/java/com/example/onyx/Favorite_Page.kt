@@ -107,7 +107,7 @@ class Favorite_Page : AppCompatActivity() {
         val animeFavData = db.getFavoriteAnime(userId)
         val movies = db.getFavoriteShowsByType(userId, "movie")
         val tvs = db.getFavoriteShowsByType(userId, "tv")
-        val cWatching = db.getContinueWatchingAll(userId)
+        val cWatching = db.getContinueWatchingAll(userId, "anime")
 
         Log.d("FAVORITE", "Movies: ${movies.size}")
         Log.d("FAVORITE", "TV Shows: ${tvs.size}")

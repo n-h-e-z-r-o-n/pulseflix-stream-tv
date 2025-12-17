@@ -127,6 +127,26 @@ class AppDatabase(context: Context) :
                 )"""
         )
 
+// 8. notification
+    db.execSQL(
+        """CREATE TABLE notification (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                show_id TEXT,                 -- movieId, episodeId, animeEpisodeId etc
+                type TEXT,                    -- movie, tv_episode, anime_episode
+                title TEXT,
+                poster TEXT,
+                  
+                season_number TEXT,  -- for tv/anime
+                episode_number TEXT, -- for tv/anime
+                last_position INTEGER DEFAULT 0,  -- last playback position in ms
+                duration INTEGER DEFAULT 0,       -- total duration in ms
+                updated_at INTEGER,               -- last update time
+                UNIQUE(user_id, item_id, type),
+                FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+            )"""
+    )
+
 
         // 8. App Settings (General App Info – NOT linked to users)
         db.execSQL(
@@ -522,23 +542,22 @@ class AppDatabase(context: Context) :
         )
     }
     //Get all continue watching items sorted by updated time
-    fun getContinueWatchingAll(userId: Int): ArrayList<HashMap<String, String>> {
+    fun getContinueWatchingAll(userId: Int, type: String): ArrayList<HashMap<String, String>> {
         val db = readableDatabase
         val list = ArrayList<HashMap<String, String>>()
 
         val cursor = db.rawQuery(
             """
         SELECT * FROM continue_watching
-        WHERE user_id = ?
+        WHERE user_id = ? AND type = ?
         ORDER BY updated_at DESC
         """,
-            arrayOf(userId.toString())
+            arrayOf(userId.toString(),  type)
         )
 
         if (cursor.moveToFirst()) {
             do {
                 val map = HashMap<String, String>()
-
                 map["item_id"] = cursor.getString(cursor.getColumnIndexOrThrow("item_id"))
                 map["type"] = cursor.getString(cursor.getColumnIndexOrThrow("type"))
                 map["title"] = cursor.getString(cursor.getColumnIndexOrThrow("title"))

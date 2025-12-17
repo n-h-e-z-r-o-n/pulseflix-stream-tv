@@ -310,7 +310,7 @@ class Watch_Anime_Page : AppCompatActivity() {
                             cardView.setOnClickListener {
                                 Log.e("ANIME_episodeId ", "episodeId: $episodeId")
 
-                                 Anime_Video_Player.playVideoExternally(this@Watch_Anime_Page, episodeId, episodes, eNumber, poster, season_id, eTitle)
+                                 Anime_Video_Player.playVideoExternally(this@Watch_Anime_Page, episodeId, episodes, eNumber, poster, season_id, eTitle, false)
 
                             }
 

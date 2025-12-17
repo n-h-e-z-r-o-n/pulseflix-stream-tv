@@ -30,11 +30,13 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
+            android:src="@raw/test3"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:visibility="gone"
             android:background="@drawable/overlay_bottom_gradient"
             android:orientation="horizontal"
             android:layout_gravity="bottom" />
@@ -42,6 +44,7 @@
         <LinearLayout
             android:layout_width="450dp"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:background="@drawable/overlay_left_gradient"
             android:orientation="horizontal"
             android:layout_gravity="start" />
@@ -52,11 +55,12 @@
         <LinearLayout
             android:layout_width="400dp"
             android:layout_height="wrap_content"
-
             android:layout_gravity="bottom"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="20dp"
-            android:orientation="vertical">
+            android:background="?attr/transparentEffect"
+            android:paddingStart="20dp"
+            android:paddingBottom="10dp"
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
 
             <TextView
                 android:id="@+id/cardTitle"
