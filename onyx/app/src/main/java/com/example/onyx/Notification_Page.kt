@@ -37,48 +37,17 @@ class Notification_Page : AppCompatActivity() {
         recyclerView = findViewById<RecyclerView>(R.id.notification_widget)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Set up callback to refresh UI when notifications are updated
-        NotificationHelper.setOnNotificationsUpdatedCallback {
-            runOnUiThread {
-                refreshNotifications()
-            }
-        }
 
-        loadNotifications()
+
     }
 
     override fun onResume() {
         super.onResume()
-        loadNotifications()
     }
     
-    private fun loadNotifications() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val notifications = NotificationHelper.loadNotifications(this@Notification_Page)
-            Log.e("NotificationHelper", "notifications ${notifications}")
 
-            withContext(Dispatchers.Main) {
-                adapter = NotificationAdapter(
-                    items = notifications.toMutableList(),
-                    layoutResId = R.layout.item_notification
-                )
-                recyclerView.adapter = adapter
-            }
-        }
-    }
     
-    private fun refreshNotifications() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val notifications = NotificationHelper.loadNotifications(this@Notification_Page)
-            Log.e("NotificationHelper", "refreshed notifications ${notifications}")
 
-            withContext(Dispatchers.Main) {
-                if (::adapter.isInitialized) {
-                    adapter.refreshItems(notifications)
-                }
-            }
-        }
-    }
 
     private fun setupBackPressedCallback() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {

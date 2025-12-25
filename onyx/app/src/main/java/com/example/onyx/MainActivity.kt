@@ -9,8 +9,10 @@ import android.util.Log
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.onyx.Database.AppDatabase
+
 
 class MainActivity : ComponentActivity() {
 
@@ -24,12 +26,19 @@ class MainActivity : ComponentActivity() {
 
         db = AppDatabase(this)
 
+        val tv = findViewById<TextView>(R.id.onyxTitle)
+
+        GlobalUtils.scrambleToText(
+            textView = tv,
+            finalText = "ONYX",
+            speed = 40
+        )
+
         val loadingImageView = findViewById<ImageView>(R.id.LoadingAnimation)
         Glide.with(this)
             .asGif()
             .load(R.raw.c)
             .into(loadingImageView)
-
 
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -40,17 +49,17 @@ class MainActivity : ComponentActivity() {
                 if (db.isSubscriptionActive()) {
                     startActivity(Intent(this, Login_Page::class.java))
                 } else {
-                    startActivity(Intent(this, PayWall::class.java))
+                    startActivity(Intent(this, Login_Page::class.java))
                 }
             }
             finish()
-        }, 500)
-
-
-
-
+        }, 10500)
 
     }
+
+
+
+
 
 }
 

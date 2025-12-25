@@ -70,6 +70,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:src="@drawable/ic_anime_logo"
+                        app:tint="?attr/FG_color"
                         tools:ignore="ContentDescription" />
 
 
@@ -78,7 +79,7 @@
                     android:gravity="center"
                     android:layout_height="wrap_content"
                     android:text="Onyx Anime"
-                    android:fontFamily="@font/j"
+                    android:fontFamily="@font/n"
                     android:textSize="23sp"
                     android:textColor="?attr/FG_color"
                     tools:ignore="HardcodedText"
@@ -99,7 +100,7 @@
                 android:focusableInTouchMode="true"
                 android:gravity="center_vertical"
                 android:nextFocusLeft="@+id/HomeAnimeBtn"
-                android:nextFocusUp="@+id/cWatchAnimeBtn"
+                android:nextFocusUp="@+id/cNotificationAnimeBtn"
                 android:nextFocusDown="@+id/DubbedAnimeBtn"
                 android:background="@drawable/background_hovor"
                 android:padding="5dp"
@@ -283,7 +284,7 @@
                 android:focusableInTouchMode="true"
                 android:gravity="center_vertical"
                 android:nextFocusUp="@+id/FavAnimeBtn"
-                android:nextFocusDown="@+id/HomeAnimeBtn"
+                android:nextFocusDown="@+id/cNotificationAnimeBtn"
                 android:nextFocusLeft="@+id/cWatchAnimeBtn"
                 android:padding="5dp"
                 android:background="@drawable/background_hovor"
@@ -309,6 +310,58 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/cNotificationAnimeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:nextFocusUp="@+id/cWatchAnimeBtn"
+                android:nextFocusDown="@+id/HomeAnimeBtn"
+                android:nextFocusLeft="@+id/cNotificationAnimeBtn"
+                android:padding="5dp"
+                android:background="@drawable/background_hovor"
+                tools:ignore="UselessParent">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cNotificationAnimeIcon"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        app:cardCornerRadius="50dp"
+                        android:layout_gravity="right"
+                        android:visibility="gone"
+                        app:cardBackgroundColor="@android:color/holo_red_light"
+                        tools:ignore="RtlHardcoded" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/ic_notification"
+                    app:tint="?attr/FG_color"
+                    android:layout_marginRight="5dp"
+                    tools:ignore="ContentDescription" />
+                </FrameLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Notification"
+                    android:fontFamily="@font/n"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText,SmallSp" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -320,10 +373,10 @@
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:scrollbars="none"
+            android:layout_marginVertical="10dp"
             android:overScrollMode="never">
 
             <LinearLayout
-
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -335,8 +388,7 @@
                 <LinearLayout
                     android:id="@+id/HomePageAnime"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     tools:ignore="UselessParent"
                     android:visibility="gone">
@@ -620,7 +672,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
 
 
@@ -641,7 +693,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:layout_marginHorizontal="40dp"
+                        android:layout_marginHorizontal="20dp"
                         android:layout_marginVertical="10dp"
                         app:cardBackgroundColor="?attr/BG_color"
                         app:cardCornerRadius="20dp"
@@ -872,6 +924,7 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/faveRecycler"
+                        android:layout_marginHorizontal="20dp"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:clipToPadding="false"
@@ -911,6 +964,62 @@
                    
                </LinearLayout>
 
+                <!-- //////////////////////// NOTIFICATION  PAGE ////////////////////////////////////// -->
+                <LinearLayout
+                    android:id="@+id/notificationPageAnime"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/notificationHeadline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="notifications"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/p"
+                            android:textSize="13sp"
+                            android:alpha="0.5"
+                            android:textColor="?attr/FG_color"
+                            tools:ignore="HardcodedText"
+                            />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"/>
+
+                        <TextView
+                            android:id="@+id/clearNotBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Clear All"
+                            android:paddingHorizontal="15dp"
+                            android:paddingVertical="2dp"
+                            android:background="@drawable/filter_button"
+                            android:layout_marginRight="20dp"/>
+
+                    </LinearLayout>
+
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/notificationRecycler"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:clipToPadding="false"
+                        android:scrollbars="none"
+                        tools:ignore="RtlSymmetry"/>
+
+                </LinearLayout>
+
 
             </LinearLayout>
         </ScrollView>
@@ -923,9 +1032,9 @@
 
 
 
-    <include layout="@layout/laod_animation"/>
+    <include layout="@layout/laod_animation" />
     </androidx.cardview.widget.CardView>
 
-    <include layout="@layout/side_bar"/>
+    <include layout="@layout/side_bar" android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

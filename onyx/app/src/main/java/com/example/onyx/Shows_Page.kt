@@ -38,7 +38,10 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import com.bumptech.glide.request.target.Target
+import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
 import java.io.IOException
+import java.util.Calendar
 
 class Shows_Page : AppCompatActivity() {
     private var currentMoviePage = 1
@@ -81,9 +84,16 @@ class Shows_Page : AppCompatActivity() {
     private lateinit var searchRecyclerView : RecyclerView
     private lateinit var fliterRecyclerView : RecyclerView
 
+    private lateinit var faveRecyclerView: RecyclerView
+    private lateinit var faveAdapter: FavAdapter
+
+    private lateinit var notificationAdapter: NotificationAdapter
+    private lateinit var  notificationRecyclerView: RecyclerView
 
 
-
+    private lateinit var db: AppDatabase
+    private lateinit var  sm: SessionManger
+    private var userId: Int = -1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,140 +103,249 @@ class Shows_Page : AppCompatActivity() {
         setContentView(R.layout.activity_shows_page)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         LoadingAnimation.setup(this, R.raw.b)
-        LoadingAnimation.show(this)
+        //LoadingAnimation.show(this)
         NavAction.setupSidebar(this)
 
+        db = AppDatabase(this)         // Initialize database
+        sm = SessionManger(this)
+        userId = sm.getUserId()
+
         ////////////////////////////////////////////////////////////////////////////////////////////
-        moviesBtn = findViewById(R.id.MoviesButtonLayout)
-        tvBtn = findViewById(R.id.TvButtonLayout)
-        SearchBtn  =  findViewById(R.id.SearchButtonLayout)
-        filterBtn = findViewById(R.id.FilterButtonLayout)
+
+        val HomeBtn = findViewById<LinearLayout>(R.id.HomeBtn)
+        val MoviesBtn = findViewById<LinearLayout>(R.id.MoviesBtn)
+        val seriesBtn = findViewById<LinearLayout>(R.id.seriesBtn)
+        val SearchBtn = findViewById<LinearLayout>(R.id.SearchBtn)
+        val FilterBtn = findViewById<LinearLayout>(R.id.FilterBtn)
+        val FavBtn = findViewById<LinearLayout>(R.id.FavBtn)
+        val cWatchBtn = findViewById<LinearLayout>(R.id.cWatchBtn)
+        val cNotificationBtn = findViewById<LinearLayout>(R.id.cNotificationBtn)
 
 
+        val HomePage = findViewById<LinearLayout>(R.id.HomePage)
+        val moviePage = findViewById<LinearLayout>(R.id.MoviePage)
+        val seriesPage = findViewById<LinearLayout>(R.id.SeriesPage)
+        val searchPage = findViewById<LinearLayout>(R.id.searchPage)
+        val filterPage = findViewById<LinearLayout>(R.id.FilterPage)
+        val FavePage = findViewById<LinearLayout>(R.id.FavePage)
+        val cWatchPage = findViewById<LinearLayout>(R.id.cWatchPage)
+        val cNotificationPage = findViewById<LinearLayout>(R.id.cNotificationPage)
 
 
-        mvBtnText = findViewById(R.id.MoviesButtonText)
-        tvBtnText = findViewById(R.id.TvButtonText)
+        HomeBtn.setOnClickListener {
+            HomePage.visibility = View.VISIBLE
+            moviePage.visibility = View.GONE
+            seriesPage.visibility = View.GONE
+            searchPage.visibility = View.GONE
+            filterPage.visibility = View.GONE
+            FavePage.visibility = View.GONE
+            cWatchPage.visibility = View.GONE
+            cNotificationPage.visibility = View.GONE
 
-        searchContainer  =  findViewById(R.id.searchContainerHome)
-        searchContainerImg = findViewById(R.id.SearchButtonImg)
 
-        fliterContainer  =  findViewById(R.id.FilterContainer)
-        filterContainerImg= findViewById(R.id.FilterButtonImg)
-
-
-
-        moviesBtn.setOnClickListener {
-            showMovies()
+            HomeBtn.isSelected = true
+            MoviesBtn.isSelected = false
+            seriesBtn.isSelected = false
+            SearchBtn.isSelected = false
+            FilterBtn.isSelected = false
+            FavBtn.isSelected = false
+            cWatchBtn.isSelected = false
+            cNotificationBtn.isSelected = false
         }
-        tvBtn.setOnClickListener {
-            showTv()
+        HomeBtn.performClick()
+
+
+        MoviesBtn.setOnClickListener {
+            HomePage.visibility = View.GONE
+            moviePage.visibility = View.VISIBLE
+            seriesPage.visibility = View.GONE
+            searchPage.visibility = View.GONE
+            filterPage.visibility = View.GONE
+            FavePage.visibility = View.GONE
+            cWatchPage.visibility = View.GONE
+            cNotificationPage.visibility = View.GONE
+
+
+            HomeBtn.isSelected = false
+            MoviesBtn.isSelected = true
+            seriesBtn.isSelected = false
+            SearchBtn.isSelected = false
+            FilterBtn.isSelected = false
+            FavBtn.isSelected = false
+            cWatchBtn.isSelected = false
+            cNotificationBtn.isSelected = false
         }
+
+        seriesBtn.setOnClickListener {
+            HomePage.visibility = View.GONE
+            moviePage.visibility = View.GONE
+            seriesPage.visibility = View.VISIBLE
+            searchPage.visibility = View.GONE
+            filterPage.visibility = View.GONE
+            FavePage.visibility = View.GONE
+            cWatchPage.visibility = View.GONE
+            cNotificationPage.visibility = View.GONE
+
+            HomeBtn.isSelected = false
+            MoviesBtn.isSelected = false
+            seriesBtn.isSelected = true
+            SearchBtn.isSelected = false
+            FilterBtn.isSelected = false
+            FavBtn.isSelected = false
+            cWatchBtn.isSelected = false
+            cNotificationBtn.isSelected = false
+        }
+
         SearchBtn.setOnClickListener {
-            showSearch()
+            HomePage.visibility = View.GONE
+            moviePage.visibility = View.GONE
+            seriesPage.visibility = View.GONE
+            searchPage.visibility = View.VISIBLE
+            filterPage.visibility = View.GONE
+            FavePage.visibility = View.GONE
+            cWatchPage.visibility = View.GONE
+            cNotificationPage.visibility = View.GONE
+
+            HomeBtn.isSelected = false
+            MoviesBtn.isSelected = false
+            seriesBtn.isSelected = false
+            SearchBtn.isSelected = true
+            FilterBtn.isSelected = false
+            FavBtn.isSelected = false
+            cWatchBtn.isSelected = false
+            cNotificationBtn.isSelected = false
         }
-        filterBtn.setOnClickListener {
-            showFilter()
+
+
+        FilterBtn.setOnClickListener {
+            HomePage.visibility = View.GONE
+            moviePage.visibility = View.GONE
+            seriesPage.visibility = View.GONE
+            searchPage.visibility = View.GONE
+            filterPage.visibility = View.VISIBLE
+            FavePage.visibility = View.GONE
+            cWatchPage.visibility = View.GONE
+            cNotificationPage.visibility = View.GONE
+
+            HomeBtn.isSelected = false
+            MoviesBtn.isSelected = false
+            seriesBtn.isSelected = false
+            SearchBtn.isSelected = false
+            FilterBtn.isSelected = true
+            FavBtn.isSelected = false
+            cWatchBtn.isSelected = false
+            cNotificationBtn.isSelected = false
+        }
+
+
+        FavBtn.setOnClickListener {
+            HomePage.visibility = View.GONE
+            moviePage.visibility = View.GONE
+            seriesPage.visibility = View.GONE
+            searchPage.visibility = View.GONE
+            filterPage.visibility = View.GONE
+            FavePage.visibility = View.VISIBLE
+            cWatchPage.visibility = View.GONE
+            cNotificationPage.visibility = View.GONE
+
+            HomeBtn.isSelected = false
+            MoviesBtn.isSelected = false
+            seriesBtn.isSelected = false
+            SearchBtn.isSelected = false
+            FilterBtn.isSelected = false
+            FavBtn.isSelected = true
+            cWatchBtn.isSelected = false
+            cNotificationBtn.isSelected = false
+        }
+
+        cWatchBtn.setOnClickListener {
+            HomePage.visibility = View.GONE
+            moviePage.visibility = View.GONE
+            seriesPage.visibility = View.GONE
+            searchPage.visibility = View.GONE
+            filterPage.visibility = View.GONE
+            FavePage.visibility = View.GONE
+            cWatchPage.visibility = View.VISIBLE
+            cNotificationPage.visibility = View.GONE
+
+            HomeBtn.isSelected = false
+            MoviesBtn.isSelected = false
+            seriesBtn.isSelected = false
+            SearchBtn.isSelected = false
+            FilterBtn.isSelected = false
+            FavBtn.isSelected = false
+            cWatchBtn.isSelected = true
+            cNotificationBtn.isSelected = false
+        }
+
+        cNotificationBtn.setOnClickListener {
+            HomePage.visibility = View.GONE
+            moviePage.visibility = View.GONE
+            seriesPage.visibility = View.GONE
+            searchPage.visibility = View.GONE
+            filterPage.visibility = View.GONE
+            FavePage.visibility = View.GONE
+            cWatchPage.visibility = View.GONE
+            cNotificationPage.visibility = View.VISIBLE
+
+            HomeBtn.isSelected = false
+            MoviesBtn.isSelected = false
+            seriesBtn.isSelected = false
+            SearchBtn.isSelected = false
+            FilterBtn.isSelected = false
+            FavBtn.isSelected = false
+            cWatchBtn.isSelected = false
+            cNotificationBtn.isSelected = true
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         setupRecyclerViews()
-        showMovies()
+        HomeData()
+        categoryShow()
+
         fetchMovies()
         fetchTvShows()
         filter()
+        tvFavoritesList()
+        notificationS()
     }
 
-    private fun showMovies() {
-        movieRecyclerView.visibility = View.VISIBLE
-        tvRecyclerView.visibility = View.GONE
-        searchContainer.visibility = View.GONE
-        fliterContainer.visibility = View.GONE
+    override fun onResume() {
+        super.onResume()
+        /*
+        if (this::watchAdapter.isInitialized) {
+            watchAdapter.clearItems()
+        }
+          */
+
+        if(this::notificationAdapter.isInitialized){
+            notificationAdapter.clearItems()
+        }
 
 
-        moviesBtn.isSelected = true
-        tvBtn.isSelected = false
-        SearchBtn.isSelected = false
 
-        val fgColor = getThemeColor(R.attr.FG_color)
-        val accentColor = getThemeColor(R.attr.AccentColor)
+        if (this::faveAdapter.isInitialized) {
+            faveAdapter.clearItems()
+        }
 
-        tvBtnText.setTextColor(fgColor)
-        mvBtnText.setTextColor(accentColor )
-        searchContainerImg.setColorFilter(fgColor)
-        filterContainerImg.setColorFilter(fgColor)
 
+        notificationS()
+        //tvFavoritesList()
     }
 
-    private fun showTv() {
-        movieRecyclerView.visibility = View.GONE
-        tvRecyclerView.visibility = View.VISIBLE
-        searchContainer.visibility = View.GONE
-        fliterContainer.visibility = View.GONE
-
-
-
-
-        val fgColor = getThemeColor(R.attr.FG_color)
-        val accentColor = getThemeColor(R.attr.AccentColor)
-
-        tvBtnText.setTextColor(accentColor )
-        mvBtnText.setTextColor(fgColor)
-        searchContainerImg.setColorFilter(fgColor)
-        filterContainerImg.setColorFilter(fgColor)
-
-    }
-
-    private fun showFilter() {
-        movieRecyclerView.visibility = View.GONE
-        tvRecyclerView.visibility = View.GONE
-        searchContainer.visibility = View.GONE
-        fliterContainer.visibility = View.VISIBLE
-
-
-
-        val fgColor = getThemeColor(R.attr.FG_color)
-        val accentColor = getThemeColor(R.attr.AccentColor)
-
-        tvBtnText.setTextColor(fgColor )
-        mvBtnText.setTextColor(fgColor)
-        searchContainerImg.setColorFilter(fgColor)
-        filterContainerImg.setColorFilter(accentColor)
-
-    }
-    private fun showSearch() {
-        movieRecyclerView.visibility = View.GONE
-        tvRecyclerView.visibility = View.GONE
-        searchContainer.visibility = View.VISIBLE
-        fliterContainer.visibility = View.GONE
-
-
-
-        val fgColor = getThemeColor(R.attr.FG_color)
-        val accentColor = getThemeColor(R.attr.AccentColor)
-
-        tvBtnText.setTextColor(fgColor)
-        mvBtnText.setTextColor(fgColor)
-        searchContainerImg.setColorFilter(accentColor)
-        filterContainerImg.setColorFilter(fgColor)
-
-    }
-    private fun getThemeColor(attr: Int): Int {
-        val typedValue = TypedValue()
-        theme.resolveAttribute(attr, typedValue, true)
-        return typedValue.data
-    }
 
     private fun setupRecyclerViews() {
 
-        val Spacing = (16 * resources.displayMetrics.density).toInt()
-        val item_grid2_width = 289
+        val Spacing = (10 * resources.displayMetrics.density).toInt()
+        val item_grid2_width = 255
+        val gapUsed = 160
 
 
-        //  Movies
+        //  Movies ---------------------------------------------------------------------------------
         movieRecyclerView = findViewById(R.id.MoviesRecyclerView)
-        movieRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, item_grid2_width))
+        movieRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page,  GlobalUtils.calculateSpanCountV2(this, item_grid2_width, gapUsed ))
         movieRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
         movieAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2, )
         movieRecyclerView.adapter = movieAdapter
@@ -239,9 +358,9 @@ class Shows_Page : AppCompatActivity() {
         }
 
 
-        //  TV Shows
+        //  TV Shows -------------------------------------------------------------------------------
         tvRecyclerView = findViewById(R.id.TVsRecyclerView)
-        tvRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, item_grid2_width) )
+        tvRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this, item_grid2_width, gapUsed ) )
         tvRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
         tvAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2)
         tvRecyclerView.adapter = tvAdapter
@@ -253,16 +372,16 @@ class Shows_Page : AppCompatActivity() {
             hidePopup()
         }
 
-        //  Search
+        //  Search  --------------------------------------------------------------------------------
         searchAdapter = GridAdapter2(mutableListOf(), R.layout.item_grid)
-        searchRecyclerView = findViewById<RecyclerView>(R.id.SearchResults)
-        searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this, 140,320 ))
+        searchRecyclerView = findViewById(R.id.SearchResults)
+        searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this, item_grid2_width,gapUsed ))
 
         searchRecyclerView.adapter = searchAdapter
         searchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
         setupSearchUi()
 
-        // Filter
+        // Filter  ---------------------------------------------------------------------------------
         filterAdapter = FilterAdapter(mutableListOf(), R.layout.item_filter)
         filterAdapter.onItemFocused = { view, item ->
             showPopupBeside(view, item.posterUlr, 240)
@@ -271,9 +390,30 @@ class Shows_Page : AppCompatActivity() {
             hidePopup()
         }
         fliterRecyclerView = findViewById<RecyclerView>(R.id.filterResults)
-        fliterRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCount(this, 170))
+        fliterRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this, 140, gapUsed))
         fliterRecyclerView.adapter = filterAdapter
         fliterRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
+
+        //------------------------------------------------------------------------------------------
+
+        faveRecyclerView = findViewById(R.id.faveRecycler)
+        faveRecyclerView.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        faveRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
+
+        //------------------------------------------------------------------------------------------
+
+        notificationRecyclerView = findViewById<RecyclerView>(R.id.notificationRecycler)
+        notificationRecyclerView.layoutManager = LinearLayoutManager(this)
+        val clearBtn = findViewById<TextView>(R.id.clearNotBtn)
+
+        clearBtn.setOnClickListener {
+            db.clearAllTvNotifications(userId)
+            notificationAdapter.clearItems()
+        }
 
 
 
@@ -340,6 +480,316 @@ class Shows_Page : AppCompatActivity() {
 
     private fun Int.dp(context: Context): Int =
         (this * context.resources.displayMetrics.density).toInt()
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private fun HomeData() {
+
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels     // in pixels
+        val screenHeight = displayMetrics.heightPixels    // in pixels
+
+        val recyclerView = findViewById<RecyclerView>(R.id.Slider_widget)
+        val params = recyclerView.layoutParams
+        params.height = (screenHeight * 0.70).toInt()
+        recyclerView.layoutParams = params
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+            repeat(10) { attempt ->
+                try {
+                    val url = "https://api.themoviedb.org/3/discover/movie?include_adult=true"
+                    val connection = URL(url).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("accept", "application/json")
+                    connection.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = org.json.JSONObject(response)
+                    val moviesArray = jsonObject.getJSONArray("results")
+
+
+                    val url2 = "https://api.themoviedb.org/3/discover/tv?include_adult=true"
+                    val connection2 = URL(url2).openConnection() as HttpURLConnection
+                    connection2.requestMethod = "GET"
+                    connection2.setRequestProperty("accept", "application/json")
+                    connection2.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response2 = connection2.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject2 = org.json.JSONObject(response2)
+                    val moviesArray2 = jsonObject2.getJSONArray("results")
+
+
+                    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+                    val url3 =
+                        "https://api.themoviedb.org/3/trending/all/day?primary_release_year=$currentYear"
+                    val connection3 = URL(url3).openConnection() as HttpURLConnection
+                    connection3.requestMethod = "GET"
+                    connection3.setRequestProperty("accept", "application/json")
+                    connection3.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response3 = connection3.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject3 = org.json.JSONObject(response3)
+                    val moviesArray3 = jsonObject3.getJSONArray("results")
+
+                    Log.e("DEBUG_MAIN_Slider raw", moviesArray3.toString())
+
+
+
+                    var movies = mutableListOf<SliderItem>()
+                    for (i in 0 until moviesArray.length()) {
+
+                        val item = moviesArray.getJSONObject(i)
+
+                        val title = item.getString("title")
+                        //val backdrop_path = "https://image.tmdb.org/t/p/w1280" + item.getString("backdrop_path")
+
+                        val backdrop_path =
+                            if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
+                                "https://image.tmdb.org/t/p/w1280${item.getString("backdrop_path")}"
+                            } else if (item.has("poster_path") && !item.isNull("poster_path")) {
+                                "https://image.tmdb.org/t/p/w780${item.getString("poster_path")}"
+                            } else {
+                                ""
+                            }
+
+                        val PG = if (item.optString("adult") == "true") "PG-18 +" else "PG-13"
+                        if (PG == "PG-18 +") {
+                            continue
+                        }
+
+                        val id = item.getString("id")
+                        val type = "movie"
+                        val overview = item.getString("overview")
+                        val release_date = item.getString("release_date").substring(0, 4)
+                        val vote_average = item.getString("vote_average").substring(0, 3)
+                        val poster_path = item.getString("poster_path")
+                        val genreIdsJson = item.getJSONArray("genre_ids")
+                        val genreIds: List<Int> = List(genreIdsJson.length()) { idx ->
+                            genreIdsJson.getInt(idx)
+                        }
+
+                        movies.add(
+                            SliderItem(
+                                title,
+                                backdrop_path,
+                                id,
+                                type,
+                                overview,
+                                release_date,
+                                vote_average,
+                                poster_path,
+                                genreIds,
+                                PG
+                            )
+
+                        )
+                    }
+
+
+                    for (i in 0 until moviesArray2.length()) {
+
+                        val item = moviesArray2.getJSONObject(i)
+                        val title = item.getString("original_name")
+
+                        val backdrop_path =
+                            if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
+                                "https://image.tmdb.org/t/p/w1280${item.getString("backdrop_path")}"
+                            } else if (item.has("poster_path") && !item.isNull("poster_path")) {
+                                "https://image.tmdb.org/t/p/w780${item.getString("poster_path")}"
+                            } else {
+                                ""
+                            }
+
+                        val PG = if (item.optString("adult") == "true") "PG-18 +" else "PG-13"
+
+                        val id = item.getString("id")
+                        val type = "tv"
+                        val overview = item.getString("overview")
+                        val release_date = item.getString("first_air_date").substring(0, 4)
+                        val vote_average = item.getString("vote_average").substring(0, 3)
+                        val poster_path = item.getString("poster_path")
+                        val genreIdsJson = item.getJSONArray("genre_ids")
+                        val genreIds: List<Int> = List(genreIdsJson.length()) { idx ->
+                            genreIdsJson.getInt(idx)
+                        }
+
+                        movies.add(
+                            SliderItem(
+                                title,
+                                backdrop_path,
+                                id,
+                                type,
+                                overview,
+                                release_date,
+                                vote_average,
+                                poster_path,
+                                genreIds,
+                                PG
+                            )
+                        )
+                    }
+
+                    for (i in 0 until moviesArray3.length()) {
+                        val item = moviesArray3.getJSONObject(i)
+                        val title = when {
+                            item.has("original_name") && !item.isNull("original_name") -> item.getString(
+                                "original_name"
+                            )
+
+                            item.has("original_title") && !item.isNull("original_title") -> item.getString(
+                                "original_title"
+                            )
+
+                            item.has("title") && !item.isNull("title") -> item.getString("title")
+                            else -> "Untitled"
+                        }
+
+                        val type = item.getString("media_type")
+                        if (type != "movie" && type != "tv") {
+                            continue   // skip this loop iteration
+                        }
+
+                        val backdrop_path =
+                            if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
+                                "https://image.tmdb.org/t/p/w1280${item.getString("backdrop_path")}"
+                            } else if (item.has("poster_path") && !item.isNull("poster_path")) {
+                                "https://image.tmdb.org/t/p/w780${item.getString("poster_path")}"
+                            } else {
+                                ""
+                            }
+
+                        val PG = if (item.optString("adult") == "true") "PG-18 +" else "PG-13"
+                        val id = item.getString("id")
+                        val overview = item.getString("overview")
+                        val release_date = try {
+                            item.getString("release_date").substring(0, 4)
+                        } catch (e: Exception) {
+                            item.getString("first_air_date").substring(0, 4)
+                        }
+                        val vote_average = item.getString("vote_average").substring(0, 3)
+                        val poster_path = item.getString("poster_path")
+                        val genreIdsJson = item.getJSONArray("genre_ids")
+                        val genreIds: List<Int> = List(genreIdsJson.length()) { idx ->
+                            genreIdsJson.getInt(idx)
+                        }
+
+                        movies.add(
+                            SliderItem(
+                                title,
+                                backdrop_path,
+                                id,
+                                type,
+                                overview,
+                                release_date,
+                                vote_average,
+                                poster_path,
+                                genreIds,
+                                PG
+                            )
+                        )
+
+                    }
+
+
+                    //movies.shuffle()
+                    movies = movies.distinctBy { it.imdbCode }.toMutableList()
+
+                    withContext(Dispatchers.Main) {
+                        val recyclerView = findViewById<RecyclerView>(R.id.Slider_widget)
+                        val adapter = CardSwiper(movies, R.layout.card_layout)
+
+                        val layoutManager = LinearLayoutManager(
+                            this@Shows_Page,
+                            LinearLayoutManager.HORIZONTAL, // 👈 makes it horizontal
+                            false
+                        )
+                        recyclerView.layoutManager = layoutManager
+                        recyclerView.adapter = adapter
+                        //LoadingAnimation.hide(this@Shows_Page)
+                    }
+
+                    return@launch
+                } catch (e: IOException) {
+                    withContext(Dispatchers.Main) {
+                        Log.e("DEBUG_MAINSliderPage", "Network error ", e)
+                        //LoadingAnimation.setup(this@Shows_Page, R.raw.error)
+                        //LoadingAnimation.show(this@Shows_Page)
+                    }
+                    delay(30_000)
+                } catch (e: Exception) {
+                    delay(20_000)
+                    Log.e("DEBUG_MAINSliderPage", "Error fetching data", e)
+                }
+            }
+        }
+    }
+
+
+    private fun categoryShow() {
+        val company_show = mapOf(
+            "Marvel Studios" to Pair(420, "https://image.tmdb.org/t/p/w1280/hUzeosd33nzE5MCNsZxCGEKTXaQ.png"),
+            "Marvel Animation" to Pair(13252, "https://image.tmdb.org/t/p/w1280/1gKwYyTDNhumwBKUlKqoxXRUdpC.png"),
+            "DC Films" to Pair(128064, "https://image.tmdb.org/t/p/w1280/13F3Jf7EFAcREU0xzZqJnVnyGXu.png"),
+            "Walt Disney Pictures" to Pair(2, "https://image.tmdb.org/t/p/w1280/wdrCwmRnLFJhEoH8GSfymY85KHT.png"),
+            "Walt Disney Television" to Pair(670, "https://image.tmdb.org/t/p/w1280/rRGi5UkwvdOPSfr5Xf42RZUsYgd.png"),
+            "Warner Bros. Pictures" to Pair(174, "https://image.tmdb.org/t/p/w1280/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png"),
+            "Universal Pictures" to Pair(33, "https://image.tmdb.org/t/p/w1280/3wwjVpkZtnog6lSKzWDjvw2Yi00.png"),
+            "Paramount Pictures" to Pair(4, "https://image.tmdb.org/t/p/w1280/gz66EfNoYPqHTYI4q9UEN4CbHRc.png"),
+            "Sony Pictures Entertainment" to Pair(34, "https://image.tmdb.org/t/p/w1280/mtp1fvZbe4H991Ka1HOORl572VH.png"),
+            "Lionsgate " to Pair(1632, "https://image.tmdb.org/t/p/w1280/cisLn1YAUuptXVBa0xjq7ST9cH0.png"),
+            "DreamWorks Animation " to Pair(521, "https://image.tmdb.org/t/p/w1280/3BPX5VGBov8SDqTV7wC1L1xShAS.png"),
+            "Netflix Animation " to Pair(171251, "https://image.tmdb.org/t/p/w1280/AqUAfMC270bGGK09Nh3mycwT1hY.png"),
+            "Netflix" to Pair(178464, "https://image.tmdb.org/t/p/w1280/tyHnxjQJLH6h4iDQKhN5iqebWmX.png"),
+            "Pixar" to Pair(3, "https://image.tmdb.org/t/p/w1280/1TjvGVDMYsj6JBxOAkUHpPEwLf7.png"),
+            "Illumination" to Pair(6704, "https://image.tmdb.org/t/p/w1280/fOG2oY4m1YuYTQh4bMqqZkmgOAI.png"),
+            "Blue Sky Studios" to Pair(9383, "https://image.tmdb.org/t/p/w1280/ppeMh4iZJQUMm1nAjRALeNhWDfU.png"),
+            "Laika" to Pair(11537, "https://image.tmdb.org/t/p/w1280/AgCkAk8EpUG9fTmK6mWcaJA2Zwh.png"),
+            "Amazon Studios" to Pair(20580, "https://image.tmdb.org/t/p/w1280/oRR9EXVoKP9szDkVKlze5HVJS7g.png"),
+            "HBO" to Pair(3268, "https://image.tmdb.org/t/p/w1280/tuomPhY2UtuPTqqFnKMVHvSb724.png"),
+            "Apple" to Pair(14801, "https://image.tmdb.org/t/p/w1280/bnlD5KJ5oSzBYbEpDkwi6w8SoBO.png")
+        )
+
+        // Convert map to list of categoryItem objects
+        val categoryItems = mutableListOf<categoryItem>()
+        company_show.forEach { (name, pair) ->
+            categoryItems.add(
+                categoryItem(
+                    cCode = pair.first.toString(),
+                    cImg = pair.second,
+                    cName = name
+                )
+            )
+        }
+
+        // Setup RecyclerView
+        val recyclerView = findViewById<RecyclerView>(R.id.CategoryRecyclerView)
+        val adapter = CategoryAdapter(categoryItems, R.layout.item_category)
+
+        val tvSpacing = (10 * resources.displayMetrics.density).toInt()
+        recyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+
+        val layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     private fun fetchMovies() {
@@ -350,40 +800,29 @@ class Shows_Page : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             repeat(3) { attempt ->
                 try {
-                    val url = "https://vidsrc.xyz/movies/latest/page-$currentMoviePage.json"
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val urlM = "https://api.themoviedb.org/3/discover/movie?include_video=true&language=en-US&page=$currentMoviePage&sort_by=popularity.desc"
 
-                    val jsonObject = JSONObject(response)
-                    val moviesArray = jsonObject.getJSONArray("result")
 
-                    val movieIds = mutableSetOf<String>()
-                    for (i in 0 until moviesArray.length()) {
-                        val item = moviesArray.getJSONObject(i)
-                        val tmdbId = item.optString("tmdb_id")
-                        if (tmdbId.isNotEmpty() && tmdbId != "null") {
-                            movieIds.add(tmdbId)
-                        }
-                    }
+                    val connection2 = URL(urlM).openConnection() as HttpURLConnection
+                    connection2.requestMethod = "GET"
+                    connection2.setRequestProperty("accept", "application/json")
+                    connection2.setRequestProperty(
+                    "Authorization",
+                    "Bearer ${BuildConfig.TM_K}"
+                    )
 
-                    Log.e("DEBUG_MOVIES_IDS", movieIds.joinToString())
+                    val response2 = connection2.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject2 = org.json.JSONObject(response2)
+                    val dataFetched = jsonObject2.getJSONArray("results")
+
+
 
                     val movies = mutableListOf<MovieItemOne>()
 
-                    for (id in movieIds) {
-                        val detailsUrl = "https://api.themoviedb.org/3/movie/$id"
-                        val detailsConn = URL(detailsUrl).openConnection() as HttpURLConnection
-                        detailsConn.requestMethod = "GET"
-                        detailsConn.setRequestProperty("accept", "application/json")
-                        detailsConn.setRequestProperty(
-                            "Authorization",
-                            "Bearer ${BuildConfig.TM_K}"
-                        )
+                    for (i in 0 until dataFetched.length()) {
+                        val detailsJson = dataFetched.getJSONObject(i)
 
-                        val detailsResponse = detailsConn.inputStream.bufferedReader().use { it.readText() }
-                        val detailsJson = JSONObject(detailsResponse)
-
+                        val id = detailsJson.optString("id", "Unknown")
                         val title = detailsJson.optString("title", "Unknown")
                         val year = detailsJson.optString("release_date", "")
                         val runtime = detailsJson.optString("runtime", "0")
@@ -414,7 +853,7 @@ class Shows_Page : AppCompatActivity() {
                                 imdbCode = id,
                                 type = "movie",
                                 year = year,
-                                rating = "☆${String.format("%.1f", rating)}",
+                                rating = "${String.format("%.1f", rating)}imdb",
                                 runtime = "⏱$runtime min"
                             )
                         )
@@ -463,50 +902,25 @@ class Shows_Page : AppCompatActivity() {
 
             repeat(5) { attempt ->
                 try {
-                    val url = "https://vidsrc.xyz/episodes/latest/page-$currentTvPage.json"
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject = JSONObject(response)
-                    val moviesArray = jsonObject.getJSONArray("result")
+                    val urlM = "https://api.themoviedb.org/3/discover/tv?include_video=true&language=en-US&page=$currentTvPage&sort_by=popularity.desc"
 
-                    val finalArray = JSONArray()
+                    val connection2 = URL(urlM).openConnection() as HttpURLConnection
+                    connection2.requestMethod = "GET"
+                    connection2.setRequestProperty("accept", "application/json")
+                    connection2.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
 
-                    for (i in 0 until moviesArray.length()) {
-                        finalArray.put(moviesArray.getJSONObject(i))
-                    }
-
-                    Log.e("DEBUG_TAG_TvShows 1", finalArray.toString())
-
+                    val response2 = connection2.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject2 = org.json.JSONObject(response2)
+                    val dataFetched = jsonObject2.getJSONArray("results")
 
                     val movies = mutableListOf<MovieItemOne>()
-                    val movies_temp = mutableListOf<String>()
 
-                    for (i in 0 until finalArray.length()) {
-                        val item = finalArray.getJSONObject(i)
-                        val imdb_code = item.getString("tmdb_id")
-                        if (imdb_code == "null" || imdb_code.isEmpty()) continue
-                        movies_temp.add(imdb_code)
-                    }
-                    val uniqueMovies = movies_temp.toSet().toList()
+                    for (i in 0 until dataFetched.length()) {
+                        val jsonObject = dataFetched.getJSONObject(i)
 
-                    Log.e("DEBUG_TAG_TvShows 2", movies_temp.toString())
-
-
-                    for (i in 0 until uniqueMovies.size) {
-                        val imdb_code = uniqueMovies[i]
-                        val url = "https://api.themoviedb.org/3/tv/$imdb_code?"
-                        val connection = URL(url).openConnection() as HttpURLConnection
-                        connection.requestMethod = "GET"
-                        connection.setRequestProperty("accept", "application/json")
-                        connection.setRequestProperty(
-                            "Authorization",
-                            "Bearer ${BuildConfig.TM_K}"
-                        )
-                        val response = connection.inputStream.bufferedReader().use { it.readText() }
-                        val jsonObject = org.json.JSONObject(response)
-
-                        Log.e("DEBUG_TAG_TvShows 3", jsonObject.toString())
 
                         val title = jsonObject.getString("name")
                         val numberOfSeasons = try {
@@ -921,8 +1335,6 @@ class Shows_Page : AppCompatActivity() {
                         movieList.add(mvData.getJSONObject(i))
                     }
 
-
-
                     Log.e("Filter Results mvData", mvData.toString())
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -998,12 +1410,8 @@ class Shows_Page : AppCompatActivity() {
 
 
                     }
-
                 }
-
             }
-
-
         }
         fun loadMoreFilter() {
             if (isLoadingFliter) return // Prevent multiple rapid clicks
@@ -1124,6 +1532,128 @@ class Shows_Page : AppCompatActivity() {
 
         builder.setNegativeButton("Cancel", null)
         builder.show()
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private fun tvFavoritesList(){
+
+        val FavBackdrop: ImageView = findViewById(R.id.FavBackdrop)
+        val FavTitle: TextView = findViewById(R.id.FavTitle)
+        val FavGenre: TextView = findViewById(R.id.FavGenre)
+        val FavType: TextView = findViewById(R.id.FavType)
+        val FavRating: TextView = findViewById(R.id.FavRating)
+        val FavYear: TextView = findViewById(R.id.FavYear)
+        val FavOverview: TextView = findViewById(R.id.FavOverview)
+        val RemoveFaveItem: LinearLayout = findViewById(R.id.RemoveFaveItem)
+
+
+        val showFavData = db.getFavoriteShows(userId)
+
+        Log.e("show_Notification", "data: ${showFavData.toString()}")
+
+        val items = mutableListOf<FavItem>()
+
+        for (anime in showFavData) {
+
+            Log.d("Fav_anime", "show_id: ${anime["show_id"]}")
+            Log.d("Fav_anime", "title: ${anime["title"]}")
+            Log.d("Fav_anime", "poster: ${anime["poster"]}")
+            Log.d("Fav_anime", "type: ${anime["type"]}")
+            Log.d("Fav_anime", "noOfSeason: ${anime["noOfSeason"]}")
+            Log.d("Fav_anime", "lastSeason: ${anime["lastSeason"]}")
+            Log.d("Fav_anime", "lastEpisode: ${anime["lastEpisode"]}")
+
+            val genres = anime["genres"] ?: ""
+            items.add(
+                FavItem(
+                    title = anime["title"] ?: "",
+                    posterUrl = anime["poster"] ?: "",
+                    backdropUrl = anime["backdrop"] ?: "",
+                    releaseDate = anime["year"] ?: "",
+                    runtime = anime["runtime"] ?: "",
+                    overview = anime["overview"] ?: "",
+                    voteAverage = anime["rating"] ?: "",
+                    genres = genres,
+                    production = "",
+                    parentalGuide = anime["pg"] ?: "",
+                    imdbCode = anime["show_id"] ?: "",
+                    showType = anime["type"]?: ""
+                )
+            )
+        }
+
+        faveAdapter = FavAdapter(
+            items,
+            R.layout.square_card,
+            FavBackdrop,
+            FavTitle,
+            FavGenre,
+            FavType,
+            FavRating,
+            FavYear,
+            FavOverview,
+            RemoveFaveItem)
+
+        faveRecyclerView.adapter = faveAdapter
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private fun notificationS() {
+
+        val fetchedNot = NotificationHelper.getTvNotifications(this@Shows_Page)
+        Log.d("Fav_tv", "fetchedNot: $fetchedNot")
+        if(fetchedNot){
+            findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.VISIBLE
+        }
+
+
+
+
+        val dnot = db.getAllTvNotifications(userId)
+        val notifications = mutableListOf<NotificationItem>()
+
+        findViewById<TextView>(R.id.notificationHeadline).text = "notifications (${dnot.size})"
+
+
+
+        for (item in dnot) {
+
+            Log.d("Not_tv", "notificationId: ${item["id"]}")
+            Log.d("Not_tv", "anime_id: ${item["anime_id"]}")
+            Log.d("Not_tv", "title: ${item["title"]}")
+            Log.d("Not_tv", "poster: ${item["poster"]}")
+            Log.d("Not_tv", "noOfSeason: ${item["noOfSeason"]}")
+            Log.d("Not_tv", "lastSeason: ${item["lastSeason"]}")
+            Log.d("Not_tv", "lastEpisode: ${item["lastEpisode"]}")
+            Log.d("Not_tv", "notify_at: ${item["notify_at"]}\n\n\n")
+
+
+            val itemData = NotificationItem(
+                notificationId = item["id"].toString(),      // ✅ PASS ID
+                imdbCode = item["tv_id"].toString(),
+                title = item["title"].toString(),
+                imageUrl = item["poster"],
+                info = "Season ${item["lastSeason"]} - Episode ${item["lastEpisode"]}",
+                type = "tv",
+                newSeason = item["lastSeason"].toString(),
+                newEpisode = item["lastEpisode"].toString(),
+                time =  item["notify_at"].toString()
+            )
+            notifications.add(itemData)
+        }
+
+
+        notificationAdapter = NotificationAdapter(
+            items = notifications.toMutableList(),
+            layoutResId = R.layout.item_notification
+        )
+        notificationRecyclerView.adapter = notificationAdapter
+
     }
 
 

@@ -29,17 +29,19 @@ import org.json.JSONArray
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.String
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import com.example.onyx.BuildConfig
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
-
-
+import com.example.onyx.FetchData.TMDBapi
 
 
 class Anime_Page : AppCompatActivity() {
 
      private lateinit var db: AppDatabase
      private lateinit var  sm: SessionManger
+     private var userId: Int = -1
      private var urlHome = BuildConfig.A_K      //private var urlHome = "http://192.168.100.22:4000"
 
 
@@ -80,8 +82,12 @@ class Anime_Page : AppCompatActivity() {
     private lateinit var faveRecyclerView: RecyclerView
     private lateinit var faveAdapter: FavAdapter
 
+   //-----------------------------------------------------------------------------------------------
 
-     //---------------------------------------------------------------------------------------------
+    private lateinit var notificationAdapter: NotificationAdapter
+    private lateinit var  notificationRecyclerView: RecyclerView
+
+   //---------------------------------------------------------------------------------------------
 
      override fun onCreate(savedInstanceState: Bundle?) {
          super.onCreate(savedInstanceState)
@@ -95,6 +101,8 @@ class Anime_Page : AppCompatActivity() {
 
          db = AppDatabase(this)         // Initialize database
          sm = SessionManger(this)
+         userId = sm.getUserId()
+
 
 
          ////////////////////////////////////////////////////////////////////////////////////////
@@ -103,16 +111,18 @@ class Anime_Page : AppCompatActivity() {
          val homeAnimeBtn = findViewById<LinearLayout>(R.id.HomeAnimeBtn)
          val favAnimeBtn = findViewById<LinearLayout>(R.id.FavAnimeBtn)
          val searchAnimeBtn = findViewById<LinearLayout>(R.id.SearchAnimeBtn)
-         val cWatchAnimeBtn = findViewById<LinearLayout>(R.id.cWatchAnimeBtn)
          val popularAnimeBtn = findViewById<LinearLayout>(R.id.PopularAnimeBtn)
          val dubbedAnimeBtn = findViewById<LinearLayout>(R.id.DubbedAnimeBtn)
+         val cWatchAnimeBtn = findViewById<LinearLayout>(R.id.cWatchAnimeBtn)
+         val cNotificationAnimeBtn = findViewById<LinearLayout>(R.id.cNotificationAnimeBtn)
 
          val homePageAnime = findViewById<LinearLayout>(R.id.HomePageAnime)
          val dubbedPageAnime = findViewById<LinearLayout>(R.id.DubbedPageAnime)
          val popularPageAnime = findViewById<LinearLayout>(R.id.PopularPageAnime)
          val searchPageAnime = findViewById<LinearLayout>(R.id.SearchPageAnime)
-         val cWatchedPageAnime = findViewById<LinearLayout>(R.id.WatchedListPageAnime)
          val favPageAnime = findViewById<LinearLayout>(R.id.FavPageAnime)
+         val cWatchedPageAnime = findViewById<LinearLayout>(R.id.WatchedListPageAnime)
+         val notificationPageAnime = findViewById<LinearLayout>(R.id.notificationPageAnime)
 
 
 
@@ -125,6 +135,8 @@ class Anime_Page : AppCompatActivity() {
              searchPageAnime.visibility = View.GONE
              cWatchedPageAnime.visibility = View.GONE
              favPageAnime.visibility = View.GONE
+             notificationPageAnime.visibility = View.GONE
+
 
              homeAnimeBtn.isSelected = true
              dubbedAnimeBtn.isSelected = false
@@ -132,9 +144,10 @@ class Anime_Page : AppCompatActivity() {
              searchAnimeBtn.isSelected = false
              favAnimeBtn.isSelected = false
              cWatchAnimeBtn.isSelected = false
-
-
+             cNotificationAnimeBtn.isSelected = false
          }
+
+         homeAnimeBtn.performClick()
 
          favAnimeBtn.setOnClickListener {
              homePageAnime.visibility = View.GONE
@@ -143,6 +156,8 @@ class Anime_Page : AppCompatActivity() {
              searchPageAnime.visibility = View.GONE
              cWatchedPageAnime.visibility = View.GONE
              favPageAnime.visibility = View.VISIBLE
+             notificationPageAnime.visibility = View.GONE
+
 
              homeAnimeBtn.isSelected = false
              dubbedAnimeBtn.isSelected = false
@@ -150,8 +165,7 @@ class Anime_Page : AppCompatActivity() {
              searchAnimeBtn.isSelected = false
              favAnimeBtn.isSelected = true
              cWatchAnimeBtn.isSelected = false
-
-
+             cNotificationAnimeBtn.isSelected = false
          }
 
          searchAnimeBtn.setOnClickListener {
@@ -161,6 +175,8 @@ class Anime_Page : AppCompatActivity() {
              searchPageAnime.visibility = View.VISIBLE
              cWatchedPageAnime.visibility = View.GONE
              favPageAnime.visibility = View.GONE
+             notificationPageAnime.visibility = View.GONE
+
 
              homeAnimeBtn.isSelected = false
              dubbedAnimeBtn.isSelected = false
@@ -178,6 +194,8 @@ class Anime_Page : AppCompatActivity() {
              searchPageAnime.visibility = View.GONE
              cWatchedPageAnime.visibility = View.VISIBLE
              favPageAnime.visibility = View.GONE
+             notificationPageAnime.visibility = View.GONE
+
 
              homeAnimeBtn.isSelected = false
              dubbedAnimeBtn.isSelected = false
@@ -185,8 +203,7 @@ class Anime_Page : AppCompatActivity() {
              searchAnimeBtn.isSelected = false
              favAnimeBtn.isSelected = false
              cWatchAnimeBtn.isSelected = true
-
-
+             cNotificationAnimeBtn.isSelected = false
          }
 
          popularAnimeBtn.setOnClickListener {
@@ -196,6 +213,8 @@ class Anime_Page : AppCompatActivity() {
              searchPageAnime.visibility = View.GONE
              cWatchedPageAnime.visibility = View.GONE
              favPageAnime.visibility = View.GONE
+             notificationPageAnime.visibility = View.GONE
+
 
              homeAnimeBtn.isSelected = false
              dubbedAnimeBtn.isSelected = false
@@ -203,6 +222,7 @@ class Anime_Page : AppCompatActivity() {
              searchAnimeBtn.isSelected = false
              favAnimeBtn.isSelected = false
              cWatchAnimeBtn.isSelected = false
+             cNotificationAnimeBtn.isSelected = false
          }
 
          dubbedAnimeBtn.setOnClickListener {
@@ -212,6 +232,8 @@ class Anime_Page : AppCompatActivity() {
              searchPageAnime.visibility = View.GONE
              cWatchedPageAnime.visibility = View.GONE
              favPageAnime.visibility = View.GONE
+             notificationPageAnime.visibility = View.GONE
+
 
              homeAnimeBtn.isSelected = false
              dubbedAnimeBtn.isSelected = true
@@ -219,8 +241,32 @@ class Anime_Page : AppCompatActivity() {
              searchAnimeBtn.isSelected = false
              favAnimeBtn.isSelected = false
              cWatchAnimeBtn.isSelected = false
+             cNotificationAnimeBtn.isSelected = false
 
          }
+
+         cNotificationAnimeBtn.setOnClickListener {
+             homePageAnime.visibility = View.GONE
+             dubbedPageAnime.visibility = View.GONE
+             popularPageAnime.visibility = View.GONE
+             searchPageAnime.visibility = View.GONE
+             cWatchedPageAnime.visibility = View.GONE
+             favPageAnime.visibility = View.GONE
+             notificationPageAnime.visibility = View.VISIBLE
+
+
+             homeAnimeBtn.isSelected = false
+             dubbedAnimeBtn.isSelected = false
+             popularAnimeBtn.isSelected = false
+             searchAnimeBtn.isSelected = false
+             favAnimeBtn.isSelected = false
+             cWatchAnimeBtn.isSelected = false
+             cNotificationAnimeBtn.isSelected = true
+
+             findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.GONE
+         }
+
+
 
          ////////////////////////////////////////////////////////////////////////////////////////
          ////////////////////////////////////////////////////////////////////////////////////////
@@ -264,7 +310,7 @@ class Anime_Page : AppCompatActivity() {
          RecentlyRecyclerView.adapter = RecentlyAdapter
          RecentlyAdapter.onAddMoreClicked = { loadDubbedAnime() }
 
-
+         //-----------------------------------------------------------------------------------------
 
          searchRecyclerView = findViewById(R.id.SearchRecycler)
          searchRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page,GlobalUtils.calculateSpanCountV2(this@Anime_Page, 160, anime_airing_item_width))
@@ -272,10 +318,15 @@ class Anime_Page : AppCompatActivity() {
          searchRecyclerView.adapter = searchAdapter
          searchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
 
+         //------------------------------------------------------------------------------------------
+
 
          watchRecyclerView = findViewById(R.id.watchingRecycler)
          watchRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,160,150))
          watchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
+
+
+         //------------------------------------------------------------------------------------------
 
          faveRecyclerView = findViewById(R.id.faveRecycler)
          faveRecyclerView.layoutManager = LinearLayoutManager(
@@ -285,16 +336,29 @@ class Anime_Page : AppCompatActivity() {
          )
          faveRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
 
+         //------------------------------------------------------------------------------------------
+
+         notificationRecyclerView = findViewById<RecyclerView>(R.id.notificationRecycler)
+         notificationRecyclerView.layoutManager = LinearLayoutManager(this)
+         val clearBtn = findViewById<TextView>(R.id.clearNotBtn)
+
+         clearBtn.setOnClickListener {
+             db.clearAllAnimeNotifications(userId)
+             notificationAdapter.clearItems()
+         }
+
+
          ////////////////////////////////////////////////////////////////////////////////////////////
          ////////////////////////////////////////////////////////////////////////////////////////////
 
          animeHomeData()
 
-         loadDubbedAnime()
-         loadPopularAnime()
+         //loadDubbedAnime()
+         //loadPopularAnime()
          //loadRecentlyAnime()
-         setupSearchUi()
-         animeWatchedList()
+         //setupSearchUi()
+         //animeWatchedList()
+         notificationS()
      }
 
 
@@ -308,9 +372,14 @@ class Anime_Page : AppCompatActivity() {
             faveAdapter.clearItems()
         }
 
+        if(this::notificationAdapter.isInitialized){
+            notificationAdapter.clearItems()
+        }
+
 
         animeWatchedList()
         animeFavoritesList()
+        notificationS()
     }
 
 
@@ -940,12 +1009,21 @@ class Anime_Page : AppCompatActivity() {
         val FavOverview: TextView = findViewById(R.id.FavOverview)
         val RemoveFaveItem: LinearLayout = findViewById(R.id.RemoveFaveItem)
 
-        val userId = sm.getUserId()
+
         val animeFavData = db.getFavoriteAnime(userId)
 
         val items = mutableListOf<FavItem>()
 
         for (anime in animeFavData) {
+
+            Log.d("Fav_anime", "anime_id: ${anime["anime_id"]}")
+            Log.d("Fav_anime", "title: ${anime["name"]}")
+            Log.d("Fav_anime", "poster: ${anime["poster"]}")
+            Log.d("Fav_anime", "type: ${anime["type"]}")
+            Log.d("Fav_anime", "seasons: ${anime["seasons"]}")
+            Log.d("Fav_anime", "sub: ${anime["sub"]}")
+            Log.d("Fav_anime", "dub: ${anime["dub"]}")
+
             val genres = anime["genre"] ?: ""
             items.add(
                 FavItem(
@@ -980,6 +1058,61 @@ class Anime_Page : AppCompatActivity() {
         faveRecyclerView.adapter = faveAdapter
 
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private fun notificationS() {
+
+        val fetchedNot = NotificationHelper.getAnimeNotifications(this@Anime_Page)
+        Log.d("Not_anime", "fetchedNot: $fetchedNot")
+       if(fetchedNot){
+                findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.VISIBLE
+       }
+
+
+
+        val dnot = db.getAllAnimeNotifications(userId)
+        val notifications = mutableListOf<NotificationItem>()
+
+        findViewById<TextView>(R.id.notificationHeadline).text = "notifications (${dnot.size})"
+
+
+
+        for (item in dnot) {
+
+                Log.d("Not_anime", "notificationId: ${item["id"]}")
+                Log.d("Not_anime", "anime_id: ${item["anime_id"]}")
+                Log.d("Not_anime", "title: ${item["title"]}")
+                Log.d("Not_anime", "poster: ${item["poster"]}")
+                Log.d("Not_anime", "subStored: ${item["subStored"]}")
+                Log.d("Not_anime", "dubStored: ${item["dubStored"]}")
+                Log.d("Not_anime", "seasonsStored: ${item["seasonsStored"]}")
+                Log.d("Not_anime", "notify_at: ${item["notify_at"]}\n\n\n")
+
+
+            val itemData = NotificationItem(
+                notificationId = item["id"].toString(),      // ✅ PASS ID
+                imdbCode = item["anime_id"].toString(),
+                title = item["title"].toString(),
+                imageUrl = item["poster"],
+                info = "sub: ${item["subStored"]} dub: ${item["dubStored"]}",
+                type = "anime",
+                newSeason = item["subStored"].toString(),
+                newEpisode = item["dubStored"].toString(),
+                time =  item["notify_at"].toString()
+            )
+            notifications.add(itemData)
+            }
+
+
+            notificationAdapter = NotificationAdapter(
+                items = notifications.toMutableList(),
+                layoutResId = R.layout.item_notification
+            )
+            notificationRecyclerView.adapter = notificationAdapter
+
+
+    }
+
 
 
 

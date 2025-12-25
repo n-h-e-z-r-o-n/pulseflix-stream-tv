@@ -7,9 +7,11 @@ import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -54,6 +56,7 @@ class Login_Page : AppCompatActivity() {
 
         InitializeWindgets()         // Setup
         loadProfiles()         // Load existing profiles
+        setupBackPressedCallback()
 
     }
 
@@ -241,6 +244,13 @@ class Login_Page : AppCompatActivity() {
             profileContainer.visibility = LinearLayout.VISIBLE
             CreateProfileContainer.visibility = View.GONE
         }
+    }
+
+    private fun setupBackPressedCallback() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+            }
+        })
     }
 
 

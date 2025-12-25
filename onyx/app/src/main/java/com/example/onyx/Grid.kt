@@ -2,6 +2,7 @@ package com.example.onyx
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -23,8 +24,7 @@ import org.json.JSONArray
 
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
-
-
+import kotlin.text.toLongOrNull
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ class GridAdapter(
         val rating = currentItem.rating
         val runtime = currentItem.runtime
 
-        holder.showYear?.text = year.substring(1, 4)
+        holder.showYear?.text = year.substring(0, 4)
         holder.showTitle?.text = title
         holder.showRating?.text = rating
         holder.showRS?.text = runtime
@@ -505,9 +505,12 @@ class CategoryAdapter(
 
             Glide.with(holder.itemView.context)
                 .load(imageUrl)
-                .override(Target.SIZE_ORIGINAL, finalHeight)
+                .override(finalHeight, Target.SIZE_ORIGINAL)
                 .into(holder.category_image)
         }
+
+
+
 
 
         holder.CardViewSquare.setOnClickListener {
@@ -529,7 +532,7 @@ class CategoryAdapter(
 
             when (keyCode) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    if (position == 0) return@setOnKeyListener true
+                    //if (position == 0) return@setOnKeyListener true
                 }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
                     if (position == items.size-1) return@setOnKeyListener true
@@ -1090,7 +1093,6 @@ class FavAdapter(
     private val favOverviewView: TextView,
     private val RemoveFaveItemBtn: LinearLayout
 
-
 ) :  RecyclerView.Adapter<FavAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -1418,16 +1420,16 @@ class NotificationAdapter(
     private val layoutResId: Int   // 👈 pass in the layout resource
 ) :  RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
 
+    private lateinit var db: AppDatabase
+    private lateinit var  sm: SessionManger
+
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         //val image: ImageView = view.findViewById(R.id.notification_title)
         val showTitle: TextView = view.findViewById(R.id.notification_title)
         val message: TextView = view.findViewById(R.id.notification_message)
-
         val imageContainer: ImageView = view.findViewById(R.id.notification_icon)
-
-
-
+        val timeContainer: TextView = view.findViewById(R.id.timestamp_text)
 
 
         init {
@@ -1452,6 +1454,12 @@ class NotificationAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+        db = AppDatabase(holder.itemView.context)         // Initialize database
+        sm = SessionManger(holder.itemView.context)
+        val userId = sm.getUserId()
+
+
+
         val currentItem = items[position]
 
         val title = currentItem.title
@@ -1461,6 +1469,9 @@ class NotificationAdapter(
         val info = currentItem.info
         val updateSeason  = currentItem.newSeason
         val updateEpisode  = currentItem.newEpisode
+        val lastPos = currentItem.time?.toLongOrNull() ?: 0L
+
+        holder.timeContainer.text = formatTimeFromString(currentItem.time)
 
 
         holder.showTitle.text =  title
@@ -1477,6 +1488,7 @@ class NotificationAdapter(
             val context = holder.itemView.context
             if(type == "anime"){
                 val intent = Intent(context, Watch_Anime_Page::class.java)
+                db.deleteAnimeNotificationById(userId=userId,animeId =imdbCode,notificationId=currentItem.notificationId)
                 intent.putExtra("anime_code", imdbCode)
                 intent.putExtra("anime_poster", imageUrl)
                 context.startActivity(intent)
@@ -1487,7 +1499,7 @@ class NotificationAdapter(
                 context.startActivity(intent)
             }
 
-            NotificationHelper.updateNotification(context, imdbCode, updateSeason, updateEpisode)
+            //NotificationHelper.updateNotification(context, imdbCode, updateSeason, updateEpisode)
             //call updateNotification
         }
 
@@ -1502,9 +1514,8 @@ class NotificationAdapter(
     }
     
     // 👇 helper to refresh all items
-    fun refreshItems(newItems: List<NotificationItem>) {
+    fun clearItems() {
         items.clear()
-        items.addAll(newItems)
         notifyDataSetChanged()
     }
     
@@ -1516,17 +1527,34 @@ class NotificationAdapter(
             notifyItemRemoved(index)
         }
     }
+
+    private fun formatTimeFromString(timeString: String?): String {
+
+        val timeMillis = timeString
+            ?.trim()
+            ?.toLongOrNull()
+            ?: return "Just now"
+
+        return DateUtils.getRelativeTimeSpanString(
+            timeMillis,
+            System.currentTimeMillis(),
+            DateUtils.MINUTE_IN_MILLIS,
+            DateUtils.FORMAT_ABBREV_RELATIVE
+        ).toString()
+    }
 }
 
 
 data class NotificationItem(
+    val notificationId: String,
     val imdbCode: String,
     val title: String,
     val imageUrl: String?,
     val info: String,
     val type: String = "tv",
-    val newSeason: Int,
-    val newEpisode: Int
+    val newSeason: String,
+    val newEpisode: String,
+    val time: String
 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1537,8 +1565,7 @@ class cWatchingAdapter(
     private val layoutResId: Int
 ) : RecyclerView.Adapter<cWatchingAdapter.ViewHolder>() {
 
-    companion object {
-    }
+
     private lateinit var sm: SessionManger
 
 

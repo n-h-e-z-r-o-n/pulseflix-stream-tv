@@ -84,9 +84,8 @@
             android:textColor="?attr/FG_color"
             app:layout_constraintTop_toTopOf="@id/notification_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="2h ago"
             tools:ignore="HardcodedText"
-            android:alpha="0"/>
+            android:alpha="0.7"/>
 
 
 

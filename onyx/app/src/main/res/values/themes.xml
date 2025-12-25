@@ -59,7 +59,7 @@
         <item name="AccentColor">#A8E05F</item>
         <item name="SidebarFocus">#66BB6A</item>
         <item name="SidebarDefault">#9EBCA7</item>
-        <item name="transparentEffect">#40000000</item>
+        <item name="transparentEffect">#400F3D2E</item>
         <item name="notBudge">#BFFF00</item>
     </style>
 

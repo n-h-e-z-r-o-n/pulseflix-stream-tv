@@ -16,13 +16,59 @@ import kotlin.text.ifEmpty
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.json.JSONException
 import java.net.HttpURLConnection
 import java.net.URL
 
 
 class TMDBapi(private val context: Context) {
+
+    suspend fun fetchLogos(
+        type: String,
+        tmdbId: String
+    ): String? = withContext(Dispatchers.IO) {
+
+        try {
+            val logosUrl = "https://api.themoviedb.org/3/$type/$tmdbId/images"
+
+            val connection = URL(logosUrl).openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.setRequestProperty("accept", "application/json")
+            connection.setRequestProperty(
+                "Authorization",
+                "Bearer ${BuildConfig.TM_K}"
+            )
+
+            val response = connection.inputStream
+                .bufferedReader()
+                .use { it.readText() }
+
+            val logos = JSONObject(response).getJSONArray("logos")
+
+            // 1️⃣ Prefer English logo
+            for (i in 0 until logos.length()) {
+                val logo = logos.getJSONObject(i)
+                if (logo.optString("iso_639_1") == "en") {
+                    return@withContext "https://image.tmdb.org/t/p/original/${logo.getString("file_path")}"
+                }
+            }
+
+            // 2️⃣ Fallback to first available
+            if (logos.length() > 0) {
+                return@withContext "https://image.tmdb.org/t/p/original/${logos.getJSONObject(0).getString("file_path")}"
+            }
+
+            null
+        } catch (e: Exception) {
+            Log.e("fetchLogos", "Error: ${e.message}")
+            null
+        }
+    }
+
 
     fun fetchLogos (type:String, tmdbId:String, widget:ImageView, widget2: View){
         CoroutineScope(Dispatchers.IO).launch {
@@ -83,6 +129,81 @@ class TMDBapi(private val context: Context) {
                 }
 
             }
+        }
+    }
+
+
+
+
+
+    fun fetchAnimeData(animeId: String): JSONObject? {
+        return runBlocking {
+            async(Dispatchers.IO) {
+                try {
+                    val url = "${BuildConfig.A_K}/api/v2/hianime/anime/$animeId"
+
+                    val connection = URL(url).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("accept", "application/json")
+                    connection.connectTimeout = 10000
+                    connection.readTimeout = 10000
+
+                    val responseCode = connection.responseCode
+                    if (responseCode != HttpURLConnection.HTTP_OK) {
+                        return@async null
+                    }
+
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    Log.d("fetchAnimeData", "Response received: ${response.take(200)}...")
+
+                    val jsonObject = JSONObject(response)
+
+                    // Try to get "data" field, fallback to full response
+                    jsonObject.optJSONObject("data") ?: jsonObject
+
+                } catch (e: IOException) {
+                    Log.e("fetchAnimeData", "Network error: ${e.message}")
+                    null
+                } catch (e: JSONException) {
+                    Log.e("fetchAnimeData", "JSON error: ${e.message}")
+                    null
+                } catch (e: Exception) {
+                    Log.e("fetchAnimeData", "Unexpected error: ${e.message}")
+                    null
+                }
+            }.await()
+        }
+    }
+
+    fun fetchTvData(showId: String): JSONObject? {
+        return runBlocking {
+            async(Dispatchers.IO) {
+                try {
+                    val tvUrl = "https://api.themoviedb.org/3/tv/$showId?language=en-US"
+                    val connection = URL(tvUrl).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("accept", "application/json")
+                    connection.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = JSONObject(response)
+
+                    jsonObject.optJSONObject("data") ?: jsonObject
+
+                } catch (e: IOException) {
+                    Log.e("fetchAnimeData", "Network error: ${e.message}")
+                    null
+                } catch (e: JSONException) {
+                    Log.e("fetchAnimeData", "JSON error: ${e.message}")
+                    null
+                } catch (e: Exception) {
+                    Log.e("fetchAnimeData", "Unexpected error: ${e.message}")
+                    null
+                }
+            }.await()
         }
     }
 

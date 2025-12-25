@@ -6,6 +6,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.Cursor
+import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
 import java.util.concurrent.TimeUnit
 
 class AppDatabase(context: Context) :
@@ -127,28 +129,54 @@ class AppDatabase(context: Context) :
                 )"""
         )
 
-// 8. notification
-    db.execSQL(
-        """CREATE TABLE notification (
+// 8. anime notification
+        db.execSQL(
+            """
+            CREATE TABLE anime_notification (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER,
-                show_id TEXT,                 -- movieId, episodeId, animeEpisodeId etc
-                type TEXT,                    -- movie, tv_episode, anime_episode
+        
+                anime_id TEXT,
                 title TEXT,
                 poster TEXT,
-                  
-                season_number TEXT,  -- for tv/anime
-                episode_number TEXT, -- for tv/anime
-                last_position INTEGER DEFAULT 0,  -- last playback position in ms
-                duration INTEGER DEFAULT 0,       -- total duration in ms
-                updated_at INTEGER,               -- last update time
-                UNIQUE(user_id, item_id, type),
+                subStored TEXT,
+                dubStored TEXT,
+                
+                seasonsStored TEXT,
+        
+                notify_at INTEGER,
+        
+                UNIQUE(user_id, anime_id, subStored, dubStored, seasonsStored),
                 FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-            )"""
-    )
+            )
+            """
+        )
 
 
-        // 8. App Settings (General App Info – NOT linked to users)
+// 9. tv notification
+        db.execSQL(
+            """
+            CREATE TABLE tv_notification (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+        
+                tv_id TEXT,
+                title TEXT,
+                poster TEXT,
+                noOfSeason INTEGER,
+                lastSeason INTEGER,
+                lastEpisode INTEGER,
+        
+                notify_at INTEGER,
+        
+                UNIQUE(user_id, tv_id, noOfSeason, lastSeason, lastEpisode),
+                FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+            )
+            """
+        )
+
+
+// 10. App Settings (General App Info – NOT linked to users)
         db.execSQL(
             """CREATE TABLE app_settings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -274,6 +302,40 @@ class AppDatabase(context: Context) :
         }
     }
 
+    fun updateAnimeProgress(
+        userId: Int,
+        animeId: String,
+        sub: Int,
+        dub: Int,
+    ): Boolean {
+
+        val db = writableDatabase
+        val cv = ContentValues()
+
+        cv.put("sub", sub)
+        cv.put("dub", dub)
+
+        return try {
+            val rows = db.update(
+                "favorites_anime",
+                cv,
+                "user_id = ? AND anime_id = ?",
+                arrayOf(userId.toString(), animeId)
+            )
+
+            if (rows > 0) {
+                Log.d("Database.feedback", "Anime Fave UPDATE  SUCCESS → userId=$userId animeId=$animeId sub=$sub dub=$dub")
+                true
+            } else {
+                Log.w("Database.feedback", "Anime DELETE FAILED (not found) → userId=$userId animeId=$animeId sub=$sub dub=$dub")
+                false
+            }
+        } catch (e: Exception) {
+            Log.d("Database.feedback", "Anime Fave UPDATE ERROR  →  userId=$userId animeId=$animeId sub=$sub dub=$dub" )
+            false
+        }
+    }
+
     fun removeFavoriteAnime(userId: Int, animeId: String): Boolean {
         val db = writableDatabase
         return db.delete(
@@ -329,9 +391,6 @@ class AppDatabase(context: Context) :
                 // Convert "seasons" from comma text → array string
                 val seasonsString = cursor.getString(cursor.getColumnIndexOrThrow("seasons"))
                 map["seasons"] = seasonsString   // keep original string
-                // If you want array list form:
-                // val seasonsArray = seasonsString.split(",")
-                // map["seasonsArray"] = seasonsArray.toString()
 
                 list.add(map)
 
@@ -387,6 +446,42 @@ class AppDatabase(context: Context) :
         return try {
             db.insertOrThrow("favorites_shows", null, cv) > 0
         } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun updateTvProgress(
+        userId: Int,
+        showId: String,
+        noOfSeason: Int,
+        lastSeason: Int,
+        lastEpisode: Int,
+    ): Boolean {
+
+        val db = writableDatabase
+        val cv = ContentValues()
+
+        cv.put("noOfSeason", noOfSeason)
+        cv.put("lastSeason", lastSeason)
+        cv.put("lastEpisode", lastEpisode)
+
+        return try {
+            val rows = db.update(
+                "favorites_shows",
+                cv,
+                "user_id = ? AND anime_id = ?",
+                arrayOf(userId.toString(), showId)
+            )
+
+            if (rows > 0) {
+                Log.d("Database.feedback", "TvShow Fave UPDATE  SUCCESS → userId=$userId animeId=$showId noOfSeason=$noOfSeason lastSeason=$lastSeason  lastEpisode=$lastEpisode" )
+                true
+            } else {
+                Log.w("Database.feedback", "TvShow DELETE FAILED (not found) → userId=$userId animeId=$showId noOfSeason=$noOfSeason lastSeason=$lastSeason lastEpisode=$lastEpisode")
+                false
+            }
+        } catch (e: Exception) {
+            Log.d("Database.feedback", "TvShow Fave UPDATE ERROR  →  userId=$userId animeId=$showId noOfSeason=$noOfSeason lastSeason=$lastSeason lastEpisode=$lastEpisode" )
             false
         }
     }
@@ -486,10 +581,8 @@ class AppDatabase(context: Context) :
                 map["lastEpisode"] = cursor.getString(cursor.getColumnIndexOrThrow("lastEpisode"))
 
                 list.add(map)
-
             } while (cursor.moveToNext())
         }
-
         cursor.close()
         return list
     }
@@ -617,6 +710,363 @@ class AppDatabase(context: Context) :
             arrayOf(userId.toString(), itemId, type)
         )
     }
+
+    ////////////////////////////////// NOTIFICATIONS FUNCTIONS ///////////////////////////////////////
+
+    fun insertAnimeNotification(
+        userId: Int,
+        animeId: String,
+        title: String,
+        poster: String,
+        subStored: Int,
+        dubStored: Int,
+        seasonsStored: Int
+    ): Boolean {
+
+        val db = writableDatabase
+        val cv = ContentValues().apply {
+            put("user_id", userId)
+            put("anime_id", animeId)
+            put("title", title)
+            put("poster", poster)
+            put("subStored", subStored.toString())
+            put("dubStored", dubStored.toString())
+            put("seasonsStored", seasonsStored.toString())
+            put("notify_at", System.currentTimeMillis())
+        }
+
+        return try {
+            db.insertOrThrow("anime_notification", null, cv)
+            true
+        } catch (e: SQLiteConstraintException) {
+            // ✅ Duplicate detected → ignore
+            false
+        } catch (e: Exception) {
+            //Log.e("Database.feedback", "Insert failed: ${e.message}")
+            false
+        }
+    }
+
+    fun getAnimeNotificationHistory(
+        userId: Int,
+        animeId: String
+    ): List<Map<String, String>> {
+
+        val db = readableDatabase
+        val list = mutableListOf<Map<String, String>>()
+
+        val cursor = db.rawQuery(
+            """
+        SELECT * FROM anime_notification
+        WHERE user_id = ? AND anime_id = ?
+        ORDER BY notify_at DESC
+        """,
+            arrayOf(userId.toString(), animeId)
+        )
+
+        cursor.use {
+            while (it.moveToNext()) {
+                list.add(
+                    mapOf(
+                        "id" to it.getInt(it.getColumnIndexOrThrow("id")).toString(),
+                        "anime_id" to it.getString(it.getColumnIndexOrThrow("anime_id")),
+                        "title" to it.getString(it.getColumnIndexOrThrow("title")),
+                        "poster" to it.getString(it.getColumnIndexOrThrow("poster")),
+                        "subStored" to it.getString(it.getColumnIndexOrThrow("subStored")),
+                        "dubStored" to it.getString(it.getColumnIndexOrThrow("dubStored")),
+                        "seasonsStored" to it.getString(it.getColumnIndexOrThrow("seasonsStored")),
+                        "notify_at" to it.getLong(it.getColumnIndexOrThrow("notify_at")).toString()
+                    )
+                )
+            }
+        }
+        return list
+    }
+
+    // Get ALL notifications for a user
+    fun getAllAnimeNotifications(userId: Int): List<Map<String, String>> {
+
+        val db = readableDatabase
+        val list = mutableListOf<Map<String, String>>()
+
+        val cursor = db.rawQuery(
+            """
+        SELECT * FROM anime_notification
+        WHERE user_id = ?
+        ORDER BY notify_at DESC
+        """,
+            arrayOf(userId.toString())
+        )
+
+        cursor.use {
+            while (it.moveToNext()) {
+                list.add(
+                    mapOf(
+                        "id" to it.getString(it.getColumnIndexOrThrow("id")),
+                        "anime_id" to it.getString(it.getColumnIndexOrThrow("anime_id")),
+                        "title" to it.getString(it.getColumnIndexOrThrow("title")),
+                        "poster" to it.getString(it.getColumnIndexOrThrow("poster")),
+                        "subStored" to it.getString(it.getColumnIndexOrThrow("subStored")),
+                        "dubStored" to it.getString(it.getColumnIndexOrThrow("dubStored")),
+                        "seasonsStored" to it.getString(it.getColumnIndexOrThrow("seasonsStored")),
+                        "notify_at" to it.getLong(it.getColumnIndexOrThrow("notify_at")).toString()
+                    )
+                )
+            }
+        }
+        return list
+    }
+
+    //Delete notifications for ONE anime
+    fun deleteAnimeNotifications(
+        userId: Int,
+        animeId: String
+    ): Boolean {
+
+        val db = writableDatabase
+        return try {
+            db.delete(
+                "anime_notification",
+                "user_id = ? AND anime_id = ?",
+                arrayOf(userId.toString(), animeId)
+            ) > 0
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun deleteAnimeNotificationById(
+        userId: Int,
+        animeId: String,
+        notificationId: String
+    ): Boolean {
+
+        val db = writableDatabase
+
+        return try {
+            val rowsDeleted = db.delete(
+                "anime_notification",
+                "user_id = ? AND anime_id = ? AND id = ?",
+                arrayOf(
+                    userId.toString(),
+                    animeId,
+                    notificationId
+                )
+            )
+
+            if (rowsDeleted > 0) {
+                Log.d("Database.feedback", "Anime notification DELETE SUCCESS → animeId=$animeId id=$notificationId")
+                true
+            } else {
+                Log.w("Database.feedback", "Anime notification DELETE FAILED (not found) → animeId=$animeId id=$notificationId")
+                false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database.feedback", "Anime notification DELETE ERROR: ${e.message}", e)
+            false
+        }
+    }
+
+
+    fun clearAllAnimeNotifications(userId: Int): Boolean {
+        val db = writableDatabase
+        return try {
+            val rowsDeleted = db.delete(
+                "anime_notification",
+                "user_id = ?",
+                arrayOf(userId.toString())
+            )
+            if (rowsDeleted > 0) {
+                Log.d("Database.feedback", "Anime notification CLEAR SUCCESS → userId=$userId id=$rowsDeleted")
+                true
+            } else {
+                Log.w("Database.feedback", "Anime notification CLEAR FAILED (not found) → userId=$userId id=$rowsDeleted")
+                false
+            }
+        } catch (e: Exception) {
+            Log.e("Database.feedback", "clearAllAnimeNotifications failed", e)
+            false
+        }
+    }
+
+
+    fun insertTvNotification(
+        userId: Int,
+        tvId: String,
+        title: String,
+        poster: String,
+        noOfSeason: Int,
+        lastSeason: Int,
+        lastEpisode: Int
+    ): Boolean {
+
+        val db = writableDatabase
+        val cv = ContentValues().apply {
+            put("user_id", userId)
+            put("tv_id", tvId)
+            put("title", title)
+            put("poster", poster)
+            put("noOfSeason", noOfSeason)
+            put("lastSeason", lastSeason)
+            put("lastEpisode", lastEpisode)
+            put("notify_at", System.currentTimeMillis())
+        }
+
+        return try {
+            db.insertOrThrow("tv_notification", null, cv)
+            true
+        } catch (e: SQLiteConstraintException) {
+            // ✅ Duplicate (same season/episode)
+            false
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+
+    fun getTvNotificationHistory(
+        userId: Int,
+        tvId: String
+    ): List<Map<String, String>> {
+
+        val db = readableDatabase
+        val list = mutableListOf<Map<String, String>>()
+
+        val cursor = db.rawQuery(
+            """
+        SELECT * FROM tv_notification
+        WHERE user_id = ? AND tv_id = ?
+        ORDER BY notify_at DESC
+        """,
+            arrayOf(userId.toString(), tvId)
+        )
+
+        cursor.use {
+            while (it.moveToNext()) {
+                list.add(
+                    mapOf(
+                        "id" to it.getInt(it.getColumnIndexOrThrow("id")).toString(),
+                        "tv_id" to it.getString(it.getColumnIndexOrThrow("tv_id")),
+                        "title" to it.getString(it.getColumnIndexOrThrow("title")),
+                        "poster" to it.getString(it.getColumnIndexOrThrow("poster")),
+                        "noOfSeason" to it.getInt(it.getColumnIndexOrThrow("noOfSeason")).toString(),
+                        "lastSeason" to it.getInt(it.getColumnIndexOrThrow("lastSeason")).toString(),
+                        "lastEpisode" to it.getInt(it.getColumnIndexOrThrow("lastEpisode")).toString(),
+                        "notify_at" to it.getLong(it.getColumnIndexOrThrow("notify_at")).toString()
+                    )
+                )
+            }
+        }
+        return list
+    }
+
+    fun getAllTvNotifications(userId: Int): List<Map<String, String>> {
+
+        val db = readableDatabase
+        val list = mutableListOf<Map<String, String>>()
+
+        val cursor = db.rawQuery(
+            """
+        SELECT * FROM tv_notification
+        WHERE user_id = ?
+        ORDER BY notify_at DESC
+        """,
+            arrayOf(userId.toString())
+        )
+
+        cursor.use {
+            while (it.moveToNext()) {
+                list.add(
+                    mapOf(
+                        "id" to it.getString(it.getColumnIndexOrThrow("id")),
+                        "tv_id" to it.getString(it.getColumnIndexOrThrow("tv_id")),
+                        "title" to it.getString(it.getColumnIndexOrThrow("title")),
+                        "poster" to it.getString(it.getColumnIndexOrThrow("poster")),
+                        "noOfSeason" to it.getInt(it.getColumnIndexOrThrow("noOfSeason")).toString(),
+                        "lastSeason" to it.getInt(it.getColumnIndexOrThrow("lastSeason")).toString(),
+                        "lastEpisode" to it.getInt(it.getColumnIndexOrThrow("lastEpisode")).toString(),
+                        "notify_at" to it.getLong(it.getColumnIndexOrThrow("notify_at")).toString()
+                    )
+                )
+            }
+        }
+        return list
+    }
+
+    fun deleteTvNotifications(
+        userId: Int,
+        tvId: String
+    ): Boolean {
+
+        val db = writableDatabase
+        return try {
+            db.delete(
+                "tv_notification",
+                "user_id = ? AND tv_id = ?",
+                arrayOf(userId.toString(), tvId)
+            ) > 0
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+
+    fun deleteTvNotificationById(
+        userId: Int,
+        tvId: String,
+        notificationId: String
+    ): Boolean {
+
+        val db = writableDatabase
+
+        return try {
+            val rowsDeleted = db.delete(
+                "tv_notification",
+                "user_id = ? AND tv_id = ? AND id = ?",
+                arrayOf(userId.toString(), tvId, notificationId)
+            )
+
+            if (rowsDeleted > 0) {
+                Log.d("Database.feedback", "TV notification DELETE SUCCESS → tvId=$tvId id=$notificationId")
+                true
+            } else {
+                Log.w("Database.feedback", "TV notification DELETE FAILED → tvId=$tvId id=$notificationId")
+                false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database.feedback", "TV notification DELETE ERROR", e)
+            false
+        }
+    }
+
+    fun clearAllTvNotifications(userId: Int): Boolean {
+
+        val db = writableDatabase
+        return try {
+            val rowsDeleted = db.delete(
+                "tv_notification",
+                "user_id = ?",
+                arrayOf(userId.toString())
+            )
+
+            if (rowsDeleted > 0) {
+                Log.d("Database.feedback", "TV notification CLEAR SUCCESS → userId=$userId rows=$rowsDeleted")
+                true
+            } else {
+                Log.w("Database.feedback", "TV notification CLEAR FAILED → userId=$userId")
+                false
+            }
+
+        } catch (e: Exception) {
+            Log.e("Database.feedback", "clearAllTvNotifications failed", e)
+            false
+        }
+    }
+
+
+
 
 
 

@@ -12,28 +12,23 @@
     android:gravity="center"
     android:orientation="vertical"
     card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="2dp"
-    card_view:cardBackgroundColor="@android:color/darker_gray"
+    app:cardElevation="0dp"
+    app:cardUseCompatPadding="false"
+    card_view:cardBackgroundColor="#60A9A9A9"
     android:foreground="@drawable/card_focus"
     android:id="@+id/categoryView">
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:padding="8dp">
+
 
         <ImageView
             android:id="@+id/categoryImage"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
+            android:maxWidth="200dp"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
+            android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@raw/test2"
-            />
-
-    </FrameLayout>
-
-
+            android:layout_margin="9dp"
+            tools:ignore="ContentDescription" />
 
 </androidx.cardview.widget.CardView>
 

@@ -127,7 +127,6 @@ object NavAction {
 
 
 
-        NotificationHelper.checkNotificationsWithBadge(activity)
     }
 
     private fun handleFocusChange(

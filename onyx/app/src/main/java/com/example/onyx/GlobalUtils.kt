@@ -6,8 +6,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.os.Handler
+import android.os.Looper
 import android.os.Process
+import android.text.SpannableStringBuilder
 import android.util.Log
+import android.widget.TextView
+import kotlin.random.Random
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 
 object GlobalUtils {
     
@@ -281,6 +288,69 @@ object GlobalUtils {
 
         // Calculate span count
         return (availableWidthPx / itemWidthPx).coerceAtLeast(1)
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    fun scrambleToText(
+        textView: TextView,
+        finalText: String,
+        speed: Int = 400
+    ) {
+        val chars = "#▫▪■□"
+        val handler = Handler(Looper.getMainLooper())
+
+        data class QueueItem(
+            val to: Char,
+            var char: Char = ' ',
+            var done: Boolean = false,
+            var frame: Int = 0,
+            val maxFrames: Int
+        )
+
+        val queue = finalText.map {
+            QueueItem(
+                to = it,
+                maxFrames = Random.nextInt(speed, speed * 2)
+            )
+        }
+
+        fun randomChar(): Char =
+            chars[Random.nextInt(chars.length)]
+
+        fun update() {
+            val sb = SpannableStringBuilder()
+            var complete = 0
+
+            queue.forEach { q ->
+                if (q.done) {
+                    sb.append(q.to)
+                    complete++
+                } else {
+                    if (q.frame >= q.maxFrames) {
+                        q.done = true
+                        sb.append(q.to)
+                    } else {
+                        if (q.frame == 0 || Random.nextFloat() < 0.5f) {
+                            q.char = randomChar()
+                        }
+
+                        val start = sb.length
+                        sb.append(q.char)
+
+                        q.frame++
+                    }
+                }
+            }
+
+            textView.text = sb
+
+            if (complete < queue.size) {
+                handler.postDelayed({ update() }, 16L) // ~60fps
+            }
+        }
+
+        update()
     }
 
 

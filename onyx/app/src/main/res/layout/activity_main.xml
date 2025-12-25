@@ -11,9 +11,8 @@
     <LinearLayout
         android:id="@+id/centerContainer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,18 +42,26 @@
             android:textSize="170sp"
             android:textColor="?attr/FG_color"
             android:shadowColor="?attr/AccentColor"
+            android:maxLines="1"
             android:shadowDx="5"
             android:shadowDy="6"
             android:shadowRadius="4"
             android:fontFamily="@font/j"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="100dp"
             tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <!-- Loading Animation -->
         <ImageView
             android:id="@+id/LoadingAnimation"
+            android:layout_gravity="center"
             android:layout_width="75dp"
             android:layout_height="50dp"
+            android:layout_marginBottom="50dp"
             android:src="@raw/loadsplash"
             android:contentDescription="@string/app_name" />
 
