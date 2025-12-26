@@ -1,5 +1,6 @@
 package com.example.onyx
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -11,8 +12,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import kotlin.math.abs
 
 
 class CardSwiper(
@@ -157,5 +160,3 @@ data class SliderItem(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-

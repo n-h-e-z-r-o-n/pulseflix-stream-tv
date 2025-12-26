@@ -47,9 +47,10 @@ class Home_Page : AppCompatActivity() {
 
         NavAction.setupSidebar(this)
 
+
         //setupBackPressedCallback()
-        sliderData()
-        categoryShow()
+        //sliderData()
+        //categoryShow()
 
     }
 
@@ -287,6 +288,7 @@ class Home_Page : AppCompatActivity() {
                             LinearLayoutManager.HORIZONTAL, // 👈 makes it horizontal
                             false
                         )
+
                         recyclerView.layoutManager = layoutManager
                         recyclerView.adapter = adapter
                         LoadingAnimation.hide(this@Home_Page)

@@ -17,6 +17,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:overScrollMode="never"
+        android:scrollbars="none"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -177,7 +178,7 @@
                                     android:text="IMDB"
 
                                     android:textSize="11sp"
-                                    app:cardBackgroundColor="#DAA520"
+                                    app:cardBackgroundColor="#99DAA520"
                                     tools:ignore="HardcodedText"
                                     android:textStyle="bold">
 
@@ -460,7 +461,7 @@
                                 android:focusableInTouchMode="true"
                                 android:focusable="true"
                                 android:clickable="true"
-                                android:paddingHorizontal="14dp"
+                                android:paddingHorizontal="8dp"
                                 android:nextFocusLeft="@+id/serverButton"
                                 android:nextFocusRight="@+id/TrailerButton"
                                 android:elevation="2dp"
@@ -525,7 +526,7 @@
                                 android:focusable="true"
                                 android:clickable="true"
                                 android:layout_marginEnd="10dp"
-                                android:paddingHorizontal="14dp"
+                                android:paddingHorizontal="9dp"
                                 android:nextFocusLeft="@+id/TrailerButton"
                                 android:nextFocusRight="@+id/serverButton"
                                 android:elevation="2dp" >
@@ -566,7 +567,7 @@
                                 android:focusableInTouchMode="true"
                                 android:focusable="true"
                                 android:clickable="true"
-                                android:paddingHorizontal="14dp"
+                                android:paddingHorizontal="8dp"
                                 android:nextFocusLeft="@+id/favoriteButton"
                                 android:nextFocusRight="@+id/watchNowButton"
                                 android:elevation="2dp"
@@ -708,10 +709,12 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text=" You may also like"
-                android:fontFamily="@font/d"
-                android:textColor="?attr/AccentColor"
-                android:textSize="18sp"
+                android:fontFamily="@font/p"
+                android:textColor="?attr/FG_color"
+                android:textSize="20sp"
                 android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:alpha="0.7"
                 tools:ignore="HardcodedText" />
 
 
@@ -727,6 +730,7 @@
                     android:scrollbars="none"
                     android:orientation="horizontal"
                     tools:layout_editor_absoluteY="8dp"
+                    android:nestedScrollingEnabled="false"
                     android:descendantFocusability="afterDescendants"/>
 
 

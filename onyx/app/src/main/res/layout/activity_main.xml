@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ONYX"
-            android:textSize="170sp"
+            android:textSize="200sp"
             android:textColor="?attr/FG_color"
             android:shadowColor="?attr/AccentColor"
             android:maxLines="1"

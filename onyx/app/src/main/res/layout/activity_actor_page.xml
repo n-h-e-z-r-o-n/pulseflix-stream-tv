@@ -19,7 +19,6 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:overScrollMode="always"
-            android:paddingStart="41dp"
             android:orientation="vertical"
             tools:ignore="RtlSymmetry">
 
@@ -40,9 +39,6 @@
 
 
         </LinearLayout>
-
-        <include layout="@layout/side_bar" />
-
     </FrameLayout>
 
 

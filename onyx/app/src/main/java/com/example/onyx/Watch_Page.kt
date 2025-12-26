@@ -116,6 +116,15 @@ class Watch_Page : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchData(id:String, type: String) {
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels
+
+
+        val mainWidget1 = findViewById<FrameLayout>(R.id.widget_1)
+        val params = mainWidget1.layoutParams
+        params.height = (screenHeight * 0.8).toInt()
+        mainWidget1.layoutParams = params
+
         CoroutineScope(Dispatchers.IO).launch {
             var tmdbId = id // mutable copy
             val maxRetries = 4
@@ -346,14 +355,9 @@ class Watch_Page : AppCompatActivity() {
 
                         if(type=="tv"){
 
-                            val displayMetrics = resources.displayMetrics
-                            val screenWidth = displayMetrics.widthPixels     // in pixels
-
-                            val screenHeight = displayMetrics.heightPixels    // in pixels
-                            val recyclerView = findViewById<FrameLayout>(R.id.widget_1)
-                            val params = recyclerView.layoutParams
                             params.height = (screenHeight * 1).toInt()
-                            recyclerView.layoutParams = params
+                            mainWidget1.layoutParams = params
+
 
                             watchButton.visibility = View.GONE
                             val Season_widget = findViewById<LinearLayout>(R.id.Season_widget)
@@ -798,8 +802,21 @@ class Watch_Page : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         val recyclerView = findViewById<RecyclerView>(R.id.Recommendation_widget)
+                        recyclerView.isNestedScrollingEnabled = false
 
-
+                        // Calculate number of rows
+                        val columns = 3
+                        val itemCount = movies.size
+                        val rows = Math.ceil(itemCount.toDouble() / columns).toInt()
+                        val dpPerRow = 172f
+                        val spacingBetweenRows = 19f // dp (from your item decoration)
+                        val totalHeightDp = (dpPerRow * rows) + (spacingBetweenRows * (rows - 1))
+                        // Convert dp to pixels
+                        val density = resources.displayMetrics.density
+                        val totalHeightPx = (totalHeightDp * density).toInt()
+                        // Set the calculated height
+                        recyclerView.layoutParams.height = totalHeightPx
+                        recyclerView.requestLayout() // Important: request layout update
 
                         recyclerView.layoutManager = GridLayoutManager(this@Watch_Page, 3)
                         recyclerView.adapter = RecommendAdapter(movies,  R.layout.recomendation_card)
@@ -851,10 +868,10 @@ class Watch_Page : AppCompatActivity() {
             val isFav = db.isFavoriteShow(userId, showId, type)
             if (isFav) {
                 faveButtonImg.setImageResource(R.drawable.ic_tickfave)
-                faveButtonText.text = "Remove from Favorites"
+                faveButtonText.text = "Remove Favorite"
             } else {
                 faveButtonImg.setImageResource(R.drawable.ic_addfave)
-                faveButtonText.text = "Add to Favorites"
+                faveButtonText.text = "Add-to-Favorites"
             }
         }
 

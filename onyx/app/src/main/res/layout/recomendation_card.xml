@@ -33,7 +33,7 @@
         android:background="@android:color/transparent"
         android:ellipsize="end"
         android:text="Tekdss"
-        android:fontFamily="@font/f"
+        android:fontFamily="@font/o"
         android:padding="8dp"
         android:rotationX="0"
         android:singleLine="true"
@@ -42,7 +42,8 @@
         android:shadowDy="4"
         android:shadowRadius="4"
         android:textColor="@android:color/white"
-        android:textSize="14sp" />
+        android:textSize="18sp"
+        tools:ignore="HardcodedText" />
 
 
 </androidx.cardview.widget.CardView>

@@ -27,13 +27,6 @@ class MainActivity : ComponentActivity() {
         db = AppDatabase(this)
 
         val tv = findViewById<TextView>(R.id.onyxTitle)
-
-        GlobalUtils.scrambleToText(
-            textView = tv,
-            finalText = "ONYX",
-            speed = 40
-        )
-
         val loadingImageView = findViewById<ImageView>(R.id.LoadingAnimation)
         Glide.with(this)
             .asGif()

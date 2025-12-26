@@ -297,7 +297,7 @@ object GlobalUtils {
         finalText: String,
         speed: Int = 400
     ) {
-        val chars = "#▫▪■□"
+        val chars = "▫▪■□"
         val handler = Handler(Looper.getMainLooper())
 
         data class QueueItem(

@@ -12,9 +12,9 @@
     android:gravity="center"
     android:orientation="vertical"
     card_view:cardCornerRadius="12dp"
-    app:cardElevation="0dp"
-    app:cardUseCompatPadding="false"
-    card_view:cardBackgroundColor="#60A9A9A9"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    card_view:cardBackgroundColor="?attr/FG_color"
     android:foreground="@drawable/card_focus"
     android:id="@+id/categoryView">
 
