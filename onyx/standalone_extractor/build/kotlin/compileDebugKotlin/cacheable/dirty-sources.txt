@@ -1,8 +1,0 @@
-C:\Users\n-h-e-z-r-o-n\Desktop\TV PROJECT\streamflix\standalone_extractor\src\main\java\com\extractor\models\DataClasses.kt
-C:\Users\n-h-e-z-r-o-n\Desktop\TV PROJECT\streamflix\standalone_extractor\src\main\java\com\extractor\providers\Provider.kt
-C:\Users\n-h-e-z-r-o-n\Desktop\TV PROJECT\streamflix\standalone_extractor\src\main\java\com\extractor\providers\SflixProvider.kt
-C:\Users\n-h-e-z-r-o-n\Desktop\TV PROJECT\streamflix\standalone_extractor\src\main\java\com\extractor\utils\Converters.kt
-C:\Users\n-h-e-z-r-o-n\Desktop\TV PROJECT\streamflix\standalone_extractor\src\main\java\com\extractor\utils\DnsResolver.kt
-C:\Users\n-h-e-z-r-o-n\Desktop\TV PROJECT\streamflix\standalone_extractor\src\main\java\com\extractor\extractors\RabbitstreamExtractor.kt
-C:\Users\n-h-e-z-r-o-n\Desktop\TV PROJECT\streamflix\standalone_extractor\src\main\java\com\extractor\StreamFlixExtractor.kt
-C:\Users\n-h-e-z-r-o-n\Desktop\TV PROJECT\streamflix\standalone_extractor\src\main\java\com\extractor\extractors\Extractor.kt
