@@ -3,6 +3,7 @@ package com.example.onyx
 import android.app.Activity
 import android.app.UiModeManager
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -353,6 +354,17 @@ object GlobalUtils {
         update()
     }
 
+
+    fun saveServerIndex(context: Context, index: Int) {
+        val prefs = context.getSharedPreferences("server_prefs", MODE_PRIVATE)
+        prefs.edit().putInt("selected_server_index", index).apply()
+    }
+
+    fun getSavedServerIndex(context: Context): Int {
+        val prefs = context.getSharedPreferences("server_prefs", MODE_PRIVATE)
+        Log.e("DEBUG_SERVER", prefs.getInt("selected_server_index", 0).toString())
+        return prefs.getInt("selected_server_index", 0)
+    }
 
 
 

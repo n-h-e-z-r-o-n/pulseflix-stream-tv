@@ -603,9 +603,10 @@
                     <LinearLayout
                         android:id="@+id/Season_widget"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
 
                         <!-- ✅ Season Selector goes here -->
@@ -653,14 +654,12 @@
                             android:background="?attr/AccentColor"
                             android:alpha="0.3" />
 
-                        <include android:layout_height="50dp" layout="@layout/laod_animation"
-                            tools:ignore="IncludeLayoutParam" />
-
                         <!-- Episodes Recycler -->
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/episodes_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:minHeight="1dp"
                             android:orientation="horizontal"
                             android:clipToPadding="false"
                             android:scrollbars="none"

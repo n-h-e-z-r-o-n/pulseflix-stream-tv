@@ -39,9 +39,6 @@ class Play : AppCompatActivity() {
         val server = intent.getStringExtra("server") ?: "VidSrc.to"
 
 
-
-
-
         // Increment watch statistics using GlobalUtils
         if(type == "movie"){
             GlobalUtils.incrementMoviesWatched(this)
@@ -50,6 +47,8 @@ class Play : AppCompatActivity() {
         }
 
         val webView = findViewById<WebView>(R.id.webView)
+
+
 
         // Set WebView background color to avoid white flash before content loads
         val typedValue = TypedValue()
@@ -237,8 +236,8 @@ class Play : AppCompatActivity() {
         webView.settings.setSupportMultipleWindows(false)
 
         // Get complete URL based on server selection and content type
-        val url = getServerUrl(server, type, imdbCode, seasonNo, episodeNo)
-        
+        val url = getServerUrl(type, imdbCode.toString().trim(), seasonNo.toString().trim(), episodeNo.toString().trim())
+
         // Load the URL
         webView.loadUrl(url)
         Log.d("DEBUG_WEBVIEW", "imdbCode: $imdbCode - type: $type -seasonNo:  $seasonNo - episodeNo: $episodeNo - server: $server ")
@@ -246,38 +245,10 @@ class Play : AppCompatActivity() {
 
         setupBackPressedCallback()
 
-
-
-
     }
 
 
-    @OptIn(UnstableApi::class)
-    private fun playVideoExternally(videoUrl: String) {
-        synchronized(this) {
-            if (isVideoLaunching) {
-                Log.d("DEBUG_TAG_PlayActivity", "Video launch ignored: already launching.")
-                return
-            }
-            isVideoLaunching = true
-        }
 
-        Log.d("DEBUG_TAG_PlayActivity", "Launching external video: $videoUrl")
-
-        try {
-            // Clear WebView data and cookies before launching video player
-            clearWebViewData()
-            Video_payer.playVideoExternally(this, videoUrl)
-            finish()
-        } catch (e: Exception) {
-            Log.e("DEBUG_TAG_PlayActivity", "Failed to launch external video", e)
-        } finally {
-            synchronized(this) {
-                isVideoLaunching = false
-            }
-        }
-    }
-    
     private fun clearWebViewData() {
         try {
             // Clear WebView cache, cookies, and data
@@ -285,27 +256,27 @@ class Play : AppCompatActivity() {
             webView?.let { wv ->
                 // Stop loading
                 wv.stopLoading()
-                
+
                 // Clear cache
                 wv.clearCache(true)
-                
+
                 // Clear history
                 wv.clearHistory()
-                
+
                 // Clear form data
                 wv.clearFormData()
-                
+
                 // Clear cookies
                 val cookieManager = CookieManager.getInstance()
                 cookieManager.removeAllCookies(null)
                 cookieManager.flush()
-                
+
                 // Clear WebView storage
                 wv.clearMatches()
-                
+
                 // Load blank page
                 wv.loadUrl("about:blank")
-                
+
                 Log.d("DEBUG_TAG_PlayActivity", "WebView data cleared successfully")
             }
         } catch (e: Exception) {
@@ -351,43 +322,32 @@ class Play : AppCompatActivity() {
         }
     }
 
-    private fun getServerUrl(server: String, urlType: String?, showId: String?, seasonNo: String?, episodeNo: String?): String {
-        val serverIndex = getServerIndex(server)
-        
+    private fun getServerUrl(urlType: String?, showId: String?, seasonNo: String?, episodeNo: String?): String {
+        val serverIndex = GlobalUtils.getSavedServerIndex(this)
+
         return if (urlType == "movie") {
             when (serverIndex) {
-                1 -> "https://vidsrc.to/embed/movie/$showId"
-                2 -> "https://player.embed-api.stream/?id=$showId&type=movie"
-                3 -> "https://www.2embed.skin/embed/$showId"
-                4 -> "https://embed.su/embed/movie/$showId"
-                5 -> "https://www.primewire.tf/embed/movie?tmdb=$showId"
-                6 -> "https://www.vidking.net/embed/movie/$showId"
+                0 -> "https://vidsrc.to/embed/movie/$showId"
+                1 -> "https://player.embed-api.stream/?id=$showId&type=movie"
+                2 -> "https://www.2embed.skin/embed/$showId"
+                3 -> "https://embed.su/embed/movie/$showId"
+                4 -> "https://www.primewire.tf/embed/movie?tmdb=$showId"
+                5 -> "https://www.vidking.net/embed/movie/$showId"
                 else -> "https://vidsrc.to/embed/movie/$showId"
             }
         } else {
             when (serverIndex) {
-                1 -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
-                2 -> "https://player.embed-api.stream/?id=$showId&s=$seasonNo&e=$episodeNo"
-                3 -> "https://www.2embed.cc/embedtv/$showId&s=$seasonNo&e=$episodeNo"
-                4 -> "https://embed.su/embed/tv/$showId/$seasonNo/$episodeNo"
-                5 -> "https://www.primewire.tf/embed/tv?tmdb=$showId&season=$seasonNo&episode=$episodeNo"
-                6 -> "https://www.vidking.net/embed/tv/$showId/$seasonNo/$episodeNo"
+                0 -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
+                1 -> "https://player.embed-api.stream/?id=$showId&s=$seasonNo&e=$episodeNo"
+                2 -> "https://www.2embed.cc/embedtv/$showId&s=$seasonNo&e=$episodeNo"
+                3 -> "https://embed.su/embed/tv/$showId/$seasonNo/$episodeNo"
+                4 -> "https://www.primewire.tf/embed/tv?tmdb=$showId&season=$seasonNo&episode=$episodeNo"
+                5 -> "https://www.vidking.net/embed/tv/$showId/$seasonNo/$episodeNo"
                 else -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
             }
         }
     }
-    
-    private fun getServerIndex(server: String): Int {
-        return when (server) {
-            "VidSrc.to" -> 1
-            "Embed API Stream" -> 2
-            "2Embed" -> 3
-            "Embed.su" -> 4
-            "PrimeWire" -> 5
-            "vidking" -> 6
-            else -> 1 // Default to VidSrc.to
-        }
-    }
+
 
     private fun setupBackPressedCallback() {
         onBackPressedDispatcher.addCallback(

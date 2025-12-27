@@ -59,15 +59,6 @@ class Watch_Page : AppCompatActivity() {
     private lateinit var  sm: SessionManger
     
     private var currentServerIndex = 0
-    private val servers = listOf(
-        "VidSrc.to",
-        "Embed API Stream",
-        "2Embed",
-        "Embed.su",
-        "PrimeWire",
-        "vidking"
-    )
-
     private lateinit var episodes_recycler : RecyclerView
 
 
@@ -83,10 +74,6 @@ class Watch_Page : AppCompatActivity() {
         fetch = TMDBapi(this)
         db = AppDatabase(this)
         sm = SessionManger(this)
-
-
-
-
 
 
         episodes_recycler = findViewById<RecyclerView>(R.id.episodes_recycler)
@@ -324,7 +311,6 @@ class Watch_Page : AppCompatActivity() {
                             val intent = Intent(this@Watch_Page, Play::class.java)
                             intent.putExtra("imdb_code", tmdbId)
                             intent.putExtra("type", type)
-                            intent.putExtra("server", servers[currentServerIndex])
                             startActivity(intent)
                         }
 
@@ -527,9 +513,6 @@ class Watch_Page : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun ShowSeasonEpisodes(SelectedSeasons: Int, seasonData : MutableList<JSONObject>, seriesId: String, seasonAllData:  JSONObject) {
 
-        LoadingAnimation.setup(this, R.raw.grey)
-        LoadingAnimation.show(this)
-
         val overviewWidget = findViewById<TextView>(R.id.overview_widget)
         val ratingWidget = findViewById<TextView>(R.id.Rating_widget)
         val posterWidget = findViewById<ImageView>(R.id.posterImageView)
@@ -664,7 +647,6 @@ class Watch_Page : AppCompatActivity() {
                         Log.e("DEBUG_Each E list", "${episodesList.size}")
                         episodes_recycler.removeAllViews()
                         episodes_recycler.adapter = EpisodesAdapter(episodesList)
-                        LoadingAnimation.hide(this@Watch_Page)
 
                     }
                     break
@@ -908,25 +890,36 @@ class Watch_Page : AppCompatActivity() {
         }
     }
 
-
-    // dp → px converter
-    fun Int.dpToPx(context: Context): Int {
-        return (this * context.resources.displayMetrics.density).toInt()
-    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private fun showServerDialog() {
+
+        val servers = listOf(
+            "VidSrc",
+            "Embed API",
+            "2Embed",
+            "Embed.su",
+            "PrimeWire",
+            "vidking"
+        )
+
         val builder = android.app.AlertDialog.Builder(this, R.style.CustomDialogTheme)
         builder.setTitle("Select a Streaming Server (Powered by Third Parties)")
-            .setSingleChoiceItems(servers.toTypedArray(), currentServerIndex) { dialog, which ->
-                currentServerIndex = which
-                // Update server button display
-                //val serverButton = findViewById<ImageButton>(R.id.serverButton)
 
-                Toast.makeText(this, "Server changed to: ${servers[currentServerIndex]}", Toast.LENGTH_SHORT).show()
-                dialog.dismiss() // Auto-close dialog when option is selected
+            .setSingleChoiceItems(servers.toTypedArray(), GlobalUtils.getSavedServerIndex(this)) { dialog, which ->
+
+                // Save selection immediately
+                GlobalUtils.saveServerIndex(this, which)
+                currentServerIndex = which
+
+                Toast.makeText(this, "Server: ${servers[currentServerIndex]}", Toast.LENGTH_SHORT).show()
+                dialog.dismiss() // Auto-close dialog
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
+
+
 
 }

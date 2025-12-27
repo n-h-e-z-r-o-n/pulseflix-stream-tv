@@ -1,5 +1,6 @@
 package com.example.onyx
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -15,6 +16,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import android.widget.ScrollView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +38,7 @@ class Home_Page : AppCompatActivity() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
@@ -51,6 +54,13 @@ class Home_Page : AppCompatActivity() {
         //setupBackPressedCallback()
         //sliderData()
         //categoryShow()
+        
+        // Test VideoResolver
+        Log.d("DEBUG_HOME", "Starting VideoResolver test...")
+
+        val url = "https://vidsrc.to/embed/movie/76600"
+
+
 
     }
 
