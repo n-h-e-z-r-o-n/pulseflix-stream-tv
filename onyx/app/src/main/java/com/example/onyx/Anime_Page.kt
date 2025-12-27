@@ -353,11 +353,11 @@ class Anime_Page : AppCompatActivity() {
 
          animeHomeData()
 
-         //loadDubbedAnime()
-         //loadPopularAnime()
-         //loadRecentlyAnime()
-         //setupSearchUi()
-         //animeWatchedList()
+         loadDubbedAnime()
+         loadPopularAnime()
+         loadRecentlyAnime()
+         setupSearchUi()
+         animeWatchedList()
          notificationS()
      }
 
