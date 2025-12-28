@@ -42,6 +42,17 @@ class Video_payer : AppCompatActivity(), Player.Listener {
     private lateinit var  sm: SessionManger
     private  var  userId: Int? = null
     private var resumePosition: Long = 0L
+    private var showId: String = ""
+    private var showType: String = ""
+    private var showTitle: String = ""
+    private var showPoster: String = ""
+    private var showBackdrop: String = ""
+    private var showSNo: String = ""
+    private var showENo: String = ""
+    private var videoUrl: String = ""
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     private lateinit var playerView: PlayerView
     private lateinit var progressBar: ProgressBar
@@ -136,8 +147,20 @@ class Video_payer : AppCompatActivity(), Player.Listener {
     }
 
     private fun setupPlayer() {
-        val videoUrl = intent.getStringExtra("video_url")
-        if (videoUrl != null) {
+
+
+        videoUrl = intent.getStringExtra("video_url")?: ""
+        showId = intent.getStringExtra("showId")?: ""
+        showType = intent.getStringExtra("showType")?: ""
+        showTitle = intent.getStringExtra("showTitle")?: ""
+        showPoster = intent.getStringExtra("showPoster")?: ""
+        showBackdrop = intent.getStringExtra("showBackdrop")?: ""
+        showSNo = intent.getStringExtra("showSNo")?: ""
+        showENo = intent.getStringExtra("showENo")?: ""
+
+
+
+        if (!videoUrl.isNullOrEmpty()) {
             exoPlayer = initializePlayer(videoUrl)
             
             exoPlayer?.let { player ->
@@ -613,9 +636,17 @@ class Video_payer : AppCompatActivity(), Player.Listener {
     // ===== PlayerManager functionality merged into this class =====
     
     companion object {
-        fun playVideoExternally(context: Context, videoUrl: String) {
+        fun playVideoExternally(context: Context, videoUrl: String,showId: String,showType: String,showTitle: String,showPoster: String, showBackdrop: String, showSNo: String,showENo: String,) {
             val intent = Intent(context, Video_payer::class.java).apply {
                 putExtra("video_url", videoUrl)
+                putExtra("showId", showId)
+                putExtra("showType", showType)
+                putExtra("showTitle", showTitle)
+                putExtra("showPoster", videoUrl)
+                putExtra("showBackdrop", videoUrl)
+                putExtra("showSNo", videoUrl)
+                putExtra("showENo", videoUrl)
+
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
             context.startActivity(intent)

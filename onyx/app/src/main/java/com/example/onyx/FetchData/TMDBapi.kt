@@ -27,47 +27,7 @@ import java.net.URL
 
 class TMDBapi(private val context: Context) {
 
-    suspend fun fetchLogos(
-        type: String,
-        tmdbId: String
-    ): String? = withContext(Dispatchers.IO) {
 
-        try {
-            val logosUrl = "https://api.themoviedb.org/3/$type/$tmdbId/images"
-
-            val connection = URL(logosUrl).openConnection() as HttpURLConnection
-            connection.requestMethod = "GET"
-            connection.setRequestProperty("accept", "application/json")
-            connection.setRequestProperty(
-                "Authorization",
-                "Bearer ${BuildConfig.TM_K}"
-            )
-
-            val response = connection.inputStream
-                .bufferedReader()
-                .use { it.readText() }
-
-            val logos = JSONObject(response).getJSONArray("logos")
-
-            // 1️⃣ Prefer English logo
-            for (i in 0 until logos.length()) {
-                val logo = logos.getJSONObject(i)
-                if (logo.optString("iso_639_1") == "en") {
-                    return@withContext "https://image.tmdb.org/t/p/original/${logo.getString("file_path")}"
-                }
-            }
-
-            // 2️⃣ Fallback to first available
-            if (logos.length() > 0) {
-                return@withContext "https://image.tmdb.org/t/p/original/${logos.getJSONObject(0).getString("file_path")}"
-            }
-
-            null
-        } catch (e: Exception) {
-            Log.e("fetchLogos", "Error: ${e.message}")
-            null
-        }
-    }
 
 
     fun fetchLogos (type:String, tmdbId:String, widget:ImageView, widget2: View){

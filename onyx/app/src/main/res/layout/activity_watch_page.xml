@@ -606,7 +606,7 @@
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
 
                         <!-- ✅ Season Selector goes here -->

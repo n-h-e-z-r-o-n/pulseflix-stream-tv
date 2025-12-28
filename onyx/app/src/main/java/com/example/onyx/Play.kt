@@ -24,6 +24,14 @@ class Play : AppCompatActivity() {
 
     @Volatile
     private var isVideoLaunching = false
+    private var showId: String = ""
+    private var showType: String = ""
+    private var showTitle: String = ""
+    private var showPoster: String = ""
+    private var showBackdrop: String = ""
+    private var showSNo: String = ""
+    private var showENo: String = ""
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,22 +40,40 @@ class Play : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_play)
 
-        val imdbCode = intent.getStringExtra("imdb_code")
-        val type = intent.getStringExtra("type")
-        val seasonNo = intent.getStringExtra("seasonNo")
-        val episodeNo = intent.getStringExtra("episodeNo")
-        val server = intent.getStringExtra("server") ?: "VidSrc.to"
+        /*
+        intent.putExtra("imdb_code", showId)
+        intent.putExtra("type", showType)
+        intent.putExtra("title", showTitle)
+        intent.putExtra("poster", showPoster)
+        intent.putExtra("backdrop", showBackdrop)
+        intent.putExtra("seasonNo", '0')
+        intent.putExtra("EpisodeNo", '0')
+        */
+
+
+        showId = intent.getStringExtra("imdb_code")?: ""
+        showType = intent.getStringExtra("type")?: ""
+        showTitle =  intent.getStringExtra("title")?: ""
+        showPoster =  intent.getStringExtra("poster")?: ""
+        showBackdrop =  intent.getStringExtra("showBackdrop")?: ""
+        showSNo =  intent.getStringExtra("seasonNo")?: ""
+        showENo =  intent.getStringExtra("seasonNo")?: ""
+
+        Log.d("DEBUG_WEBVIEW", "imdbCode: $showId - type: $showType   -title: $showTitle  -seasonNo:  $showSNo - episodeNo: $showENo ")
+
+
 
 
         // Increment watch statistics using GlobalUtils
-        if(type == "movie"){
+        if(showType == "movie"){
             GlobalUtils.incrementMoviesWatched(this)
         }else{
             GlobalUtils.incrementSeriesWatched(this)
         }
 
-        val webView = findViewById<WebView>(R.id.webView)
+        //-----------------------------------------------------------------------------------------
 
+        val webView = findViewById<WebView>(R.id.webView)
 
 
         // Set WebView background color to avoid white flash before content loads
@@ -236,11 +262,11 @@ class Play : AppCompatActivity() {
         webView.settings.setSupportMultipleWindows(false)
 
         // Get complete URL based on server selection and content type
-        val url = getServerUrl(type, imdbCode.toString().trim(), seasonNo.toString().trim(), episodeNo.toString().trim())
+        val url = getServerUrl(showType, showId.trim(), showSNo.trim(), showENo.trim())
 
         // Load the URL
         webView.loadUrl(url)
-        Log.d("DEBUG_WEBVIEW", "imdbCode: $imdbCode - type: $type -seasonNo:  $seasonNo - episodeNo: $episodeNo - server: $server ")
+        Log.d("DEBUG_WEBVIEW", "imdbCode: $showType - type: $showType -seasonNo:  $showSNo - episodeNo: $showENo ")
         Log.d("DEBUG_WEBVIEW", "url: $url ")
 
         setupBackPressedCallback()
@@ -293,8 +319,6 @@ class Play : AppCompatActivity() {
         lifecycleScope.launch {
             var centerX = webView.width / 2
             var centerY = webView.height / 2
-
-
 
 
             repeat(repeatCount) { index ->

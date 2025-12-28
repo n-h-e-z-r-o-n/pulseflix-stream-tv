@@ -58,6 +58,14 @@ class Watch_Page : AppCompatActivity() {
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
 
+    private var userId: Int = -1
+    private var showId: String = ""
+    private var showType: String = ""
+    private var showTitle: String = ""
+    private var showPoster: String = ""
+    private var showBackdrop: String = ""
+
+
 
     private var currentServerIndex = 0
 
@@ -81,6 +89,8 @@ class Watch_Page : AppCompatActivity() {
         db = AppDatabase(this)
         sm = SessionManger(this)
 
+        userId = sm.getUserId()
+
 
         episodes_recycler = findViewById<RecyclerView>(R.id.episodes_recycler)
         //episodes_recycler.layoutManager = GridLayoutManager(this@Watch_Page, 4)
@@ -95,16 +105,18 @@ class Watch_Page : AppCompatActivity() {
         serverButton = findViewById<LinearLayout>(R.id.serverButton)
 
 
-        // Get extras from Intent
-        val imdbCode = intent.getStringExtra("imdb_code")
-        val type = intent.getStringExtra("type")
+        //-------- Get extras from Intent-----------------------------------------------------------
+        showId = intent.getStringExtra("imdb_code")?: ""
+        showType = intent.getStringExtra("type")?: ""
 
-        Log.e("DEBUG_WATCH", "imdbCode: $imdbCode, type: $type")
+        Log.e("DEBUG_WATCH", "imdbCode: $showId, type: $showType")
 
-        if(!imdbCode.isNullOrEmpty()){
-            fetchData(imdbCode.toString(), type.toString())
+        if(!showId.isNullOrEmpty()){
+            fetchData()
         }else{
-            fetchData("76479 ", "tv")
+            showId = "533444"
+            showType = "movie"
+            fetchData()
         }
 
     }
@@ -112,7 +124,7 @@ class Watch_Page : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun fetchData(tmdbId:String, type: String) {
+    private fun fetchData() {
         LoadingAnimation.show(this@Watch_Page)
 
         val displayMetrics = resources.displayMetrics
@@ -127,10 +139,10 @@ class Watch_Page : AppCompatActivity() {
         // ---------- LOGOS ------------------------------------------------------------------------
         val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
         val textLogo = findViewById<TextView>(R.id.title_widget)
-        fetch.fetchLogos(type, tmdbId, cShowLogo, textLogo)
+        fetch.fetchLogos(showType, showId, cShowLogo, textLogo)
 
         // ---------- DATA -------------------------------------------------------------------------
-        val jsonObject = fetch.fetchShowData(tmdbId, type=type)
+        val jsonObject = fetch.fetchShowData(showId, showType)
         Log.e("DEBUG_Watch", jsonObject.toString())
         if (jsonObject != null) {
 
@@ -141,6 +153,7 @@ class Watch_Page : AppCompatActivity() {
             val originalTitle = jsonObject.optString("name").ifEmpty {
                 jsonObject.optString("title")
             }
+
 
             val releaseDate = jsonObject.optString("release_date").ifEmpty {
                 jsonObject.optString("first_air_date")
@@ -159,6 +172,13 @@ class Watch_Page : AppCompatActivity() {
 
             val posterUrl =
                 "https://image.tmdb.org/t/p/original/${jsonObject.getString("poster_path")}"
+
+
+            val tmdbId = jsonObject.optString("id")
+            showId = tmdbId
+
+
+
 
             val runtime = if (jsonObject.has("runtime") && !jsonObject.isNull("runtime")) {
                 val runtimeInt = jsonObject.optInt("runtime", 0)
@@ -198,7 +218,9 @@ class Watch_Page : AppCompatActivity() {
 
 
 
-
+            showTitle = originalTitle
+            showPoster = posterUrl
+            showBackdrop = backdropUrl
 
             // ---------- UI BINDS -----------------------------------------------------------------
 
@@ -234,7 +256,7 @@ class Watch_Page : AppCompatActivity() {
             var lastSeason: Int = 0
             var lastEpisode: Int = 0
 
-            if (type == "tv") {
+            if (showType == "tv") {
                 try {
                     lastEpisode = jsonObject.getJSONObject("last_episode_to_air")
                         .optInt("episode_number", 0)
@@ -265,7 +287,7 @@ class Watch_Page : AppCompatActivity() {
 
                 //val season_count_widget = findViewById<TextView>(R.id.season_count_text)
                 //season_count_widget.text = "$no_of_season Seasons"
-                createSeasonButtons(no_of_season, validSeasons, tmdbId, jsonObject)
+                createSeasonButtons(no_of_season, validSeasons, showId, jsonObject)
             }
 
             // ---------- BUTTONS ------------------------------------------------------------------
@@ -274,8 +296,13 @@ class Watch_Page : AppCompatActivity() {
 
             watchButton.setOnClickListener {
                 val intent = Intent(this@Watch_Page, Play::class.java)
-                intent.putExtra("imdb_code", tmdbId)
-                intent.putExtra("type", type)
+                intent.putExtra("imdb_code", showId)
+                intent.putExtra("type", showType)
+                intent.putExtra("title", showTitle)
+                intent.putExtra("poster", showPoster)
+                intent.putExtra("backdrop", showBackdrop)
+                intent.putExtra("seasonNo", "0")
+                intent.putExtra("EpisodeNo", "0")
                 startActivity(intent)
             }
 
@@ -288,8 +315,8 @@ class Watch_Page : AppCompatActivity() {
 
 
             setupFavoriteButton(
-                showId = tmdbId,
-                type = type,
+                showId = showId,
+                type = showType,
                 title = originalTitle,
                 voteAverage = voteAverage,
                 genres = genres,
@@ -309,8 +336,8 @@ class Watch_Page : AppCompatActivity() {
 
 
             LoadingAnimation.hide(this@Watch_Page)
-            Cast_Data(tmdbId.toString(), type.toString())
-            Watch_Recomendation_Data(tmdbId.toString(), type.toString())
+            Cast_Data(showId.toString(), showType.toString())
+            Watch_Recomendation_Data(showId.toString(), showType.toString())
         }else{
             LoadingAnimation.setup(this@Watch_Page, R.raw.error)
         }
