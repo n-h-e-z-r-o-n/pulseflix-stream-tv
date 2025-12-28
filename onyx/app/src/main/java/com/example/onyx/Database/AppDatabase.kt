@@ -711,6 +711,34 @@ class AppDatabase(context: Context) :
         )
     }
 
+    fun getResumePosition(
+        userId: Int,
+        itemId: String,
+        type: String
+    ): Int {
+        val db = readableDatabase
+        var lastPosition = 0
+
+        val cursor = db.rawQuery(
+            """
+        SELECT last_position 
+        FROM continue_watching
+        WHERE user_id = ? AND item_id = ? AND type = ?
+        LIMIT 1
+        """,
+            arrayOf(userId.toString(), itemId, type)
+        )
+
+        if (cursor.moveToFirst()) {
+            lastPosition = cursor.getInt(
+                cursor.getColumnIndexOrThrow("last_position")
+            )
+        }
+
+        cursor.close()
+        return lastPosition
+    }
+
     ////////////////////////////////// NOTIFICATIONS FUNCTIONS ///////////////////////////////////////
 
     fun insertAnimeNotification(

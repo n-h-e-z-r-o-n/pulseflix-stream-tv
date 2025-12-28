@@ -34,13 +34,14 @@ import java.util.*
 
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import kotlin.text.toLongOrNull
 
 @UnstableApi
 class Video_payer : AppCompatActivity(), Player.Listener {
 
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
-    private  var  userId: Int? = null
+    private  var  userId = -1
     private var resumePosition: Long = 0L
     private var showId: String = ""
     private var showType: String = ""
@@ -157,6 +158,9 @@ class Video_payer : AppCompatActivity(), Player.Listener {
         showBackdrop = intent.getStringExtra("showBackdrop")?: ""
         showSNo = intent.getStringExtra("showSNo")?: ""
         showENo = intent.getStringExtra("showENo")?: ""
+
+        resumePosition = db.getResumePosition(userId, showId, showType).toLong()
+
 
 
 
@@ -545,6 +549,49 @@ class Video_payer : AppCompatActivity(), Player.Listener {
                     Toast.makeText(this, "Video ended", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+    private fun saveContinueWatching() {
+        exoPlayer?.let { player ->
+            val duration = player.duration.toInt()
+            val lastPosition = player.currentPosition.toInt()
+
+            // Ignore very short playback
+            if (lastPosition < 5_000 || duration <= 0) return
+
+            if(showType=="movie"){
+
+                db.addOrUpdateContinueWatching(
+                    userId = userId,
+                    itemId = showId,
+                    type = showType,
+                    title = showTitle,
+                    poster = showPoster,
+                    backdrop = showBackdrop,
+                    seasonNumber = showSNo,
+                    episodeNumber = showENo,
+                    lastPosition = lastPosition,
+                    duration = duration
+                )
+
+            }else{
+                val itemId =  "S${showSNo.trim()}/${showSNo.trim()}/${showENo.trim()}"
+                db.addOrUpdateContinueWatching(
+                    userId = userId,
+                    itemId = itemId,
+                    type = showType,
+                    title = showTitle,
+                    poster = showPoster,
+                    backdrop = showBackdrop,
+                    seasonNumber = showSNo,
+                    episodeNumber = showENo,
+                    lastPosition = lastPosition,
+                    duration = duration
+                )
+            }
+
+
         }
     }
 

@@ -1112,8 +1112,4 @@ class Anime_Page : AppCompatActivity() {
 
 
     }
-
-
-
-
  }
