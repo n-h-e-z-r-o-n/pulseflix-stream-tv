@@ -68,7 +68,7 @@ object NotificationHelper {
                 val storedLastEpisode =item["lastEpisode"].toString().toIntOrNull() ?: 0
                 val storedNoOfSeason = item["noOfSeason"].toString().toIntOrNull() ?: 0
 
-                val data = fetch.fetchTvData(show_id.toString())
+                val data = fetch.fetchShowData(show_id.toString(), type="tv")
 
                 if (data != null) {
 

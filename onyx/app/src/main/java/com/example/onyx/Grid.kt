@@ -764,6 +764,8 @@ class RecommendAdapter(
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
 class CastAdapter(
     private val  items: MutableList<CastItem>,   // ✅ mutable now,
     private val layoutResId: Int   // 👈 pass in the layout resource
@@ -809,9 +811,6 @@ class CastAdapter(
 
 
         holder.Actor_Name.text = title
-
-
-
 
 
         Glide.with(holder.itemView.context)
@@ -1313,10 +1312,10 @@ class EpisodesAdapter(
         holder.descView.text = ep.episodesDescription
 
 
-        val url = "https://image.tmdb.org/t/p/w500${ep.episodesImage}"
+        val url = "https://image.tmdb.org/t/p/original${ep.episodesImage}"
         Glide.with(holder.itemView.context)
             .load(url)
-            .centerInside()
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .into(holder.epsImg)
 
 

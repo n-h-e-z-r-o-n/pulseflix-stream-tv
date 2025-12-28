@@ -49,7 +49,7 @@ import kotlin.text.ifEmpty
 import com.example.onyx.FetchData.TMDBapi
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
-
+import java.time.format.DateTimeFormatter
 
 
 class Watch_Page : AppCompatActivity() {
@@ -57,9 +57,15 @@ class Watch_Page : AppCompatActivity() {
     private lateinit var  fetch: TMDBapi
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
-    
+
+
     private var currentServerIndex = 0
+
     private lateinit var episodes_recycler : RecyclerView
+
+    private lateinit var watchButton : LinearLayout
+    private lateinit var trailerButton :LinearLayout
+    private lateinit var serverButton: LinearLayout
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -84,6 +90,10 @@ class Watch_Page : AppCompatActivity() {
             false
         )
 
+        watchButton = findViewById<LinearLayout>(R.id.watchNowButton)
+        trailerButton = findViewById<LinearLayout>(R.id.TrailerButton)
+        serverButton = findViewById<LinearLayout>(R.id.serverButton)
+
 
         // Get extras from Intent
         val imdbCode = intent.getStringExtra("imdb_code")
@@ -94,7 +104,7 @@ class Watch_Page : AppCompatActivity() {
         if(!imdbCode.isNullOrEmpty()){
             fetchData(imdbCode.toString(), type.toString())
         }else{
-            fetchData("66732 ", "tv")
+            fetchData("76479 ", "tv")
         }
 
     }
@@ -102,7 +112,9 @@ class Watch_Page : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun fetchData(id:String, type: String) {
+    private fun fetchData(tmdbId:String, type: String) {
+        LoadingAnimation.show(this@Watch_Page)
+
         val displayMetrics = resources.displayMetrics
         val screenHeight = displayMetrics.heightPixels
 
@@ -112,274 +124,197 @@ class Watch_Page : AppCompatActivity() {
         params.height = (screenHeight * 0.8).toInt()
         mainWidget1.layoutParams = params
 
-        CoroutineScope(Dispatchers.IO).launch {
-            var tmdbId = id // mutable copy
-            val maxRetries = 4
-            var attempts = 0
+        // ---------- LOGOS ------------------------------------------------------------------------
+        val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
+        val textLogo = findViewById<TextView>(R.id.title_widget)
+        fetch.fetchLogos(type, tmdbId, cShowLogo, textLogo)
 
-            while (attempts < maxRetries) {
-                attempts++
+        // ---------- DATA -------------------------------------------------------------------------
+        val jsonObject = fetch.fetchShowData(tmdbId, type=type)
+        Log.e("DEBUG_Watch", jsonObject.toString())
+        if (jsonObject != null) {
+
+            val overview = jsonObject.optString("overview", "")
+            val voteAverage = jsonObject.optString("vote_average", "0")
+            val voteCount = jsonObject.optString("vote_count", "0")
+
+            val originalTitle = jsonObject.optString("name").ifEmpty {
+                jsonObject.optString("title")
+            }
+
+            val releaseDate = jsonObject.optString("release_date").ifEmpty {
+                jsonObject.optString("first_air_date")
+            }.substring(0, 4)
+
+            val PG = if (jsonObject.optBoolean("adult", false)) "18 +" else "13"
+
+            val backdropUrl =
+                if (jsonObject.has("backdrop_path") && !jsonObject.isNull("backdrop_path")) {
+                    "https://image.tmdb.org/t/p/original/${jsonObject.getString("backdrop_path")}"
+                } else if (jsonObject.has("poster_path") && !jsonObject.isNull("poster_path")) {
+                    "https://image.tmdb.org/t/p/original/${jsonObject.getString("poster_path")}"
+                } else {
+                    ""
+                }
+
+            val posterUrl =
+                "https://image.tmdb.org/t/p/original/${jsonObject.getString("poster_path")}"
+
+            val runtime = if (jsonObject.has("runtime") && !jsonObject.isNull("runtime")) {
+                val runtimeInt = jsonObject.optInt("runtime", 0)
+                if (runtimeInt > 0) GlobalUtils.formatRuntime(runtimeInt) else ""
+            } else {
+                val arr = jsonObject.optJSONArray("episode_run_time")
+                val runtimeInt =
+                    if (arr != null && arr.length() > 0) arr.optInt(0) else 0
+                if (runtimeInt > 0) GlobalUtils.formatRuntime(runtimeInt) else ""
+            }
+
+            val genresArray =
+                jsonObject.getJSONArray("genres") //[{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"}]
+            val genresList = mutableListOf<String>()
+            for (i in 0 until genresArray.length()) {
+                val genreObject = genresArray.getJSONObject(i)
+                val genreName = genreObject.getString("name")
+                genresList.add(genreName)
+            }
+
+            val genres = jsonObject.optJSONArray("genres")
+                ?.let { array ->
+                    (0 until array.length()).mapNotNull {
+                        array.optJSONObject(it)?.optString("name")
+                    }.joinToString("  -  ")
+                } ?: ""
+
+
+            val productionCompanies = jsonObject.optJSONArray("production_companies")
+                ?.let { array ->
+                    (0 until array.length()).mapNotNull {
+                        array.optJSONObject(it)?.optString("name")
+                    }.joinToString("  -  ")
+                } ?: ""
+
+
+
+
+
+
+
+            // ---------- UI BINDS -----------------------------------------------------------------
+
+            findViewById<TextView>(R.id.title_widget).text = originalTitle
+            findViewById<TextView>(R.id.year_widget).text = releaseDate
+            findViewById<TextView>(R.id.overview_widget).text = overview
+            findViewById<TextView>(R.id.Genres_widget).text = genres
+            findViewById<TextView>(R.id.Production_widget).text = productionCompanies
+            findViewById<TextView>(R.id.Rating_widget).text = voteAverage
+            findViewById<TextView>(R.id.Runtime_widget).text = "$runtime min"
+            findViewById<TextView>(R.id.PG_widget).text = PG
+
+            val poster_widget = findViewById<ImageView>(R.id.posterImageView)
+            val backdrop_Widget = findViewById<ImageView>(R.id.backdropImageView)
+
+
+            Glide.with(this@Watch_Page)
+                .load(backdropUrl)
+                .centerInside()
+                .into(backdrop_Widget)
+
+
+            Glide.with(this@Watch_Page)
+                .load(posterUrl)
+                .centerInside()
+                .into(poster_widget)
+
+
+        //------------------------------------------------------------------------------------------
+
+            val validSeasons = mutableListOf<JSONObject>()
+            var no_of_season: Int = 0
+            var lastSeason: Int = 0
+            var lastEpisode: Int = 0
+
+            if (type == "tv") {
                 try {
-                    // --- STEP 1: Convert IMDb → TMDB ID (if required)
-                    if (id.startsWith("tt")) {
-
-                        val url = "https://api.themoviedb.org/3/movie/$id/external_ids"
-                        val connection = URL(url).openConnection() as HttpURLConnection
-                        connection.requestMethod = "GET"
-                        connection.setRequestProperty("accept", "application/json")
-                        connection.setRequestProperty(
-                            "Authorization",
-                            "Bearer ${BuildConfig.TM_K}"
-                        )
-                        val response = connection.inputStream.bufferedReader().use { it.readText() }
-                        val jsonObject = JSONObject(response)
-                        tmdbId = jsonObject.getString("id")
-                    }
-
-
-                    val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
-                    val textLogo = findViewById<TextView>(R.id.title_widget)
-                    fetch.fetchLogos(type, tmdbId, cShowLogo, textLogo)
-
-
-
-
-
-
-                    // --- STEP 2: Fetch main movie/TV details
-                    val url = "https://api.themoviedb.org/3/$type/$tmdbId?language=en-US"
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    connection.setRequestProperty("accept", "application/json")
-                    connection.setRequestProperty(
-                        "Authorization",
-                        "Bearer ${BuildConfig.TM_K}"
-                    )
-
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject = JSONObject(response)
-                    Log.e("DEBUG_Watch", jsonObject.toString())
-
-
-
-
-                    val originalTitle: String
-                    val backdropUrl: String
-                    val posterUrl: String
-                    val overview: String
-                    val releaseDate: String
-                    val runtime: String
-                    val vote_average: String
-                    val genres: String
-                    val production_C:String
-                    val PG: String
-                    var voteCount:String
-                    val validSeasons = mutableListOf<JSONObject>()
-                    var no_of_season: Int = 0
-                    var lastSeason :Int = 0
-                    var lastEpisode:Int = 0
-
-
-                    overview = jsonObject.getString("overview")
-
-                    vote_average = jsonObject.getString("vote_average")
-
-                    backdropUrl = if (jsonObject.has("backdrop_path") && !jsonObject.isNull("backdrop_path")) {
-                        "https://image.tmdb.org/t/p/w1280${jsonObject.getString("backdrop_path")}"
-                    } else if (jsonObject.has("poster_path") && !jsonObject.isNull("poster_path")) {
-                        "https://image.tmdb.org/t/p/w780${jsonObject.getString("poster_path")}"
-                    } else { "" }
-
-                    posterUrl =  "https://image.tmdb.org/t/p/w780${jsonObject.getString("poster_path")}"
-
-                    originalTitle  = jsonObject.optString("name").ifEmpty {
-                        jsonObject.optString("title")
-                    }
-
-                    val adult = jsonObject.getString("adult")
-                    PG = if(adult == "true"){
-                        "18 +"
-                    } else {
-                        "13"
-                    }
-
-                    releaseDate = jsonObject.optString("release_date").ifEmpty {
-                        jsonObject.optString("first_air_date")
-                    }.substring(0, 4)
-
-
-
-                    runtime = if (jsonObject.has("runtime") && !jsonObject.isNull("runtime")) {
-                        val runtimeInt = jsonObject.optInt("runtime", 0)
-                        if (runtimeInt > 0) GlobalUtils.formatRuntime(runtimeInt) else ""
-                    } else {
-                        val arr = jsonObject.optJSONArray("episode_run_time")
-                        val runtimeInt = if (arr != null && arr.length() > 0) arr.optInt(0) else 0
-                        if (runtimeInt > 0) GlobalUtils.formatRuntime(runtimeInt) else ""
-                    }
-
-
-                    val genresArray = jsonObject.getJSONArray("genres") //[{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"}]
-                    val genresList = mutableListOf<String>()
-                    for (i in 0 until genresArray.length()) {
-                        val genreObject = genresArray.getJSONObject(i)
-                        val genreName = genreObject.getString("name")
-                        genresList.add(genreName)
-                    }
-                    genres = genresList.joinToString("  -  ")
-
-
-                    val production_companies = jsonObject.getJSONArray("production_companies") //[{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"}]
-                    val productionList = mutableListOf<String>()
-
-                    for (i in 0 until production_companies.length()) {
-                        val productionObject = production_companies.getJSONObject(i)
-                        val genreName = productionObject.getString("name")
-                        productionList.add(genreName)
-                    }
-                    production_C = productionList.joinToString("  - ")
-
-                    voteCount =jsonObject.getString("vote_count")
-
-
-                    if (type == "tv") {
-                        try{
-                            lastEpisode = jsonObject.getJSONObject("last_episode_to_air").optInt("episode_number", 0)
-                            lastSeason = jsonObject.getJSONObject("last_episode_to_air").optInt("season_number", 0)
-                        }catch (e:Exception){}
-
-                        val seasonsArray = jsonObject.getJSONArray("seasons")
-                        for (i in 0 until seasonsArray.length()) {
-                            val season = seasonsArray.getJSONObject(i)
-                            val airDate = season.optString("air_date", "")
-
-                            if (airDate.isNotEmpty()) {
-                                validSeasons.add(season)
-                            }
-                        }
-                        no_of_season = validSeasons.size
-                    }
-
-                    withContext(Dispatchers.Main) {
-                        val backdrop_Widget = findViewById<ImageView>(R.id.backdropImageView)
-                        val poster_widget = findViewById<ImageView>(R.id.posterImageView)
-                        val title_widget = findViewById<TextView>(R.id.title_widget)
-                        val year_widget = findViewById<TextView>(R.id.year_widget)
-                        val Rating_widget = findViewById<TextView>(R.id.Rating_widget)
-                        val Overview_widget = findViewById<TextView>(R.id.overview_widget)
-                        val Runtime_widget = findViewById<TextView>(R.id.Runtime_widget)
-                        val Genres_widget = findViewById<TextView>(R.id.Genres_widget)
-                        val Production_widget = findViewById<TextView>(R.id.Production_widget)
-                        val PG_widget = findViewById<TextView>(R.id.PG_widget)
-
-
-                        title_widget.text = originalTitle
-                        year_widget.text = releaseDate
-                        Overview_widget.text = overview
-                        Genres_widget.text = genres
-                        Production_widget.text = production_C
-
-                        Rating_widget.text = "${vote_average}"
-                        Runtime_widget.text = "${runtime} min"
-                        PG_widget.text = PG
-
-
-
-
-                        Glide.with(this@Watch_Page)
-                            .load(backdropUrl)
-                            .centerInside()
-                            .into(backdrop_Widget)
-
-
-
-
-                        Glide.with(this@Watch_Page)
-                            .load(posterUrl)
-                            .centerInside()
-                            .into(poster_widget)
-
-
-                        val watchButton = findViewById<LinearLayout>(R.id.watchNowButton)
-                        val trailerButton = findViewById<LinearLayout>(R.id.TrailerButton)
-                        val serverButton = findViewById<LinearLayout>(R.id.serverButton)
-
-
-
-
-                        watchButton.setOnClickListener {
-                            val intent = Intent(this@Watch_Page, Play::class.java)
-                            intent.putExtra("imdb_code", tmdbId)
-                            intent.putExtra("type", type)
-                            startActivity(intent)
-                        }
-
-                        serverButton.setOnClickListener {
-                            showServerDialog()
-                        }
-
-
-
-                        setupFavoriteButton(
-                            showId =  tmdbId,
-                            type = type,
-                            title = originalTitle,
-                            voteAverage = vote_average,
-                            genres = genres,
-                            overview = overview,
-                            runtime =runtime,
-                            year= releaseDate,
-                            voteCount = voteCount,
-                            pg = PG,
-                            poster = posterUrl,
-                            backdrop = backdropUrl,
-                            noOfSeason = no_of_season,
-                            lastSeason = lastSeason,
-                            lastEpisode = lastEpisode
-                        )
-
-
-                        if(type=="tv"){
-
-                            params.height = (screenHeight * 1).toInt()
-                            mainWidget1.layoutParams = params
-
-
-                            watchButton.visibility = View.GONE
-                            val Season_widget = findViewById<LinearLayout>(R.id.Season_widget)
-                            Season_widget.visibility = View.VISIBLE
-
-                            //val season_count_widget = findViewById<TextView>(R.id.season_count_text)
-                            //season_count_widget.text = "$no_of_season Seasons"
-                            createSeasonButtons( no_of_season, validSeasons, tmdbId, jsonObject)
-                        }
-                        LoadingAnimation.hide(this@Watch_Page)
-                    }
-
-
-
-                    Cast_Data(tmdbId.toString(), type.toString())
-                    Watch_Recomendation_Data(tmdbId.toString(), type.toString())
-                    break
-
-                }  catch (e: IOException) {
-                    Log.e("DEBUG_WATCH", "Network error ($attempts)", e)
-
-                    withContext(Dispatchers.Main) {
-                        Log.e("DEBUG_SHOWS PAGE", "Network error ", e)
-                        LoadingAnimation.setup(this@Watch_Page, R.raw.error)
-                        LoadingAnimation.show(this@Watch_Page)
-                    }
-                    break
-
-                }  catch (e: Exception) {
-                    Log.e("DEBUG_WATCH", "Error fetching data", e)
-                    withContext(Dispatchers.Main) {
-                      LoadingAnimation.show(this@Watch_Page)
+                    lastEpisode = jsonObject.getJSONObject("last_episode_to_air")
+                        .optInt("episode_number", 0)
+                    lastSeason = jsonObject.getJSONObject("last_episode_to_air")
+                        .optInt("season_number", 0)
+                } catch (e: Exception) {}
+
+                val seasonsArray = jsonObject.getJSONArray("seasons")
+                for (i in 0 until seasonsArray.length()) {
+                    val season = seasonsArray.getJSONObject(i)
+                    val airDate = season.optString("air_date", "")
+
+                    if (airDate.isNotEmpty()) {
+                        validSeasons.add(season)
                     }
                 }
+
+                no_of_season = validSeasons.size
+
+
+                params.height = (screenHeight * 1).toInt()
+                mainWidget1.layoutParams = params
+
+
+                watchButton.visibility = View.GONE
+                val Season_widget = findViewById<LinearLayout>(R.id.Season_widget)
+                Season_widget.visibility = View.VISIBLE
+
+                //val season_count_widget = findViewById<TextView>(R.id.season_count_text)
+                //season_count_widget.text = "$no_of_season Seasons"
+                createSeasonButtons(no_of_season, validSeasons, tmdbId, jsonObject)
             }
+
+            // ---------- BUTTONS ------------------------------------------------------------------
+
+
+
+            watchButton.setOnClickListener {
+                val intent = Intent(this@Watch_Page, Play::class.java)
+                intent.putExtra("imdb_code", tmdbId)
+                intent.putExtra("type", type)
+                startActivity(intent)
+            }
+
+            serverButton.setOnClickListener {
+                showServerDialog()
+            }
+
+            trailerButton.setOnClickListener {
+            }
+
+
+            setupFavoriteButton(
+                showId = tmdbId,
+                type = type,
+                title = originalTitle,
+                voteAverage = voteAverage,
+                genres = genres,
+                overview = overview,
+                runtime = runtime,
+                year = releaseDate,
+                voteCount = voteCount,
+                pg = PG,
+                poster = posterUrl,
+                backdrop = backdropUrl,
+                noOfSeason = no_of_season,
+                lastSeason = lastSeason,
+                lastEpisode = lastEpisode
+            )
+
+            //--------------------------------------------------------------------------------------
+
+
+            LoadingAnimation.hide(this@Watch_Page)
+            Cast_Data(tmdbId.toString(), type.toString())
+            Watch_Recomendation_Data(tmdbId.toString(), type.toString())
+        }else{
+            LoadingAnimation.setup(this@Watch_Page, R.raw.error)
         }
+
     }
 
 
@@ -440,7 +375,7 @@ class Watch_Page : AppCompatActivity() {
                 selectedSeasonButton = seasonButton
 
                 seasonButton.isEnabled = false
-                ShowSeasonEpisodes(season_no, seasonData, seasonID, seasonAllData)
+                ShowSeasonEpisodes(season_no, seasonData, seasonID)
                 seasonButton.postDelayed({ seasonButton.isEnabled = true }, 3000)
             }
 
@@ -511,23 +446,16 @@ class Watch_Page : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun ShowSeasonEpisodes(SelectedSeasons: Int, seasonData : MutableList<JSONObject>, seriesId: String, seasonAllData:  JSONObject) {
+    private fun ShowSeasonEpisodes(SelectedSeasons: Int, seasonData : MutableList<JSONObject>, seriesId: String) {
 
-        val overviewWidget = findViewById<TextView>(R.id.overview_widget)
-        val ratingWidget = findViewById<TextView>(R.id.Rating_widget)
-        val posterWidget = findViewById<ImageView>(R.id.posterImageView)
-        val backdropWidget = findViewById<ImageView>(R.id.backdropImageView)
-        val season_CWidget = findViewById<TextView>(R.id.season_C)
+        val today = LocalDate.now()
+        val formatter = DateTimeFormatter.ISO_LOCAL_DATE
 
 
-        //val currentSeasonTitle = findViewById<TextView>(R.id.current_season_title)
-        //val episodeCountText = findViewById<TextView>(R.id.episode_count_text)
-        //val seasonYearText = findViewById<TextView>(R.id.season_year_text)
+         findViewById<ImageView>(R.id.backdropImageView)
 
-        //Log.e("DEBUG_Each Selecteds", SelectedSeasons.toString())
-        //Log.e("DEBUG_Each seasonData", seasonData.toString())
 
-        // val selectedSeason = seasonData[SelectedSeasons]
+
         val selectedSeason = seasonData.firstOrNull {
             it.optInt("season_number") == SelectedSeasons
         }
@@ -535,33 +463,21 @@ class Watch_Page : AppCompatActivity() {
             return
         }
 
-        val episodeCount = selectedSeason.optInt("episode_count", 0)
+
         val airDate = selectedSeason.optString("air_date", "")
         var selectedSeasonPoster = selectedSeason.optString("poster_path", "")
         val selectedSeasonOverview = selectedSeason.optString("overview", "")
-        val selectedSeasonNumber = selectedSeason.optString("season_number", "")
         val selectedSeasonRating = selectedSeason.optDouble("vote_average", 0.0)
-        var stillPath = selectedSeason.optString("still_path", "")
 
-        Log.e("DEBUG_Each  stillPath", stillPath.toString())
-
-
-
-
-
-        //currentSeasonTitle.text = "Season $SelectedSeasons"
-        season_CWidget.text = "Season $SelectedSeasons"
-        //episodeCountText.text = "$episodeCount Episodes"
-        //seasonYearText.text = airDate.take(4)
-
-
-        ratingWidget.text = "$selectedSeasonRating/10"
+        findViewById<TextView>(R.id.season_C).text = "Season $SelectedSeasons"
+        findViewById<TextView>(R.id.Rating_widget).text = "$selectedSeasonRating"
 
         if (selectedSeasonOverview !== "") {
-            overviewWidget.text = selectedSeasonOverview
+            findViewById<TextView>(R.id.overview_widget).text = selectedSeasonOverview
         }
         if (selectedSeasonPoster !== "") {
-            selectedSeasonPoster = "https://image.tmdb.org/t/p/w780$selectedSeasonPoster"
+            selectedSeasonPoster = "https://image.tmdb.org/t/p/original/$selectedSeasonPoster"
+            val posterWidget = findViewById<ImageView>(R.id.posterImageView)
             Glide.with(posterWidget.context)
                 .load(selectedSeasonPoster)
                 .centerCrop()
@@ -569,34 +485,10 @@ class Watch_Page : AppCompatActivity() {
         }
 
 
-
-
-        Log.e("DEBUG_Each E--- S 1", seasonData.toString())
-        Log.e("DEBUG_Each E--- S 2", seasonAllData.toString())
-
-        val tempImg = seasonAllData.getString("backdrop_path")
-
-
-        CoroutineScope(Dispatchers.IO).launch {
-            while (true) {
-
-                try {
-
-                    val url =
-                        "https://api.themoviedb.org/3/tv/$seriesId/season/${SelectedSeasons}?language=en-US"
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    connection.setRequestProperty("accept", "application/json")
-                    connection.setRequestProperty(
-                        "Authorization",
-                        "Bearer ${BuildConfig.TM_K}"
-                    )
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject = JSONObject(response)
-
+        val jsonObject = fetch.fetchSeasonInfo(seriesId.toString(), SelectedSeasons.toString())
+        if (jsonObject != null) {
 
                     val episodesArray = jsonObject.getJSONArray("episodes")
-                    val today = LocalDate.now()
 
                     Log.e("DEBUG_Each E json", jsonObject.toString())
                     Log.e("DEBUG_Each E data", episodesArray.toString())
@@ -607,23 +499,22 @@ class Watch_Page : AppCompatActivity() {
                     for (i in 0 until episodesArray.length()) {
                         val episodes = episodesArray.getJSONObject(i)
 
-
-                        /*
-                        if (episodes.optString("still_path", "").isBlank() || episodes.optString("still_path", "").equals("null", true) ||
-                            episodes.optString("runtime", "").isBlank() || episodes.optString("runtime", "").equals("null", true)) {
-                            continue
+                        val episodesAirDate =  episodes.optString("air_date", "")
+                        try {
+                            Log.e("DEBUG_Each E date", "airDate: $episodesAirDate,  today $today")
+                            val airLocalDate  = LocalDate.parse(episodesAirDate, formatter)
+                            if (airLocalDate.isAfter(today)) {
+                                continue
+                            }
+                        }catch (e: Exception){
+                            Log.e("DEBUG_Each E date", "airDate: $airDate,  today $today, Error${e.message}")
                         }
 
-                         */
-
-                        if (airDate.isNullOrEmpty() || airDate.equals("null", true) || episodeCount == 0) {
-                            continue // Skip unreleased
-                        }
 
                         val stillPathRaw = episodes.optString("still_path", "")
                         val runtimeRaw = episodes.optString("runtime", "")
 
-                        val stillPath = if (stillPathRaw.isNullOrEmpty() || runtimeRaw == "null") tempImg  else stillPathRaw
+                        val stillPath = if (stillPathRaw.isNullOrEmpty() || runtimeRaw == "null") ""  else stillPathRaw
                         val runtime = if (runtimeRaw.isNullOrEmpty() || runtimeRaw == "null") "0" else runtimeRaw
 
 
@@ -642,109 +533,51 @@ class Watch_Page : AppCompatActivity() {
                         )
                     }
 
-
-                    withContext(Dispatchers.Main) {
                         Log.e("DEBUG_Each E list", "${episodesList.size}")
                         episodes_recycler.removeAllViews()
                         episodes_recycler.adapter = EpisodesAdapter(episodesList)
-
-                    }
-                    break
-                } catch (e: Exception) {
-                }
-
-            }
-
         }
     }
 
 
     private fun Cast_Data(show_id: String, type: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            while(true) {
-                try {
-                    val url = if (type == "movie") {
-                        "https://api.themoviedb.org/3/movie/${show_id}/credits?language=en-US"
-                    } else {
-                        "https://api.themoviedb.org/3/tv/${show_id}/credits?language=en-US"
-                    }
 
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    connection.setRequestProperty("accept", "application/json")
-                    connection.setRequestProperty(
-                        "Authorization",
-                        "Bearer ${BuildConfig.TM_K}"
-                    )
 
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject = JSONObject(response)
+                val jsonObject = fetch.fetchShowCast(show_id, type)
 
-                    Log.e("DEBUG_WATCH_RECO", jsonObject.toString())
+                if (jsonObject != null) {
+
                     val moviesArray = jsonObject.getJSONArray("cast")
-
-
-
                     Log.e("DEBUG_WATCH_Results", jsonObject.toString())
 
                     val movies = mutableListOf<CastItem>()
-
                     for (i in 0 until moviesArray.length()) {
                         val item = moviesArray.getJSONObject(i)
                         val title = item.getString("original_name")
-                        val imgUrl = "https://image.tmdb.org/t/p/h632" + item.getString("profile_path")
+                        val imgUrl = "https://image.tmdb.org/t/p/original/" + item.getString("profile_path")
                         val cast_id = item.getString("id")
                         val type = "Actor"
                         movies.add(CastItem(title, imgUrl, cast_id, type))
                     }
 
+                    val recyclerView = findViewById<RecyclerView>(R.id.Cast_widget)
+                    recyclerView.layoutManager = LinearLayoutManager(
+                        this@Watch_Page,
+                        LinearLayoutManager.HORIZONTAL, // 👈 makes it horizontal
+                        false
+                    )
+                    recyclerView.adapter = CastAdapter(movies,  R.layout.round_grid)
+                    val spacing = (9 * resources.displayMetrics.density).toInt()
+                    recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
 
-
-                    withContext(Dispatchers.Main) {
-                        val recyclerView = findViewById<RecyclerView>(R.id.Cast_widget)
-                        recyclerView.layoutManager = LinearLayoutManager(
-                            this@Watch_Page,
-                            LinearLayoutManager.HORIZONTAL, // 👈 makes it horizontal
-                            false
-                        )
-                        recyclerView.adapter = CastAdapter(movies,  R.layout.round_grid)
-                        val spacing = (9 * resources.displayMetrics.density).toInt() // 16dp to px
-                        recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
-                    }
-
-
-                    break
-                } catch (e: Exception) {
-                    delay(10_000)
-                    Log.e("DEBUG_WATCH_RECO", "Error fetching data", e)
-                    break
                 }
-            }
-        }
     }
 
     private fun Watch_Recomendation_Data(show_id: String, type: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            while(true) {
-                try {
 
-                    val url = if (type == "tv") {
-                         "https://api.themoviedb.org/3/tv/${show_id}/recommendations?language=en-US&page=1"
-                    } else {
-                         "https://api.themoviedb.org/3/movie/${show_id}/recommendations?language=en-US&page=1"
-                    }
+                val jsonObject = fetch.fetchShowRecommendation(show_id, type)
 
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    connection.setRequestProperty("accept", "application/json")
-                    connection.setRequestProperty(
-                        "Authorization",
-                        "Bearer ${BuildConfig.TM_K}"
-                    )
-
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject = JSONObject(response)
-
+                if (jsonObject != null) {
                     Log.e("DEBUG_WATCH_RECO", jsonObject.toString())
                     val moviesArray = jsonObject.getJSONArray("results")
 
@@ -771,9 +604,9 @@ class Watch_Page : AppCompatActivity() {
                         //val imgUrl = "https://image.tmdb.org/t/p/w780" + item.getString("backdrop_path")
 
                         val imgUrl = if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
-                            "https://image.tmdb.org/t/p/w1280${item.getString("backdrop_path")}"
+                            "https://image.tmdb.org/t/p/original${item.getString("backdrop_path")}"
                         } else if (item.has("poster_path") && !item.isNull("poster_path")) {
-                            "https://image.tmdb.org/t/p/w780${item.getString("poster_path")}"
+                            "https://image.tmdb.org/t/p/original${item.getString("poster_path")}"
                         } else { "" }
 
                         val imdb_code = item.getString("id")
@@ -782,7 +615,7 @@ class Watch_Page : AppCompatActivity() {
                     }
 
 
-                    withContext(Dispatchers.Main) {
+
                         val recyclerView = findViewById<RecyclerView>(R.id.Recommendation_widget)
                         recyclerView.isNestedScrollingEnabled = false
 
@@ -805,17 +638,7 @@ class Watch_Page : AppCompatActivity() {
                         val spacing = (19 * resources.displayMetrics.density).toInt() // 16dp to px
                         recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
 
-
-                    }
-
-
-                    break
-                } catch (e: Exception) {
-                    delay(10_000)
-                    break
                 }
-            }
-        }
     }
 
 
@@ -853,7 +676,7 @@ class Watch_Page : AppCompatActivity() {
                 faveButtonText.text = "Remove Favorite"
             } else {
                 faveButtonImg.setImageResource(R.drawable.ic_addfave)
-                faveButtonText.text = "Add-to-Favorites"
+                faveButtonText.text = "Add Favorites"
             }
         }
 

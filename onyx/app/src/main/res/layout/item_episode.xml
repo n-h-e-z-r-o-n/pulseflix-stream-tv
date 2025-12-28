@@ -20,12 +20,15 @@
         <ImageView
             android:id="@+id/Ep_IMG"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
             android:adjustViewBounds="true"
             android:background="?attr/BG_color_up"
-            android:src="@raw/test2"
+            android:src="@raw/test3"
+            android:layout_gravity="left"
             tools:ignore="ContentDescription" />
+
+
 
 
 
@@ -34,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:background="#409090C0"
             android:padding="8dp">
 
 
@@ -96,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/o"
                 android:maxLines="1"
@@ -108,12 +112,15 @@
 
             <TextView
                 android:id="@+id/episode_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:background="#406082B6"
                 android:ellipsize="end"
                 android:fontFamily="@font/o"
                 android:gravity="bottom"
+                android:maxWidth="200dp"
+                android:adjustViewBounds="true"
                 android:maxLines="1"
                 android:shadowColor="#80000000"
                 android:shadowDx="3"
@@ -121,7 +128,7 @@
                 android:shadowRadius="4"
                 android:text="Episode Title"
                 android:textColor="?attr/FG_color"
-                android:textSize="15sp"
+                android:textSize="10sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText,SmallSp" />
         </FrameLayout>

@@ -175,11 +175,11 @@ class TMDBapi(private val context: Context) {
         }
     }
 
-    fun fetchTvData(showId: String): JSONObject? {
+    fun fetchShowData(showId: String, type:String): JSONObject? {
         return runBlocking {
             async(Dispatchers.IO) {
                 try {
-                    val tvUrl = "https://api.themoviedb.org/3/tv/$showId?language=en-US"
+                    val tvUrl = "https://api.themoviedb.org/3/$type/$showId?language=en-US"
                     val connection = URL(tvUrl).openConnection() as HttpURLConnection
                     connection.requestMethod = "GET"
                     connection.setRequestProperty("accept", "application/json")
@@ -206,6 +206,154 @@ class TMDBapi(private val context: Context) {
             }.await()
         }
     }
+
+    fun fetchShowCast(showId: String, type:String): JSONObject? {
+        return runBlocking {
+            async(Dispatchers.IO) {
+                try {
+                    val Url = "https://api.themoviedb.org/3/$type/$showId/credits?language=en-US"
+                    val connection = URL(Url).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("accept", "application/json")
+                    connection.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = JSONObject(response)
+
+                    jsonObject.optJSONObject("data") ?: jsonObject
+
+                } catch (e: IOException) {
+                    Log.e("fetchAnimeData", "Network error: ${e.message}")
+                    null
+                } catch (e: JSONException) {
+                    Log.e("fetchAnimeData", "JSON error: ${e.message}")
+                    null
+                } catch (e: Exception) {
+                    Log.e("fetchAnimeData", "Unexpected error: ${e.message}")
+                    null
+                }
+            }.await()
+        }
+    }
+
+    fun fetchShowRecommendation (showId: String, type:String): JSONObject? {
+        return runBlocking {
+            async(Dispatchers.IO) {
+                try {
+                    val Url = "https://api.themoviedb.org/3/$type/$showId/recommendations?language=en-US&page=1"
+                    val connection = URL(Url).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("accept", "application/json")
+                    connection.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = JSONObject(response)
+
+                    jsonObject.optJSONObject("data") ?: jsonObject
+
+                } catch (e: IOException) {
+                    Log.e("fetchAnimeData", "Network error: ${e.message}")
+                    null
+                } catch (e: JSONException) {
+                    Log.e("fetchAnimeData", "JSON error: ${e.message}")
+                    null
+                } catch (e: Exception) {
+                    Log.e("fetchAnimeData", "Unexpected error: ${e.message}")
+                    null
+                }
+            }.await()
+        }
+    }
+
+    //Query the details of a TV season.
+    fun fetchSeasonInfo(seriesId: String, seasonNo:String): JSONObject? {
+        return runBlocking {
+            async(Dispatchers.IO) {
+                try {
+                    val Url = "https://api.themoviedb.org/3/tv/$seriesId/season/$seasonNo?language=en-US"
+                    val connection = URL(Url).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("accept", "application/json")
+                    connection.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = JSONObject(response)
+
+                    jsonObject.optJSONObject("data") ?: jsonObject
+
+                } catch (e: IOException) {
+                    Log.e("fetchAnimeData", "Network error: ${e.message}")
+                    null
+                } catch (e: JSONException) {
+                    Log.e("fetchAnimeData", "JSON error: ${e.message}")
+                    null
+                } catch (e: Exception) {
+                    Log.e("fetchAnimeData", "Unexpected error: ${e.message}")
+                    null
+                }
+            }.await()
+        }
+    }
+
+    fun fetchImages(showId: String, type:String): JSONObject? {
+        return runBlocking {
+            async(Dispatchers.IO) {
+                try {
+                    val logosUrl = "https://api.themoviedb.org/3/$type/$showId/images"
+                    val connection = URL(logosUrl).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("accept", "application/json")
+                    connection.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = JSONObject(response)
+
+                    jsonObject.optJSONObject("data") ?: jsonObject
+
+                } catch (e: IOException) {
+                    Log.e("fetchAnimeData", "Network error: ${e.message}")
+                    null
+                } catch (e: JSONException) {
+                    Log.e("fetchAnimeData", "JSON error: ${e.message}")
+                    null
+                } catch (e: Exception) {
+                    Log.e("fetchAnimeData", "Unexpected error: ${e.message}")
+                    null
+                }
+            }.await()
+        }
+    }
+
+
+    /*
+         if (id.startsWith("tt")) {
+
+                        val url = "https://api.themoviedb.org/3/movie/$id/external_ids"
+                        val connection = URL(url).openConnection() as HttpURLConnection
+                        connection.requestMethod = "GET"
+                        connection.setRequestProperty("accept", "application/json")
+                        connection.setRequestProperty(
+                            "Authorization",
+                            "Bearer ${BuildConfig.TM_K}"
+                        )
+                        val response = connection.inputStream.bufferedReader().use { it.readText() }
+                        val jsonObject = JSONObject(response)
+                        tmdbId = jsonObject.getString("id")
+                    }
+     */
+
 
 
 
