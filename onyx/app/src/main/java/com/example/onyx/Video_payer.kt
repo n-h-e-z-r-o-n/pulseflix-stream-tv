@@ -101,6 +101,7 @@ class Video_payer : AppCompatActivity(), Player.Listener {
     // Player management variables (merged from PlayerManager)
     private var currentVideoUrl: String? = null
     private var availableQualities: List<String> = listOf("Auto")
+    private var saveCounter = 0 // Counter for auto-save
 
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalUtils.applyTheme(this)
@@ -147,6 +148,15 @@ class Video_payer : AppCompatActivity(), Player.Listener {
         txtDuration = findViewById(R.id.txt_duration)
     }
 
+    private fun fetchResumePosition(): Long {
+        return if (showType == "movie") {
+            db.getResumePosition(userId, showId, showType).toLong()
+        } else {
+            val itemId = "${showId}_S${showSNo}_E${showENo}"
+            db.getResumePosition(userId, itemId, showType).toLong()
+        }
+    }
+
     private fun setupPlayer() {
 
 
@@ -159,7 +169,7 @@ class Video_payer : AppCompatActivity(), Player.Listener {
         showSNo = intent.getStringExtra("showSNo")?: ""
         showENo = intent.getStringExtra("showENo")?: ""
 
-        resumePosition = db.getResumePosition(userId, showId, showType).toLong()
+        resumePosition = fetchResumePosition()
 
 
 
@@ -402,8 +412,18 @@ class Video_payer : AppCompatActivity(), Player.Listener {
         val videoUrl = intent.getStringExtra("video_url")
         if (videoUrl != null) {
             exoPlayer?.let { player ->
+                // Save current position before refreshing effectively (if we want to resume exactly where we were)
+                // But user asked to check for "resumePosition", which usually means saved DB position.
+                // However, since we auto-save every 10s, DB might be slightly behind.
+                // Let's force a save now before reloading!
+                saveContinueWatching()
+                
                 player.stop()
                 player.clearMediaItems()
+                
+                // Fetch latest resume position from DB (which we just updated)
+                resumePosition = fetchResumePosition()
+                
                 player.setMediaItem(MediaItem.fromUri(videoUrl))
                 player.prepare()
                 player.play()
@@ -542,6 +562,12 @@ class Video_payer : AppCompatActivity(), Player.Listener {
                     if (exoPlayer?.isPlaying == true) {
                         startProgressTracking()
                     }
+
+                    // Resume from saved position if applicable
+                    if (resumePosition > 0) {
+                        exoPlayer?.seekTo(resumePosition)
+                        resumePosition = 0 // Reset so we don't seek again
+                    }
                 }
                 Player.STATE_ENDED -> {
                     // Video ended, could restart or show next video
@@ -560,36 +586,39 @@ class Video_payer : AppCompatActivity(), Player.Listener {
             // Ignore very short playback
             if (lastPosition < 5_000 || duration <= 0) return
 
-            if(showType=="movie"){
+            // Run database operation in background to avoid UI jank
+            Thread {
+                if(showType=="movie"){
 
-                db.addOrUpdateContinueWatching(
-                    userId = userId,
-                    itemId = showId,
-                    type = showType,
-                    title = showTitle,
-                    poster = showPoster,
-                    backdrop = showBackdrop,
-                    seasonNumber = showSNo,
-                    episodeNumber = showENo,
-                    lastPosition = lastPosition,
-                    duration = duration
-                )
+                    db.addOrUpdateContinueWatching(
+                        userId = userId,
+                        itemId = showId,
+                        type = showType,
+                        title = showTitle,
+                        poster = showPoster,
+                        backdrop = showBackdrop,
+                        seasonNumber = showSNo,
+                        episodeNumber = showENo,
+                        lastPosition = lastPosition,
+                        duration = duration
+                    )
 
-            }else{
-                val itemId =  "S${showSNo.trim()}/${showSNo.trim()}/${showENo.trim()}"
-                db.addOrUpdateContinueWatching(
-                    userId = userId,
-                    itemId = itemId,
-                    type = showType,
-                    title = showTitle,
-                    poster = showPoster,
-                    backdrop = showBackdrop,
-                    seasonNumber = showSNo,
-                    episodeNumber = showENo,
-                    lastPosition = lastPosition,
-                    duration = duration
-                )
-            }
+                }else{
+                    val itemId = "${showId}_S${showSNo}_E${showENo}"
+                    db.addOrUpdateContinueWatching(
+                        userId = userId,
+                        itemId = itemId,
+                        type = showType,
+                        title = showTitle,
+                        poster = showPoster,
+                        backdrop = showBackdrop,
+                        seasonNumber = showSNo,
+                        episodeNumber = showENo,
+                        lastPosition = lastPosition,
+                        duration = duration
+                    )
+                }
+            }.start()
 
 
         }
@@ -625,6 +654,14 @@ class Video_payer : AppCompatActivity(), Player.Listener {
         progressRunnable = object : Runnable {
             override fun run() {
                 updateSeekBar()
+                
+                // Auto-save every 10 seconds (called every 1s, so count to 10)
+                saveCounter++
+                if (saveCounter >= 10) {
+                    saveContinueWatching()
+                    saveCounter = 0
+                }
+                
                 progressHandler.postDelayed(this, 1000) // Update every second
             }
         }
@@ -650,6 +687,7 @@ class Video_payer : AppCompatActivity(), Player.Listener {
 
     override fun onDestroy() {
         super.onDestroy()
+        saveContinueWatching() // Save progress before destroying
         stopProgressTracking()
         releasePlayerWithAudioFocus()
         finish()
@@ -657,6 +695,7 @@ class Video_payer : AppCompatActivity(), Player.Listener {
 
     override fun onPause() {
         super.onPause()
+        saveContinueWatching() // Save progress when paused
         exoPlayer?.pause()
         stopProgressTracking()
     }
@@ -683,16 +722,16 @@ class Video_payer : AppCompatActivity(), Player.Listener {
     // ===== PlayerManager functionality merged into this class =====
     
     companion object {
-        fun playVideoExternally(context: Context, videoUrl: String,showId: String,showType: String,showTitle: String,showPoster: String, showBackdrop: String, showSNo: String,showENo: String,) {
+        fun playVideoExternally(context: Context, videoUrl: String,showId: String,showType: String,showTitle: String, showPoster: String, showBackdrop: String, showSNo: String,showENo: String,) {
             val intent = Intent(context, Video_payer::class.java).apply {
                 putExtra("video_url", videoUrl)
                 putExtra("showId", showId)
                 putExtra("showType", showType)
                 putExtra("showTitle", showTitle)
-                putExtra("showPoster", videoUrl)
-                putExtra("showBackdrop", videoUrl)
-                putExtra("showSNo", videoUrl)
-                putExtra("showENo", videoUrl)
+                putExtra("showPoster", showPoster)
+                putExtra("showBackdrop", showBackdrop)
+                putExtra("showSNo", showSNo)
+                putExtra("showENo", showENo)
 
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             }

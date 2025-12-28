@@ -1640,7 +1640,7 @@ class cWatchingAdapter(
                 sm = SessionManger(context)
                 sm.saveLastPosition(itemId, lastPos)
 
-                Anime_Video_Player.playVideoExternally(context, itemId, JSONArray(), episodeNumber, posterUrl, seasonNumber, title, true)
+                //Anime_Video_Player.playVideoExternally(context, itemId, JSONArray(), episodeNumber, posterUrl, seasonNumber, title, true)
             }
 
         }

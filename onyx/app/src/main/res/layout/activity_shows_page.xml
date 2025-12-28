@@ -1061,7 +1061,7 @@
                             android:id="@+id/cWatchPage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:orientation="vertical">
 
                             <TextView
@@ -1075,11 +1075,19 @@
                                 android:textColor="?attr/FG_color"
                                 tools:ignore="HardcodedText"/>
 
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/watchingRecycler"
+                                android:layout_height="match_parent"
+                                android:layout_width="match_parent"
+                                android:clipToPadding="false"
+                                android:scrollbars="none"
+                                tools:ignore="RtlSymmetry"/>
+
 
 
                         </LinearLayout>
 
-                        <!-- //////////////////////// CWATCH PAGE //////////////////////////////////// -->
+                        <!-- //////////////////////// Notification PAGE //////////////////////////////////// -->
 
 
                         <LinearLayout
@@ -1138,31 +1146,9 @@
 
                             </LinearLayout>
 
-
-
-
-
-
-
-
-
                     </LinearLayout>
 
                 </ScrollView>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

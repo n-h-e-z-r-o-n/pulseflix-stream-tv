@@ -1,5 +1,6 @@
 package com.example.onyx
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -60,6 +61,7 @@ class Play : AppCompatActivity() {
         showENo =  intent.getStringExtra("seasonNo")?: ""
 
         Log.d("DEBUG_WEBVIEW", "imdbCode: $showId - type: $showType   -title: $showTitle  -seasonNo:  $showSNo - episodeNo: $showENo ")
+        Log.d("DEBUG_WEBVIEW", "imdbCode: $showId - type: $showType   -title: $showTitle  -showPoster:  $showPoster - showBackdrop: $showBackdrop ")
 
 
 
@@ -206,7 +208,9 @@ class Play : AppCompatActivity() {
                     runOnUiThread {
                         // Clear WebView data and cookies before launching video player
                         clearWebViewData()
-                        Video_payer.playVideoExternally(this@Play, url)
+                        //Video_payer.playVideoExternally(this@Play, url)
+                        Video_payer.playVideoExternally(this@Play, url,showId, showType, showTitle, showPoster, showBackdrop, showSNo, showENo)
+
                         finish()
                     }
                 }

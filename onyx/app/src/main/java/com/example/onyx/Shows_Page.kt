@@ -90,6 +90,9 @@ class Shows_Page : AppCompatActivity() {
     private lateinit var notificationAdapter: NotificationAdapter
     private lateinit var  notificationRecyclerView: RecyclerView
 
+    private lateinit var watchRecyclerView: RecyclerView
+    private lateinit var watchAdapter: cWatchingAdapter
+
 
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
@@ -310,15 +313,16 @@ class Shows_Page : AppCompatActivity() {
         filter()
         tvFavoritesList()
         notificationS()
+        watchedList()
     }
 
     override fun onResume() {
         super.onResume()
-        /*
+
         if (this::watchAdapter.isInitialized) {
             watchAdapter.clearItems()
         }
-          */
+
 
         if(this::notificationAdapter.isInitialized){
             notificationAdapter.clearItems()
@@ -333,6 +337,7 @@ class Shows_Page : AppCompatActivity() {
 
         notificationS()
         //tvFavoritesList()
+        watchedList()
     }
 
 
@@ -414,6 +419,12 @@ class Shows_Page : AppCompatActivity() {
             db.clearAllTvNotifications(userId)
             notificationAdapter.clearItems()
         }
+
+        //------------------------------------------------------------------------------------------
+
+        watchRecyclerView = findViewById(R.id.watchingRecycler)
+        watchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this@Shows_Page,160,150))
+        watchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
 
 
 
@@ -1653,6 +1664,22 @@ class Shows_Page : AppCompatActivity() {
             layoutResId = R.layout.item_notification
         )
         notificationRecyclerView.adapter = notificationAdapter
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private fun watchedList(){
+
+        val userId = sm.getUserId()
+        val cWatching = db.getContinueWatchingAll(userId, "movie")
+
+        watchAdapter = cWatchingAdapter(
+            cWatching,
+            R.layout.item_watched
+        )
+        watchRecyclerView.adapter = watchAdapter
 
     }
 
