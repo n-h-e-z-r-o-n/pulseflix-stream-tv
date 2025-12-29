@@ -82,55 +82,79 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/episode_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:text="Short episode description goes here..."
-                android:textColor="?attr/FG_color"
-                android:textSize="9sp"
-                android:visibility="gone"
-                tools:ignore="HardcodedText,SmallSp" />
-
-            <TextView
-                android:id="@+id/episode_Number"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/o"
-                android:maxLines="1"
-                android:text="S1-E2"
-                android:textColor="?attr/FG_color"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/episode_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="#406082B6"
-                android:ellipsize="end"
-                android:fontFamily="@font/o"
-                android:gravity="bottom"
-                android:maxWidth="200dp"
-                android:adjustViewBounds="true"
-                android:maxLines="1"
-                android:shadowColor="#80000000"
-                android:shadowDx="3"
-                android:shadowDy="4"
-                android:shadowRadius="4"
-                android:text="Episode Title"
-                android:textColor="?attr/FG_color"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText,SmallSp" />
+                        <TextView
+                            android:id="@+id/episode_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="3"
+                            android:text="Short episode description goes here..."
+                            android:textColor="?attr/FG_color"
+                            android:textSize="9sp"
+                            android:visibility="gone"
+                            tools:ignore="HardcodedText,SmallSp" />
+
+                        <TextView
+                            android:id="@+id/episode_Number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/o"
+                            android:maxLines="1"
+                            android:text="S1-E2"
+                            android:textColor="?attr/FG_color"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/episode_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/o"
+                            android:gravity="bottom"
+                            android:maxWidth="200dp"
+                            android:adjustViewBounds="true"
+                            android:maxLines="1"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="3"
+                            android:shadowDy="4"
+                            android:shadowRadius="4"
+                            android:text="Episode Title"
+                            android:textColor="?attr/FG_color"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText,SmallSp" />
+                        <SeekBar
+                            android:id="@+id/cWatchSeek_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="0dp"
+                            android:max="1000"
+                            android:progress="600"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:focusableInTouchMode="false"
+                            android:enabled="false"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:paddingLeft="0dp"
+                            android:paddingRight="0dp"
+                            android:progressTint="?attr/AccentColor"
+                            android:progressBackgroundTint="?attr/FG_color"
+                            android:layout_gravity="bottom"
+                            android:thumbTint="@android:color/transparent" />
+            </LinearLayout>
         </FrameLayout>
 
     </FrameLayout>

@@ -739,6 +739,34 @@ class AppDatabase(context: Context) :
         return lastPosition
     }
 
+    fun getDurationPosition(
+        userId: Int,
+        itemId: String,
+        type: String
+    ): Int {
+        val db = readableDatabase
+        var durationPosition = 0
+
+        val cursor = db.rawQuery(
+            """
+        SELECT duration 
+        FROM continue_watching
+        WHERE user_id = ? AND item_id = ? AND type = ?
+        LIMIT 1
+        """,
+            arrayOf(userId.toString(), itemId, type)
+        )
+
+        if (cursor.moveToFirst()) {
+            durationPosition = cursor.getInt(
+                cursor.getColumnIndexOrThrow("duration")
+            )
+        }
+
+        cursor.close()
+        return durationPosition
+    }
+
     ////////////////////////////////// NOTIFICATIONS FUNCTIONS ///////////////////////////////////////
 
     fun insertAnimeNotification(

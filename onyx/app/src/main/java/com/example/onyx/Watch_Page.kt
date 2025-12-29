@@ -108,8 +108,34 @@ class Watch_Page : AppCompatActivity() {
         //-------- Get extras from Intent-----------------------------------------------------------
         showId = intent.getStringExtra("imdb_code")?: ""
         showType = intent.getStringExtra("type")?: ""
-
         Log.e("DEBUG_WATCH", "imdbCode: $showId, type: $showType")
+
+        //------------------------------------------------------------------------------------------
+        val continuePlay = intent.getBooleanExtra("continue_play", false)
+        if(continuePlay){
+
+            val seasonNumber = intent.getStringExtra("seasonNo") ?: ""
+            val episodeNumber = intent.getStringExtra("EpisodeNo") ?: ""
+            val type = intent.getStringExtra("type") ?: ""
+            val title = intent.getStringExtra("title") ?: ""
+            val posterUrl = intent.getStringExtra("poster") ?: ""
+            val backdropUrl = intent.getStringExtra("backdrop") ?: ""
+            val itemId = intent.getStringExtra("imdb_code") ?: ""
+
+            val intent = Intent(this@Watch_Page, Play::class.java)
+            intent.putExtra("imdb_code", itemId)
+            intent.putExtra("type", type)
+            intent.putExtra("title", title)
+            intent.putExtra("poster", posterUrl)
+            intent.putExtra("backdrop", backdropUrl)
+            intent.putExtra("seasonNo", seasonNumber)
+            intent.putExtra("EpisodeNo", episodeNumber)
+
+            startActivity(intent)
+        }
+        //------------------------------------------------------------------------------------------
+
+
 
         if(!showId.isNullOrEmpty()){
             fetchData()
@@ -548,6 +574,9 @@ class Watch_Page : AppCompatActivity() {
                         episodesList.add(
 
                             EpisodeItem(
+                                showTitle = showTitle,
+                                showPoster = showPoster,
+                                showBackdrop = showBackdrop,
                                 episodesName = episodes.optString("name", ""),
                                 episodesImage = stillPath,
                                 episodesNumber = episodes.optString("episode_number", ""),

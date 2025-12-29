@@ -61,7 +61,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
-    private  var  userId: Int? = null
+    private  var  userId  = 0
     private var resumePosition: Long = 0L
 
     private  var urlHome ="https://corsproxy.io/https://aniwatch-api-r4uo.vercel.app/"
@@ -986,7 +986,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     private fun trackContinueWatching() {
         exoPlayer?.let { player ->
             val duration = player.duration.toInt()
-            val lastPosition = player.currentPosition.toInt()
+            val lastPosition = db.getDurationPosition(userId, currentEpisodeId.toString(),"anime")
             
             if (duration > 0 && lastPosition >= 0 && userId != null && currentEpisodeId != null) {
                 val currentTime = System.currentTimeMillis()

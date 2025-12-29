@@ -58,7 +58,7 @@ class Play : AppCompatActivity() {
         showPoster =  intent.getStringExtra("poster")?: ""
         showBackdrop =  intent.getStringExtra("showBackdrop")?: ""
         showSNo =  intent.getStringExtra("seasonNo")?: ""
-        showENo =  intent.getStringExtra("seasonNo")?: ""
+        showENo =  intent.getStringExtra("episodeNo")?: ""
 
         Log.d("DEBUG_WEBVIEW", "imdbCode: $showId - type: $showType   -title: $showTitle  -seasonNo:  $showSNo - episodeNo: $showENo ")
         Log.d("DEBUG_WEBVIEW", "imdbCode: $showId - type: $showType   -title: $showTitle  -showPoster:  $showPoster - showBackdrop: $showBackdrop ")

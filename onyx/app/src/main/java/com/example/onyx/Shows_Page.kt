@@ -566,9 +566,9 @@ class Shows_Page : AppCompatActivity() {
 
                         val backdrop_path =
                             if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
-                                "https://image.tmdb.org/t/p/w1280${item.getString("backdrop_path")}"
+                                "https://image.tmdb.org/t/p/original${item.getString("backdrop_path")}"
                             } else if (item.has("poster_path") && !item.isNull("poster_path")) {
-                                "https://image.tmdb.org/t/p/w780${item.getString("poster_path")}"
+                                "https://image.tmdb.org/t/p/original${item.getString("poster_path")}"
                             } else {
                                 ""
                             }
@@ -614,9 +614,9 @@ class Shows_Page : AppCompatActivity() {
 
                         val backdrop_path =
                             if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
-                                "https://image.tmdb.org/t/p/w1280${item.getString("backdrop_path")}"
+                                "https://image.tmdb.org/t/p/original${item.getString("backdrop_path")}"
                             } else if (item.has("poster_path") && !item.isNull("poster_path")) {
-                                "https://image.tmdb.org/t/p/w780${item.getString("poster_path")}"
+                                "https://image.tmdb.org/t/p/original${item.getString("poster_path")}"
                             } else {
                                 ""
                             }
@@ -672,9 +672,9 @@ class Shows_Page : AppCompatActivity() {
 
                         val backdrop_path =
                             if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
-                                "https://image.tmdb.org/t/p/w1280${item.getString("backdrop_path")}"
+                                "https://image.tmdb.org/t/p/original${item.getString("backdrop_path")}"
                             } else if (item.has("poster_path") && !item.isNull("poster_path")) {
-                                "https://image.tmdb.org/t/p/w780${item.getString("poster_path")}"
+                                "https://image.tmdb.org/t/p/original${item.getString("poster_path")}"
                             } else {
                                 ""
                             }
@@ -841,17 +841,17 @@ class Shows_Page : AppCompatActivity() {
                         //val imgUrl = "https://image.tmdb.org/t/p/w780" + detailsJson.optString("poster_path", "")
                         val imgUrl =
                             if (detailsJson.has("backdrop_path") && !detailsJson.isNull("backdrop_path")) {
-                                "https://image.tmdb.org/t/p/w1280${detailsJson.getString("backdrop_path")}"
+                                "https://image.tmdb.org/t/p/original${detailsJson.getString("backdrop_path")}"
                             } else if (detailsJson.has("poster_path") && !detailsJson.isNull("poster_path")) {
-                                "https://image.tmdb.org/t/p/w780${detailsJson.getString("poster_path")}"
+                                "https://image.tmdb.org/t/p/original${detailsJson.getString("poster_path")}"
                             } else {
                                 ""
                             }
                         val imgUrl2 =
                             if (detailsJson.has("poster_path") && !detailsJson.isNull("poster_path")) {
-                                "https://image.tmdb.org/t/p/w780${detailsJson.getString("poster_path")}"
+                                "https://image.tmdb.org/t/p/original${detailsJson.getString("poster_path")}"
                             } else if (detailsJson.has("backdrop_path") && !detailsJson.isNull("backdrop_path")) {
-                                "https://image.tmdb.org/t/p/w1280${detailsJson.getString("backdrop_path")}"
+                                "https://image.tmdb.org/t/p/original${detailsJson.getString("backdrop_path")}"
                             } else {
                                 ""
                             }
@@ -958,18 +958,18 @@ class Shows_Page : AppCompatActivity() {
                         //val imgUrl = "https://image.tmdb.org/t/p/w500" + jsonObject.getString("poster_path")
                         val imgUrl =
                             if (jsonObject.has("backdrop_path") && !jsonObject.isNull("backdrop_path")) {
-                                "https://image.tmdb.org/t/p/w1280${jsonObject.getString("backdrop_path")}"
+                                "https://image.tmdb.org/t/p/original${jsonObject.getString("backdrop_path")}"
                             } else if (jsonObject.has("poster_path") && !jsonObject.isNull("poster_path")) {
-                                "https://image.tmdb.org/t/p/w780${jsonObject.getString("poster_path")}"
+                                "https://image.tmdb.org/t/p/original${jsonObject.getString("poster_path")}"
                             } else {
                                 ""
                             }
 
                         val imgUrl2 =
                             if (jsonObject.has("poster_path") && !jsonObject.isNull("poster_path")) {
-                                "https://image.tmdb.org/t/p/w780${jsonObject.getString("poster_path")}"
+                                "https://image.tmdb.org/t/p/original${jsonObject.getString("poster_path")}"
                             } else if (jsonObject.has("backdrop_path") && !jsonObject.isNull("backdrop_path")) {
-                                "https://image.tmdb.org/t/p/w1280${jsonObject.getString("backdrop_path")}"
+                                "https://image.tmdb.org/t/p/original${jsonObject.getString("backdrop_path")}"
 
                             } else {
                                 ""
@@ -1395,8 +1395,8 @@ class Shows_Page : AppCompatActivity() {
                     var date: String
                     var showD: String = ""
 
-                    val imgPost =  "https://image.tmdb.org/t/p/w780$poster_path"
-                    val imgback  = "https://image.tmdb.org/t/p/w1280$backdrop_path"
+                    val imgPost =  "https://image.tmdb.org/t/p/original$poster_path"
+                    val imgback  = "https://image.tmdb.org/t/p/original$backdrop_path"
 
                     if (original_title == "") {
                         type = "tv";
@@ -1670,10 +1670,14 @@ class Shows_Page : AppCompatActivity() {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /*
     private fun watchedList(){
 
+
         val userId = sm.getUserId()
-        val cWatching = db.getContinueWatchingAll(userId, "movie")
+        val cWatchingMv = db.getContinueWatchingAll(userId, "movie")
+        val cWatchingTv = db.getContinueWatchingAll(userId, "tv")
+
 
         watchAdapter = cWatchingAdapter(
             cWatching,
@@ -1681,6 +1685,28 @@ class Shows_Page : AppCompatActivity() {
         )
         watchRecyclerView.adapter = watchAdapter
 
+    }
+
+     */
+
+    private fun watchedList() {
+        val userId = sm.getUserId()
+        val cWatchingMv = db.getContinueWatchingAll(userId, "movie")
+        val cWatchingTv = db.getContinueWatchingAll(userId, "tv")
+
+        // Combine and sort in one operation
+        val combinedList = ArrayList<HashMap<String, String>>().apply {
+            addAll(cWatchingMv)
+            addAll(cWatchingTv)
+            // Sort by updated_at in descending order
+            sortByDescending { it["updated_at"]?.toLongOrNull() ?: 0L }
+        }
+
+        watchAdapter = cWatchingAdapter(
+            combinedList,
+            R.layout.item_watched
+        )
+        watchRecyclerView.adapter = watchAdapter
     }
 
 

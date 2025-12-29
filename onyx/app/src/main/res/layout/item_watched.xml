@@ -51,7 +51,11 @@
             android:layout_height="wrap_content"
             android:text="Redo of Healer"
             android:textColor="?attr/FG_color"
+            android:ellipsize="end"
+            android:fontFamily="@font/l"
+            android:singleLine="true"
             android:textSize="12sp"
+            android:alpha="0.7"
             tools:ignore="HardcodedText" />
 
         <LinearLayout
@@ -63,9 +67,12 @@
                 android:id="@+id/watchItemEpisode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="E1"
+                android:text="S1-E1"
+                android:textStyle="bold"
+                android:fontFamily='serif-monospace'
                 android:textColor="?attr/FG_color"
-                android:textSize="12sp"
+                android:textSize="10sp"
+                android:alpha="0.6"
                 tools:ignore="HardcodedText" />
 
             <View
@@ -80,15 +87,15 @@
                 android:layout_height="wrap_content"
                 android:text="00:20"
                 android:textColor="?attr/AccentColor"
-                android:fontFamily="@font/o"
-                android:textSize="10sp"
+                android:fontFamily="@font/p"
+                android:textSize="8sp"
                 tools:ignore="HardcodedText,SmallSp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:textSize="9sp"
                 android:text="/"
-                android:fontFamily="@font/o"
+                android:alpha="0.6"
                 android:textColor="?attr/FG_color"
                 tools:ignore="HardcodedText,SmallSp" />
 
@@ -97,9 +104,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="24:47"
+                android:alpha="0.6"
                 android:textColor="?attr/FG_color"
-                android:fontFamily="@font/o"
-                android:textSize="10sp"
+                android:fontFamily="@font/p"
+                android:textSize="8sp"
                 tools:ignore="HardcodedText,SmallSp" />
 
         </LinearLayout>
@@ -107,16 +115,19 @@
         <SeekBar
             android:id="@+id/cWatchSeek_bar"
             android:layout_width="match_parent"
-            android:padding="0dp"
-            android:layout_margin="0dp"
             android:layout_height="4dp"
             android:layout_marginTop="1dp"
+            android:layout_marginBottom="4dp"
             android:max="1000"
             android:progress="600"
             android:focusable="false"
             android:clickable="false"
             android:focusableInTouchMode="false"
             android:enabled="false"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
             android:progressTint="?attr/AccentColor"
             android:progressBackgroundTint="?attr/FG_color"
             android:thumbTint="@android:color/transparent" />

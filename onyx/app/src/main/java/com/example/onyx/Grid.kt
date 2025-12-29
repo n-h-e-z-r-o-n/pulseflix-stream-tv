@@ -1291,6 +1291,8 @@ class EpisodesAdapter(
         val ratingView: TextView = view.findViewById(R.id.episode_Rating)
         val descView: TextView = view.findViewById(R.id.episode_description)
         val epsImg: ImageView = view.findViewById(R.id.Ep_IMG)
+
+        var cWatchSeek_bar: SeekBar = view.findViewById(R.id.cWatchSeek_bar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
@@ -1303,6 +1305,17 @@ class EpisodesAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         val ep = episodes[position]
+
+        val sm = SessionManger(holder.itemView.context)
+        val userId = sm.getUserId()
+        val db = AppDatabase(holder.itemView.context)
+
+        val itemId = "${ep.seriesId}_S${ep.seasonNumber}_E${ep.episodesNumber}"
+        val lastPos = db.getResumePosition(userId, itemId, "tv").toLong()
+        val durationPos = db.getDurationPosition(userId, itemId, "tv").toLong()
+
+        val progress = ((lastPos.toDouble() / durationPos.toDouble()) * 1000).toInt()
+        holder.cWatchSeek_bar.progress = progress.coerceIn(0, 1000)
 
 
         holder.epNoView.text = "S${ep.seasonNumber}-E${ep.episodesNumber}"
@@ -1323,18 +1336,21 @@ class EpisodesAdapter(
             view.isEnabled = false
             val context = holder.itemView.context
             val intent = Intent(context, Play::class.java).apply {
+                Log.e("DEBUG_Each EpisodeWatch", "Eps ${ep.episodesNumber} Season ${ep.seasonNumber}")
                 putExtra("imdb_code", ep.seriesId)
                 putExtra("type", "tv")
-                putExtra("seasonNo", ep.seasonNumber.toString())
-                putExtra("episodeNo", ep.episodesNumber.toString())
+                putExtra("seasonNo", ep.seasonNumber)
+                putExtra("episodeNo", ep.episodesNumber)
+                putExtra("poster", ep.showPoster)
+                putExtra("backdrop", ep.showBackdrop)
+                putExtra("title", ep.showTitle)
             }
             context.startActivity(intent)
             view.postDelayed({
                 view.isEnabled = true
             }, 5000)
         }
-        Log.e("DEBUG_Each E grid", "Eps ${ep.episodesNumber}")
-        Log.e("DEBUG_Each E size", "${episodes.size}")
+
 
 
         // ✅ Attach the KeyListener here
@@ -1381,6 +1397,9 @@ class EpisodesAdapter(
 
 
 data class EpisodeItem(
+    val showTitle: String = "",
+    val showPoster: String = "",
+    val showBackdrop: String = "",
     val episodesName: String = "",
     val episodesImage: String= "",
     val episodesNumber: String= "",
@@ -1607,6 +1626,7 @@ class cWatchingAdapter(
         val type = item["type"] ?: ""
         val title = item["title"] ?: ""
         val posterUrl = item["poster"] ?: ""
+        val backdropUrl = item["backdrop"] ?: ""
         val episodeNumber = item["episode_number"] ?: ""
         val seasonNumber = item["season_number"] ?: ""
         val lastPos = item["last_position"]?.toLongOrNull() ?: 0L
@@ -1629,6 +1649,7 @@ class cWatchingAdapter(
             .into(holder.poster)
 
         // ---------- CLICK → RESUME ----------
+        val context = holder.itemView.context
         if(type=="anime"){
             holder.episode.text = "E$episodeNumber"
 
@@ -1636,13 +1657,47 @@ class cWatchingAdapter(
 
             holder.rootCard.setOnClickListener {
                 val context = holder.itemView.context
-
                 sm = SessionManger(context)
-                sm.saveLastPosition(itemId, lastPos)
 
                 //Anime_Video_Player.playVideoExternally(context, itemId, JSONArray(), episodeNumber, posterUrl, seasonNumber, title, true)
             }
 
+        }else if(type=="movie"){
+            holder.episode.text = ""
+
+            holder.rootCard.setOnClickListener {
+
+                val intent = Intent(context, Watch_Page::class.java)
+                intent.putExtra("imdb_code", itemId)
+                intent.putExtra("type", type)
+                intent.putExtra("title", title)
+                intent.putExtra("poster", posterUrl)
+                intent.putExtra("backdrop", backdropUrl)
+                intent.putExtra("seasonNo", seasonNumber)
+                intent.putExtra("EpisodeNo", episodeNumber)
+                intent.putExtra("continue_play", true)
+
+                context.startActivity(intent)
+            }
+
+        }else if(type=="tv"){
+            holder.episode.text = "S$seasonNumber-E$episodeNumber"
+            val seriesId = itemId.substringBefore("_")
+
+            holder.rootCard.setOnClickListener {
+
+                val intent = Intent(context, Watch_Page::class.java)
+                intent.putExtra("imdb_code", seriesId)
+                intent.putExtra("type", type)
+                intent.putExtra("title", title)
+                intent.putExtra("poster", posterUrl)
+                intent.putExtra("backdrop", backdropUrl)
+                intent.putExtra("seasonNo", seasonNumber)
+                intent.putExtra("EpisodeNo", episodeNumber)
+                intent.putExtra("continue_play", true)
+
+                context.startActivity(intent)
+            }
         }
 
     }
