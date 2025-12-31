@@ -47,6 +47,8 @@ tools:context=".Anime_Video_Player">
     android:focusable="false">
 
 
+
+
     <!-- Bottom controls bar -->
     <LinearLayout
         android:id="@+id/bottom_bar"
@@ -330,21 +332,56 @@ tools:context=".Anime_Video_Player">
 
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/MoreSection"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#400C2340">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:id="@+id/EpisodeContiner"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+            <LinearLayout
+                android:id="@+id/SeasonsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
         </HorizontalScrollView>
+
+
+        <TextView
+            android:id="@+id/PlayingSeasonTitle"
+            android:layout_marginHorizontal="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="My Hero Academia 2"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:shadowColor="#80000000"
+            android:shadowDx="5"
+            android:shadowDy="6"
+            android:shadowRadius="4"
+            tools:ignore="HardcodedText" />
+
+
+
+
+            <LinearLayout
+                android:id="@+id/EpisodeContiner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+            </LinearLayout>
+
 
     </LinearLayout>
 

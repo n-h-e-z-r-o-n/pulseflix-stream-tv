@@ -35,15 +35,21 @@ import java.net.URL
 import com.example.onyx.BuildConfig
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import com.example.onyx.FetchData.AnimeApi
 import java.io.IOException
+
+
 
 
 class Watch_Anime_Page : AppCompatActivity() {
     private var urlHome = BuildConfig.A_K
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
-
+    private lateinit var  fetchAnime: AnimeApi
     private lateinit var poster :String
+    private lateinit var animeId :String
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,165 +59,117 @@ class Watch_Anime_Page : AppCompatActivity() {
 
         db = AppDatabase(this)
         sm = SessionManger(this)
+        fetchAnime = AnimeApi(this)
 
         LoadingAnimation.setup(this@Watch_Anime_Page, R.raw.b)
 
-        val animeCode = intent.getStringExtra("anime_code")
+        animeId = intent.getStringExtra("anime_code")?: ""
 
-        Log.e("ANIME_Watch id", animeCode.toString())
+        Log.e("ANIME_Watch id", animeId)
+        if (animeId.isNotEmpty()){
+            getInfo(animeId)
+        }else{
+            getInfo("one-punch-man-season-3-19932")
+        }
 
-        //http://192.168.100.22:4000/api/v2/hianime/anime/$animeCode/episodes
-
-        //getInfo("my-status-as-an-assassin-obviously-exceeds-the-heros-19922")
-        getInfo(animeCode.toString())
 
     }
 
 
 
-    private fun getInfo(id: String){
+    private fun getInfo(Id: String){
 
         LoadingAnimation.show(this@Watch_Anime_Page)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            repeat(1) { attempt ->
-                try {
+        val jsonObject = fetchAnime.animeInfo(Id)
 
-                    val url = "$urlHome/api/v2/hianime/anime/$id"
-
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    connection.setRequestProperty("accept", "application/json")
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject = org.json.JSONObject(response)
-                    val data = jsonObject.getJSONObject("data")
-
-                    Log.e("ANIME_Watch Data", data.toString())
-
-
-
-                    val id = data.getJSONObject("anime").getJSONObject("info").getString("id")
-                    val anilistId = data.getJSONObject("anime").getJSONObject("info").getString("anilistId")
-                    val malId = data.getJSONObject("anime").getJSONObject("info").getString("malId")
-                    val name = data.getJSONObject("anime").getJSONObject("info").getString("name")
-                    poster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
-                    val description = data.getJSONObject("anime").getJSONObject("info").getString("description")
-                    val rating = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getString("rating")
-                    val quality = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getString("quality")
-                    val type = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getString("type")
-                    val duration = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getString("duration")
-                    val sub = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("sub", "")
-                    val dub = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("dub", "")
-                    val aired = data.getJSONObject("anime").getJSONObject("moreInfo").getString("aired")
-                    //val status = data.getJSONObject("anime").getJSONObject("moreInfo").getString("status")
-                    //val studios = data.getJSONObject("anime").getJSONObject("moreInfo").getString("studios")
-                    val genresArray = data.getJSONObject("anime").getJSONObject("moreInfo").getJSONArray("genres")
-                    var genre = ""
-                    for (i in 0 until genresArray.length()) {
-                        genre = genre +" ~ " +genresArray.getString(i)
-                    }
-
-                    val  seasons = data.getJSONArray("seasons")?: JSONArray()
-                    val  relatedAnimes = data.getJSONArray("relatedAnimes")?: JSONArray()
-                    val  recommendedAnime = data.getJSONArray("recommendedAnimes")?: JSONArray()
-
-                    val saveData  = jsonObject.getJSONObject("data")
-                    saveData.remove("recommendedAnimes")
-                    saveData.remove("relatedAnimes")
-                    saveData.remove("mostPopularAnimes")
-
-
-
-
-                    withContext(Dispatchers.Main) {
-
-                        findViewById<TextView>(R.id.watchTitle).text = name
-                        findViewById<TextView>(R.id.watchRating).text = rating
-                        findViewById<TextView>(R.id.watchRuntime).text = duration
-                        findViewById<TextView>(R.id.watchType).text = type
-                        findViewById<TextView>(R.id.watchQuality).text = quality
-                        findViewById<TextView>(R.id.watchSub).text = sub
-                        findViewById<TextView>(R.id.watchDub).text = dub
-                        findViewById<TextView>(R.id.watchYear).text = aired
-                        findViewById<TextView>(R.id.watchOverview).text = description
-                        findViewById<TextView>(R.id.watchGenres).text = genre
-
-                        val posterWidget = findViewById<ImageView>(R.id.WatchImage)
-                        Glide.with(posterWidget.context)
-                            .load(poster)
-                            .fitCenter()
-                            .into(posterWidget)
-
-
-                        if (seasons.length() > 0){
-                            createSeasonButtons(seasons.length(), seasons )
-                            findViewById<TextView>(R.id.SeasonTitle).visibility = View.VISIBLE
-                        }else{
-                            findViewById<TextView>(R.id.SeasonTitle).visibility = View.GONE
-                            getEpisodes(id)
-                        }
-
-                        showRecommendation(relatedAnimes, recommendedAnime)
-                        LoadingAnimation.hide(this@Watch_Anime_Page)
-
-
-                        setupFavoriteButton(
-                            animeId = id,
-                            name = name,
-                            type = type,
-                            anilistId = anilistId,
-                            malId = malId,
-                            description = description,
-                            rating = rating,
-                            quality = quality,
-                            duration = duration,
-                            poster = poster,
-                            sub=sub,
-                            dub=dub,
-                            aired=aired,
-                            genre=genre,
-                            seasons = seasons.toString()
-                        )
-
-                    }
-
-                    return@launch
-
-                } catch (e: java.net.UnknownHostException) {
-                    Log.e("ANIME_Watch", "No Internet Connection", e)
-                    withContext(Dispatchers.Main) {
-                        LoadingAnimation.setup(this@Watch_Anime_Page, R.raw.error)
-                    }
-
-                } catch (e: java.net.SocketTimeoutException) {
-                    // Server timeout
-                    Log.e("ANIME_Watch", "Request timed out", e)
-                    withContext(Dispatchers.Main) {
-                        LoadingAnimation.show(this@Watch_Anime_Page)
-                    }
-                    return@repeat
-
-                } catch (e: javax.net.ssl.SSLException) {
-                    Log.e("ANIME_Watch", "SSL Error", e)
-                    withContext(Dispatchers.Main) {
-                        LoadingAnimation.setup(this@Watch_Anime_Page, R.raw.error)
-                    }
-                    return@repeat
-                } catch (e: IOException) {
-                    Log.e("ANIME_Watch", "Network IO Error", e)
-                    withContext(Dispatchers.Main) {
-                        LoadingAnimation.setup(this@Watch_Anime_Page, R.raw.error)
-                    }
-                    return@repeat
-                } catch (e: Exception) {
-                    delay(20_000)
-                    Log.e("ANIME_Watch 1", "Error fetching data", e)
-                    withContext(Dispatchers.Main) {
-                        LoadingAnimation.show(this@Watch_Anime_Page)
-                    }
-                }
-            }
+        Log.e("ANIME_Watch Data", jsonObject.toString())
+        if (jsonObject==null){
+            return
         }
+
+        val data = jsonObject.getJSONObject("data")
+
+        val id = data.getJSONObject("anime").getJSONObject("info").getString("id")
+        poster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
+
+        val anilistId = data.getJSONObject("anime").getJSONObject("info").getString("anilistId")
+        val malId = data.getJSONObject("anime").getJSONObject("info").getString("malId")
+
+        val name = data.getJSONObject("anime").getJSONObject("info").getString("name")
+        val description = data.getJSONObject("anime").getJSONObject("info").getString("description")
+        val rating = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getString("rating")
+        val quality = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getString("quality")
+        val type = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getString("type")
+        val duration = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getString("duration")
+        val sub = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("sub", "")
+        val dub = data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats").getJSONObject("episodes").optString("dub", "")
+        val aired = data.getJSONObject("anime").getJSONObject("moreInfo").getString("aired")
+        //val status = data.getJSONObject("anime").getJSONObject("moreInfo").getString("status")
+        //val studios = data.getJSONObject("anime").getJSONObject("moreInfo").getString("studios")
+        val genresArray = data.getJSONObject("anime").getJSONObject("moreInfo").getJSONArray("genres")
+        var genre = ""
+        for (i in 0 until genresArray.length()) {
+            genre = genre +" ~ " +genresArray.getString(i)
+        }
+
+        val  seasons = data.getJSONArray("seasons")?: JSONArray()
+        val  relatedAnimes = data.getJSONArray("relatedAnimes")?: JSONArray()
+        val  recommendedAnime = data.getJSONArray("recommendedAnimes")?: JSONArray()
+
+        val saveData  = jsonObject.getJSONObject("data")
+        saveData.remove("recommendedAnimes")
+        saveData.remove("relatedAnimes")
+        saveData.remove("mostPopularAnimes")
+
+
+        findViewById<TextView>(R.id.watchTitle).text = name
+        findViewById<TextView>(R.id.watchRating).text = rating
+        findViewById<TextView>(R.id.watchRuntime).text = duration
+        findViewById<TextView>(R.id.watchType).text = type
+        findViewById<TextView>(R.id.watchQuality).text = quality
+        findViewById<TextView>(R.id.watchSub).text = sub
+        findViewById<TextView>(R.id.watchDub).text = dub
+        findViewById<TextView>(R.id.watchYear).text = aired
+        findViewById<TextView>(R.id.watchOverview).text = description
+        findViewById<TextView>(R.id.watchGenres).text = genre
+
+        val posterWidget = findViewById<ImageView>(R.id.WatchImage)
+        Glide.with(posterWidget.context)
+            .load(poster)
+            .fitCenter()
+            .into(posterWidget)
+
+
+        if (seasons.length() > 0){
+            createSeasonButtons(seasons.length(), seasons )
+            findViewById<TextView>(R.id.SeasonTitle).visibility = View.VISIBLE
+        }else{
+            findViewById<TextView>(R.id.SeasonTitle).visibility = View.GONE
+            getEpisodes(id)
+        }
+
+        showRecommendation(relatedAnimes, recommendedAnime)
+        LoadingAnimation.hide(this@Watch_Anime_Page)
+
+
+        setupFavoriteButton(
+            animeId = animeId,
+            name = name,
+            type = type,
+            anilistId = anilistId,
+            malId = malId,
+            description = description,
+            rating = rating,
+            quality = quality,
+            duration = duration,
+            poster = poster,
+            sub=sub,
+            dub=dub,
+            aired=aired,
+            genre=genre,
+            seasons = seasons.toString()
+        )
     }
 
 
@@ -228,7 +186,7 @@ class Watch_Anime_Page : AppCompatActivity() {
         for (i in 0 until noOfSeasons) {
             val season = seasonData.getJSONObject(i)
 
-            val cardView = inflater.inflate(R.layout.anime_season_item, container, false) as CardView
+            val cardView = inflater.inflate(R.layout.anime_season_item, container, false) as FrameLayout
             val seasonTitle = cardView.findViewById<TextView>(R.id.SeasonTitle)
             val seasonImage = cardView.findViewById<ImageView>(R.id.SeasonImage)
 
@@ -247,17 +205,6 @@ class Watch_Anime_Page : AppCompatActivity() {
 
             cardView.setOnClickListener {
 
-                /*
-                val backdrop = findViewById<ImageView>(R.id.backdrop)
-
-                Glide.with(this)
-                    .load(imageUrl)
-                    .centerCrop()
-                    .into(backdrop)
-
-                 */
-
-
                 val selected_seasonShow = findViewById<TextView>(R.id.selected_seasonShow)
                 selected_seasonShow.text = "List of episodes ($title)"
 
@@ -268,65 +215,48 @@ class Watch_Anime_Page : AppCompatActivity() {
         }
     }
     @OptIn(UnstableApi::class)
-    private fun getEpisodes(season_id: String){
-        CoroutineScope(Dispatchers.IO).launch {
-            repeat(1) { attempt ->
-                try {
+    private fun getEpisodes(seasonId: String){
 
-                    val url = "$urlHome/api/v2/hianime/anime/$season_id/episodes"
+        val jsonObject = fetchAnime.animeEpisodes(seasonId)
 
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    connection.setRequestProperty("accept", "application/json")
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject = org.json.JSONObject(response)
-                    val data = jsonObject.getJSONObject("data")
-                    val  episodes = data.getJSONArray("episodes")
-
-                    Log.e("Watch_Anime_Page 1", episodes.toString())
-
-                    withContext(Dispatchers.Main) {
-
-                        val container = findViewById<LinearLayout>(R.id.anime_episodes_selector_container)
-                        container.removeAllViews()
-                        val inflater = LayoutInflater.from(this@Watch_Anime_Page)
-
-                        for (i in 0 until episodes.length()) {
-                            val episode = episodes.getJSONObject(i)
-
-                            val cardView = inflater.inflate(R.layout.anime_item_episode, container, false) as FrameLayout
-                            val epTitle = cardView.findViewById<TextView>(R.id.episode_name)
-                            val epNumber = cardView.findViewById<TextView>(R.id.episode_Number)
-
-                            val eTitle = episode.optString("title", "${i + 1}")
-                            val eNumber = episode.optString("number", "")
-                            val episodeId = episode.optString("episodeId", "")
-
-
-                            epTitle.text = eTitle
-                            epNumber.text = eNumber
-
-
-                            cardView.setOnClickListener {
-                                Log.e("ANIME_episodeId ", "episodeId: $episodeId")
-
-                                 Anime_Video_Player.playVideoExternally(this@Watch_Anime_Page, episodeId, episodes, eNumber, poster, season_id, eTitle, false)
-
-                            }
-
-                            container.addView(cardView)
-                        }
-
-                    }
-
-
-                    return@launch
-                } catch (e: Exception) {
-                    delay(20_000)
-                    Log.e("ANIME_STATUS HOME 1", "Error fetching data", e)
-                }
-            }
+        Log.e("ANIME_Watch EPISODES", jsonObject.toString())
+        if (jsonObject==null){
+            return
         }
+
+        val data = jsonObject.getJSONObject("data")
+        val  episodes = data.getJSONArray("episodes")
+
+        val container = findViewById<LinearLayout>(R.id.anime_episodes_selector_container)
+        container.removeAllViews()
+        val inflater = LayoutInflater.from(this@Watch_Anime_Page)
+
+        for (i in 0 until episodes.length()) {
+            val episode = episodes.getJSONObject(i)
+
+            val cardView = inflater.inflate(R.layout.anime_item_episode, container, false) as FrameLayout
+            val epTitle = cardView.findViewById<TextView>(R.id.episode_name)
+            val epNumber = cardView.findViewById<TextView>(R.id.episode_Number)
+
+            val eTitle = episode.optString("title", "${i + 1}")
+            val eNumber = episode.optString("number", "")
+            val episodeId = episode.optString("episodeId", "")
+
+
+            epTitle.text = eTitle
+            epNumber.text = eNumber
+
+
+            cardView.setOnClickListener {
+                Log.e("ANIME_episodeId ", "episodeId: $episodeId")
+
+                //Anime_Video_Player.playVideoExternally(this@Watch_Anime_Page, episodeId, eNumber, seasonId, eTitle)
+                Anime_Video_Player.playVideoExternally(this@Watch_Anime_Page, episodeId, eNumber, seasonId)
+            }
+            container.addView(cardView)
+        }
+
+
     }
 
 
