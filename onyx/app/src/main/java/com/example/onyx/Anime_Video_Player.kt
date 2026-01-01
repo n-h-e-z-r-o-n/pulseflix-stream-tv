@@ -2,7 +2,6 @@
 
 package com.example.onyx
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -82,12 +81,14 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
 
 
-
-
     private lateinit var EpisodeContiner: LinearLayout
     private lateinit var SeasonsContainer: LinearLayout
     private lateinit var seasonTitleWidget: TextView
 
+    private var selectedEpisodeView: FrameLayout? = null
+
+    private var isEpisodeLoading = false
+    private var isSeasonLoading = false
 
 
     private lateinit var playerView: PlayerView
@@ -146,6 +147,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         GlobalUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anime_video_player)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) // Prevent screen from sleeping while this Activity is visible
 
         db = AppDatabase(this)         // Initialize database
         sm = SessionManger(this)
@@ -153,8 +155,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
         userId = sm.getUserId()
 
-        // Prevent screen from sleeping while this Activity is visible
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
 
         initializeViews()
         setupPlayer()
@@ -227,7 +228,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         currentSeasonId = seasonId.toString()
 
 
-        //fetchStreamingLinks(episodeId.toString())
+        fetchStreamingLinks(episodeId.toString())
         //displayEpisode(episodesArray, episodesNumber.toString())
 
         showData(seasonId.toString())
@@ -235,8 +236,9 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     }
 
     private fun showData(SeasonId: String){
-        val jsonObject = fetchAnime.animeInfo(SeasonId)
 
+
+        val jsonObject = fetchAnime.animeInfo(SeasonId)
 
         if (jsonObject==null){
             return
@@ -274,7 +276,9 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                         .centerCrop()
                         .into(seasonImage)
                 }
+
                 seasonBtn.setOnClickListener {
+                    isSeasonLoading = true
 
                     val jsonObject = fetchAnime.animeInfo(season_id)
                     if (jsonObject!=null){
@@ -282,9 +286,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                         val name = data.getJSONObject("anime").getJSONObject("info").getString("name")
                         val id = data.getJSONObject("anime").getJSONObject("info").getString("id")
                         val poster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
-                        if (id==currentSeasonId){
 
-                        }
                         //currentPoster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
                         seasonTitleWidget.text  = name
 
@@ -294,8 +296,13 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                     }
 
                     getEpisodes(season_id )
+                    isSeasonLoading = false
                 }
+
                 SeasonsContainer.addView(seasonBtn)
+                if (currentSeasonId == season_id){
+                    seasonBtn.performClick()
+                }
             }
 
 
@@ -322,15 +329,23 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                 val episodeId = episode.optString("episodeId", "")
 
                 val episodeBtn = inflater.inflate(R.layout.anime_item_episode2, EpisodeContiner, false) as FrameLayout
-                val epTitle = episodeBtn.findViewById<TextView>(R.id.episode_name)
-                val epNumber = episodeBtn.findViewById<TextView>(R.id.episode_Number)
+                val epTitleWidget = episodeBtn.findViewById<TextView>(R.id.episode_name)
+                val epNumberWidget = episodeBtn.findViewById<TextView>(R.id.episode_Number)
 
-                epTitle.text = eTitle
-                epNumber.text = eNumber
+                epTitleWidget.text = eTitle
+                epNumberWidget.text = "$eNumber: "
+
+                if(currentEpisodeNumber == eNumber && currentEpisodeId == episodeId){
+                    episodeBtn.isSelected = true
+                    selectedEpisodeView = episodeBtn
+                }
 
                 episodeBtn.setOnClickListener {
-
-
+                    if (currentEpisodeId == episodeId) return@setOnClickListener
+                    if (isEpisodeLoading) return@setOnClickListener
+                    selectedEpisodeView?.isSelected = false
+                    episodeBtn.isSelected = true
+                    selectedEpisodeView = episodeBtn
 
                     fetchStreamingLinks(episodeId)
                 }
@@ -343,9 +358,13 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     }
 
     private fun fetchStreamingLinks(episodeId: String) {
+        isEpisodeLoading = true
 
         val jsonObjectServerInfo = fetchAnime.animeEpisodeServers(episodeId)
-        if(jsonObjectServerInfo == null) return
+        if (jsonObjectServerInfo == null) {
+            isEpisodeLoading = false
+            return
+        }
 
         val dataServers = jsonObjectServerInfo.getJSONObject("data")
 
@@ -429,7 +448,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
             dialog.show()
         }
 
-
+        isEpisodeLoading = false
     }
 
     private fun fetchServerSources(episodeId: String, serverName: String, category: String) {
@@ -462,6 +481,9 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         exoPlayer?.let { player ->
             playerView.player = player
             player.addListener(this@Anime_Video_Player)
+            if (resumePosition > 0) {
+                player.seekTo(resumePosition)
+            }
             updatePlayPauseButton()
             updateMuteButton()
             updateSpeedButton()
@@ -882,10 +904,10 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         isMenuVisible = true
         moreSectionMenu.visibility = View.VISIBLE
 
-        isControlsVisible = true
+        isControlsVisible = false
         bottomBar.visibility = View.GONE
 
-        focusEpisode()
+        focusPlayingEpisode()
     }
 
     private fun hideMenu() {
@@ -1004,8 +1026,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                     updateQualityButton()
                     if (resumePosition > 0) {
                         exoPlayer?.seekTo(resumePosition)
-                        sm.clearLastPosition(currentEpisodeId.toString())
-                        resumePosition = 0
+                        resumePosition = fetchResumePosition()
                     }
                     if (exoPlayer?.isPlaying == true) {
                         startProgressTracking()

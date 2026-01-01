@@ -2,21 +2,41 @@
     <!-- Focused state -->
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <corners android:radius="5dp" />
-            <stroke
-                android:width="2dp"
-                android:color="?attr/AccentColor" />
+            <corners android:radius="2dp" />
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="@android:color/transparent"
+                android:endColor="#dddddd"
+                android:alpha="0.5"
+                />
+        </shape>
+    </item>
+
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="2dp" />
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="@android:color/transparent"
+                android:endColor="?attr/AccentColor"
+                />
+
         </shape>
     </item>
 
     <!-- Default -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/transparent" />
-            <corners android:radius="5dp" />
-            <stroke
-                android:width="2dp"
-                android:color="@android:color/transparent" />
+            <corners android:radius="2dp" />
+            <gradient
+                android:type="linear"
+                android:angle="0"
+                android:startColor="@android:color/transparent"
+                android:endColor="?attr/AccentColor"
+                />
+
         </shape>
     </item>
 </selector>
