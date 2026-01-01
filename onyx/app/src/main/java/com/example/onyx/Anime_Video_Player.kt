@@ -16,6 +16,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -83,7 +84,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
 
 
-    private lateinit var MoreSectionWidget: LinearLayout
     private lateinit var EpisodeContiner: LinearLayout
     private lateinit var SeasonsContainer: LinearLayout
     private lateinit var seasonTitleWidget: TextView
@@ -94,6 +94,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     private lateinit var progressBar: ProgressBar
     private lateinit var overlayContainer: View
     private lateinit var bottomBar: LinearLayout
+    private lateinit var moreSectionMenu: FrameLayout
     private lateinit var centerOverlay: FrameLayout
 
     // Control buttons
@@ -118,6 +119,8 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
     private var exoPlayer: ExoPlayer? = null
     private var isControlsVisible = true
+    private var isMenuVisible = true
+
     private var isFullscreen = false
     private var isMuted = false
     private var currentSpeed = 1.0f
@@ -157,42 +160,14 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         setupPlayer()
         //setupControls()
         //setupGestures()
-        //setupBackPressedCallback()
+        setupBackPressedCallback()
     }
 
     private fun fetchResumePosition(): Long {
-        return if (currentEpisodeId.isNotEmpty()) {
-            db.getResumePosition(userId, currentEpisodeId, "anime").toLong()
+        return if (currentEpisodeId != null) {
+            db.getResumePosition(userId, currentEpisodeId.toString(), "anime").toLong()
         } else {
             0L
-        }
-    }
-
-    private fun saveContinueWatching() {
-        if (currentEpisodeId.isEmpty()) return
-
-        exoPlayer?.let { player ->
-            val duration = player.duration.toInt()
-            val lastPosition = player.currentPosition.toInt()
-
-            // Ignore very short playback
-            if (lastPosition < 5_000 || duration <= 0) return
-
-            // Run database operation in background to avoid UI jank
-            Thread {
-                db.addOrUpdateContinueWatching(
-                    userId = userId,
-                    itemId = currentEpisodeId,
-                    type = "anime",
-                    title = currentSeasonTitle, // Using season title as show title
-                    poster = currentPoster,
-                    backdrop = "", // Add backdrop if available
-                    seasonNumber = currentSeasonTitle, // Or parse from season title if needed
-                    episodeNumber = currentEpisodeNumber,
-                    lastPosition = lastPosition,
-                    duration = duration
-                )
-            }.start()
         }
     }
 
@@ -201,6 +176,8 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         progressBar = findViewById(R.id.progress_bar)
         overlayContainer = findViewById(R.id.overlay_container)
         bottomBar = findViewById(R.id.bottom_bar)
+
+
         centerOverlay = findViewById(R.id.center_overlay)
 
         // Control buttons
@@ -221,11 +198,10 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         txtCurrentTime = findViewById(R.id.txt_current_time)
         txtDuration = findViewById(R.id.txt_duration)
 
-
-        MoreSectionWidget = findViewById<LinearLayout>(R.id.MoreSection)
-        seasonTitleWidget = findViewById<TextView>(R.id.PlayingSeasonTitle)
-        SeasonsContainer = findViewById<LinearLayout>(R.id.SeasonsContainer)
-        EpisodeContiner = findViewById<LinearLayout>(R.id.EpisodeContiner)
+        moreSectionMenu = findViewById(R.id.MoreSection)
+        seasonTitleWidget = findViewById(R.id.PlayingSeasonTitle)
+        SeasonsContainer = findViewById(R.id.SeasonsContainer)
+        EpisodeContiner = findViewById(R.id.EpisodeContiner)
 
 
 
@@ -637,16 +613,15 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         serverContainer.layoutParams = params
     }
 
-    private fun focusEpisode() {
+    private fun focusPlayingEpisode() {
         val episodeContainer = findViewById<LinearLayout>(R.id.EpisodeContiner)
         if (episodeContainer.childCount == 0) return
 
-        val serverContainer = findViewById<LinearLayout>(R.id.EpisodeContiner)
-        if (serverContainer.childCount > 0) {
-            var episodeNum = currentEpisodeNumber?.toIntOrNull() ?: 0
-            episodeNum = episodeNum-1
-            serverContainer.getChildAt(episodeNum)?.requestFocus()
-        }
+
+        var episodeNum = currentEpisodeNumber?.toIntOrNull() ?: 0
+        episodeNum = episodeNum-1
+        episodeContainer.getChildAt(episodeNum)?.requestFocus()
+
     }
 
 
@@ -774,12 +749,10 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     private fun setupBackPressedCallback() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (isControlsVisible) {
-                    // If controls are visible, hide them
-                    hideControls()
+                if (!isMenuVisible) {
+                    showMenu()
                 } else {
-                    // If controls are hidden, exit the video player
-                    finish()
+                    hideMenu()
                 }
             }
         })
@@ -897,11 +870,27 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     private fun showControls() {
         isControlsVisible = true
         bottomBar.visibility = View.VISIBLE
+        moreSectionMenu.visibility = View.GONE
     }
 
     private fun hideControls() {
         isControlsVisible = false
         bottomBar.visibility = View.GONE
+    }
+
+    private fun showMenu() {
+        isMenuVisible = true
+        moreSectionMenu.visibility = View.VISIBLE
+
+        isControlsVisible = true
+        bottomBar.visibility = View.GONE
+
+        focusEpisode()
+    }
+
+    private fun hideMenu() {
+        isMenuVisible = false
+        moreSectionMenu.visibility = View.GONE
     }
 
     private fun toggleFullscreen() {
@@ -1141,21 +1130,18 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         when (keyCode) {
             KeyEvent.KEYCODE_DPAD_UP -> {
                 // Only show controls if they are hidden
-                if (!isControlsVisible) {
+                 if (!isControlsVisible and !isMenuVisible) {
                     showControls()
                     return true
                 }
             }
             KeyEvent.KEYCODE_DPAD_DOWN -> {
-                // Expand episodes list and move focus into it when navigating down from controls
-                val serverContainer = findViewById<LinearLayout>(R.id.EpisodeContiner)
-                val anyControlFocused = bottomBar.findFocus() != null
-                if (anyControlFocused && serverContainer.childCount > 0) {
-                    setContainerExpanded(true)
-                    focusEpisode()
+                if (isControlsVisible and !isMenuVisible) {
+                    hideControls()
                     return true
                 }
             }
+
         }
         return super.onKeyDown(keyCode, event)
     }

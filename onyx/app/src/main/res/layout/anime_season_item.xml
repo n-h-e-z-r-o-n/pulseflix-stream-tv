@@ -8,8 +8,10 @@
         android:focusableInTouchMode="true"
         android:clickable="true"
         android:background="@drawable/item_episode_focus"
-         android:clipToOutline="true"
-         tools:ignore="UnusedAttribute">
+        android:foreground="@drawable/item_episode_focus"
+        android:clipToOutline="true"
+        android:elevation="70dp"
+        tools:ignore="UnusedAttribute">
 
 
     <ImageView
@@ -19,6 +21,16 @@
         tools:ignore="ContentDescription"
         android:scaleType="centerCrop"
         android:src="@raw/test2"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/transparentEffect"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/transparentEffect"/>
 
 
     <TextView
@@ -31,10 +43,14 @@
         android:text="Season 1"
         android:textColor="?attr/FG_color"
         android:fontFamily="@font/e"
-        android:textSize="15sp"
+        android:textSize="18sp"
         tools:ignore="HardcodedText,Suspicious0dp"
         android:gravity="center"
         android:layout_gravity="center"
+        android:shadowColor="#000000"
+        android:shadowDx="5"
+        android:shadowDy="6"
+        android:shadowRadius="4"
         android:textStyle="bold" />
 
 

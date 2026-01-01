@@ -38,7 +38,7 @@ tools:context=".Anime_Video_Player">
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
-<!-- Custom overlay controls -->
+<!-- ==== Custom overlay controls ================================================================= -->
 <FrameLayout
     android:id="@+id/overlay_container"
     android:layout_width="match_parent"
@@ -46,10 +46,70 @@ tools:context=".Anime_Video_Player">
     android:clickable="false"
     android:focusable="false">
 
+    <FrameLayout
+        android:id="@+id/MoreSection"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:background="?attr/transparentEffect">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/transparentEffect"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="?attr/transparentEffect">
 
 
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:id="@+id/SeasonsContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"/>
+            </HorizontalScrollView>
 
-    <!-- Bottom controls bar -->
+            <TextView
+                android:id="@+id/PlayingSeasonTitle"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My Hero Academia 2"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:gravity="center"
+                android:shadowColor="#000000"
+                android:shadowDx="5"
+                android:shadowDy="6"
+                android:shadowRadius="4"
+                tools:ignore="HardcodedText" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/EpisodeContiner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+    </FrameLayout>
+
+<!-- ==== Bottom controls bar ================================================================= -->
+
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
@@ -61,29 +121,27 @@ tools:context=".Anime_Video_Player">
         android:paddingEnd="12dp"
         android:paddingBottom="4dp"
         android:background="@drawable/overlay_video_control_bar"
-        android:visibility="visible"
-        >
-
-
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
 
-
             <TextView
                 android:id="@+id/txt_current_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:fontFamily="@font/c"
+                android:fontFamily="@font/p"
                 android:text="00:00:00"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
+                android:shadowColor="#000000"
+                android:shadowDx="5"
+                android:shadowDy="6"
+                android:shadowRadius="4"
                 tools:ignore="HardcodedText,TextContrastCheck" />
-
-
 
             <SeekBar
                 android:id="@+id/seek_bar"
@@ -99,21 +157,23 @@ tools:context=".Anime_Video_Player">
                 android:layout_weight="1"
                 android:progressTint="?attr/AccentColor"
                 android:progressBackgroundTint="?attr/SidebarDefault"
-                android:thumbTint="?attr/SidebarFocus"
+                android:thumbTint="?attr/AccentColor"
                 />
 
             <TextView
                 android:id="@+id/txt_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/c"
+                android:fontFamily="@font/p"
                 android:text="00:00:00"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
+                android:shadowColor="#000000"
+                android:shadowDx="5"
+                android:shadowDy="6"
+                android:shadowRadius="4"
                 tools:ignore="HardcodedText,TextContrastCheck" />
         </LinearLayout>
-
-
 
 
         <LinearLayout
@@ -144,7 +204,9 @@ tools:context=".Anime_Video_Player">
                     android:padding="5dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_rewind_back"
+                    android:nextFocusLeft="@+id/btn_close"
                     app:tint="@android:color/white"
+
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                 <ImageButton
@@ -176,7 +238,6 @@ tools:context=".Anime_Video_Player">
                     android:src="@drawable/ic_rewind_forward"
                     app:tint="@android:color/white"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintBounds" />
-
             </LinearLayout>
 
 
@@ -197,12 +258,11 @@ tools:context=".Anime_Video_Player">
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/tv_button_selector"
                     android:clickable="true"
-                    android:fontFamily="@font/f"
+                    android:fontFamily="@font/p"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingHorizontal="10dp"
                     android:text="sub: hd-4"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
@@ -218,7 +278,7 @@ tools:context=".Anime_Video_Player">
                     android:background="@drawable/tv_button_selector"
                     android:clickable="true"
                     android:focusable="true"
-                    android:fontFamily="@font/f"
+                    android:fontFamily="@font/p"
                     android:focusableInTouchMode="true"
                     android:text="1x"
                     android:textColor="@android:color/white"
@@ -260,15 +320,14 @@ tools:context=".Anime_Video_Player">
                     android:id="@+id/btn_quality"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
-                    android:fontFamily="@font/f"
+                    android:fontFamily="@font/p"
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/tv_button_selector"
                     android:clickable="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingHorizontal="10dp"
                     android:text="Auto"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
@@ -326,6 +385,7 @@ tools:context=".Anime_Video_Player">
                     android:clickable="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
+                    android:nextFocusRight="@+id/btn_rewind"
                     android:src="@drawable/ic_close"
                     app:tint="@color/nav_icon_color_selector"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
@@ -333,61 +393,6 @@ tools:context=".Anime_Video_Player">
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/MoreSection"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#400C2340">
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none">
-            <LinearLayout
-                android:id="@+id/SeasonsContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
-        </HorizontalScrollView>
-
-
-        <TextView
-            android:id="@+id/PlayingSeasonTitle"
-            android:layout_marginHorizontal="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My Hero Academia 2"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:shadowColor="#80000000"
-            android:shadowDx="5"
-            android:shadowDy="6"
-            android:shadowRadius="4"
-            tools:ignore="HardcodedText" />
-
-
-
-
-            <LinearLayout
-                android:id="@+id/EpisodeContiner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-            </LinearLayout>
-
-
-    </LinearLayout>
-
-
-
-
 
 </FrameLayout>
 

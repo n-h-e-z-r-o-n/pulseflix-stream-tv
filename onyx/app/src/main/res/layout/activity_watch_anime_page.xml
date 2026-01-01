@@ -95,7 +95,7 @@
                         android:text="Campfire Cooking in Another World with My Absurd Skill Season 2"
                         android:textColor="?attr/FG_color"
                         tools:ignore="HardcodedText"
-                        android:shadowColor="#80000000"
+                        android:shadowColor="#000000"
                         android:shadowDx="5"
                         android:shadowDy="6"
                         android:shadowRadius="4"/>

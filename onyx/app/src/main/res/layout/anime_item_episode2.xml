@@ -10,17 +10,6 @@
     android:focusableInTouchMode="true"
     tools:ignore="TouchTargetSizeCheck">
 
-
-    <LinearLayout
-        android:id="@+id/blurContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="#99000000"
-        android:gravity="center_horizontal"
-
-        android:orientation="vertical" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,7 +26,11 @@
             android:text="144:"
             android:fontFamily="@font/p"
             android:textColor="?attr/FG_color"
-            android:textSize="10sp"
+            android:textSize="15sp"
+            android:shadowColor="#000000"
+            android:shadowDx="5"
+            android:shadowDy="6"
+            android:shadowRadius="4"
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
 
@@ -54,7 +47,11 @@
             android:text="jj"
             android:ellipsize="end"
             android:textColor="?attr/FG_color"
-            android:textSize="10sp"
+            android:textSize="15sp"
+            android:shadowColor="#000000"
+            android:shadowDx="5"
+            android:shadowDy="6"
+            android:shadowRadius="4"
             tools:ignore="HardcodedText,SmallSp" />
 
     </LinearLayout>
