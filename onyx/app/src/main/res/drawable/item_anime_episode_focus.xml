@@ -5,7 +5,7 @@
             <corners android:radius="2dp" />
             <gradient
                 android:type="linear"
-                android:angle="270"
+                android:angle="0"
                 android:startColor="@android:color/transparent"
                 android:endColor="#dddddd"
                 android:alpha="0.5"
@@ -18,11 +18,9 @@
             <corners android:radius="2dp" />
             <gradient
                 android:type="linear"
-                android:angle="270"
+                android:angle="0"
                 android:startColor="@android:color/transparent"
-                android:endColor="?attr/AccentColor"
-                />
-
+                android:endColor="?attr/AccentColor"/>
         </shape>
     </item>
 
@@ -30,12 +28,7 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="2dp" />
-            <gradient
-                android:type="linear"
-                android:angle="0"
-                android:startColor="@android:color/transparent"
-                android:endColor="?attr/AccentColor"
-                />
+
 
         </shape>
     </item>
