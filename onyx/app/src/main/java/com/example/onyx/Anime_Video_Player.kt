@@ -211,9 +211,12 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         currentEpisodeNumber = episodesNumber.toString()
         currentSeasonId = seasonId.toString()
 
+        holdSeasonId = currentEpisodeId
 
-        fetchStreamingLinks(episodeId.toString())
         showData(seasonId.toString())
+
+        //fetchStreamingLinks(episodeId.toString())
+
     }
 
     private fun showData(SeasonId: String){
@@ -225,8 +228,9 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         val data = jsonObject.getJSONObject("data")
         val name = data.getJSONObject("anime").getJSONObject("info").getString("name")
         val seasons = data.getJSONArray("seasons")?: JSONArray()
-        currentPoster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
+        val poster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
 
+        currentPoster = poster
         seasonTitleWidget.text  = name
         currentSeasonTitle = name
 
@@ -280,9 +284,13 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                 SeasonsContainer.addView(seasonBtn)
                 Log.e("ANIME_SEASON_COMPAER", "currentSeasonId: $currentSeasonId , season_id: $season_id")
                 if (currentSeasonId == season_id) seasonBtn.performClick()
-
             }
         }else{
+
+            holdSeasonTitle = name
+            holdPoster = poster
+            holdSeasonId = SeasonId
+
             getEpisodes(SeasonId)
         }
     }
@@ -293,6 +301,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
         val inflater = LayoutInflater.from(this)
         val EpisodesjsonObject = fetchAnime.animeEpisodes(season_id)
+
         if (EpisodesjsonObject != null){
             val data = EpisodesjsonObject.getJSONObject("data")
             val  episodes = data.getJSONArray("episodes")
