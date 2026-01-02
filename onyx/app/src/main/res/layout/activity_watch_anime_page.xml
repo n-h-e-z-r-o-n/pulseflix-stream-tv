@@ -483,6 +483,7 @@
                                     android:text=""
                                     android:textColor="?attr/FG_color"
                                     android:textSize="13sp"
+                                    android:alpha="0.7"
                                     android:textStyle="bold"
                                     android:fontFamily="@font/p"
                                     tools:ignore="HardcodedText" />
@@ -490,7 +491,6 @@
                                 <HorizontalScrollView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="?attr/transparentEffect"
                                     android:scrollbars="none">
                                     <LinearLayout
                                         android:id="@+id/anime_episodes_selector_container"

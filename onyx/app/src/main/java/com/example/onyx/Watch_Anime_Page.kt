@@ -13,6 +13,7 @@ import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
@@ -51,6 +52,8 @@ class Watch_Anime_Page : AppCompatActivity() {
     private lateinit var  fetchAnime: AnimeApi
     private lateinit var  fetchTMDB: TMDBapi
 
+    private  var userId = -1
+
 
     private lateinit var poster :String
     private lateinit var animeId :String
@@ -77,6 +80,8 @@ class Watch_Anime_Page : AppCompatActivity() {
         sm = SessionManger(this)
         fetchAnime = AnimeApi(this)
         fetchTMDB = TMDBapi(this)
+
+        userId = sm.getUserId()
 
         val displayMetrics = resources.displayMetrics
         screenHeight = displayMetrics.heightPixels
@@ -198,6 +203,8 @@ class Watch_Anime_Page : AppCompatActivity() {
             findViewById<TextView>(R.id.SeasonHeadline).visibility = View.VISIBLE
         }else{
             findViewById<TextView>(R.id.SeasonHeadline).visibility = View.GONE
+            findViewById<TextView>(R.id.selected_seasonShow).text = "EPISODES"
+
             getEpisodes(id)
         }
 
@@ -251,10 +258,12 @@ class Watch_Anime_Page : AppCompatActivity() {
             if(resultArray.length() > 0){
                 val item = resultArray.getJSONObject(0)
                 val id = item.getString("id")
-                poster = item.getString("poster_path")
+                val posterX = item.getString("poster_path")
                 val backdrop = item.optString("backdrop_path", item.optString("poster_path", ""))
                 val title = item.getString("name")
                 poster = "https://image.tmdb.org/t/p/original/$backdrop"
+
+                SeasonIMGArray.add("https://image.tmdb.org/t/p/original/$backdrop")
 
 
                 withContext(Dispatchers.Main) {
@@ -293,7 +302,6 @@ class Watch_Anime_Page : AppCompatActivity() {
 
             val seasonBtn = inflater.inflate(R.layout.anime_season_item2, container, false) as FrameLayout
             val seasonTitle = seasonBtn.findViewById<TextView>(R.id.SeasonTitle)
-
 
             val title = season.optString("title", "Season ${i + 1}")
             val imageUrl = season.optString("poster", "")
@@ -335,8 +343,7 @@ class Watch_Anime_Page : AppCompatActivity() {
 
                 selectedSeasonView = seasonBtn
 
-                val selected_seasonShow = findViewById<TextView>(R.id.selected_seasonShow)
-                selected_seasonShow.text = "List of episodes ($title)"
+                findViewById<TextView>(R.id.selected_seasonShow).text = "List of episodes ($title)"
 
                 getEpisodes(season_id)
             }
@@ -370,12 +377,18 @@ class Watch_Anime_Page : AppCompatActivity() {
             val epTitle = cardView.findViewById<TextView>(R.id.episode_name)
             val epNumber = cardView.findViewById<TextView>(R.id.episode_Number)
             val epImg = cardView.findViewById<ImageView>(R.id.episode_image)
+            val cWatchSeek_bar = cardView.findViewById<SeekBar>(R.id.cWatchSeek_bar)
 
-            val imageUrl = SeasonIMGArray.random()
-            Glide.with(this)
-                .load(imageUrl)
-                .centerCrop()
-                .into(epImg)
+            
+            try{
+                val imageUrl = SeasonIMGArray.random()
+                Glide.with(this)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .into(epImg)
+            }catch (e:Exception){}
+
+
 
             val eTitle = episode.optString("title", "${i + 1}")
             val eNumber = episode.optString("number", "")
@@ -383,7 +396,12 @@ class Watch_Anime_Page : AppCompatActivity() {
 
 
             epTitle.text = eTitle
-            epNumber.text = "$eNumber: "
+            epNumber.text = "E$eNumber "
+
+            val lastPos = db.getResumePosition(userId, episodeId, "anime").toLong()
+            val durationPos = db.getDurationPosition(userId, episodeId, "anime").toLong()
+            val progress = ((lastPos.toDouble() / durationPos.toDouble()) * 1000).toInt()
+            cWatchSeek_bar.progress = progress.coerceIn(0, 1000)
 
 
             cardView.setOnClickListener {
@@ -486,10 +504,10 @@ class Watch_Anime_Page : AppCompatActivity() {
             val isFav = db.isFavoriteAnime(userId, animeId)
             if (isFav) {
                 favoriteButtonImg.setImageResource(R.drawable.ic_tickfave)
-                favoriteButtonText.text = "Remove from Fav"
+                favoriteButtonText.text = "Remove-Fav"
             } else {
                 favoriteButtonImg.setImageResource(R.drawable.ic_addfave)
-                favoriteButtonText.text= "Add to Fav"
+                favoriteButtonText.text= "Add-to-Fav"
             }
         }
 
