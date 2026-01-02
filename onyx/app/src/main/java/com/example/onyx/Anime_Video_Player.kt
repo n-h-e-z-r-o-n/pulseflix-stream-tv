@@ -152,7 +152,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     }
 
     private fun fetchResumePosition(): Long {
-        return if (currentEpisodeId != null) {
+        return if (currentEpisodeId.isNotBlank()) {
             db.getResumePosition(userId, currentEpisodeId.toString(), "anime").toLong()
         } else {
             0L
@@ -164,7 +164,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         progressBar = findViewById(R.id.progress_bar)
         overlayContainer = findViewById(R.id.overlay_container)
         bottomBar = findViewById(R.id.bottom_bar)
-
 
         centerOverlay = findViewById(R.id.center_overlay)
 
@@ -215,8 +214,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
         showData(seasonId.toString())
 
-        //fetchStreamingLinks(episodeId.toString())
-
     }
 
     private fun showData(SeasonId: String){
@@ -230,9 +227,12 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         val seasons = data.getJSONArray("seasons")?: JSONArray()
         val poster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
 
-        currentPoster = poster
         seasonTitleWidget.text  = name
+
+        currentPoster = poster
         currentSeasonTitle = name
+
+        fetchStreamingLinks(currentEpisodeId) //start playing the selected episode video
 
         val inflater = LayoutInflater.from(this)
         Log.e("ANIME_Player_SN", "${seasons.length()}")
@@ -269,7 +269,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                         val id = data.getJSONObject("anime").getJSONObject("info").getString("id")
                         val poster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
 
-                        //currentPoster = data.getJSONObject("anime").getJSONObject("info").getString("poster")
                         seasonTitleWidget.text  = name
 
                         holdSeasonTitle = name
@@ -282,6 +281,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                 }
 
                 SeasonsContainer.addView(seasonBtn)
+
                 Log.e("ANIME_SEASON_COMPAER", "currentSeasonId: $currentSeasonId , season_id: $season_id")
                 if (currentSeasonId == season_id) seasonBtn.performClick()
             }
@@ -319,11 +319,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                 epTitleWidget.text = eTitle
                 epNumberWidget.text = "$eNumber: "
 
-                if(currentEpisodeNumber == eNumber && currentEpisodeId == episodeId){
-                    episodeBtn.isSelected = true
-                    selectedEpisodeView = episodeBtn
-                }
-
                 episodeBtn.setOnClickListener {
                     if (currentEpisodeId == episodeId) return@setOnClickListener
                     if (isEpisodeLoading) return@setOnClickListener
@@ -339,7 +334,13 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
                     fetchStreamingLinks(episodeId)
                 }
+
                 EpisodeContiner.addView(episodeBtn)
+
+                if(currentEpisodeNumber == eNumber && currentEpisodeId == episodeId){
+                    episodeBtn.isSelected = true
+                    selectedEpisodeView = episodeBtn
+                }
             }
         }
     }
@@ -451,12 +452,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         val btnServer = findViewById<TextView>(R.id.btn_server)
         btnServer.text = "$category: $serverName"
 
-        /*
-        currentEpisodeId =  episodeId
-        currentSeasonId = holdSeasonId
-        currentPoster = holdPoster
-        currentSeasonTitle = holdSeasonTitle
-         */
         resumePosition = fetchResumePosition() //db.getResumePosition(userId, currentEpisodeId, "anime").toLong()
 
         // (Re)initialize player with new stream
@@ -476,24 +471,16 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     }
 
 
-    private fun setContainerExpanded(expand: Boolean) {
-        val serverContainer = findViewById<LinearLayout>(R.id.EpisodeContiner)
-        val params = serverContainer.layoutParams
-
-        // Set height: wrap_content when expanded, 0dp when collapsed
-        params.height = if (expand) ViewGroup.LayoutParams.WRAP_CONTENT else 0
-        serverContainer.layoutParams = params
-    }
-
     private fun focusPlayingEpisode() {
         val episodeContainer = findViewById<LinearLayout>(R.id.EpisodeContiner)
-        if (episodeContainer.childCount == 0) return
+        val childCount = episodeContainer.childCount
+        if (childCount == 0) return
 
+        var episodeNum = currentEpisodeNumber.toIntOrNull() ?: 0
+        //var episodeNum = currentEpisodeNumber?.toIntOrNull() ?: 0
 
-        var episodeNum = currentEpisodeNumber?.toIntOrNull() ?: 0
         episodeNum = episodeNum-1
         episodeContainer.getChildAt(episodeNum)?.requestFocus()
-
     }
 
 
@@ -555,10 +542,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
             finish()
         }
 
-        // Fullscreen button
-        btnFullscreen.setOnClickListener {
-            toggleFullscreen()
-        }
+
 
         // Seek bar
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -765,24 +749,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         moreSectionMenu.visibility = View.GONE
     }
 
-    private fun toggleFullscreen() {
-        isFullscreen = !isFullscreen
-        if (isFullscreen) {
-            // Enter fullscreen
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    )
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            btnFullscreen.setImageResource(android.R.drawable.ic_menu_close_clear_cancel)
-        } else {
-            // Exit fullscreen
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            btnFullscreen.setImageResource(android.R.drawable.ic_menu_crop)
-        }
-    }
 
 
     private fun showSeekFeedback(text: String) {
@@ -956,18 +922,18 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
             val duration = player.duration.toInt()
             val lastPosition = player.currentPosition.toInt()
 
-            if (duration > 0 && lastPosition >= 5000 && userId != 0 && currentEpisodeId != null) {
+            if (duration > 0 && lastPosition >= 5000 && userId != 0 && currentEpisodeId.isNotBlank()) {
                 // Run in background thread
                 Thread {
                     db.addOrUpdateContinueWatching(
                         userId = userId,
-                        itemId = currentEpisodeId!!,
+                        itemId = currentEpisodeId,
                         type = "anime",
-                        title = currentSeasonTitle ?: "",
-                        poster = currentPoster ?: "",
-                        backdrop = currentPoster ?: "",
-                        seasonNumber = currentSeasonId ?: "",
-                        episodeNumber = currentEpisodeNumber ?: "",
+                        title = currentSeasonTitle,
+                        poster = currentPoster ,
+                        backdrop = currentPoster,
+                        seasonNumber = currentSeasonId,
+                        episodeNumber = currentEpisodeNumber,
                         lastPosition = lastPosition,
                         duration = duration
                     )

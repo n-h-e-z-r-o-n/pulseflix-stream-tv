@@ -351,14 +351,18 @@ class Anime_Page : AppCompatActivity() {
          ////////////////////////////////////////////////////////////////////////////////////////////
          ////////////////////////////////////////////////////////////////////////////////////////////
 
-         animeHomeData()
 
-         loadDubbedAnime()
-         loadPopularAnime()
-         loadRecentlyAnime()
-         setupSearchUi()
-         animeWatchedList()
-         notificationS()
+
+         CoroutineScope(Dispatchers.Main).launch {
+
+             animeHomeData()
+             loadDubbedAnime()
+             loadPopularAnime()
+             loadRecentlyAnime()
+             setupSearchUi()
+             animeWatchedList()
+             notificationS()
+         }
      }
 
 
@@ -377,9 +381,13 @@ class Anime_Page : AppCompatActivity() {
         }
 
 
-        animeWatchedList()
-        animeFavoritesList()
-        notificationS()
+
+
+        CoroutineScope(Dispatchers.Main).launch {
+            animeWatchedList()
+            animeFavoritesList()
+            notificationS()
+        }
     }
 
 

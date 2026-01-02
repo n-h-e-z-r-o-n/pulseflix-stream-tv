@@ -17,6 +17,23 @@
         </shape>
     </item>
 
+    <item android:state_selected="true">
+        <shape android:shape="rectangle" android:alpha="0.2">
+
+            <gradient
+                android:type="linear"
+                android:centerX="50%"
+                android:centerY="50%"
+                android:gradientRadius="900dp"
+                android:angle="270"
+                android:startColor="@android:color/transparent"
+                android:endColor="#90E5E4E2"
+                />
+
+            <stroke android:width="0dp" android:color="?attr/AccentColor" />
+        </shape>
+    </item>
+
     <item>
         <shape android:shape="rectangle"  android:alpha="0.2">
 

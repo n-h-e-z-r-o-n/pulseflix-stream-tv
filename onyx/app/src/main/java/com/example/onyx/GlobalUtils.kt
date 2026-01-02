@@ -16,6 +16,7 @@ import android.widget.TextView
 import kotlin.random.Random
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.TypedValue
 
 object GlobalUtils {
     
@@ -289,6 +290,14 @@ object GlobalUtils {
 
         // Calculate span count
         return (availableWidthPx / itemWidthPx).coerceAtLeast(1)
+    }
+
+     fun dpToPx(dp: Int, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp.toFloat(),
+            context.resources.displayMetrics
+        ).toInt()
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="38dp"
+    android:maxWidth="190dp"
+    android:paddingHorizontal="10dp"
+    android:layout_marginHorizontal="1dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
+    android:background="@drawable/season_selector"
+    android:clipToOutline="true"
+    android:elevation="70dp"
+    tools:ignore="UnusedAttribute">
+
+
+
+    <TextView
+        android:id="@+id/SeasonTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:padding="1dp"
+        android:text="season 2: Hidden iventory arc"
+        android:textColor="?attr/FG_color"
+        android:fontFamily="@font/p"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText,Suspicious0dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:shadowColor="#000000"
+        android:shadowDx="5"
+        android:shadowDy="6"
+        android:shadowRadius="4"
+        android:textStyle="bold" />
+
+
+
+</FrameLayout>

@@ -412,7 +412,6 @@ class Watch_Page : AppCompatActivity() {
                     dpToPx(38)
                 ).apply { marginEnd = dpToPx(0) }
                 setTextColor(resolveAttrColor(context, R.attr.FG_color))
-
             }
 
             seasonButton.setOnClickListener {
