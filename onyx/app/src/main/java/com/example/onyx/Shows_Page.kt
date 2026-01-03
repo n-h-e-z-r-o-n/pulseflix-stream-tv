@@ -116,6 +116,7 @@ class Shows_Page : AppCompatActivity() {
         userId = sm.getUserId()
 
         ////////////////////////////////////////////////////////////////////////////////////////////
+        val navBar = findViewById<CardView>(R.id.showsNavBar)
 
         val HomeBtn = findViewById<LinearLayout>(R.id.HomeBtn)
         val MoviesBtn = findViewById<LinearLayout>(R.id.MoviesBtn)
@@ -302,6 +303,12 @@ class Shows_Page : AppCompatActivity() {
             cWatchBtn.isSelected = false
             cNotificationBtn.isSelected = true
         }
+
+        GlobalUtils.expandParentOnChildFocus(
+            parent = navBar,
+            expandedWidthDp = 140f,
+            collapsedWidthDp = 50f
+        )
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         setupRecyclerViews()
