@@ -156,7 +156,7 @@ tools:context=".Anime_Video_Player">
                 android:progress="0"
                 android:layout_weight="1"
                 android:progressTint="?attr/AccentColor"
-                android:progressBackgroundTint="?attr/SidebarDefault"
+                android:progressBackgroundTint="?attr/AccentColor"
                 android:thumbTint="?attr/AccentColor"
                 />
 

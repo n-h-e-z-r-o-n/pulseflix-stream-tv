@@ -95,8 +95,8 @@
                     android:progress="0"
                     android:layout_weight="1"
                     android:progressTint="?attr/AccentColor"
-                    android:progressBackgroundTint="?attr/SidebarDefault"
-                    android:thumbTint="?attr/SidebarFocus"
+                    android:progressBackgroundTint="@android:color/white"
+                    android:thumbTint="?attr/AccentColor"
                     />
 
                 <TextView

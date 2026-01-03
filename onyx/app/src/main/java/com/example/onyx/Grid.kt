@@ -12,7 +12,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.annotation.OptIn
 import androidx.cardview.widget.CardView
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -1618,6 +1620,7 @@ class cWatchingAdapter(
         return ViewHolder(view)
     }
 
+    @OptIn(UnstableApi::class)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val item = items[position]
@@ -1658,6 +1661,8 @@ class cWatchingAdapter(
             holder.rootCard.setOnClickListener {
                 val context = holder.itemView.context
                 sm = SessionManger(context)
+
+                Anime_Video_Player.playVideoExternally(context, itemId, episodeNumber, seasonNumber)
 
                 //Anime_Video_Player.playVideoExternally(context, itemId, JSONArray(), episodeNumber, posterUrl, seasonNumber, title, true)
             }

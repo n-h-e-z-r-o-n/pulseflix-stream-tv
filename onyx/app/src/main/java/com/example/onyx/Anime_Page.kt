@@ -3,6 +3,7 @@ package com.example.onyx
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
@@ -14,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -35,12 +38,18 @@ import com.example.onyx.BuildConfig
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
 import com.example.onyx.FetchData.TMDBapi
+import android.os.Handler
+import android.os.Looper
+import com.bumptech.glide.Glide
+import com.example.onyx.FetchData.AnimeApi
 
 
 class Anime_Page : AppCompatActivity() {
 
      private lateinit var db: AppDatabase
      private lateinit var  sm: SessionManger
+
+    private lateinit var  fetchAnimeAPI: AnimeApi
      private var userId: Int = -1
      private var urlHome = BuildConfig.A_K      //private var urlHome = "http://192.168.100.22:4000"
 
@@ -97,17 +106,18 @@ class Anime_Page : AppCompatActivity() {
 
 
          NavAction.setupSidebar(this@Anime_Page)
-         LoadingAnimation.show(this@Anime_Page)
 
          db = AppDatabase(this)         // Initialize database
          sm = SessionManger(this)
+         fetchAnimeAPI = AnimeApi(this)
+
          userId = sm.getUserId()
 
 
 
          ////////////////////////////////////////////////////////////////////////////////////////
 
-
+        val navBar = findViewById<CardView>(R.id.animeNavBar)
          val homeAnimeBtn = findViewById<LinearLayout>(R.id.HomeAnimeBtn)
          val favAnimeBtn = findViewById<LinearLayout>(R.id.FavAnimeBtn)
          val searchAnimeBtn = findViewById<LinearLayout>(R.id.SearchAnimeBtn)
@@ -266,6 +276,12 @@ class Anime_Page : AppCompatActivity() {
              findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.GONE
          }
 
+         GlobalUtils.expandParentOnChildFocus(
+             parent = navBar,
+             expandedWidthDp = 140f,
+             collapsedWidthDp = 50f
+         )
+
 
 
          ////////////////////////////////////////////////////////////////////////////////////////
@@ -296,19 +312,7 @@ class Anime_Page : AppCompatActivity() {
          popularRecyclerView.adapter = popularAdapter
          popularAdapter.onAddMoreClicked = { loadPopularAnime() }
 
-         //------------------------------------------------------------------------------------------
 
-
-         RecentlyRecyclerView = findViewById(R.id.Anime_RecentlyUpdated_widget)
-         RecentlyRecyclerView.layoutManager =
-             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false).apply {
-                 isSmoothScrollbarEnabled = false
-                 isItemPrefetchEnabled = false
-             }
-         RecentlyRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
-         RecentlyAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
-         RecentlyRecyclerView.adapter = RecentlyAdapter
-         RecentlyAdapter.onAddMoreClicked = { loadDubbedAnime() }
 
          //-----------------------------------------------------------------------------------------
 
@@ -354,15 +358,16 @@ class Anime_Page : AppCompatActivity() {
 
 
          CoroutineScope(Dispatchers.Main).launch {
-
+            LoadingAnimation.show(this@Anime_Page)
              animeHomeData()
-             loadDubbedAnime()
-             loadPopularAnime()
-             loadRecentlyAnime()
-             setupSearchUi()
-             animeWatchedList()
-             notificationS()
+             //loadDubbedAnime()
+             //loadPopularAnime()
+             //loadRecentlyAnime()
+             //setupSearchUi()
+             //animeWatchedList()
+             //notificationS()
          }
+
      }
 
 
@@ -395,126 +400,277 @@ class Anime_Page : AppCompatActivity() {
          val displayMetrics = resources.displayMetrics
          val screenWidth = displayMetrics.widthPixels     // in pixels
          val screenHeight = displayMetrics.heightPixels    // in pixels
-         val recyclerView = findViewById<RecyclerView>(R.id.spotlightAnimes)
-         val params = recyclerView.layoutParams
+
+         val inflater = LayoutInflater.from(this)
+
+         val SpotlightContaner = findViewById<FrameLayout>(R.id.spotlightAnimes)
+
+         val params = SpotlightContaner.layoutParams
          params.height = (screenHeight * 0.75).toInt()
-         recyclerView.layoutParams = params
+         SpotlightContaner.layoutParams = params
 
          LoadingAnimation.setup(this@Anime_Page, R.raw.b)
 
-         CoroutineScope(Dispatchers.IO).launch {
-             var attempt = 0
-             while (attempt < 5) {
-                 attempt++
 
-                 try {
+         val jsonObject = fetchAnimeAPI.animeHome()
 
-                     val url = "$urlHome/api/v2/hianime/home"
-                     val connection = URL(url).openConnection() as HttpURLConnection
-                     connection.requestMethod = "GET"
-                     connection.setRequestProperty("accept", "application/json")
+         if (jsonObject == null) return
 
-                     val response = connection.inputStream.bufferedReader().use { it.readText() }
-                     Log.e("ANIME_STATUS HOME 1", response.toString())
+         Log.e("ANIME_STATUS HOME 2", jsonObject.toString())
 
-                     val jsonObject = org.json.JSONObject(response)
-
-                     Log.e("ANIME_STATUS HOME 2", jsonObject.toString())
-
-                     val ShowHomeData = jsonObject.getJSONObject("data")
-                     Log.e("ANIME_STATUS HOME 3", ShowHomeData.toString())
+         val ShowHomeData = jsonObject.getJSONObject("data")
+         Log.e("ANIME_STATUS HOME 3", ShowHomeData.toString())
 
 
-                     val spotlightAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
-                     val trendingAnimes = ShowHomeData.getJSONArray("trendingAnimes")
-                     val latestEpisodeAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
-                     val top10Animes = ShowHomeData.getJSONArray("spotlightAnimes")
-                     val topAiringAnimes = ShowHomeData.getJSONArray("topAiringAnimes")
-                     val latestCompletedAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
+         val spotlightAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
+         val trendingAnimes = ShowHomeData.getJSONArray("trendingAnimes")
+         val latestEpisodeAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
+         val top10Animes = ShowHomeData.getJSONArray("spotlightAnimes")
+         val topAiringAnimes = ShowHomeData.getJSONArray("topAiringAnimes")
+         val latestCompletedAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
 
 
-                     var spotlightAnimesitmes = mutableListOf<AnimeSliderItem>()
 
-                     for (i in 0 until spotlightAnimes.length()) {
-                         val item = spotlightAnimes.getJSONObject(i)
-                         val title = item.getString("name")
-                         val overview = item.getString("description")
-                         val imageUrl = item.getString("poster")
-                         val id = item.getString("id")
-                         val type = item.getString("type")
-                         val runtime = item.optJSONArray("otherInfo").optString(1, "")
-                         val release_date = item.optJSONArray("otherInfo").optString(2, "")
-                         val quality = item.optJSONArray("otherInfo").optString(3, "")
-                         val sub = item.getJSONObject("episodes").optString("sub", "")
-                         val dub = item.getJSONObject("episodes").optString("dub", "")
+         for (i in 0 until spotlightAnimes.length()) {
 
-                         spotlightAnimesitmes.add(
-                             AnimeSliderItem(
-                                 title,
-                                 imageUrl,
-                                 id,
-                                 type,
-                                 overview,
-                                 release_date,
-                                 runtime,
-                                 quality,
-                                 sub,
-                                 dub,
-                             )
-                         )
-                     }
-
-                     Log.e("DEBUG_MAIN_Slider 1", spotlightAnimesitmes.toString())
-
-                     withContext(Dispatchers.Main) {
-                         showTrending(trendingAnimes)
-                         showAiring(topAiringAnimes)
-                         LoadingAnimation.hide(this@Anime_Page)
-                         val recyclerView = findViewById<RecyclerView>(R.id.spotlightAnimes)
-                         recyclerView.layoutManager = LinearLayoutManager(
-                             this@Anime_Page,
-                             LinearLayoutManager.HORIZONTAL,
-                             false
-                         )
-                         recyclerView.adapter =
-                             AnimeSwiper(spotlightAnimesitmes, R.layout.anime_card_spotlight)
-                         LoadingAnimation.hide(this@Anime_Page)
-                     }
-                 } catch (e: java.net.ConnectException) {
-                     Log.e("ANIME_ERROR", "Connection failed", e)
-                     withContext(Dispatchers.Main) {
-                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                     }
-                     currentRecentlyAnimePage--
-
-                     break // Stop retry attempts safely
-
-                 } catch (e: java.io.FileNotFoundException) {
-                     Log.e("ANIME_ERROR", "404 Not Found", e)
-                     withContext(Dispatchers.Main) {
-                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                     }
-                     currentRecentlyAnimePage--
-
-                     break // Stop attempts safely
-
-                 } catch (e: Exception) {
-                     Log.e("ANIME_ERROR", "General error", e)
-                     delay(10_000)
-                     currentRecentlyAnimePage--
-
-                     continue // Try again safely
-                 }
-
-                 return@launch
+             val card = inflater.inflate(
+                 R.layout.anime_card_spotlight,
+                 SpotlightContaner,
+                 false
+             ) as CardView
 
 
+             val item = spotlightAnimes.getJSONObject(i)
+             val title = item.getString("name")
+             val overview = item.getString("description")
+             val imageUrl = item.getString("poster")
+             val id = item.getString("id")
+             val type = item.getString("type")
+             val runtime = item.optJSONArray("otherInfo").optString(1, "")
+             val release_date = item.optJSONArray("otherInfo").optString(2, "")
+             val quality = item.optJSONArray("otherInfo").optString(3, "")
+             val sub = item.getJSONObject("episodes").optInt("sub", 0)
+             val dub = item.getJSONObject("episodes").optInt("dub", 0)
+
+             card.findViewById<TextView>(R.id.cardTitle).text = title
+             card.findViewById<TextView>(R.id.cardPg).text = "PG-13"
+             card.findViewById<TextView>(R.id.cardType).text = type
+             card.findViewById<TextView>(R.id.cardRuntime).text = runtime
+             card.findViewById<TextView>(R.id.cardYear).text = release_date
+             card.findViewById<TextView>(R.id.cardQuality).text = quality
+             card.findViewById<TextView>(R.id.cardSub).text = sub.toString()
+             card.findViewById<TextView>(R.id.cardDub).text = dub.toString()
+             card.findViewById<TextView>(R.id.cardOverview).text = overview
+
+             val SliderBackdrop = card.findViewById<ImageView>(R.id.SliderBackdrop)
+
+             Glide.with(card.context)
+                 .load(imageUrl)
+                 .centerInside()
+                 .into(SliderBackdrop)
+
+
+             card.setOnClickListener {
+                 val context = card.context
+                 val intent = android.content.Intent(context, Watch_Anime_Page::class.java)
+                 intent.putExtra("anime_code", id)
+                 intent.putExtra("anime_poster", imageUrl)
+                 context.startActivity(intent)
              }
+
+             SpotlightContaner.addView(card)
+
          }
+
+
+         showTrending(trendingAnimes)
+         showAiring(topAiringAnimes)
+
+         GlobalUtils.setupCardStackFromContainer(SpotlightContaner, 7000L)
+
+
+         LoadingAnimation.hide(this@Anime_Page)
+
+
      }
 
 
-     private fun showTrending(trending: JSONArray) {
+
+    private fun setupCardStackFromContainer(
+        container: FrameLayout,
+        autoSwipeDelay: Long = 2500L
+    ) {
+
+        // Ensure container has CardView children
+        val cards = (0 until container.childCount)
+            .mapNotNull { container.getChildAt(it) as? CardView }
+
+        if (cards.isEmpty()) return
+
+        // ---------------- Auto Swipe ----------------
+        val autoSwipeHandler = Handler(Looper.getMainLooper())
+        var autoSwipeRunnable: Runnable? = null
+        var autoSwipeRunning = false
+
+        fun stopAutoSwipe() {
+            autoSwipeRunning = false
+            autoSwipeRunnable?.let { autoSwipeHandler.removeCallbacks(it) }
+            autoSwipeRunnable = null
+        }
+
+        fun startAutoSwipe() {
+            if (autoSwipeRunning) return
+            autoSwipeRunning = true
+
+            autoSwipeRunnable = object : Runnable {
+                override fun run() {
+                    if (!container.hasFocus()) {
+                        swapRight(container, keepFocus = false)
+                        autoSwipeHandler.postDelayed(this, autoSwipeDelay)
+                    } else stopAutoSwipe()
+                }
+            }
+
+            autoSwipeHandler.postDelayed(autoSwipeRunnable!!, autoSwipeDelay)
+        }
+
+        // ---------------- Setup Card Listeners ----------------
+        cards.forEach { card ->
+
+            card.isFocusable = true
+            card.isFocusableInTouchMode = true
+
+            card.setOnFocusChangeListener { v, hasFocus ->
+                if (hasFocus) {
+                    stopAutoSwipe()
+                    v.bringToFront()
+                    v.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .translationX(dp(0f))
+                        .setDuration(200)
+                        .start()
+                    v.elevation = 7f
+                } else {
+                    layoutStack(container)
+                    container.postDelayed({
+                        if (!container.hasFocus()) startAutoSwipe()
+                    }, 300)
+                }
+            }
+
+            card.setOnKeyListener { _, keyCode, event ->
+                if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+                when (keyCode) {
+                    KeyEvent.KEYCODE_DPAD_LEFT -> { swapLeft(container); true }
+                    KeyEvent.KEYCODE_DPAD_RIGHT -> { swapRight(container); true }
+                    KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> false
+                    else -> false
+                }
+            }
+        }
+
+
+        // ---------------- Initial Layout & Focus ----------------
+        container.getChildAt(container.childCount - 1)?.requestFocus()
+        layoutStack(container)
+        container.postDelayed({ if (!container.hasFocus()) startAutoSwipe() }, 2000)
+    }
+
+
+    private fun layoutStack(container: FrameLayout) {
+
+        val count = container.childCount
+
+        for (i in 0 until count) {
+
+            val card = container.getChildAt(i)
+            val posFromTop = count - 1 - i
+
+            val (tx, scale, elevation) = when (posFromTop) {
+                0 -> Triple(0f, 1.0f, 6f)
+                1 -> Triple(50f, 0.95f, 5f)
+                2 -> Triple(90f, 0.9f, 4f)
+                3 -> Triple(120f, 0.85f, 3f)
+                4 -> Triple(140f, 0.8f, 2f)
+                else -> Triple(150f, 0.7f, 1f)
+            }
+
+            card.animate()
+                .translationX(dp(tx))
+                .scaleX(scale)
+                .scaleY(scale)
+                .setDuration(300)
+                .start()
+
+            card.elevation = elevation
+        }
+    }
+
+    private fun swapRight(container: FrameLayout, keepFocus: Boolean = true) {
+        if (container.childCount == 0) return
+        val top = container.getChildAt(container.childCount - 1)
+
+        top.animate()
+            .translationXBy(dp(-250f))
+            .scaleX(0.85f)
+            .scaleY(0.85f)
+            .rotation(-5f)
+            .setDuration(300)
+            .withEndAction {
+                top.rotation = 0f
+                container.removeView(top)
+                container.addView(top, 0)
+                layoutStack(container)
+
+                if (keepFocus) {
+                    container.getChildAt(container.childCount - 1)?.requestFocus()
+                }
+            }
+            .start()
+    }
+
+    private fun swapLeft(container: FrameLayout, keepFocus: Boolean = true) {
+        if (container.childCount == 0) return
+        val bottom = container.getChildAt(0)
+
+        bottom.animate()
+            .translationXBy(dp(-250f))
+            .scaleX(0.85f)
+            .scaleY(0.85f)
+            .rotation(-5f)
+            .setDuration(350)
+            .withEndAction {
+                bottom.rotation = 0f
+                container.removeView(bottom)
+                container.addView(bottom)
+                layoutStack(container)
+
+                if (keepFocus) {
+                    container.getChildAt(container.childCount - 1)?.requestFocus()
+                }
+            }
+            .start()
+    }
+
+    private fun dp(value: Float): Float {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            value,
+            resources.displayMetrics
+        )
+    }
+
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private fun showTrending(trending: JSONArray) {
 
          var trendingItems = mutableListOf<TrendingAnimeItem>()
          for (i in 0 until trending.length()) {
@@ -994,7 +1150,6 @@ class Anime_Page : AppCompatActivity() {
      ///////////////////////////////////////////////////////////////////////////////////////////////
 
         private fun animeWatchedList(){
-
             val userId = sm.getUserId()
             val cWatching = db.getContinueWatchingAll(userId, "anime")
 

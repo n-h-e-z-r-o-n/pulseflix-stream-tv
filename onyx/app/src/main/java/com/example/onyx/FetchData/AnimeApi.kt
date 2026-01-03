@@ -25,6 +25,36 @@ import java.net.URL
 
 class AnimeApi(private val context: Context)  {
 
+    //Anime Home
+    fun animeHome(): JSONObject? {
+        return runBlocking {
+            async(Dispatchers.IO) {
+                try {
+                    val url = "${BuildConfig.A_K}/api/v2/hianime/home"
+
+                    val connection = URL(url).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("accept", "application/json")
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = org.json.JSONObject(response)
+                    //val data = jsonObject.getJSONObject("data")
+
+                    jsonObject
+
+                } catch (e: IOException) {
+                    Log.e("fetchAnimeData", "Network error: ${e.message}")
+                    null
+                } catch (e: JSONException) {
+                    Log.e("fetchAnimeData", "JSON error: ${e.message}")
+                    null
+                } catch (e: Exception) {
+                    Log.e("fetchAnimeData", "Unexpected error: ${e.message}")
+                    null
+                }
+            }.await()
+        }
+    }
+
     //Anime About Info
     fun animeInfo(animeId: String): JSONObject? {
         return runBlocking {

@@ -46,7 +46,7 @@
             android:layout_height="20dp"
             app:cardCornerRadius="3dp"
             android:layout_gravity="center_horizontal"
-            app:cardBackgroundColor="?attr/AccentColor"
+            app:cardBackgroundColor="#80DAA520"
             android:elevation="0dp"
             android:layout_marginStart="4dp"
             >
@@ -62,7 +62,7 @@
                 android:singleLine="true"
                 android:textColor="?attr/BG_color"
                 android:textSize="10sp"
-                android:fontFamily="@font/k"
+                android:fontFamily="@font/p"
                 tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                 android:gravity="center"
                 android:layout_gravity="center"
@@ -78,7 +78,7 @@
             android:layout_height="20dp"
             app:cardCornerRadius="3dp"
             android:layout_gravity="center_horizontal"
-            app:cardBackgroundColor="?attr/BG_color_up"
+            app:cardBackgroundColor="#800F52BA"
             android:elevation="0dp"
             android:layout_marginStart="2dp">
             <LinearLayout
@@ -107,11 +107,11 @@
                     android:text="2"
                     android:singleLine="true"
                     android:textColor="?attr/FG_color"
+                    android:fontFamily="@font/p"
                     android:textSize="13sp"
                     tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                     android:gravity="center"
                     android:layout_gravity="center"
-                    android:textStyle="bold"
                     />
 
             </LinearLayout>
@@ -127,7 +127,7 @@
             android:layout_height="20dp"
             app:cardCornerRadius="3dp"
             android:layout_gravity="center_horizontal"
-            app:cardBackgroundColor="?attr/SidebarFocus"
+            app:cardBackgroundColor="#8073C2FB"
             android:elevation="0dp"
             android:layout_marginStart="2dp">
             <LinearLayout
@@ -160,7 +160,7 @@
                 tools:ignore="HardcodedText,Suspicious0dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:textStyle="bold"
+                android:fontFamily="@font/p"
                 />
             </LinearLayout>
 
