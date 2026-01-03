@@ -45,6 +45,9 @@ import org.json.JSONArray
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
 import com.example.onyx.FetchData.AnimeApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @UnstableApi
 class Anime_Video_Player : AppCompatActivity(), Player.Listener {
@@ -212,7 +215,9 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
         holdSeasonId = currentEpisodeId
 
-        showData(seasonId.toString())
+        CoroutineScope(Dispatchers.Main).launch {
+            showData(seasonId.toString())
+        }
 
     }
 
@@ -276,8 +281,11 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                         holdSeasonId = id
                     }
 
-                    getEpisodes(season_id )
-                    isSeasonLoading = false
+                    CoroutineScope(Dispatchers.Main).launch {
+                        getEpisodes(season_id )
+                        isSeasonLoading = false
+                    }
+
                 }
 
                 SeasonsContainer.addView(seasonBtn)
@@ -327,12 +335,17 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                     episodeBtn.isSelected = true
                     selectedEpisodeView = episodeBtn
 
+                    // SAVE CURRENT PROGRESS BEFORE SWITCHING
+                    saveContinueWatching()
+
                     currentEpisodeId =  episodeId
                     currentSeasonId = holdSeasonId
                     currentPoster = holdPoster
                     currentSeasonTitle = holdSeasonTitle
 
-                    fetchStreamingLinks(episodeId)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        fetchStreamingLinks(episodeId)
+                    }
                 }
 
                 EpisodeContiner.addView(episodeBtn)
@@ -922,18 +935,26 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
             val duration = player.duration.toInt()
             val lastPosition = player.currentPosition.toInt()
 
-            if (duration > 0 && lastPosition >= 5000 && userId != 0 && currentEpisodeId.isNotBlank()) {
+            // Capture all necessary values immediately to avoid race conditions
+            val savedUserId = userId
+            val savedEpisodeId = currentEpisodeId
+            val savedSeasonTitle = currentSeasonTitle
+            val savedPoster = currentPoster
+            val savedSeasonId = currentSeasonId
+            val savedEpisodeNumber = currentEpisodeNumber
+
+            if (duration > 0 && lastPosition >= 5000 && savedUserId != 0 && savedEpisodeId.isNotBlank()) {
                 // Run in background thread
                 Thread {
                     db.addOrUpdateContinueWatching(
-                        userId = userId,
-                        itemId = currentEpisodeId,
+                        userId = savedUserId,
+                        itemId = savedEpisodeId,
                         type = "anime",
-                        title = currentSeasonTitle,
-                        poster = currentPoster ,
-                        backdrop = currentPoster,
-                        seasonNumber = currentSeasonId,
-                        episodeNumber = currentEpisodeNumber,
+                        title = savedSeasonTitle,
+                        poster = savedPoster ,
+                        backdrop = savedPoster,
+                        seasonNumber = savedSeasonId,
+                        episodeNumber = savedEpisodeNumber,
                         lastPosition = lastPosition,
                         duration = duration
                     )

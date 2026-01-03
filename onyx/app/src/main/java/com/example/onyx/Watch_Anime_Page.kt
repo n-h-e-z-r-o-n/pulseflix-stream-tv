@@ -379,7 +379,7 @@ class Watch_Anime_Page : AppCompatActivity() {
             val epImg = cardView.findViewById<ImageView>(R.id.episode_image)
             val cWatchSeek_bar = cardView.findViewById<SeekBar>(R.id.cWatchSeek_bar)
 
-            
+
             try{
                 val imageUrl = SeasonIMGArray.random()
                 Glide.with(this)
