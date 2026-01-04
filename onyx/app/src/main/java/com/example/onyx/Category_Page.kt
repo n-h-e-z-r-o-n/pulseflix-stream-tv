@@ -11,7 +11,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.onyx.BuildConfig
+import com.example.onyx.OnyxClasses.EqualSpaceItemDecoration
+import com.example.onyx.OnyxClasses.GridAdapter
+import com.example.onyx.OnyxClasses.MovieItemOne
+import com.example.onyx.OnyxObjects.GlobalUtils
+import com.example.onyx.OnyxObjects.LoadingAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -292,7 +296,10 @@ class Category_Page : AppCompatActivity() {
                         list.add(
                             MovieItemOne(
                                 title =
-                                    item.optString("title", item.optString("original_title", "Untitled")),
+                                    item.optString(
+                                        "title",
+                                        item.optString("original_title", "Untitled")
+                                    ),
                                 backdropUrl = backdropUrl,
                                 posterUlr = posterUrl,
                                 imdbCode = id,
@@ -388,7 +395,10 @@ class Category_Page : AppCompatActivity() {
 
                         list.add(
                             MovieItemOne(
-                                title = item.optString("name", item.optString("original_name", "Untitled")),
+                                title = item.optString(
+                                    "name",
+                                    item.optString("original_name", "Untitled")
+                                ),
                                 backdropUrl = backdropUrl,
                                 posterUlr = posterUrl,
                                 imdbCode = id,

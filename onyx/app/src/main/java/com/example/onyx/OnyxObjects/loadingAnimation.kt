@@ -1,9 +1,10 @@
-package com.example.onyx
+package com.example.onyx.OnyxObjects
 
 import android.app.Activity
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.example.onyx.R
 
 object LoadingAnimation {
 

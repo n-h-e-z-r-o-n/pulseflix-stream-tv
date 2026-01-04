@@ -1,14 +1,10 @@
-package com.example.onyx
+package com.example.onyx.OnyxObjects
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
-import android.animation.ValueAnimator
-import android.view.animation.DecelerateInterpolator
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.graphics.Typeface
 import android.util.Log
@@ -17,10 +13,13 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.cardview.widget.CardView
 import com.bumptech.glide.Glide
+import com.example.onyx.Anime_Page
 import com.example.onyx.Database.SessionManger
+import com.example.onyx.Profile_Page
+import com.example.onyx.R
+import com.example.onyx.Shows_Page
 
 object NavAction {
 
@@ -32,43 +31,31 @@ object NavAction {
 
 
 
-        val btnHome = activity.findViewById<ImageButton>(R.id.btnHome)
         val btnTvMv = activity.findViewById<ImageButton>(R.id.btnMvTv)
         val btnAnime = activity.findViewById<ImageButton>(R.id.btnAnime)
-        val btnFav = activity.findViewById<ImageButton>(R.id.btnFav)
-        val btnNotification = activity.findViewById<ImageButton>(R.id.btnNotification)
         val btnProfile = activity.findViewById<View>(R.id.btnProfile)
 
 
-        val labelHome = activity.findViewById<TextView>(R.id.labelHome)
         val labelMvTv = activity.findViewById<TextView>(R.id.labelMvTv)
         val labelAnime = activity.findViewById<TextView>(R.id.labelAnime)
-        val labelFav = activity.findViewById<TextView>(R.id.labelFav)
-        val labelNotification = activity.findViewById<TextView>(R.id.labelNotification)
         val labelProfile = activity.findViewById<TextView>(R.id.labelProfile)
 
-        val buttons = listOf(btnHome, btnTvMv, btnAnime, btnFav, btnNotification, btnProfile)
+        val buttons = listOf( btnTvMv, btnAnime, btnProfile)
 
-        val labels = listOf(labelHome, labelMvTv, labelAnime, labelFav, labelNotification, labelProfile)
+        val labels = listOf(labelMvTv, labelAnime, labelProfile)
 
         val navigationMap = mapOf<View, Class<*>>(
-            btnHome to Home_Page::class.java,
             btnTvMv to Shows_Page::class.java,
             btnAnime to Anime_Page::class.java,
-            btnFav to Favorite_Page::class.java,
-            btnNotification to Notification_Page::class.java,
             btnProfile to Profile_Page::class.java
         )
 
 
         val activeView: View? = when (activity) {
-            is Home_Page -> btnHome
             is Shows_Page -> btnTvMv
             is Anime_Page -> btnAnime
-            is Favorite_Page -> btnFav
-            is Notification_Page -> btnNotification
             is Profile_Page -> btnProfile
-            else -> btnHome
+            else -> btnTvMv
         }
 
         highlightActive(activeView, buttons + btnProfile)

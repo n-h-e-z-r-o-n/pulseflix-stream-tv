@@ -1,0 +1,174 @@
+TERMS AND CONDITIONS OF USE
+
+Last Updated: January 4, 2026
+
+IMPORTANT LEGAL NOTICE: PLEASE READ THESE TERMS AND CONDITIONS ("TERMS") CAREFULLY BEFORE ACCESSING, DOWNLOADING, INSTALLING, OR USING THE ONYX ANDROID TV APPLICATION (THE "APPLICATION", "APP", "SERVICE", "PLATFORM", OR "SOFTWARE"). THESE TERMS CONSTITUTE A LEGALLY BINDING AGREEMENT BETWEEN YOU ("USER", "YOU", "YOUR") AND THE DEVELOPER/OPERATOR OF THE APPLICATION ("DEVELOPER", "WE", "US", "OUR").
+
+BY ACCESSING OR USING THE APPLICATION, YOU EXPRESSLY ACKNOWLEDGE AND AGREE THAT YOU HAVE READ, UNDERSTOOD, AND AGREED TO BE BOUND BY THESE TERMS. IF YOU DO NOT AGREE TO THESE TERMS, YOU MUST IMMEDIATELY CEASE USE OF THE APPLICATION AND UNINSTALL IT FROM ALL DEVICES.
+
+TABLE OF CONTENTS
+1. DEFINITIONS AND INTERPRETATION
+2. ACKNOWLEDGMENT OF THIRD-PARTY CONTENT AND NO HOSTING
+3. LICENSE GRANT AND RESTRICTIONS
+4. USER REPRESENTATIONS AND WARRANTIES
+5. DISCLAIMER OF WARRANTIES
+6. LIMITATION OF LIABILITY
+7. INDEMNIFICATION
+8. THIRD-PARTY SERVICES AND LINKS
+9. USER GENERATED CONTENT
+10. DIGITAL MILLENNIUM COPYRIGHT ACT (DMCA) COMPLIANCE
+11. INTERNATIONAL USE AND COMPLIANCE
+12. TERMINATION AND SUSPENSION
+13. CHANGES TO TERMS
+14. GOVERNING LAW AND DISPUTE RESOLUTION
+15. MISCELLANEOUS PROVISIONS
+
+--------------------------------------------------------------------------------
+
+1. DEFINITIONS AND INTERPRETATION
+
+1.1. "Application" refers to the software application known as "Onyx", including all source code, object code, user interfaces, documentation, and any updates or upgrades provided by the Developer.
+1.2. "Content" information, data, text, software, music, sound, photographs, graphics, video, messages, tags, metadata, links, or other materials.
+1.3. "Third-Party Content" means any Content that is not created, owned, or hosted by the Developer, including but not limited to movie and TV show metadata, artwork, trailers, subtitles, and external streaming links.
+1.4. "Service" means the functionality provided by the Application.
+1.5. "Device" means any Android TV, mobile phone, tablet, or other electronic device capable of running the Application.
+
+2. ACKNOWLEDGMENT OF THIRD-PARTY CONTENT AND NO HOSTING
+
+2.1. NO HOSTING DECLARATION: THE DEVELOPER EXPRESSLY DECLARES THAT THE APPLICATION DOES NOT HOST, STORE, ARCHIVE, UPLOAD, OR DISTRIBUTE ANY AUDIOVISUAL MEDIA FILES (SUCH AS MOVIES, TV EPISODES, LIVE STREAMS) ON ITS SERVERS OR WITHIN THE APPLICATION PACKAGE.
+2.2. METADATA ONLY: The Application functions solely as a search tool, metadata aggregator, and directory. It retrieves and displays metadata (titles, descriptions, cast, posters) and directs users to content hosted by third-party servers.
+2.3. NO CONTROL OVER STREAMS: We do not have control over, nor do we assume responsibility for, the content, quality, nature, legality, or availability of any streams or links found through the Application. These link to external servers outside of our jurisdiction and control.
+2.4. USER RESPONSIBILITY: You acknowledge that any video content you watch via links resolved or displayed by the Application is hosted by third parties. You are solely responsible for ensuring that your access to such content complies with all applicable laws, copyright regulations, and terms of service of the hosting provider in your specific jurisdiction.
+
+3. LICENSE GRANT AND RESTRICTIONS
+
+3.1. Limited License: Subject to your compliance with these Terms, we grant you a limited, non-exclusive, non-transferable, non-sublicensable, revocable license to download, install, and use the Application on a device that you own or control, solely for your personal, non-commercial use.
+3.2. Prohibited Uses: You unequivocally agree NOT to:
+    a) Reverse engineer, decompile, disassemble, or attempt to derive the source code of the Application.
+    b) Modify, adapt, translate, or create derivative works of the Application.
+    c) Use the Application for any commercial purpose, including selling access, leasing, or using it to provide a service to others.
+    d) Use the Application to infringe upon the intellectual property rights of others.
+    e) Use the Application to access content that is illegal in your jurisdiction.
+    f) Circumvent, bypass, or attempt to disable any technical limitations or security features of the Application.
+    g) Use automated scripts, bots, scrapers, or spiders to access or extract data from the Application or its associated services.
+    h) Use the Application in any manner that could damage, disable, overburden, or impair our services or interfere with any other party's use of the Application.
+
+4. USER REPRESENTATIONS AND WARRANTIES
+
+By using the Application, you represent and warrant that:
+4.1. You are of legal age in your jurisdiction to form a binding contract.
+4.2. You are not located in a country that is subject to a U.S. Government embargo or that has been designated by the U.S. Government as a "terrorist supporting" country.
+4.3. You are not listed on any U.S. Government list of prohibited or restricted parties.
+4.4. Your use of the Application will not violate any applicable local, state, national, or international law or regulation.
+4.5. You acknowledge that the Developer is not responsible for verifying the legality of content in your specific location.
+
+5. DISCLAIMER OF WARRANTIES
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE APPLICATION IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITH ALL FAULTS AND WITHOUT WARRANTY OF ANY KIND.
+
+THE DEVELOPER HEREBY DISCLAIMS ALL WARRANTIES AND CONDITIONS WITH RESPECT TO THE APPLICATION AND ANY SERVICES, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT LIMITED TO:
+5.1. THE IMPLIED WARRANTIES OF MERCHANTABILITY, OF SATISFACTORY QUALITY, OF FITNESS FOR A PARTICULAR PURPOSE, OF ACCURACY, OF QUIET ENJOYMENT, AND NON-INFRINGEMENT OF THIRD-PARTY RIGHTS.
+5.2. WE DO NOT WARRANT THAT THE FUNCTIONS CONTAINED IN THE APPLICATION WILL MEET YOUR REQUIREMENTS.
+5.3. WE DO NOT WARRANT THAT THE OPERATION OF THE APPLICATION WILL BE UNINTERRUPTED OR ERROR-FREE.
+5.4. WE DO NOT WARRANT THAT DEFECTS IN THE APPLICATION WILL BE CORRECTED.
+5.5. WE DO NOT WARRANT THAT THE APPLICATION WILL BE COMPATIBLE WITH ANY THIRD-PARTY SOFTWARE, APPLICATIONS, OR SERVICES.
+5.6. WE DO NOT WARRANT THE CONTINUED AVAILABILITY OF ANY THIRD-PARTY STREAMS, LINKS, OR METADATA. WE HAVE NO OBLIGATION TO MAINTAIN CONNECTIONS TO ANY SPECIFIC PROVIDER.
+
+6. LIMITATION OF LIABILITY
+
+6.1. EXTENT OF LIABILITY: TO THE EXTENT NOT PROHIBITED BY LAW, IN NO EVENT SHALL THE DEVELOPER, ITS AFFILIATES, OFFICERS, EMPLOYEES, AGENTS, OR LICENSORS BE LIABLE FOR PERSONAL INJURY, OR ANY INCIDENTAL, SPECIAL, INDIRECT, CONSEQUENTIAL, OR PUNITIVE DAMAGES WHATSOEVER, INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF PROFITS, LOSS OF DATA, BUSINESS INTERRUPTION, OR ANY OTHER COMMERCIAL DAMAGESS OR LOSSES, ARISING OUT OF OR RELATED TO YOUR USE OR INABILITY TO USE THE APPLICATION, HOWEVER CAUSED, REGARDLESS OF THE THEORY OF LIABILITY (CONTRACT, TORT, OR OTHERWISE) AND EVEN IF THE DEVELOPER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+6.2. THIRD-PARTY CONTENT LIABILITY: WE SPECIFICALLY DISCLAIM ANY AND ALL LIABILITY ARISING FROM THE CONTENT PROVIDED BY THIRD PARTIES. IF YOU ENCOUNTER CONTENT THAT IS OFFENSIVE, INDECENT, OBJECTIONABLE, OR ILLEGAL, YOUR SOLE REMEDY IS TO STOP USING THE APPLICATION. WE ARE NOT LIABLE FOR ANY DAMAGES YOU MAY SUFFER FROM DOWNLOADING OR STREAMING CONTENT FOUND VIA THE APP.
+6.3. TOTAL LIABILITY CAP: IN NO EVENT SHALL OUR TOTAL LIABILITY TO YOU FOR ALL DAMAGES (OTHER THAN AS MAY BE REQUIRED BY APPLICABLE LAW IN CASES INVOLVING PERSONAL INJURY) EXCEED THE AMOUNT OF FIFTY UNITED STATES DOLLARS ($50.00). THE FOREGOING LIMITATIONS WILL APPLY EVEN IF THE ABOVE STATED REMEDY FAILS OF ITS ESSENTIAL PURPOSE.
+
+6.4. SPECIFIC WAIVER FOR COPYRIGHTED/PIRATED CONTENT: YOU EXPRESSLY ACKNOWLEDGE THAT THE DEVELOPER DOES NOT VERIFY, MONITOR, OR ENDORSE THE COPYRIGHT STATUS OF ANY CONTENT ACCESSED THROUGH THIRD-PARTY LINKS. THE APPLICATION IS A NEUTRAL TOOL. IF YOU USE THE APPLICATION TO ACCESS, STREAM, OR DOWNLOAD COPYRIGHTED CONTENT WITHOUT AUTHORIZATION, YOU DO SO AT YOUR OWN LEGAL RISK. THE DEVELOPER SHALL NOT BE LIABLE FOR ANY COPYRIGHT INFRINGEMENT CLAIMS, FINES, OR LEGAL ACTIONS BROUGHT AGAINST YOU OR US ARISING FROM YOUR USAGE OF THE APP.
+
+7. INDEMNIFICATION
+
+You agree to indemnify, defend, and hold harmless the Developer, its successors, assigns, affiliates, agents, directors, officers, employees, and shareholders from and against any and all claims, obligations, damages, losses, expenses, and costs, including reasonable attorney's fees, resulting from:
+7.1. Your violation of these Terms.
+7.2. Your violation of any third-party right, including without limitation any copyright, property, or privacy right.
+7.3. Your use of the Application to access, stream, or distribute content in violation of applicable laws.
+7.4. Any claim that your use of the Application caused damage to a third party.
+This defense and indemnification obligation will survive these Terms and your use of the Application.
+
+8. THIRD-PARTY SERVICES AND LINKS
+
+8.1. External Services: The Application may contain links to third-party websites, trackers, resolvers, or services that are not owned or controlled by the Developer.
+8.2. No Endorsement: Inclusion of any link does not imply endorsement by the Developer.
+8.3. Risk Assumption: You acknowledge and agree that we are not responsible for the availability of such external sites or resources, and do not endorse and are not responsible or liable for any content, advertising, products, or other materials on or available from such sites or resources. You further acknowledge and agree that we shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with the use of or reliance on any such content, goods, or services available on or through any such site or resource.
+8.4. Third-Party Terms: Your dealings with third parties found on or through the Application are solely between you and such third party. You are subject to their terms and conditions and privacy policies.
+
+9. USER GENERATED CONTENT
+
+9.1. If the Application allows you to post reviews, comments, or submit links (User Generated Content or "UGC"), you retain ownership of your UGC, but you grant us a worldwide, non-exclusive, royalty-free, transferable license to use, reproduce, distribute, prepare derivative works of, display, and perform that UGC in connection with the Application.
+9.2. You are solely responsible for your UGC and the consequences of posting or publishing it.
+9.3. You affirm, represent, and warrant that you own or have the necessary licenses, rights, consents, and permissions to publish the UGC you submit.
+9.4. We have no obligation to monitor UGC but reserve the right to remove any UGC at any time, without notice, for any reason, including but not limited to content that violates these Terms or is otherwise objectionable.
+
+10. DIGITAL MILLENNIUM COPYRIGHT ACT (DMCA) COMPLIANCE
+
+10.1. Policy: We respect the intellectual property rights of others. It is our policy to respond to valid notices of alleged copyright infringement that comply with the DMCA.
+10.2. Not a Host: Since we do not host content, we cannot remove content from the internet. We can only remove metadata or links from our directory.
+10.3. Takedown Notices: If you are a copyright owner or an agent thereof and believe that any content in our Application infringes upon your copyrights, you may submit a notification pursuant to the DMCA by providing our Designated Agent with the following information in writing:
+    a) A physical or electronic signature of a person authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.
+    b) Identification of the copyrighted work claimed to have been infringed.
+    c) Identification of the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit us to locate the material (e.g., specific URLs or metadata IDs).
+    d) Information reasonably sufficient to permit us to contact you, such as an address, telephone number, and email address.
+    e) A statement that you have a good faith belief that use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law.
+    f) A statement that the information in the notification is accurate, and under penalty of perjury, that you are authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.
+10.4. Counter-Notices: If you believe that your content that was removed is not infringing, or that you have the authorization from the copyright owner, you may send a counter-notice.
+
+11. INTERNATIONAL USE AND COMPLIANCE
+
+11.1. Global Availability: The Application is accessible worldwide. However, we make no representation that the Application or its content is appropriate or legal for use in your specific location.
+11.2. Geo-Blocking: We reserve the right to limit the availability of the Application or any portion of the service to any person, geographic area, or jurisdiction at any time.
+11.3. Local Laws: If you choose to access the Application, you do so on your own initiative and are responsible for compliance with local laws, including but not limited to copyright laws, data protection regulations, and internet usage policies.
+
+12. TERMINATION AND SUSPENSION
+
+12.1. Right to Terminate: We reserve the right to terminate or suspend your access to the Application immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.
+12.2. Effect of Termination: Upon termination, your right to use the Application will immediately cease. All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity, and limitations of liability.
+
+13. CHANGES TO TERMS
+
+13.1. Modification: We reserve the right, at our sole discretion, to modify or replace these Terms at any time.
+13.2. Notice: While we may attempt to notify you of significant changes, it is your responsibility to review these Terms periodically.
+13.3. Acceptance: By continuing to access or use our Application after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, you must stop using the Application.
+
+14. GOVERNING LAW AND DISPUTE RESOLUTION
+
+14.1. Jurisdiction: These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which the Developer resides, without regard to its conflict of law provisions.
+14.2. Arbitration: Any dispute arising from or relating to the subject matter of these Terms shall be firmly settled by arbitration in a location chosen by the Developer, complying with the rules of the local arbitration association.
+14.3. Class Action Waiver: YOU AGREE THAT ANY ARBITRATION OR LEGAL ACTION SHALL BE LIMITED TO THE DISPUTE BETWEEN US AND YOU INDIVIDUALLY. TO THE FULL EXTENT PERMITTED BY LAW, (A) NO ARBITRATION OR LEGAL ACTION SHALL BE JOINED WITH ANY OTHER; (B) THERE IS NO RIGHT OR AUTHORITY FOR ANY DISPUTE TO BE ARBITRATED OR LITIGATED ON A CLASS-ACTION BASIS OR TO UTILIZE CLASS ACTION PROCEDURES; AND (C) THERE IS NO RIGHT OR AUTHORITY FOR ANY DISPUTE TO BE BROUGHT IN A PURPORTED REPRESENTATIVE CAPACITY ON BEHALF OF THE GENERAL PUBLIC OR ANY OTHER PERSONS.
+
+15. PAYMENTS AND SUBSCRIPTIONS (SUPPORT-ONLY)
+
+15.1. NATURE OF PAYMENTS: ANY PAYMENTS, SUBSCRIPTIONS, DONATIONS, OR FEES PAID BY YOU WITHIN OR RELATED TO THE APPLICATION ARE STRICTLY FOR THE PURPOSES OF SOFTWARE DEVELOPMENT, APP MAINTENANCE, SERVER COSTS FOR METADATA, AND FEATURE UPDATES.
+15.2. NOT FOR CONTENT: YOU EXPRESSLY UNDERSTAND AND AGREE THAT NO PORTION OF ANY PAYMENT IS FOR THE PURCHASE, RENTAL, OR LICENSING OF AUDIOVISUAL CONTENT, MOVIES, OR TV SHOWS. WE DO NOT SELL CONTENT. YOU ARE SUPPORTING THE TOOL, NOT BUYING THE MEDIA.
+15.3. NO REFUNDS FOR SERVICE INTERRUPTIONS: SINCE PAYMENTS ARE FOR ONGOING MAINTENANCE AND DEVELOPMENT, WE DO NOT OFFER REFUNDS FOR TEMPORARY SERVICE OUTAGES, CHANGES IN THIRD-PARTY PROVIDER AVAILABILITY, OR REMOVAL OF SPECIFIC FEATURES.
+
+16. MISCELLANEOUS PROVISIONS
+
+16.1. Severability: If any provision of these Terms is held to be unenforceable or invalid, such provision will be changed and interpreted to accomplish the objectives of such provision to the greatest extent possible under applicable law, and the remaining provisions will continue in full force and effect.
+16.2. Waiver: Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights.
+16.3. Entire Agreement: These Terms constitute the entire agreement between us regarding our Service and supersede and replace any prior agreements we might have had between us regarding the Service.
+16.4. Assignment: We may assign our rights and obligations under these Terms to any party at any time without notice to you. You may not assign your rights or obligations under these Terms without our prior written consent.
+16.5. Force Majeure: We shall not be liable for any failure to perform our obligations hereunder where such failure results from any cause beyond our reasonable control, including, without limitation, mechanical, electronic or communications failure or degradation.
+
+--------------------------------------------------------------------------------
+
+ADDENDUM A: SPECIFIC DISCLAIMERS FOR CONTENT SOURCES
+
+A1. TMDB (The Movie Database): This product uses the TMDB API but is not endorsed or certified by TMDB. All metadata regarding movies and TV shows is provided by TMDB. We do not edit or verify this data.
+A2. Trakt: This product may use Trakt services. We are not responsible for data synchronization errors.
+A3. Third-Party Resolvers: The Application may employ algorithms to resolve standard web URLs to streamable video files. This process is automated. We do not verify strict copyright compliance of the destination server. The user assumes all liability for the final "click" or "play" action.
+
+ADDENDUM B: PRIVACY POLICY SUMMARY (INCORPORATED BY REFERENCE)
+
+B1. Data Collection: We do not collect personally identifiable information (PII) such as names, addresses, or phone numbers unless explicitly provided by you (e.g., support emails).
+B2. Usage Data: We may collect anonymous usage data, crash logs, and device types to improve app stability.
+B3. Third-Party Analytics: We may use third-party tools (e.g., Firebase, Google Analytics) which are subject to their own privacy policies.
+
+--------------------------------------------------------------------------------
+
+[END OF TERMS]

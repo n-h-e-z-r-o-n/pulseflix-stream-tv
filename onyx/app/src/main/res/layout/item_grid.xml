@@ -11,7 +11,7 @@
     android:orientation="vertical"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="2dp"
-    card_view:cardBackgroundColor="@android:color/transparent"
+    card_view:cardBackgroundColor="?attr/BG_color_up"
     android:foreground="@drawable/card_focus">
 
     <FrameLayout
@@ -30,11 +30,11 @@
 
 
         <androidx.cardview.widget.CardView
-            android:layout_width="30dp"
+            android:layout_width="wrap_content"
             android:layout_height="15dp"
             app:cardCornerRadius="4dp"
-            app:cardElevation="1dp"
-            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/transparentEffect"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             >
@@ -42,12 +42,12 @@
                 android:id="@+id/itemText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/BG_color"
+                android:background="?attr/transparentEffect"
                 android:ellipsize="end"
                 android:text="2015"
+                android:fontFamily="@font/p"
                 android:gravity="center"
-                android:padding="1dp"
-                android:rotationX="0"
+                android:paddingHorizontal="3dp"                android:rotationX="0"
                 android:singleLine="true"
                 android:textColor="?attr/FG_color"
                 android:textSize="9sp" />

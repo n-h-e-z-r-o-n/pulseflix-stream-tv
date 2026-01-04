@@ -82,7 +82,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:ignore="UseCompoundDrawables">
+                    tools:ignore="UseCompoundDrawables"
+                    android:layout_marginBottom="30dp">
 
 
                     <ImageView
@@ -90,6 +91,7 @@
                         android:layout_height="40dp"
                         android:src="@drawable/ic_shows_logo"
                         tools:ignore="ContentDescription"
+                        android:alpha="0.6"
                         app:tint="?attr/FG_color"/>
 
 
@@ -98,6 +100,7 @@
                         android:gravity="center"
                         android:layout_height="wrap_content"
                         android:text="shows"
+                        android:layout_gravity="center_vertical"
                         android:fontFamily="@font/n"
                         android:textSize="23sp"
                         android:textColor="?attr/FG_color"
@@ -106,8 +109,7 @@
                         android:shadowColor="?attr/AccentColor"
                         android:shadowDx="2"
                         android:shadowDy="2"
-                        android:shadowRadius="4"
-                        android:layout_marginBottom="50dp"/>
+                        android:shadowRadius="4"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -166,7 +168,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_anime_dubbed"
+                        android:src="@drawable/ic_movies"
                         app:tint="?attr/FG_color"
                         tools:ignore="ContentDescription" />
 
@@ -203,7 +205,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_anime_popular"
+                        android:src="@drawable/ic_series"
                         app:tint="?attr/FG_color"
                         tools:ignore="ContentDescription" />
 
@@ -225,7 +227,7 @@
                     android:id="@+id/SearchBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="35dp"
+                    android:layout_marginBottom="15dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
@@ -276,7 +278,7 @@
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_anime_search"
+                        android:src="@drawable/ic_filter"
                         app:tint="?attr/FG_color"
                         tools:ignore="ContentDescription" />
 
@@ -456,27 +458,26 @@
                             android:visibility="gone"
                             android:orientation="vertical">
 
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="match_parent"
-                                app:cardBackgroundColor="?attr/BG_color"
-                                app:cardCornerRadius="30dp"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="15dp"
-                                >
 
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/Slider_widget"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:clipToPadding="false"
-                                    android:scrollbars="none" />
-                            </androidx.cardview.widget.CardView>
+                            <FrameLayout
+                                android:id="@+id/spotlightShows"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:layout_gravity="center"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:descendantFocusability="afterDescendants"
+                                android:clipChildren="false"
+                                android:clipToPadding="false"/>
+
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/CategoryRecyclerView"
-                                android:layout_height="140dp"
+                                android:layout_height="104dp"
                                 android:layout_width="match_parent"
                                 android:layout_gravity="bottom"
+
                                 android:clipToPadding="false"
                                 android:scrollbars="none"
                                 tools:ignore="RtlSymmetry" />
@@ -554,10 +555,9 @@
                             android:id="@+id/searchPage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="?attr/transparentEffect"
                             android:orientation="horizontal"
                             android:nextFocusLeft="@+id/searchContainerHome"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             tools:ignore="DisableBaselineAlignment">
 
 
@@ -628,16 +628,34 @@
                                     tools:ignore="HardcodedText,RtlSymmetry"
                                     android:layout_marginTop="7dp"/>
 
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/SearchResults"
+                                <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:clipToPadding="false"
-                                    android:overScrollMode="never"
-                                    android:focusable="false"
-                                    android:scrollbars="none"
-                                    tools:ignore="NestedWeights"
-                                    />
+                                    android:layout_height="490dp"
+                                    android:background="@drawable/background_hovor"
+                                    android:focusableInTouchMode="false"
+                                    android:clickable="false"
+                                    android:descendantFocusability="afterDescendants"
+                                    >
+
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/SearchResults"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:clipToPadding="false"
+                                        android:overScrollMode="never"
+                                        android:descendantFocusability="afterDescendants"
+                                        android:focusable="false"
+                                        android:scrollbars="none"
+                                        android:layout_margin="4dp"
+                                        tools:ignore="NestedWeights"
+
+                                        />
+                                </LinearLayout>
+
+
+
+
+
 
                             </LinearLayout>
                         </LinearLayout>
@@ -651,22 +669,13 @@
                             android:nextFocusLeft="@+id/FilterContainer"
                             android:visibility="gone">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Favorites"
-                                android:textStyle="bold"
-                                android:fontFamily="@font/p"
-                                android:textSize="15sp"
-                                android:alpha="0.5"
-                                android:textColor="?attr/FG_color"
-                                tools:ignore="HardcodedText"/>
+
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="3dp"
-                    >
+                                android:layout_gravity="center_horizontal"
+                                android:padding="3dp">
 
 
                                 <TextView
@@ -683,6 +692,7 @@
                                     android:textStyle="bold"
                                     android:layout_gravity="center"
                                     tools:ignore="HardcodedText"
+                                    android:nextFocusLeft="@+id/FilterYearBtn"
                                     android:clickable="true"
                                     android:focusable="true"
                                     android:focusableInTouchMode="true"/>
@@ -766,6 +776,7 @@
                                     android:textColor="?attr/FG_color"
                                     android:layout_gravity="center"
                                     tools:ignore="HardcodedText"
+                                    android:nextFocusRight="@+id/FilterTypeBtn"
                                     android:clickable="true"
                                     android:focusable="true"
                                     android:focusableInTouchMode="true"/>
@@ -822,7 +833,7 @@
                                 android:layout_weight="1"
                                 android:layout_marginHorizontal="20dp"
                                 android:layout_marginVertical="10dp"
-                                app:cardBackgroundColor="?attr/BG_color"
+                                app:cardBackgroundColor="?attr/BG_color_up"
                                 app:cardCornerRadius="20dp"
                                 android:orientation="horizontal">
 
@@ -837,7 +848,6 @@
                                         android:layout_height="match_parent"
                                         android:adjustViewBounds="true"
                                         android:scaleType="fitCenter"
-                                        android:src="@raw/test4"
                                         app:layout_constraintTop_toTopOf="parent"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintStart_toStartOf="parent" />
@@ -859,7 +869,7 @@
                                         android:id="@+id/LeftOverlay"
                                         android:layout_width="0dp"
                                         android:layout_height="0dp"
-                                        android:background="@drawable/overlay_left_gradient"
+                                        android:background="@drawable/overlay_left_gradient_light"
                                         app:layout_constraintStart_toStartOf="@id/FavBackdrop"
                                         app:layout_constraintTop_toTopOf="@id/FavBackdrop"
                                         app:layout_constraintBottom_toBottomOf="@id/FavBackdrop"
@@ -885,7 +895,7 @@
                                         android:layout_gravity="bottom"
                                         android:ellipsize="end"
                                         android:maxLines="3"
-                                        android:text="Sakamoto Days Part 2"
+                                        android:text=""
                                         android:singleLine="false"
                                         android:textColor="?attr/FG_color"
                                         android:textSize="40sp"
@@ -899,7 +909,7 @@
                                         android:layout_height="wrap_content"
                                         android:ellipsize="end"
                                         android:maxLines="1"
-                                        android:text="Action"
+                                        android:text=""
                                         android:singleLine="false"
                                         android:textColor="?attr/FG_color"
                                         android:textSize="13sp"
@@ -1002,7 +1012,7 @@
                                         android:ellipsize="end"
                                         android:maxLines="5"
                                         android:singleLine="false"
-                                        android:text="  at com.android.server.wm.WindowOrganizerController.onTransact(WindowOrganizerController.java:223)"
+                                        android:text=""
                                         android:textColor="?attr/FG_color"
                                         android:fontFamily="@font/p"
                                         android:textSize="12sp"
@@ -1045,6 +1055,25 @@
 
                                     </LinearLayout>
                                 </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/favEmptyState"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:padding="150dp"
+                                    android:textSize="35sp"
+                                    android:text="Your favorites list is feeling a little lonely. Discover shows and add them to your favorites!"
+                                    android:gravity="center"
+                                    android:fontFamily="@font/i"
+                                    android:textColor="?attr/BG_color_up"
+                                    android:visibility="visible"
+                                    android:background="?attr/BG_color_up"
+                                    android:shadowColor="?attr/FG_color"
+                                    android:shadowDx="2"
+                                    android:shadowDy="3"
+                                    android:shadowRadius="4"
+                                    tools:ignore="HardcodedText" />
+
                             </androidx.cardview.widget.CardView>
 
 
@@ -1067,7 +1096,7 @@
                             android:id="@+id/cWatchPage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:orientation="vertical">
 
                             <TextView

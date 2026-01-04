@@ -1,7 +1,9 @@
-package com.example.onyx
+package com.example.onyx.OnyxClasses
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Rect
 import android.text.format.DateUtils
 import android.util.Log
 import android.view.KeyEvent
@@ -20,12 +22,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 import com.bumptech.glide.request.target.Target
+import com.example.onyx.Actor_Page
+import com.example.onyx.Anime_Video_Player
+import com.example.onyx.Category_Page
 import com.example.onyx.FetchData.TMDBapi
-import com.example.onyx.GridAdapter.Companion.lastKeyTime
-import org.json.JSONArray
 
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import com.example.onyx.Play
+import com.example.onyx.R
+import com.example.onyx.Shows_Page
+import com.example.onyx.Watch_Anime_Page
+import com.example.onyx.Watch_Page
 import kotlin.text.toLongOrNull
 
 
@@ -507,7 +515,6 @@ class CategoryAdapter(
 
             Glide.with(holder.itemView.context)
                 .load(imageUrl)
-                .override(finalHeight, Target.SIZE_ORIGINAL)
                 .into(holder.category_image)
         }
 
@@ -923,8 +930,8 @@ class ProfileAdapter (
         // Handle "Create Profile" button appearance
         if (userid == "CREATE") {
             holder.profileImageWidget.setImageResource(android.R.drawable.ic_input_add)
-            holder.profileImageWidget.scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
-            holder.profileImageWidget.setBackgroundColor(android.graphics.Color.parseColor("#00000000"))
+            holder.profileImageWidget.scaleType = ImageView.ScaleType.CENTER_INSIDE
+            holder.profileImageWidget.setBackgroundColor(Color.parseColor("#00000000"))
         } else {
             // Handle avatar loading - if empty, use placeholder
             if (avatarImg.isNotEmpty()) {
@@ -944,7 +951,7 @@ class ProfileAdapter (
             onProfileSelected?.invoke(currentItem) ?: run {
                 // Fallback to default behavior if callback not set
                 val context = holder.itemView.context
-                val intent = Intent(context, Home_Page::class.java)
+                val intent = Intent(context, Shows_Page::class.java)
                 intent.putExtra("UserId", userid)
                 context.startActivity(intent)
             }
@@ -1049,11 +1056,11 @@ class AvatarAdapter(
         // Highlight selected avatar
         if (position == selectedPosition) {
             holder.avatarCardView.setCardBackgroundColor(
-                android.graphics.Color.parseColor("#4CAF50")
+                Color.parseColor("#4CAF50")
             )
         } else {
             holder.avatarCardView.setCardBackgroundColor(
-                android.graphics.Color.TRANSPARENT
+                Color.TRANSPARENT
             )
         }
 
@@ -1135,7 +1142,7 @@ class FavAdapter(
 
 
                         RemoveFaveItemBtn.setOnClickListener {
-                            FavoritesManager.removeFavorite( RemoveFaveItemBtn.context, item.imdbCode, item.showType)
+                            //.removeFavorite( RemoveFaveItemBtn.context, item.imdbCode, item.showType)
                             val pos = bindingAdapterPosition
                             if (pos != RecyclerView.NO_POSITION) {
                                 items.removeAt(pos)
@@ -1226,7 +1233,7 @@ data class FavItem(
 
 class EqualSxpaceItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
-        outRect: android.graphics.Rect,
+        outRect: Rect,
         view: View,
         parent: RecyclerView,
         state: RecyclerView.State
@@ -1253,7 +1260,7 @@ class EqualSxpaceItemDecoration(private val space: Int) : RecyclerView.ItemDecor
 
 class EqualSpaceItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
-        outRect: android.graphics.Rect,
+        outRect: Rect,
         view: View,
         parent: RecyclerView,
         state: RecyclerView.State
@@ -1662,7 +1669,7 @@ class cWatchingAdapter(
                 val context = holder.itemView.context
                 sm = SessionManger(context)
 
-                Anime_Video_Player.playVideoExternally(context, itemId, episodeNumber, seasonNumber)
+                Anime_Video_Player.Companion.playVideoExternally(context, itemId, episodeNumber, seasonNumber)
 
                 //Anime_Video_Player.playVideoExternally(context, itemId, JSONArray(), episodeNumber, posterUrl, seasonNumber, title, true)
             }

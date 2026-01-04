@@ -1,4 +1,4 @@
-package com.example.onyx
+package com.example.onyx.OnyxObjects
 
 import okhttp3.OkHttpClient
 import java.security.SecureRandom

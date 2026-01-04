@@ -5,25 +5,18 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,13 +26,32 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import com.bumptech.glide.request.target.Target
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import com.example.onyx.OnyxClasses.CategoryAdapter
+import com.example.onyx.OnyxClasses.CustomKeyboardManager
+import com.example.onyx.OnyxClasses.EqualSpaceItemDecoration
+import com.example.onyx.OnyxClasses.FavAdapter
+import com.example.onyx.OnyxClasses.FavItem
+import com.example.onyx.OnyxClasses.FilterAdapter
+import com.example.onyx.OnyxClasses.GridAdapter
+import com.example.onyx.OnyxClasses.GridAdapter2
+import com.example.onyx.OnyxClasses.MovieItem
+import com.example.onyx.OnyxClasses.MovieItemOne
+import com.example.onyx.OnyxClasses.NotificationAdapter
+import com.example.onyx.OnyxClasses.NotificationItem
+import com.example.onyx.OnyxClasses.OnSearchListener
+import com.example.onyx.OnyxClasses.cWatchingAdapter
+import com.example.onyx.OnyxClasses.categoryItem
+import com.example.onyx.OnyxClasses.filterItemOne
+import com.example.onyx.OnyxObjects.GlobalUtils
+import com.example.onyx.OnyxObjects.LoadingAnimation
+import com.example.onyx.OnyxObjects.NavAction
+import com.example.onyx.OnyxObjects.NotificationHelper
 import java.io.IOException
 import java.util.Calendar
 
@@ -351,19 +363,19 @@ class Shows_Page : AppCompatActivity() {
     private fun setupRecyclerViews() {
 
         val Spacing = (10 * resources.displayMetrics.density).toInt()
-        val item_grid2_width = 255
-        val gapUsed = 160
+        val item_grid2_width = 280
+        val gapUsed = 70
 
 
         //  Movies ---------------------------------------------------------------------------------
         movieRecyclerView = findViewById(R.id.MoviesRecyclerView)
         movieRecyclerView.layoutManager  = GridLayoutManager(this@Shows_Page,  GlobalUtils.calculateSpanCountV2(this, item_grid2_width, gapUsed ))
         movieRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
-        movieAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2, )
+        movieAdapter = GridAdapter(mutableListOf(), R.layout.item_grid2,)
         movieRecyclerView.adapter = movieAdapter
         movieAdapter.onAddMoreClicked = { loadMoreMovies() }
         movieAdapter.onItemFocused = { view, item ->
-            showPopupBeside(view, item.posterUlr, 170)
+            showPopupBeside(view, item.posterUlr, 165)
         }
         movieAdapter.onItemFocusLost = {
             hidePopup()
@@ -378,7 +390,7 @@ class Shows_Page : AppCompatActivity() {
         tvRecyclerView.adapter = tvAdapter
         tvAdapter.onAddMoreClicked = { loadMoreTv() }
         tvAdapter.onItemFocused = { view, item ->
-            showPopupBeside(view, item.posterUlr, 170)
+            showPopupBeside(view, item.posterUlr, 165)
         }
         tvAdapter.onItemFocusLost = {
             hidePopup()
@@ -387,7 +399,7 @@ class Shows_Page : AppCompatActivity() {
         //  Search  --------------------------------------------------------------------------------
         searchAdapter = GridAdapter2(mutableListOf(), R.layout.item_grid)
         searchRecyclerView = findViewById(R.id.SearchResults)
-        searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this, item_grid2_width,gapUsed ))
+        searchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, 4)
 
         searchRecyclerView.adapter = searchAdapter
         searchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
@@ -402,7 +414,7 @@ class Shows_Page : AppCompatActivity() {
             hidePopup()
         }
         fliterRecyclerView = findViewById<RecyclerView>(R.id.filterResults)
-        fliterRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this, 140, gapUsed))
+        fliterRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this, 160, gapUsed))
         fliterRecyclerView.adapter = filterAdapter
         fliterRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
 
@@ -430,10 +442,8 @@ class Shows_Page : AppCompatActivity() {
         //------------------------------------------------------------------------------------------
 
         watchRecyclerView = findViewById(R.id.watchingRecycler)
-        watchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this@Shows_Page,160,150))
+        watchRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, GlobalUtils.calculateSpanCountV2(this@Shows_Page,160,gapUsed))
         watchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
-
-
 
     }
 
@@ -507,43 +517,27 @@ class Shows_Page : AppCompatActivity() {
         val screenWidth = displayMetrics.widthPixels     // in pixels
         val screenHeight = displayMetrics.heightPixels    // in pixels
 
-        val recyclerView = findViewById<RecyclerView>(R.id.Slider_widget)
-        val params = recyclerView.layoutParams
-        params.height = (screenHeight * 0.70).toInt()
-        recyclerView.layoutParams = params
+        val inflater = LayoutInflater.from(this)
+        val container = findViewById<FrameLayout>(R.id.spotlightShows)
+
+
+        val params = container.layoutParams
+        //params.height = (screenHeight * 0.70).toInt()
+        val otherItemHeightPx = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            124f,
+            container.resources.displayMetrics
+        ).toInt()
+
+        params.height = screenHeight - otherItemHeightPx
+        container.layoutParams = params
+
+
 
         CoroutineScope(Dispatchers.IO).launch {
 
             repeat(10) { attempt ->
                 try {
-                    val url = "https://api.themoviedb.org/3/discover/movie?include_adult=true"
-                    val connection = URL(url).openConnection() as HttpURLConnection
-                    connection.requestMethod = "GET"
-                    connection.setRequestProperty("accept", "application/json")
-                    connection.setRequestProperty(
-                        "Authorization",
-                        "Bearer ${BuildConfig.TM_K}"
-                    )
-
-                    val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject = org.json.JSONObject(response)
-                    val moviesArray = jsonObject.getJSONArray("results")
-
-
-                    val url2 = "https://api.themoviedb.org/3/discover/tv?include_adult=true"
-                    val connection2 = URL(url2).openConnection() as HttpURLConnection
-                    connection2.requestMethod = "GET"
-                    connection2.setRequestProperty("accept", "application/json")
-                    connection2.setRequestProperty(
-                        "Authorization",
-                        "Bearer ${BuildConfig.TM_K}"
-                    )
-
-                    val response2 = connection2.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject2 = org.json.JSONObject(response2)
-                    val moviesArray2 = jsonObject2.getJSONArray("results")
-
-
                     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
                     val url3 =
                         "https://api.themoviedb.org/3/trending/all/day?primary_release_year=$currentYear"
@@ -561,178 +555,103 @@ class Shows_Page : AppCompatActivity() {
 
                     Log.e("DEBUG_MAIN_Slider raw", moviesArray3.toString())
 
-
-
-                    var movies = mutableListOf<SliderItem>()
-                    for (i in 0 until moviesArray.length()) {
-
-                        val item = moviesArray.getJSONObject(i)
-
-                        val title = item.getString("title")
-                        //val backdrop_path = "https://image.tmdb.org/t/p/w1280" + item.getString("backdrop_path")
-
-                        val backdrop_path =
-                            if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
-                                "https://image.tmdb.org/t/p/original${item.getString("backdrop_path")}"
-                            } else if (item.has("poster_path") && !item.isNull("poster_path")) {
-                                "https://image.tmdb.org/t/p/original${item.getString("poster_path")}"
-                            } else {
-                                ""
-                            }
-
-                        val PG = if (item.optString("adult") == "true") "PG-18 +" else "PG-13"
-                        if (PG == "PG-18 +") {
-                            continue
-                        }
-
-                        val id = item.getString("id")
-                        val type = "movie"
-                        val overview = item.getString("overview")
-                        val release_date = item.getString("release_date").substring(0, 4)
-                        val vote_average = item.getString("vote_average").substring(0, 3)
-                        val poster_path = item.getString("poster_path")
-                        val genreIdsJson = item.getJSONArray("genre_ids")
-                        val genreIds: List<Int> = List(genreIdsJson.length()) { idx ->
-                            genreIdsJson.getInt(idx)
-                        }
-
-                        movies.add(
-                            SliderItem(
-                                title,
-                                backdrop_path,
-                                id,
-                                type,
-                                overview,
-                                release_date,
-                                vote_average,
-                                poster_path,
-                                genreIds,
-                                PG
-                            )
-
-                        )
-                    }
-
-
-                    for (i in 0 until moviesArray2.length()) {
-
-                        val item = moviesArray2.getJSONObject(i)
-                        val title = item.getString("original_name")
-
-                        val backdrop_path =
-                            if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
-                                "https://image.tmdb.org/t/p/original${item.getString("backdrop_path")}"
-                            } else if (item.has("poster_path") && !item.isNull("poster_path")) {
-                                "https://image.tmdb.org/t/p/original${item.getString("poster_path")}"
-                            } else {
-                                ""
-                            }
-
-                        val PG = if (item.optString("adult") == "true") "PG-18 +" else "PG-13"
-
-                        val id = item.getString("id")
-                        val type = "tv"
-                        val overview = item.getString("overview")
-                        val release_date = item.getString("first_air_date").substring(0, 4)
-                        val vote_average = item.getString("vote_average").substring(0, 3)
-                        val poster_path = item.getString("poster_path")
-                        val genreIdsJson = item.getJSONArray("genre_ids")
-                        val genreIds: List<Int> = List(genreIdsJson.length()) { idx ->
-                            genreIdsJson.getInt(idx)
-                        }
-
-                        movies.add(
-                            SliderItem(
-                                title,
-                                backdrop_path,
-                                id,
-                                type,
-                                overview,
-                                release_date,
-                                vote_average,
-                                poster_path,
-                                genreIds,
-                                PG
-                            )
-                        )
-                    }
-
-                    for (i in 0 until moviesArray3.length()) {
-                        val item = moviesArray3.getJSONObject(i)
-                        val title = when {
-                            item.has("original_name") && !item.isNull("original_name") -> item.getString(
-                                "original_name"
-                            )
-
-                            item.has("original_title") && !item.isNull("original_title") -> item.getString(
-                                "original_title"
-                            )
-
-                            item.has("title") && !item.isNull("title") -> item.getString("title")
-                            else -> "Untitled"
-                        }
-
-                        val type = item.getString("media_type")
-                        if (type != "movie" && type != "tv") {
-                            continue   // skip this loop iteration
-                        }
-
-                        val backdrop_path =
-                            if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
-                                "https://image.tmdb.org/t/p/original${item.getString("backdrop_path")}"
-                            } else if (item.has("poster_path") && !item.isNull("poster_path")) {
-                                "https://image.tmdb.org/t/p/original${item.getString("poster_path")}"
-                            } else {
-                                ""
-                            }
-
-                        val PG = if (item.optString("adult") == "true") "PG-18 +" else "PG-13"
-                        val id = item.getString("id")
-                        val overview = item.getString("overview")
-                        val release_date = try {
-                            item.getString("release_date").substring(0, 4)
-                        } catch (e: Exception) {
-                            item.getString("first_air_date").substring(0, 4)
-                        }
-                        val vote_average = item.getString("vote_average").substring(0, 3)
-                        val poster_path = item.getString("poster_path")
-                        val genreIdsJson = item.getJSONArray("genre_ids")
-                        val genreIds: List<Int> = List(genreIdsJson.length()) { idx ->
-                            genreIdsJson.getInt(idx)
-                        }
-
-                        movies.add(
-                            SliderItem(
-                                title,
-                                backdrop_path,
-                                id,
-                                type,
-                                overview,
-                                release_date,
-                                vote_average,
-                                poster_path,
-                                genreIds,
-                                PG
-                            )
-                        )
-
-                    }
-
-
-                    //movies.shuffle()
-                    movies = movies.distinctBy { it.imdbCode }.toMutableList()
-
                     withContext(Dispatchers.Main) {
-                        val recyclerView = findViewById<RecyclerView>(R.id.Slider_widget)
-                        val adapter = CardSwiper(movies, R.layout.card_layout)
 
-                        val layoutManager = LinearLayoutManager(
-                            this@Shows_Page,
-                            LinearLayoutManager.HORIZONTAL, // 👈 makes it horizontal
-                            false
-                        )
-                        recyclerView.layoutManager = layoutManager
-                        recyclerView.adapter = adapter
+                        /*
+                        val mergedMoviesArray = JSONArray()
+
+                        listOf(moviesArray, moviesArray2, moviesArray3).forEach { array ->
+                            for (i in 0 until array.length()) {
+                                mergedMoviesArray.put(array.getJSONObject(i))
+                            }
+                        }
+
+                         */
+
+
+                        for (i in 0 until moviesArray3.length()) {
+
+                            val card = inflater.inflate(
+                                R.layout.card_layout,
+                                container,
+                                false
+                            ) as CardView
+
+                            val item = moviesArray3.getJSONObject(i)
+                            val title = when {
+                                item.has("original_name") && !item.isNull("original_name") -> item.getString(
+                                    "original_name"
+                                )
+
+                                item.has("original_title") && !item.isNull("original_title") -> item.getString(
+                                    "original_title"
+                                )
+
+                                item.has("title") && !item.isNull("title") -> item.getString("title")
+                                else -> "Untitled"
+                            }
+
+                            val type = item.getString("media_type")
+                            if (type != "movie" && type != "tv") {
+                                continue   // skip this loop iteration
+                            }
+
+                            val backdrop_path =
+                                if (item.has("backdrop_path") && !item.isNull("backdrop_path")) {
+                                    "https://image.tmdb.org/t/p/original${item.getString("backdrop_path")}"
+                                } else if (item.has("poster_path") && !item.isNull("poster_path")) {
+                                    "https://image.tmdb.org/t/p/original${item.getString("poster_path")}"
+                                } else {
+                                    ""
+                                }
+
+                            val pg = if (item.optString("adult") == "true") "PG-18 +" else "PG-13"
+                            val id = item.getString("id")
+                            val overview = item.getString("overview")
+                            val release_date = try {
+                                item.getString("release_date").substring(0, 4)
+                            } catch (e: Exception) {
+                                item.getString("first_air_date").substring(0, 4)
+                            }
+                            val vote_average = item.getString("vote_average").substring(0, 3)
+                            val poster_path = item.getString("poster_path")
+                            val genreIdsJson = item.getJSONArray("genre_ids")
+                            val genreIds: List<Int> = List(genreIdsJson.length()) { idx ->
+                                genreIdsJson.getInt(idx)
+                            }
+
+
+
+                            card.findViewById<TextView>(R.id.cardTitle).text = title
+                            card.findViewById<TextView>(R.id.cardGenre).text = "genra"
+                            card.findViewById<TextView>(R.id.cardQuality).text = "HD"
+                            card.findViewById<TextView>(R.id.cardPg).text = pg
+                            card.findViewById<TextView>(R.id.cardType).text = type
+                            card.findViewById<TextView>(R.id.cardRating).text = vote_average
+                            card.findViewById<TextView>(R.id.cardYear).text = release_date
+                            card.findViewById<TextView>(R.id.cardOverview).text = overview
+
+
+
+                            val SliderBackdrop = card.findViewById<ImageView>(R.id.cardBackdrop)
+
+                            Glide.with(card.context)
+                                .load(backdrop_path)
+                                .centerInside()
+                                .into(SliderBackdrop)
+
+
+                            card.setOnClickListener {
+                                val context = card.context
+                                val intent = android.content.Intent(context, Watch_Anime_Page::class.java)
+
+                            }
+
+                            container.addView(card)
+
+                        }
+
+                        GlobalUtils.setupCardStackFromContainer(container, 7000L)
                         //LoadingAnimation.hide(this@Shows_Page)
                     }
 
@@ -744,9 +663,6 @@ class Shows_Page : AppCompatActivity() {
                         //LoadingAnimation.show(this@Shows_Page)
                     }
                     delay(30_000)
-                } catch (e: Exception) {
-                    delay(20_000)
-                    Log.e("DEBUG_MAINSliderPage", "Error fetching data", e)
                 }
             }
         }
@@ -755,26 +671,26 @@ class Shows_Page : AppCompatActivity() {
 
     private fun categoryShow() {
         val company_show = mapOf(
-            "Marvel Studios" to Pair(420, "https://image.tmdb.org/t/p/w1280/hUzeosd33nzE5MCNsZxCGEKTXaQ.png"),
-            "Marvel Animation" to Pair(13252, "https://image.tmdb.org/t/p/w1280/1gKwYyTDNhumwBKUlKqoxXRUdpC.png"),
-            "DC Films" to Pair(128064, "https://image.tmdb.org/t/p/w1280/13F3Jf7EFAcREU0xzZqJnVnyGXu.png"),
-            "Walt Disney Pictures" to Pair(2, "https://image.tmdb.org/t/p/w1280/wdrCwmRnLFJhEoH8GSfymY85KHT.png"),
-            "Walt Disney Television" to Pair(670, "https://image.tmdb.org/t/p/w1280/rRGi5UkwvdOPSfr5Xf42RZUsYgd.png"),
-            "Warner Bros. Pictures" to Pair(174, "https://image.tmdb.org/t/p/w1280/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png"),
-            "Universal Pictures" to Pair(33, "https://image.tmdb.org/t/p/w1280/3wwjVpkZtnog6lSKzWDjvw2Yi00.png"),
-            "Paramount Pictures" to Pair(4, "https://image.tmdb.org/t/p/w1280/gz66EfNoYPqHTYI4q9UEN4CbHRc.png"),
-            "Sony Pictures Entertainment" to Pair(34, "https://image.tmdb.org/t/p/w1280/mtp1fvZbe4H991Ka1HOORl572VH.png"),
-            "Lionsgate " to Pair(1632, "https://image.tmdb.org/t/p/w1280/cisLn1YAUuptXVBa0xjq7ST9cH0.png"),
-            "DreamWorks Animation " to Pair(521, "https://image.tmdb.org/t/p/w1280/3BPX5VGBov8SDqTV7wC1L1xShAS.png"),
-            "Netflix Animation " to Pair(171251, "https://image.tmdb.org/t/p/w1280/AqUAfMC270bGGK09Nh3mycwT1hY.png"),
-            "Netflix" to Pair(178464, "https://image.tmdb.org/t/p/w1280/tyHnxjQJLH6h4iDQKhN5iqebWmX.png"),
-            "Pixar" to Pair(3, "https://image.tmdb.org/t/p/w1280/1TjvGVDMYsj6JBxOAkUHpPEwLf7.png"),
-            "Illumination" to Pair(6704, "https://image.tmdb.org/t/p/w1280/fOG2oY4m1YuYTQh4bMqqZkmgOAI.png"),
-            "Blue Sky Studios" to Pair(9383, "https://image.tmdb.org/t/p/w1280/ppeMh4iZJQUMm1nAjRALeNhWDfU.png"),
-            "Laika" to Pair(11537, "https://image.tmdb.org/t/p/w1280/AgCkAk8EpUG9fTmK6mWcaJA2Zwh.png"),
-            "Amazon Studios" to Pair(20580, "https://image.tmdb.org/t/p/w1280/oRR9EXVoKP9szDkVKlze5HVJS7g.png"),
-            "HBO" to Pair(3268, "https://image.tmdb.org/t/p/w1280/tuomPhY2UtuPTqqFnKMVHvSb724.png"),
-            "Apple" to Pair(14801, "https://image.tmdb.org/t/p/w1280/bnlD5KJ5oSzBYbEpDkwi6w8SoBO.png")
+            "Marvel Studios" to Pair(420, "https://image.tmdb.org/t/p/original/hUzeosd33nzE5MCNsZxCGEKTXaQ.png"),
+            "Marvel Animation" to Pair(13252, "https://image.tmdb.org/t/p/original/1gKwYyTDNhumwBKUlKqoxXRUdpC.png"),
+            "DC Films" to Pair(128064, "https://image.tmdb.org/t/p/original/13F3Jf7EFAcREU0xzZqJnVnyGXu.png"),
+            "Walt Disney Pictures" to Pair(2, "https://image.tmdb.org/t/p/original/wdrCwmRnLFJhEoH8GSfymY85KHT.png"),
+            "Walt Disney Television" to Pair(670, "https://image.tmdb.org/t/p/original/rRGi5UkwvdOPSfr5Xf42RZUsYgd.png"),
+            "Warner Bros. Pictures" to Pair(174, "https://image.tmdb.org/t/p/original/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png"),
+            "Universal Pictures" to Pair(33, "https://image.tmdb.org/t/p/original/3wwjVpkZtnog6lSKzWDjvw2Yi00.png"),
+            "Paramount Pictures" to Pair(4, "https://image.tmdb.org/t/p/original/gz66EfNoYPqHTYI4q9UEN4CbHRc.png"),
+            "Sony Pictures Entertainment" to Pair(34, "https://image.tmdb.org/t/p/original/mtp1fvZbe4H991Ka1HOORl572VH.png"),
+            "Lionsgate " to Pair(1632, "https://image.tmdb.org/t/p/original/cisLn1YAUuptXVBa0xjq7ST9cH0.png"),
+            "DreamWorks Animation " to Pair(521, "https://image.tmdb.org/t/p/original/3BPX5VGBov8SDqTV7wC1L1xShAS.png"),
+            "Netflix Animation " to Pair(171251, "https://image.tmdb.org/t/p/original/AqUAfMC270bGGK09Nh3mycwT1hY.png"),
+            "Netflix" to Pair(178464, "https://image.tmdb.org/t/p/original/tyHnxjQJLH6h4iDQKhN5iqebWmX.png"),
+            "Pixar" to Pair(3, "https://image.tmdb.org/t/p/original/1TjvGVDMYsj6JBxOAkUHpPEwLf7.png"),
+            "Illumination" to Pair(6704, "https://image.tmdb.org/t/p/original/fOG2oY4m1YuYTQh4bMqqZkmgOAI.png"),
+            "Blue Sky Studios" to Pair(9383, "https://image.tmdb.org/t/p/original/ppeMh4iZJQUMm1nAjRALeNhWDfU.png"),
+            "Laika" to Pair(11537, "https://image.tmdb.org/t/p/original/AgCkAk8EpUG9fTmK6mWcaJA2Zwh.png"),
+            "Amazon Studios" to Pair(20580, "https://image.tmdb.org/t/p/original/oRR9EXVoKP9szDkVKlze5HVJS7g.png"),
+            "HBO" to Pair(3268, "https://image.tmdb.org/t/p/original/tuomPhY2UtuPTqqFnKMVHvSb724.png"),
+            "Apple" to Pair(14801, "https://image.tmdb.org/t/p/original/bnlD5KJ5oSzBYbEpDkwi6w8SoBO.png")
         )
 
         // Convert map to list of categoryItem objects
@@ -793,7 +709,7 @@ class Shows_Page : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.CategoryRecyclerView)
         val adapter = CategoryAdapter(categoryItems, R.layout.item_category)
 
-        val tvSpacing = (10 * resources.displayMetrics.density).toInt()
+        val tvSpacing = (1 * resources.displayMetrics.density).toInt()
         recyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
 
         val layoutManager = LinearLayoutManager(
@@ -1045,12 +961,12 @@ class Shows_Page : AppCompatActivity() {
         val searchInput = findViewById<EditText>(R.id.HomeSearchInput)
         val keyboardLayout = findViewById<LinearLayout>(R.id.keyboard_layout)
         val keyboardManager = CustomKeyboardManager(
-            this, 
-            searchInput, 
+            this,
+            searchInput,
             keyboardLayout,
             object : OnSearchListener {
                 override fun EnterActionTrigger(query: String) {
-                    val searchTerm  = query.trim()
+                    val searchTerm = query.trim()
                     if (searchTerm.isNotEmpty()) {
                         performSearch(searchTerm)
                     }
@@ -1419,7 +1335,16 @@ class Shows_Page : AppCompatActivity() {
                             current.getString("release_date")}
                     }
 
-                    val Item = filterItemOne(title=title, backdropUrl = imgPost, posterUlr =  imgback , imdbCode=id, type=type, year=date, rating=vote_average, runtime=showD)
+                    val Item = filterItemOne(
+                        title = title,
+                        backdropUrl = imgPost,
+                        posterUlr = imgback,
+                        imdbCode = id,
+                        type = type,
+                        year = date,
+                        rating = vote_average,
+                        runtime = showD
+                    )
 
                     withContext(Dispatchers.Main) {
                         filterAdapter.addItem(Item)
@@ -1574,6 +1499,8 @@ class Shows_Page : AppCompatActivity() {
         val items = mutableListOf<FavItem>()
 
         for (anime in showFavData) {
+            findViewById<TextView>(R.id.favEmptyState).visibility = View.GONE
+
 
             Log.d("Fav_anime", "show_id: ${anime["show_id"]}")
             Log.d("Fav_anime", "title: ${anime["title"]}")
@@ -1597,7 +1524,7 @@ class Shows_Page : AppCompatActivity() {
                     production = "",
                     parentalGuide = anime["pg"] ?: "",
                     imdbCode = anime["show_id"] ?: "",
-                    showType = anime["type"]?: ""
+                    showType = anime["type"] ?: ""
                 )
             )
         }
@@ -1612,7 +1539,8 @@ class Shows_Page : AppCompatActivity() {
             FavRating,
             FavYear,
             FavOverview,
-            RemoveFaveItem)
+            RemoveFaveItem
+        )
 
         faveRecyclerView.adapter = faveAdapter
 
@@ -1660,7 +1588,7 @@ class Shows_Page : AppCompatActivity() {
                 type = "tv",
                 newSeason = item["lastSeason"].toString(),
                 newEpisode = item["lastEpisode"].toString(),
-                time =  item["notify_at"].toString()
+                time = item["notify_at"].toString()
             )
             notifications.add(itemData)
         }

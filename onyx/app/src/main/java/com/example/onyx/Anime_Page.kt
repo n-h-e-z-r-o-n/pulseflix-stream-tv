@@ -1,12 +1,8 @@
 package com.example.onyx
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,12 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -32,16 +24,29 @@ import org.json.JSONArray
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.String
-import androidx.core.content.ContextCompat
-import androidx.core.widget.ImageViewCompat
-import com.example.onyx.BuildConfig
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
-import com.example.onyx.FetchData.TMDBapi
-import android.os.Handler
-import android.os.Looper
 import com.bumptech.glide.Glide
 import com.example.onyx.FetchData.AnimeApi
+import com.example.onyx.OnyxClasses.AiringAnimeItem
+import com.example.onyx.OnyxClasses.AnimeAiringAdapter
+import com.example.onyx.OnyxClasses.AnimeGridAdapter
+import com.example.onyx.OnyxClasses.AnimeSearchAdapter
+import com.example.onyx.OnyxClasses.AnimeSearchItem
+import com.example.onyx.OnyxClasses.AnimeTrendingAdapter
+import com.example.onyx.OnyxClasses.CustomKeyboardManager
+import com.example.onyx.OnyxClasses.EqualSpaceItemDecoration
+import com.example.onyx.OnyxClasses.FavAdapter
+import com.example.onyx.OnyxClasses.FavItem
+import com.example.onyx.OnyxClasses.NotificationAdapter
+import com.example.onyx.OnyxClasses.NotificationItem
+import com.example.onyx.OnyxClasses.OnSearchListener
+import com.example.onyx.OnyxClasses.TrendingAnimeItem
+import com.example.onyx.OnyxClasses.cWatchingAdapter
+import com.example.onyx.OnyxObjects.GlobalUtils
+import com.example.onyx.OnyxObjects.LoadingAnimation
+import com.example.onyx.OnyxObjects.NavAction
+import com.example.onyx.OnyxObjects.NotificationHelper
 
 
 class Anime_Page : AppCompatActivity() {
@@ -290,11 +295,13 @@ class Anime_Page : AppCompatActivity() {
 
          val tvSpacing = (10 * resources.displayMetrics.density).toInt()
          //------------------------------------------------------------------------------------------
-         val anime_airing_item_width = 150
+         val anime_airing_item_width = 160
+         val gapUsed = 70
+
          dubbedRecyclerView = findViewById(R.id.dubbedRecycler)
          dubbedRecyclerView.layoutManager = GridLayoutManager(
              this@Anime_Page,
-             GlobalUtils.calculateSpanCountV2(this@Anime_Page, 160, anime_airing_item_width)
+             GlobalUtils.calculateSpanCountV2(this@Anime_Page, anime_airing_item_width, gapUsed)
          )
          dubbedRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
          dubbedAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
@@ -305,7 +312,7 @@ class Anime_Page : AppCompatActivity() {
          popularRecyclerView = findViewById(R.id.popularRecycler)
          popularRecyclerView.layoutManager = GridLayoutManager(
              this@Anime_Page,
-             GlobalUtils.calculateSpanCountV2(this@Anime_Page, 160, anime_airing_item_width)
+             GlobalUtils.calculateSpanCountV2(this@Anime_Page, anime_airing_item_width, gapUsed)
          )
          popularRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
          popularAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
@@ -317,7 +324,7 @@ class Anime_Page : AppCompatActivity() {
          //-----------------------------------------------------------------------------------------
 
          searchRecyclerView = findViewById(R.id.SearchRecycler)
-         searchRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page,GlobalUtils.calculateSpanCountV2(this@Anime_Page, 160, anime_airing_item_width))
+         searchRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, 3)
          searchAdapter  = AnimeSearchAdapter(mutableListOf(), R.layout.anime_airing_item)
          searchRecyclerView.adapter = searchAdapter
          searchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
@@ -326,18 +333,22 @@ class Anime_Page : AppCompatActivity() {
 
 
          watchRecyclerView = findViewById(R.id.watchingRecycler)
-         watchRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,160,150))
+         watchRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,160,gapUsed))
          watchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
 
 
          //------------------------------------------------------------------------------------------
 
          faveRecyclerView = findViewById(R.id.faveRecycler)
+         /*
          faveRecyclerView.layoutManager = LinearLayoutManager(
              this,
              LinearLayoutManager.HORIZONTAL,
              false
          )
+          */
+         faveRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,150,gapUsed))
+
          faveRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
 
          //------------------------------------------------------------------------------------------
@@ -360,12 +371,12 @@ class Anime_Page : AppCompatActivity() {
          CoroutineScope(Dispatchers.Main).launch {
             LoadingAnimation.show(this@Anime_Page)
              animeHomeData()
-             //loadDubbedAnime()
-             //loadPopularAnime()
-             //loadRecentlyAnime()
-             //setupSearchUi()
-             //animeWatchedList()
-             //notificationS()
+             loadDubbedAnime()
+             loadPopularAnime()
+             loadRecentlyAnime()
+             setupSearchUi()
+             animeWatchedList()
+             notificationS()
          }
 
      }
@@ -488,7 +499,6 @@ class Anime_Page : AppCompatActivity() {
 
          GlobalUtils.setupCardStackFromContainer(SpotlightContaner, 7000L)
 
-
          LoadingAnimation.hide(this@Anime_Page)
 
 
@@ -496,170 +506,6 @@ class Anime_Page : AppCompatActivity() {
 
 
 
-    private fun setupCardStackFromContainer(
-        container: FrameLayout,
-        autoSwipeDelay: Long = 2500L
-    ) {
-
-        // Ensure container has CardView children
-        val cards = (0 until container.childCount)
-            .mapNotNull { container.getChildAt(it) as? CardView }
-
-        if (cards.isEmpty()) return
-
-        // ---------------- Auto Swipe ----------------
-        val autoSwipeHandler = Handler(Looper.getMainLooper())
-        var autoSwipeRunnable: Runnable? = null
-        var autoSwipeRunning = false
-
-        fun stopAutoSwipe() {
-            autoSwipeRunning = false
-            autoSwipeRunnable?.let { autoSwipeHandler.removeCallbacks(it) }
-            autoSwipeRunnable = null
-        }
-
-        fun startAutoSwipe() {
-            if (autoSwipeRunning) return
-            autoSwipeRunning = true
-
-            autoSwipeRunnable = object : Runnable {
-                override fun run() {
-                    if (!container.hasFocus()) {
-                        swapRight(container, keepFocus = false)
-                        autoSwipeHandler.postDelayed(this, autoSwipeDelay)
-                    } else stopAutoSwipe()
-                }
-            }
-
-            autoSwipeHandler.postDelayed(autoSwipeRunnable!!, autoSwipeDelay)
-        }
-
-        // ---------------- Setup Card Listeners ----------------
-        cards.forEach { card ->
-
-            card.isFocusable = true
-            card.isFocusableInTouchMode = true
-
-            card.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus) {
-                    stopAutoSwipe()
-                    v.bringToFront()
-                    v.animate()
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .translationX(dp(0f))
-                        .setDuration(200)
-                        .start()
-                    v.elevation = 7f
-                } else {
-                    layoutStack(container)
-                    container.postDelayed({
-                        if (!container.hasFocus()) startAutoSwipe()
-                    }, 300)
-                }
-            }
-
-            card.setOnKeyListener { _, keyCode, event ->
-                if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
-                when (keyCode) {
-                    KeyEvent.KEYCODE_DPAD_LEFT -> { swapLeft(container); true }
-                    KeyEvent.KEYCODE_DPAD_RIGHT -> { swapRight(container); true }
-                    KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> false
-                    else -> false
-                }
-            }
-        }
-
-
-        // ---------------- Initial Layout & Focus ----------------
-        container.getChildAt(container.childCount - 1)?.requestFocus()
-        layoutStack(container)
-        container.postDelayed({ if (!container.hasFocus()) startAutoSwipe() }, 2000)
-    }
-
-
-    private fun layoutStack(container: FrameLayout) {
-
-        val count = container.childCount
-
-        for (i in 0 until count) {
-
-            val card = container.getChildAt(i)
-            val posFromTop = count - 1 - i
-
-            val (tx, scale, elevation) = when (posFromTop) {
-                0 -> Triple(0f, 1.0f, 6f)
-                1 -> Triple(50f, 0.95f, 5f)
-                2 -> Triple(90f, 0.9f, 4f)
-                3 -> Triple(120f, 0.85f, 3f)
-                4 -> Triple(140f, 0.8f, 2f)
-                else -> Triple(150f, 0.7f, 1f)
-            }
-
-            card.animate()
-                .translationX(dp(tx))
-                .scaleX(scale)
-                .scaleY(scale)
-                .setDuration(300)
-                .start()
-
-            card.elevation = elevation
-        }
-    }
-
-    private fun swapRight(container: FrameLayout, keepFocus: Boolean = true) {
-        if (container.childCount == 0) return
-        val top = container.getChildAt(container.childCount - 1)
-
-        top.animate()
-            .translationXBy(dp(-250f))
-            .scaleX(0.85f)
-            .scaleY(0.85f)
-            .rotation(-5f)
-            .setDuration(300)
-            .withEndAction {
-                top.rotation = 0f
-                container.removeView(top)
-                container.addView(top, 0)
-                layoutStack(container)
-
-                if (keepFocus) {
-                    container.getChildAt(container.childCount - 1)?.requestFocus()
-                }
-            }
-            .start()
-    }
-
-    private fun swapLeft(container: FrameLayout, keepFocus: Boolean = true) {
-        if (container.childCount == 0) return
-        val bottom = container.getChildAt(0)
-
-        bottom.animate()
-            .translationXBy(dp(-250f))
-            .scaleX(0.85f)
-            .scaleY(0.85f)
-            .rotation(-5f)
-            .setDuration(350)
-            .withEndAction {
-                bottom.rotation = 0f
-                container.removeView(bottom)
-                container.addView(bottom)
-                layoutStack(container)
-
-                if (keepFocus) {
-                    container.getChildAt(container.childCount - 1)?.requestFocus()
-                }
-            }
-            .start()
-    }
-
-    private fun dp(value: Float): Float {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            value,
-            resources.displayMetrics
-        )
-    }
 
 
 
@@ -1090,61 +936,32 @@ class Anime_Page : AppCompatActivity() {
              }
              isLoadingMoreRecently = false
          }
-         private fun setupSearchUi() {
-             val searchInput = findViewById<EditText>(R.id.AnimeSearchInput)
-             val searchBar = findViewById<CardView>(R.id.searchBarAnime)
-
-             val focusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-                 if (hasFocus) {
-                     searchBar.post {
-                         searchInput.requestFocus()
-                         showKeyboard(searchInput)
-                     }
-                 } else {
-                     hideKeyboard()
-                 }
-             }
 
 
-             // Set focus listeners on both the search bar and the input field
-             searchBar.onFocusChangeListener = focusChangeListener
-             searchInput.onFocusChangeListener = focusChangeListener
+    private fun setupSearchUi() {
 
-             try{
-                 searchInput.setOnEditorActionListener { _, actionId, event ->
+        val searchInput = findViewById<EditText>(R.id.AnimeSearchInput)
+        val keyboardLayout = findViewById<LinearLayout>(R.id.keyboard_layout)
+        val keyboardManager = CustomKeyboardManager(
+            this,
+            searchInput,
+            keyboardLayout,
+            object : OnSearchListener {
+                override fun EnterActionTrigger(query: String) {
+                    val searchTerm = query.trim()
+                    if (searchTerm.isNotEmpty()) {
+                        searchAnimeFetch(searchTerm)
+                    }
+                }
+            }
+        )
+        keyboardManager.showKeyboard()
+        //keyboardManager.hideKeyboard()
+        keyboardManager.isKeyboardVisible()
 
-                     if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                         (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
-                     ) {
+    }
 
-                         val searchTerm = searchInput.text.toString().trim()
-                         if (searchTerm.isNotEmpty()) {
-                             searchAnimeFetch(searchTerm)
-                         }
 
-                         true
-                     } else {
-                         false
-                     }
-                 }
-
-             }catch (e: Exception){
-                 Log.e("ANIME_STATUS S-Error", "setupSearchUi() ", e)
-
-             }
-         }
-
-         private fun showKeyboard(view: View) {
-             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-         }
-
-         private fun hideKeyboard() {
-             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-             currentFocus?.let {
-                 imm.hideSoftInputFromWindow(it.windowToken, 0)
-             }
-         }
 
      ///////////////////////////////////////////////////////////////////////////////////////////////
      ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1216,7 +1033,8 @@ class Anime_Page : AppCompatActivity() {
             FavRating,
             FavYear,
             FavOverview,
-            RemoveFaveItem)
+            RemoveFaveItem
+        )
 
         faveRecyclerView.adapter = faveAdapter
 
@@ -1261,7 +1079,7 @@ class Anime_Page : AppCompatActivity() {
                 type = "anime",
                 newSeason = item["subStored"].toString(),
                 newEpisode = item["dubStored"].toString(),
-                time =  item["notify_at"].toString()
+                time = item["notify_at"].toString()
             )
             notifications.add(itemData)
             }

@@ -8,7 +8,6 @@
     android:id="@+id/spotlightMovie"
     app:cardCornerRadius="20dp"
     android:focusableInTouchMode="true"
-    android:nextFocusDown="@id/SliderButton"
     android:background="@drawable/season_selector"
     android:foreground="@drawable/season_selector"
     android:elevation="2dp"

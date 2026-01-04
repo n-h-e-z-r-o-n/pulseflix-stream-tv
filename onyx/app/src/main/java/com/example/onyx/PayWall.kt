@@ -1,6 +1,5 @@
 package com.example.onyx
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Looper
@@ -35,6 +34,8 @@ import android.view.Gravity
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.AdapterView
 import com.example.onyx.Database.AppDatabase
+import com.example.onyx.OnyxObjects.GlobalUtils
+import com.example.onyx.OnyxObjects.LoadingAnimation
 
 
 class PayWall : AppCompatActivity() {

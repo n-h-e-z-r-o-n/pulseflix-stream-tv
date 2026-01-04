@@ -1,4 +1,4 @@
-package com.example.onyx
+package com.example.onyx.OnyxClasses
 
 import android.content.Context
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import com.example.onyx.R
 
 // Callback interface for search actions
 interface OnSearchListener {

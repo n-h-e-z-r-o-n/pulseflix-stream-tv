@@ -1,22 +1,24 @@
 <!-- res/layout/item_grid.xml -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    android:id="@+id/spotlightMovie"
     android:focusableInTouchMode="true"
-    android:nextFocusDown="@id/SliderButton"
-    android:background="?attr/BG_color"
-    android:nextFocusUp="@id/HomeSearchInput">
+    app:cardCornerRadius="20dp"
+    app:cardBackgroundColor="?attr/BG_color_up"
+    android:foreground="@drawable/spotlight_selector"
+    android:layout_marginVertical="5dp"
+    android:layout_marginEnd="90dp"
+    android:layout_marginStart="15dp"
+    >
 
 
 
         <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="?attr/BG_color"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent=".75"
             app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +27,7 @@
 
 
                 <ImageView
-                    android:id="@+id/SliderBackdrop"
+                    android:id="@+id/cardBackdrop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
@@ -40,9 +42,9 @@
                     android:layout_gravity="bottom" />
 
                 <LinearLayout
-                    android:layout_width="450dp"
+                    android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/overlay_left_gradient"
+                    android:background="@drawable/overlay_left_gradient_light"
                     android:orientation="horizontal"
                     android:layout_gravity="start" />
 
@@ -51,19 +53,14 @@
 
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="500dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent=".45"
-            android:layout_marginStart="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            >
+            android:layout_gravity="bottom"
+            android:layout_margin="15dp">
 
             <TextView
-                android:id="@+id/SliderTitle"
+                android:id="@+id/cardTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -71,11 +68,11 @@
                 android:maxLines="3"
                 android:singleLine="false"
                 android:text="Sakamoto Days Part 2"
-                android:textColor="?attr/FG_color"
+                android:textColor="#FFFFFF"
                 android:textSize="40sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="5dp"
-                android:fontFamily="@font/u"
+                android:fontFamily="@font/p"
                 android:shadowColor="#80000000"
                 android:shadowDx="5"
                 android:shadowDy="6"
@@ -83,14 +80,14 @@
                 tools:ignore="HardcodedText,Suspicious0dp"/>
 
                 <TextView
-                    android:id="@+id/SliderGenre"
+                    android:id="@+id/cardGenre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="Action"
                     android:singleLine="false"
-                    android:textColor="?attr/FG_color"
+                    android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     tools:ignore="HardcodedText,Suspicious0dp"
                     android:textStyle="bold"
@@ -109,22 +106,24 @@
 
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="30dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        app:cardCornerRadius="100dp"
+                        app:cardCornerRadius="4dp"
                         android:layout_gravity="center_horizontal"
                         app:cardBackgroundColor="?attr/AccentColor"
                         android:elevation="0dp"
                         >
 
                         <TextView
+                            android:id="@+id/cardQuality"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="HD"
+                            android:layout_marginHorizontal="3dp"
                             android:singleLine="true"
-                            android:textColor="?attr/BG_color"
+                            android:textColor="#FFFFFF"
                             android:textSize="11sp"
                             tools:ignore="HardcodedText,Suspicious0dp"
                             android:gravity="center"
@@ -139,14 +138,14 @@
 
 
                         <TextView
-                            android:id="@+id/SliderPg"
+                            android:id="@+id/cardPg"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="PG-13"
                             android:singleLine="true"
-                            android:textColor="?attr/FG_color"
+                            android:textColor="#FFFFFF"
                             android:textSize="10sp"
                             tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                             android:gravity="center"
@@ -161,7 +160,7 @@
 
 
                     <TextView
-                        android:id="@+id/SliderType"
+                        android:id="@+id/cardType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -169,7 +168,7 @@
                         android:text="Mv"
                         android:fontFamily="@font/a"
                         android:singleLine="true"
-                        android:textColor="?attr/FG_color"
+                        android:textColor="#FFFFFF"
                         android:textSize="13sp"
                         tools:ignore="HardcodedText,Suspicious0dp"
                         android:gravity="center"
@@ -193,7 +192,7 @@
                             tools:ignore="ContentDescription" />
 
                         <TextView
-                            android:id="@+id/SliderRating"
+                            android:id="@+id/cardRating"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="bottom"
@@ -201,7 +200,7 @@
                             android:maxLines="1"
                             android:text="9.7"
                             android:singleLine="false"
-                            android:textColor="?attr/FG_color"
+                            android:textColor="#FFFFFF"
                             android:textSize="13sp"
                             tools:ignore="HardcodedText,Suspicious0dp"
                             android:gravity="center"/>
@@ -210,7 +209,7 @@
 
 
                     <TextView
-                        android:id="@+id/SliderYear"
+                        android:id="@+id/cardYear"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom"
@@ -218,7 +217,7 @@
                         android:maxLines="1"
                         android:text="2025"
                         android:singleLine="false"
-                        android:textColor="?attr/FG_color"
+                        android:textColor="#FFFFFF"
                         android:textSize="13sp"
                         tools:ignore="HardcodedText,Suspicious0dp"
                         android:gravity="center"
@@ -231,7 +230,7 @@
 
 
                 <TextView
-                    android:id="@+id/SliderOverview"
+                    android:id="@+id/cardOverview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -245,50 +244,8 @@
                    />
 
 
-
-            <LinearLayout
-                android:id="@+id/SliderButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="4dp"
-                android:layout_marginBottom="10dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:layout_gravity="bottom"
-                android:clickable="true"
-                android:background="@drawable/tv_button_selector"
-                android:nextFocusUp="@+id/spotlightMovie"
-                android:nextFocusLeft="@+id/spotlightMovie"
-                android:nextFocusRight="@+id/spotlightMovie"
-                android:nextFocusDown="@+id/itemGrid2"
-
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:src="@drawable/ic_play"
-                    app:tint="?attr/FG_color"
-                    tools:ignore="ContentDescription" />
-
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Watch Now"
-                    android:textColor="@android:color/white"
-                    android:textSize="8sp"
-                    android:layout_marginStart="2dp"
-                    tools:ignore="HardcodedText,SmallSp"
-                    />
-
-            </LinearLayout>
-
-
         </LinearLayout>
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

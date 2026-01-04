@@ -3,8 +3,8 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="255dp"
-    android:layout_height="150dp"
+    android:layout_width="280dp"
+    android:layout_height="165dp"
     android:clickable="true"
     android:focusable="true"
     android:gravity="center"
@@ -42,23 +42,26 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="17dp"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="1dp"
-            app:cardBackgroundColor="@android:color/transparent"
-            >
+            app:cardCornerRadius="3dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?attr/transparentEffect">
             <TextView
                 android:id="@+id/itemText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/BG_color"
                 android:ellipsize="end"
                 android:text="2015"
+                android:background="?attr/transparentEffect"
+                android:shadowColor="#80000000"
+                android:shadowDx="2"
+                android:shadowDy="4"
+                android:shadowRadius="4"
                 android:gravity="center"
                 android:paddingHorizontal="4dp"
                 android:rotationX="0"
                 android:fontFamily="@font/p"
                 android:singleLine="true"
-                android:textColor="?attr/FG_color"
+                android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 tools:ignore="HardcodedText,SmallSp" />
 
@@ -76,8 +79,9 @@
                 android:padding="1dp"
                 android:rotationX="0"
                 android:singleLine="true"
-                android:textColor="?attr/FG_color"
+                android:textColor="#FFFFFF"
                 android:textSize="12sp"
+                android:alpha="0.7"
                 android:layout_marginStart="4dp"
                 tools:ignore="HardcodedText,SmallSp" />
 
@@ -96,7 +100,7 @@
                 android:singleLine="true"
                 android:text="7.5 imdb"
                 android:alpha="0.3"
-                android:textColor="?attr/FG_color"
+                android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 android:fontFamily="@font/p"
                 tools:ignore="HardcodedText,SmallSp"
@@ -162,8 +166,9 @@
             android:shadowDx="2"
             android:shadowDy="4"
             android:shadowRadius="4"
-            android:textColor="@android:color/white"
-            android:textSize="15sp" />
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText" />
 
         <ImageView
             android:id="@+id/itemLogo"

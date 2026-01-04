@@ -1,10 +1,9 @@
-package com.example.onyx
+package com.example.onyx.OnyxObjects
 
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.UiModeManager
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -13,19 +12,18 @@ import android.os.Looper
 import android.os.Process
 import android.text.SpannableStringBuilder
 import android.util.Log
-import android.widget.TextView
-import kotlin.random.Random
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.cardview.widget.CardView
+import com.example.onyx.R
+import kotlin.random.Random
 
 object GlobalUtils {
-    
+
     // SharedPreferences key constants
     private const val PREF_NAME = "OnyxProfile"
     private const val KEY_MOVIES_WATCHED = "movies_watched"
@@ -327,12 +325,12 @@ object GlobalUtils {
         val queue = finalText.map {
             QueueItem(
                 to = it,
-                maxFrames = Random.nextInt(speed, speed * 2)
+                maxFrames = Random.Default.nextInt(speed, speed * 2)
             )
         }
 
         fun randomChar(): Char =
-            chars[Random.nextInt(chars.length)]
+            chars[Random.Default.nextInt(chars.length)]
 
         fun update() {
             val sb = SpannableStringBuilder()
@@ -347,7 +345,7 @@ object GlobalUtils {
                         q.done = true
                         sb.append(q.to)
                     } else {
-                        if (q.frame == 0 || Random.nextFloat() < 0.5f) {
+                        if (q.frame == 0 || Random.Default.nextFloat() < 0.5f) {
                             q.char = randomChar()
                         }
 
@@ -371,12 +369,12 @@ object GlobalUtils {
 
 
     fun saveServerIndex(context: Context, index: Int) {
-        val prefs = context.getSharedPreferences("server_prefs", MODE_PRIVATE)
+        val prefs = context.getSharedPreferences("server_prefs", Context.MODE_PRIVATE)
         prefs.edit().putInt("selected_server_index", index).apply()
     }
 
     fun getSavedServerIndex(context: Context): Int {
-        val prefs = context.getSharedPreferences("server_prefs", MODE_PRIVATE)
+        val prefs = context.getSharedPreferences("server_prefs", Context.MODE_PRIVATE)
         Log.e("DEBUG_SERVER", prefs.getInt("selected_server_index", 0).toString())
         return prefs.getInt("selected_server_index", 0)
     }
@@ -491,7 +489,7 @@ object GlobalUtils {
                 .translationX(dp(container.context,tx))
                 .scaleX(scale)
                 .scaleY(scale)
-                .setDuration(300)
+                .setDuration(220)
                 .start()
 
             card.elevation = elevation
@@ -507,7 +505,7 @@ object GlobalUtils {
             .scaleX(0.85f)
             .scaleY(0.85f)
             .rotation(-5f)
-            .setDuration(300)
+            .setDuration(220)
             .withEndAction {
                 top.rotation = 0f
                 container.removeView(top)
@@ -530,7 +528,7 @@ object GlobalUtils {
             .scaleX(0.85f)
             .scaleY(0.85f)
             .rotation(-5f)
-            .setDuration(350)
+            .setDuration(220)
             .withEndAction {
                 bottom.rotation = 0f
                 container.removeView(bottom)
@@ -571,7 +569,7 @@ object GlobalUtils {
             if (startWidth == targetWidth) return
 
             ValueAnimator.ofInt(startWidth, targetWidth).apply {
-                duration = animationDuration
+                duration = animationDuration // <--- FIXED
                 addUpdateListener {
                     parent.layoutParams = parent.layoutParams.apply {
                         width = it.animatedValue as Int

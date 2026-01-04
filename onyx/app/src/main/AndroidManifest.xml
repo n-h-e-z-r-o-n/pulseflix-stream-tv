@@ -31,9 +31,6 @@
             android:name=".Category_Page"
             android:exported="false" />
         <activity
-            android:name=".Category"
-            android:exported="false" />
-        <activity
             android:name=".Shows_Page"
             android:exported="false" />
         <activity
@@ -51,20 +48,12 @@
         <activity
             android:name=".PayWall"
             android:exported="false" />
-        <activity
-            android:name=".Notification_Page"
-            android:exported="false" />
-        <activity
-            android:name=".Favorite_Page"
-            android:exported="false" />
+
         <activity
             android:name=".Actor_Page"
             android:exported="false"
             android:launchMode="singleTop" />
-        <activity
-            android:name=".Home_Page"
-            android:exported="false"
-            android:launchMode="singleTop" />
+
         <activity
             android:name=".Profile_Page"
             android:exported="false" />

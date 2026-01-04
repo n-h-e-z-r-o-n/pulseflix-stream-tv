@@ -45,6 +45,7 @@ import org.json.JSONArray
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
 import com.example.onyx.FetchData.AnimeApi
+import com.example.onyx.OnyxObjects.GlobalUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

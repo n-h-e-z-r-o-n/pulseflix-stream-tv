@@ -1,14 +1,10 @@
 package com.example.onyx
 
-import android.content.Intent
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -19,30 +15,28 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
-import com.example.onyx.BuildConfig
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
 import com.example.onyx.FetchData.AnimeApi
 import com.example.onyx.FetchData.TMDBapi
-import java.io.IOException
+import com.example.onyx.OnyxClasses.AiringAnimeItem
+import com.example.onyx.OnyxClasses.AnimeAiringAdapter
+import com.example.onyx.OnyxClasses.EqualSpaceItemDecoration
+import com.example.onyx.OnyxObjects.GlobalUtils
+import com.example.onyx.OnyxObjects.LoadingAnimation
 import kotlin.collections.mutableListOf
-import kotlin.coroutines.coroutineContext
 
 
 class Watch_Anime_Page : AppCompatActivity() {

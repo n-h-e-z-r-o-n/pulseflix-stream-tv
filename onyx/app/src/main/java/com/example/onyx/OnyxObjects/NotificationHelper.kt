@@ -1,40 +1,16 @@
-// NotificationHelper.kt
-package com.example.onyx
+package com.example.onyx.OnyxObjects
 
-import android.app.Activity
 import android.content.Context
 import android.util.Log
-import android.view.View
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
-import kotlin.String
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.example.onyx.BuildConfig
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
 import com.example.onyx.FetchData.TMDBapi
-import kotlin.toString
-
 
 object NotificationHelper {
 
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
 
-    private const val PREFS_NAME = "notification_prefs"
-    private const val KEY_NOTIFICATIONS = "notifications_json"
-
-
-    
 
 
 
@@ -212,9 +188,3 @@ object NotificationHelper {
 
 
 }
-
-/////
-
-
-
-

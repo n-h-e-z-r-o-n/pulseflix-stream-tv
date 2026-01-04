@@ -2,12 +2,15 @@ package com.example.onyx
 
 import android.os.Bundle
 import android.util.Log
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.onyx.OnyxClasses.EqualSpaceItemDecoration
+import com.example.onyx.OnyxClasses.GridAdapter2
+import com.example.onyx.OnyxClasses.MovieItem
+import com.example.onyx.OnyxObjects.GlobalUtils
+import com.example.onyx.OnyxObjects.LoadingAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -106,7 +109,15 @@ class Actor_Page : AppCompatActivity() {
 
 
 
-                    val movieItem = MovieItem(title=title, imageUrl=imgUrl, imdbCode=id, type=mediaType, year = date, rating=vote_average, runtime=info)
+                    val movieItem = MovieItem(
+                        title = title,
+                        imageUrl = imgUrl,
+                        imdbCode = id,
+                        type = mediaType,
+                        year = date,
+                        rating = vote_average,
+                        runtime = info
+                    )
 
 
                     withContext(Dispatchers.Main) {
@@ -155,7 +166,15 @@ class Actor_Page : AppCompatActivity() {
                         val id = current.getString("id")
 
 
-                        val movieItem =MovieItem(title=title, imageUrl=imgUrl, imdbCode=id, type=mediaType, year = date, rating=vote_average, runtime=info)
+                        val movieItem = MovieItem(
+                            title = title,
+                            imageUrl = imgUrl,
+                            imdbCode = id,
+                            type = mediaType,
+                            year = date,
+                            rating = vote_average,
+                            runtime = info
+                        )
 
 
                         withContext(Dispatchers.Main) {

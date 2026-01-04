@@ -12,4 +12,6 @@
         <item>Tanzania (TZS)</item>
     </string-array>
 
+    <string name="loading_terms">Loading Terms and Conditions...</string>
+
 </resources>

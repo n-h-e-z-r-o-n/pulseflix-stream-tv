@@ -54,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="50dp"
+                    android:alpha="0.6"
                     tools:ignore="UseCompoundDrawables">
 
 
@@ -379,7 +380,7 @@
         android:scrollbars="none"
         android:background="?attr/BG_color"
         tools:ignore="RtlSymmetry"
-        android:nextFocusLeft="@id/btnHome">
+        >
 
 
 
@@ -407,18 +408,6 @@
                     android:orientation="vertical"
                     tools:ignore="UselessParent"
                     android:visibility="visible">
-
-                    <FrameLayout
-                        android:id="@+id/cardStackContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:focusable="false"
-                        android:descendantFocusability="afterDescendants"
-                        android:clipChildren="false"
-                        android:visibility="gone"
-                        android:clipToPadding="false"/>
-
 
 
                     <FrameLayout
@@ -455,11 +444,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clipToPadding="false"
+                            android:nextFocusUp="@+id/spotlightAnimes"
+                            android:nextFocusDown="@+id/Anime_Airing_widget"
                             android:overScrollMode="never"
                             android:scrollbars="none"
-                            tools:ignore="NestedWeights"
-                            android:nextFocusUp="@+id/spotlightAnimes"
-                            android:nextFocusDown="@+id/Anime_Airing_widget"/>
+                            tools:ignore="NestedWeights" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -563,80 +552,115 @@
                     android:id="@+id/SearchPageAnime"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:visibility="gone">
 
-
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/searchBarAnime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        app:cardBackgroundColor="?attr/BG_color"
-                        android:layout_margin="10dp"
-                        app:cardCornerRadius="10dp">
+                    <LinearLayout
+                        android:layout_width="280dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
 
 
-                        <!-- Search Icon -->
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_anime_filter"
-                            app:tint="?attr/FG_color"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginHorizontal="5dp"
-                            tools:ignore="ContentDescription" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="35dp"
+                                android:layout_marginTop="30dp"
+                                android:layout_marginBottom="30dp"
+                                android:orientation="horizontal"
+                                android:focusableInTouchMode="true">
 
 
-                        <!-- Search Text Input -->
+
+                                <!-- Search Icon -->
+                                <ImageView
+                                    android:layout_width="25dp"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/ic_anime_filter"
+                                    app:tint="?attr/FG_color"
+                                    android:background="?attr/AccentColor"
+                                    android:layout_gravity="center_vertical"
+                                    tools:ignore="ContentDescription" />
 
 
-                        <EditText
-                            android:id="@+id/AnimeSearchInput"
-                            android:background="@drawable/search_background"
-                            android:layout_width="240dp"
-                            android:layout_height="30dp"
-                            android:hint="Search Anime..."
-                            android:textColorHint="@android:color/darker_gray"
+                                <!-- Search Text Input -->
+
+
+
+                                <EditText
+                                    android:id="@+id/AnimeSearchInput"
+                                    android:layout_width="250dp"
+                                    android:layout_height="match_parent"
+                                    android:hint="Search for anime..."
+                                    android:textColor="?attr/FG_color"
+                                    android:textColorHint="?attr/FG_color"
+                                    android:padding = "3dp"
+                                    android:inputType="text"
+                                    android:textSize="15sp"
+                                    android:singleLine="true"
+                                    android:clickable="false"
+                                    android:focusable="false"
+                                    android:fontFamily="@font/p"
+                                    android:focusableInTouchMode="true"
+                                    android:background="#60A9A9A9"
+                                    android:imeOptions="actionSearch"
+                                    tools:ignore="Autofill,HardcodedText" />
+
+                            </LinearLayout>
+
+                        <include layout="@layout/keyboard_layout"/>
+
+                    </LinearLayout>
+
+
+
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/searchTextDisplay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Anime Search Results"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-smallcaps"
+                            android:textSize="20sp"
+                            android:paddingStart="10dp"
                             android:textColor="?attr/FG_color"
-                            android:fontFamily="serif-monospace"
-                            android:inputType="text"
-                            android:singleLine="true"
-                            android:textSize="15sp"
-                            android:paddingStart="35dp"
-                            android:paddingEnd="10dp"
-                            tools:ignore="Autofill,HardcodedText"
-                            android:focusableInTouchMode="true"
-                            android:focusable="true"
-                            android:clickable="true"
-                            android:imeOptions="actionSearch"
-                            />
+                            tools:ignore="HardcodedText,RtlSymmetry"
+                            android:layout_marginTop="7dp"/>
 
-                    </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="490dp"
+                            android:background="@drawable/background_hovor"
+                            android:focusableInTouchMode="false"
+                            android:clickable="false"
+                            android:descendantFocusability="afterDescendants"
+                            >
 
-                    <TextView
-                        android:id="@+id/searchTextDisplay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Anime Search Results"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/p"
-                        android:textSize="13sp"
-                        android:textColor="?attr/FG_color"
-                        android:alpha="0.4"
-                        tools:ignore="HardcodedText"/>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/SearchRecycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clipToPadding="false"
+                                android:overScrollMode="never"
+                                android:descendantFocusability="afterDescendants"
+                                android:focusable="false"
+                                android:scrollbars="none"
+                                android:layout_margin="4dp"
+                                tools:ignore="NestedWeights"
 
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/SearchRecycler"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_gravity=""
-                        android:clipToPadding="false"
-                        android:scrollbars="none"
-                        tools:ignore="RtlSymmetry"/>
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
 
 
 
@@ -673,7 +697,8 @@
                         android:layout_marginVertical="10dp"
                         app:cardBackgroundColor="?attr/BG_color"
                         app:cardCornerRadius="20dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="wrap_content"
@@ -900,9 +925,9 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/faveRecycler"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
+                        android:layout_marginHorizontal="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
                         android:clipToPadding="false"
                         android:scrollbars="none"
                         tools:ignore="RtlSymmetry"/>

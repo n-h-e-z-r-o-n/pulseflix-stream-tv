@@ -5,16 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="100dp"
-
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:gravity="center"
     android:orientation="vertical"
+    android:layout_gravity="center_vertical"
     card_view:cardCornerRadius="12dp"
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
-    card_view:cardBackgroundColor="?attr/FG_color"
+    card_view:cardBackgroundColor="#FFFFFF"
     android:foreground="@drawable/card_focus"
     android:id="@+id/categoryView">
 
@@ -22,12 +22,12 @@
 
         <ImageView
             android:id="@+id/categoryImage"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:maxWidth="200dp"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:layout_margin="9dp"
+            android:layout_margin="4dp"
             tools:ignore="ContentDescription" />
 
 </androidx.cardview.widget.CardView>

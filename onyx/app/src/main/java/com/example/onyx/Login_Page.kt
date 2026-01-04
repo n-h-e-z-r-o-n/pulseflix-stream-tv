@@ -1,24 +1,25 @@
 package com.example.onyx
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import com.example.onyx.OnyxClasses.AvatarAdapter
+import com.example.onyx.OnyxClasses.EqualSpaceItemDecoration
+import com.example.onyx.OnyxClasses.ProfileAdapter
+import com.example.onyx.OnyxClasses.profileItem
+import com.example.onyx.OnyxObjects.GlobalUtils
 
 
 class Login_Page : AppCompatActivity() {
@@ -50,7 +51,7 @@ class Login_Page : AppCompatActivity() {
         if (userId == -1) {
             // No user logged in → redirect to Login page
         }else{
-            startActivity(Intent(this, Home_Page::class.java))
+            startActivity(Intent(this, Shows_Page::class.java))
             finish()
         }
 
@@ -91,7 +92,7 @@ class Login_Page : AppCompatActivity() {
             }else{
                 sm.saveUserId(userId.toInt())
                 sm.saveAvatar(userAvatar.toString())
-                startActivity(Intent(this, Home_Page::class.java))
+                startActivity(Intent(this, Shows_Page::class.java))
             }
 
         }

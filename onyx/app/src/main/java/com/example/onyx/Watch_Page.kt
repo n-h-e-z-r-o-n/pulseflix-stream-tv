@@ -1,6 +1,5 @@
 package com.example.onyx
 
-import android.R.attr.textAllCaps
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -14,41 +13,37 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.net.HttpURLConnection
-import java.net.URL
-
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.delay
 import org.json.JSONArray
 import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.TooltipCompat
-import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 
 
 import org.json.JSONObject
-import java.io.IOException
 import java.time.LocalDate
 import kotlin.text.ifEmpty
 
 import com.example.onyx.FetchData.TMDBapi
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import com.example.onyx.OnyxClasses.CastAdapter
+import com.example.onyx.OnyxClasses.CastItem
+import com.example.onyx.OnyxClasses.EpisodeItem
+import com.example.onyx.OnyxClasses.EpisodesAdapter
+import com.example.onyx.OnyxClasses.EqualSpaceItemDecoration
+import com.example.onyx.OnyxClasses.MovieItem
+import com.example.onyx.OnyxClasses.RecommendAdapter
+import com.example.onyx.OnyxObjects.GlobalUtils
+import com.example.onyx.OnyxObjects.LoadingAnimation
 import java.time.format.DateTimeFormatter
 
 
@@ -621,7 +616,7 @@ class Watch_Page : AppCompatActivity() {
                         LinearLayoutManager.HORIZONTAL, // 👈 makes it horizontal
                         false
                     )
-                    recyclerView.adapter = CastAdapter(movies,  R.layout.round_grid)
+                    recyclerView.adapter = CastAdapter(movies, R.layout.round_grid)
                     val spacing = (9 * resources.displayMetrics.density).toInt()
                     recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
 
@@ -689,7 +684,7 @@ class Watch_Page : AppCompatActivity() {
                         recyclerView.requestLayout() // Important: request layout update
 
                         recyclerView.layoutManager = GridLayoutManager(this@Watch_Page, 3)
-                        recyclerView.adapter = RecommendAdapter(movies,  R.layout.recomendation_card)
+                        recyclerView.adapter = RecommendAdapter(movies, R.layout.recomendation_card)
                         val spacing = (19 * resources.displayMetrics.density).toInt() // 16dp to px
                         recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
 

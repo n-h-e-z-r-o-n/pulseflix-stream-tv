@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.onyx.OnyxObjects.GlobalUtils
+import com.example.onyx.OnyxObjects.NavAction
 
 class TermsAndConditionsActivity : AppCompatActivity() {
     
@@ -16,36 +16,27 @@ class TermsAndConditionsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_terms_and_conditions)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        NavAction.setupSidebar(this)
+        // Load Terms and Conditions content asynchronously
+        val tvTermsContent = findViewById<android.widget.TextView>(R.id.tv_terms_content)
         
-        // Setup focus handling for TV remote
-        setupFocusHandling()
-    }
-    
-    private fun setupFocusHandling() {
-        // Setup focus handling for TV remote navigation
-        // Since this is a scrollable content page, we'll set focus on the main content
-        val mainContent = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.main)
-        mainContent.isFocusable = true
-        mainContent.isFocusableInTouchMode = true
-        mainContent.requestFocus()
-        
-        // Handle back button press
-        mainContent.setOnKeyListener { _, keyCode, event ->
-            if (keyCode == android.view.KeyEvent.KEYCODE_BACK || 
-                keyCode == android.view.KeyEvent.KEYCODE_ESCAPE) {
-                finish()
-                true
-            } else {
-                false
+        Thread {
+            try {
+                val inputStream = resources.openRawResource(R.raw.terms_and_conditions)
+                val buffer = ByteArray(inputStream.available())
+                inputStream.read(buffer)
+                val str = String(buffer)
+                
+                runOnUiThread {
+                    tvTermsContent.text = str
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                runOnUiThread {
+                    tvTermsContent.text = "Error loading Terms and Conditions."
+                }
             }
-        }
-    }
-    
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
-    }
-}
+        }.start()
+
+}}
 
 

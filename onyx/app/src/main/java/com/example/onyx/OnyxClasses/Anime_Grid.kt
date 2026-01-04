@@ -1,4 +1,4 @@
-package com.example.onyx
+package com.example.onyx.OnyxClasses
 
 import android.content.Intent
 import android.view.KeyEvent
@@ -11,9 +11,9 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
-import com.example.onyx.Database.AppDatabase
-import com.example.onyx.Database.SessionManger
+import com.example.onyx.R
+import com.example.onyx.Watch_Anime_Page
+import com.example.onyx.Watch_Page
 
 
 class AnimeSwiper(
@@ -107,7 +107,7 @@ class AnimeSwiper(
 
         holder.SliderButton.setOnClickListener {
             val context = holder.itemView.context
-            val intent = android.content.Intent(context, Watch_Anime_Page::class.java)
+            val intent = Intent(context, Watch_Anime_Page::class.java)
             intent.putExtra("anime_code", imdbCode)
             intent.putExtra("anime_poster", imageUrl)
             context.startActivity(intent)
