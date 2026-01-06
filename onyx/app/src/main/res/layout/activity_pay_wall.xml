@@ -312,13 +312,12 @@
         android:layout_marginStart="0dp"
         android:elevation="6dp"
         app:cardCornerRadius="16dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:background="?attr/transparentEffect"
             android:scrollbars="none">
 
             <LinearLayout
@@ -338,7 +337,11 @@
                         android:layout_gravity="center_vertical"
                         android:gravity="center"
                         android:text="ONYX"
-                        android:fontFamily="@font/a"
+                        android:fontFamily="@font/p"
+                        android:shadowColor="?attr/BG_color"
+                        android:shadowDx="5"
+                        android:shadowDy="6"
+                        android:shadowRadius="4"
                         android:textSize="45sp"
                         android:textColor="?attr/FG_color"
                         tools:ignore="HardcodedText"
@@ -349,13 +352,18 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:background="@drawable/circle_background"
-                        android:text="×"
+                        android:text="X"
+                        android:fontFamily="@font/n"
                         android:gravity="center"
                         android:textColor="?attr/FG_color"
-                        android:textSize="20sp"
+                        android:textSize="24sp"
                         android:clickable="true"
                         android:focusable="true"
                         android:elevation="2dp"
+                        android:shadowColor="?attr/BG_color_up"
+                        android:shadowDx="5"
+                        android:shadowDy="0"
+                        android:shadowRadius="4"
                         android:layout_gravity="end"
                         tools:ignore="HardcodedText"
                         android:nextFocusDown="@+id/planMonthly"
@@ -368,11 +376,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Choose your plan"
+                    android:text="Choose your Payment plan"
                     android:textColor="?attr/FG_color"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:shadowColor="?attr/BG_color"
+                    android:shadowDx="5"
+                    android:shadowDy="6"
+                    android:shadowRadius="4"
                     android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/d"
+                    android:fontFamily="@font/n"
                     tools:ignore="HardcodedText" />
 
                 <LinearLayout
@@ -380,7 +393,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="20dp">
+                   >
 
                     <LinearLayout
                         android:id="@+id/planMonthly"
@@ -406,7 +419,7 @@
                             android:textColor="@android:color/white"
                             android:textSize="12sp"
                             android:gravity="center"
-                            android:fontFamily="@font/i"
+                            android:fontFamily="@font/p"
                             tools:ignore="HardcodedText,SmallSp"
                             />
                     </LinearLayout>
@@ -441,7 +454,7 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
                                 android:gravity="center"
-                                android:fontFamily="@font/i"
+                                android:fontFamily="@font/p"
                                 tools:ignore="HardcodedText,SmallSp" />
 
                             <TextView
@@ -485,7 +498,7 @@
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
                                 android:gravity="center"
-                                android:fontFamily="@font/i"
+                                android:fontFamily="@font/p"
                                 tools:ignore="HardcodedText,SmallSp" />
 
                             <TextView
@@ -501,16 +514,29 @@
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:background="?attr/FG_color"
+                    android:alpha="0.6"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"/>
+
                 <!-- PAYMENT METHOD SELECTION -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Payment Method"
                     android:textColor="?attr/FG_color"
-                    android:textSize="17sp"
+                    android:textSize="20sp"
+                    android:shadowColor="?attr/BG_color"
+                    android:shadowDx="5"
+                    android:shadowDy="6"
+                    android:shadowRadius="4"
+                    android:textStyle="bold"
                     android:layout_marginBottom="12dp"
-                    android:fontFamily="@font/d"
-                    tools:ignore="HardcodedText" />
+                    android:fontFamily="@font/n"
+                    tools:ignore="HardcodedText"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -524,7 +550,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="20dp">
+                    >
 
 
                     <LinearLayout
@@ -554,7 +580,7 @@
                             android:text="M-Pesa / XB"
                             android:textColor="@android:color/white"
                             android:textSize="8sp"
-                            android:fontFamily="@font/i"
+                            android:fontFamily="@font/p"
                             android:layout_marginStart="2dp"
                             tools:ignore="HardcodedText,SmallSp"
                             />
@@ -588,7 +614,7 @@
                             android:text="Credit Card"
                             android:textColor="@android:color/white"
                             android:textSize="8sp"
-                            android:fontFamily="@font/i"
+                            android:fontFamily="@font/p"
                             android:layout_marginStart="2dp"
                             tools:ignore="HardcodedText,SmallSp"
                             />
@@ -626,7 +652,7 @@
                             android:text="Google Pay"
                             android:textColor="@android:color/white"
                             android:textSize="8sp"
-                            android:fontFamily="@font/i"
+                            android:fontFamily="@font/p"
                             android:layout_marginStart="2dp"
                             tools:ignore="HardcodedText,SmallSp"
                             />
@@ -636,6 +662,14 @@
 
                     </LinearLayout>
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:background="?attr/FG_color"
+                    android:alpha="0.6"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"/>
+
 
                 <!-- M-PESA PAYMENT FIELDS -->
                 <LinearLayout
@@ -650,7 +684,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="M-Pesa Information"
-                        android:fontFamily="@font/g"
+                        android:fontFamily="@font/p"
                         android:textColor="?attr/FG_color"
                         android:textSize="14sp"
                         android:layout_marginBottom="8dp"
@@ -661,6 +695,7 @@
                         android:layout_height="wrap_content"
                         android:text="Enter your M-Pesa phone number"
                         android:textColor="?attr/FG_color"
+                        android:fontFamily="serif-monospace"
                         android:textSize="9sp"
                         android:layout_marginTop="8dp"
                         tools:ignore="HardcodedText" />
@@ -686,6 +721,7 @@
                     <Spinner
                         android:id="@+id/spCountry"
                         android:layout_width="match_parent"
+                        android:visibility="gone"
                         android:layout_height="25dp"
                         android:background="@drawable/tv_button_selector"
                         android:spinnerMode="dropdown"
@@ -719,6 +755,10 @@
                         android:background="@drawable/button_gradient"
                         android:text="Initiate payment"
                         android:textColor="#FFFFFF"
+                        android:shadowColor="?attr/BG_color"
+                        android:shadowDx="5"
+                        android:shadowDy="6"
+                        android:shadowRadius="4"
                         android:textSize="16sp"
                         android:fontFamily="sans-serif-medium"
                         android:layout_marginTop="24dp"
@@ -741,6 +781,14 @@
                           android:textColor="?attr/FG_color"
                           android:alpha="0.6"
                           tools:ignore="SpUsage"/>
+
+                    <include
+                        android:id="@+id/keyboard_layout"
+                        layout="@layout/keyboard_layout"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"/>
 
                 </LinearLayout>
 

@@ -36,6 +36,8 @@ import android.widget.AdapterView
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.LoadingAnimation
+import com.example.onyx.OnyxClasses.CustomKeyboardManager
+import com.example.onyx.OnyxClasses.OnSearchListener
 
 
 class PayWall : AppCompatActivity() {
@@ -47,6 +49,8 @@ class PayWall : AppCompatActivity() {
     private lateinit var etMpesaPhone: EditText
     private lateinit var progressBar: ProgressBar
     private lateinit var spCountry: Spinner
+    private lateinit var keyboardManager: CustomKeyboardManager
+    private lateinit var keyboardLayout: LinearLayout
 
     private lateinit var mpesaFeedbackBox: TextView
     private val INTASEND_SECRET_KEY = "Bearer ISSecretKey_live_e9d3162e-95cb-42a4-b64b-ee378525ca5a"
@@ -95,6 +99,28 @@ class PayWall : AppCompatActivity() {
         btnMpesaPayment = findViewById<Button>(R.id.btnMpesaPayment)
         etMpesaPhone  = findViewById<EditText>(R.id.etMpesaPhone)
         spCountry  = findViewById<Spinner>(R.id.spCountry)
+
+        // Prevent system keyboard from appearing
+        etMpesaPhone.showSoftInputOnFocus = false
+
+        keyboardLayout = findViewById(R.id.keyboard_layout)
+        keyboardManager = CustomKeyboardManager(this, etMpesaPhone, keyboardLayout, object : OnSearchListener {
+            override fun EnterActionTrigger(query: String) {
+                keyboardManager.hideKeyboard()
+            }
+        })
+
+        etMpesaPhone.setOnClickListener {
+            keyboardManager.showKeyboard()
+        }
+
+        etMpesaPhone.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                keyboardManager.showKeyboard()
+            } else {
+                // Optional: hide if focus lost, but might want to keep if interacting with keyboard
+            }
+        }
 
         animateCardViewScale(PaymentContainer, 0.6f, 0.6f)
         val params = btnPurchase.layoutParams as LinearLayout.LayoutParams
@@ -566,6 +592,15 @@ class PayWall : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         slideshowJob?.cancel()
+    }
+
+
+    override fun onBackPressed() {
+        if (::keyboardManager.isInitialized && keyboardManager.isKeyboardVisible()) {
+            keyboardManager.hideKeyboard()
+        } else {
+            super.onBackPressed()
+        }
     }
 
 
