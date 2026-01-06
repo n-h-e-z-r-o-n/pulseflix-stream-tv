@@ -373,7 +373,7 @@ class Anime_Page : AppCompatActivity() {
              animeHomeData()
              loadDubbedAnime()
              loadPopularAnime()
-             loadRecentlyAnime()
+             //loadRecentlyAnime()
              setupSearchUi()
              animeWatchedList()
              notificationS()

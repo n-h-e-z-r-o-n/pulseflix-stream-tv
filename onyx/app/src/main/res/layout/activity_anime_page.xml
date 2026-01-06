@@ -28,6 +28,16 @@
         app:cardBackgroundColor="?attr/transparentEffect"
         app:cardCornerRadius="0dp">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/transparentEffect"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/transparentEffect"/>
+
 
 
         <androidx.cardview.widget.CardView

@@ -189,7 +189,7 @@ object NavAction {
         view.animate()
             .scaleX(scaleX)
             .scaleY(scaleY)
-            .setDuration(200)
+            .setDuration(150)
             .setInterpolator(AccelerateDecelerateInterpolator())
             .start()
     }
@@ -226,7 +226,7 @@ object NavAction {
                     Log.e("previouslyFocusedView", previouslyFocusedView.toString())
 
                     sidebar.visibility = View.VISIBLE
-                    //animateCardViewScale(mainBox, 0.9f, 0.9f)
+                    animateCardViewScale(mainBox, 0.9f, 0.9f)
                     activeView?.let {
                         it.postDelayed({
                             it.requestFocus()
@@ -234,7 +234,7 @@ object NavAction {
                     }
                 } else {
                     sidebar.visibility = View.GONE
-                    //animateCardViewScale(mainBox, 1f, 1f)
+                    animateCardViewScale(mainBox, 1f, 1f)
 
                     previouslyFocusedView?.post {
                         if (previouslyFocusedView != null) {

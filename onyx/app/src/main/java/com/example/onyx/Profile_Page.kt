@@ -54,7 +54,7 @@ class Profile_Page : AppCompatActivity() {
     
     // GitHub raw URL for the APK file - replace with your actual URL
     // TODO: USER - Update this link to point to your version.json file
-    private val versionJsonUrl = "https://raw.githubusercontent.com/n-h-e-z-r-o-n/tv-APP/main/onyx/app/release/version.json"
+    private val versionJsonUrl = "https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs/heads/main/App/version.json"
     
     // Data class for update info
     data class UpdateInfo(

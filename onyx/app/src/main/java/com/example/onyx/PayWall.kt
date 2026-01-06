@@ -316,8 +316,8 @@ class PayWall : AppCompatActivity() {
                     val backdrop_path = current.optString("backdrop_path", "")
 
                     if (poster.isNotBlank() && !poster.endsWith("null")) {
-                        val imgUrl = "https://image.tmdb.org/t/p/w780$poster"
-                        val imgUrls = "https://image.tmdb.org/t/p/w1280$backdrop_path"
+                        val imgUrl = "https://image.tmdb.org/t/p/original$poster"
+                        val imgUrls = "https://image.tmdb.org/t/p/original$backdrop_path"
                         outputList.add(imgUrls)
                     }
                 }

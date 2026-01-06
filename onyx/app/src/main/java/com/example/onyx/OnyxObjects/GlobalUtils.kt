@@ -558,7 +558,7 @@ object GlobalUtils {
         parent: View,
         expandedWidthDp: Float,
         collapsedWidthDp: Float,
-        animationDuration: Long = 200L
+        animationDuration: Long = 140L
     ) {
         val context = parent.context
         val expandedWidthPx = dp(context, expandedWidthDp).toInt()

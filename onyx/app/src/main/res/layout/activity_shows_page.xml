@@ -62,6 +62,11 @@
         android:layout_height="match_parent"
         android:background="?attr/transparentEffect"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/transparentEffect"/>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/showsNavBar"
             android:layout_width="50dp"
@@ -1192,6 +1197,6 @@
     </androidx.cardview.widget.CardView>
 
 
-    <include layout="@layout/side_bar" android:visibility="gone"/>
+    <include layout="@layout/side_bar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
