@@ -56,7 +56,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
     private lateinit var  fetchAnime: AnimeApi
-    private  var  userId  = 0
+    private  var  userId  = -1
     private var resumePosition: Long = 0L
 
 
@@ -71,7 +71,10 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     private var holdPoster  = ""
     private var holdSeasonId  = ""
 
+    private var holdEpisodeNo  = ""
 
+
+    private val episodeButtons = mutableListOf<FrameLayout>()
 
     private lateinit var EpisodeContiner: LinearLayout
     private lateinit var SeasonsContainer: LinearLayout
@@ -81,6 +84,8 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
     private var isEpisodeLoading = false
     private var isSeasonLoading = false
+
+    private var firstEpisodeLoaded = false
 
 
     private lateinit var playerView: PlayerView
@@ -114,7 +119,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     private var isControlsVisible = true
     private var isMenuVisible = true
 
-    private var isFullscreen = false
     private var isMuted = false
     private var currentSpeed = 1.0f
     private var lastTapTime = 0L
@@ -168,7 +172,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         progressBar = findViewById(R.id.progress_bar)
         overlayContainer = findViewById(R.id.overlay_container)
         bottomBar = findViewById(R.id.bottom_bar)
-
         centerOverlay = findViewById(R.id.center_overlay)
 
         // Control buttons
@@ -194,6 +197,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         SeasonsContainer = findViewById(R.id.SeasonsContainer)
         EpisodeContiner = findViewById(R.id.EpisodeContiner)
 
+
     }
 
 
@@ -214,7 +218,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         currentEpisodeNumber = episodesNumber.toString()
         currentSeasonId = seasonId.toString()
 
-        holdSeasonId = currentEpisodeId
 
         CoroutineScope(Dispatchers.Main).launch {
             showData(seasonId.toString())
@@ -238,7 +241,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         currentPoster = poster
         currentSeasonTitle = name
 
-        fetchStreamingLinks(currentEpisodeId) //start playing the selected episode video
+        //fetchStreamingLinks(currentEpisodeId) //start playing the selected episode video
 
         val inflater = LayoutInflater.from(this)
         Log.e("ANIME_Player_SN", "${seasons.length()}")
@@ -249,7 +252,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                 val seasonBtn = inflater.inflate(R.layout.anime_season_item, SeasonsContainer, false) as FrameLayout
                 val seasonTitle = seasonBtn.findViewById<TextView>(R.id.SeasonTitle)
                 val seasonImage = seasonBtn.findViewById<ImageView>(R.id.SeasonImage)
-                Log.e("ANIME_Player_SNB", "${seasonBtn}")
 
                 val season = seasons.getJSONObject(i)
                 val title = season.optString("title", "Season ${i + 1}")
@@ -286,13 +288,15 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                         getEpisodes(season_id )
                         isSeasonLoading = false
                     }
-
                 }
 
                 SeasonsContainer.addView(seasonBtn)
 
-                Log.e("ANIME_SEASON_COMPAER", "currentSeasonId: $currentSeasonId , season_id: $season_id")
-                if (currentSeasonId == season_id) seasonBtn.performClick()
+
+                if (currentSeasonId == season_id){
+                    Log.e("ANIME_PLAYER", "currentSeasonId: $currentSeasonId , season_id: $season_id")
+                    seasonBtn.performClick()
+                }
             }
         }else{
 
@@ -329,20 +333,20 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                 epNumberWidget.text = "$eNumber: "
 
                 episodeBtn.setOnClickListener {
+
                     if (currentEpisodeId == episodeId) return@setOnClickListener
                     if (isEpisodeLoading) return@setOnClickListener
+
+                    Log.e("ANIME_PLAYER", "EPISODE: $eNumber  , ID: $episodeId, CLICKED")
+
 
                     selectedEpisodeView?.isSelected = false
                     episodeBtn.isSelected = true
                     selectedEpisodeView = episodeBtn
 
-                    // SAVE CURRENT PROGRESS BEFORE SWITCHING
-                    saveContinueWatching()
+                    holdEpisodeNo = eNumber
 
-                    currentEpisodeId =  episodeId
-                    currentSeasonId = holdSeasonId
-                    currentPoster = holdPoster
-                    currentSeasonTitle = holdSeasonTitle
+                    saveContinueWatching()
 
                     CoroutineScope(Dispatchers.Main).launch {
                         fetchStreamingLinks(episodeId)
@@ -354,9 +358,34 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                 if(currentEpisodeNumber == eNumber && currentEpisodeId == episodeId){
                     episodeBtn.isSelected = true
                     selectedEpisodeView = episodeBtn
+
+                    if(!firstEpisodeLoaded){
+                        Log.e("ANIME_PLAYER", "DEFAULT EPISODE: $eNumber  , ID: $episodeId, CLICKED")
+
+                        //episodeBtn.performClick()
+
+                        selectedEpisodeView?.isSelected = false
+                        episodeBtn.isSelected = true
+                        selectedEpisodeView = episodeBtn
+                        holdEpisodeNo = eNumber
+                        saveContinueWatching()
+                        CoroutineScope(Dispatchers.Main).launch {
+                            fetchStreamingLinks(episodeId)
+                        }
+
+                        firstEpisodeLoaded = true
+                    }
+                }
+
+                if (currentSeasonId == season_id){
+                    episodeButtons.add(episodeBtn)
                 }
             }
         }
+
+
+
+
     }
 
     private fun fetchStreamingLinks(episodeId: String) {
@@ -365,8 +394,10 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         val jsonObjectServerInfo = fetchAnime.animeEpisodeServers(episodeId)
         if (jsonObjectServerInfo == null) {
             isEpisodeLoading = false
+            Log.e("ANIME_PLAYER", "StreamingLinks=$episodeId FAILED")
             return
         }
+        Log.e("ANIME_PLAYER", "StreamingLinks=$episodeId FETCHED")
 
         val dataServers = jsonObjectServerInfo.getJSONObject("data")
 
@@ -426,9 +457,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                             Toast.makeText(context, "Switching to $title → $serverName", Toast.LENGTH_SHORT).show()
                             dialog?.dismiss()
 
-
                             fetchServerSources(episodeId, serverName, title)
-
                         }
                     }
                     container.addView(serverBtn)
@@ -452,7 +481,23 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     private fun fetchServerSources(episodeId: String, serverName: String, category: String) {
 
         val jsonObjectServerInfo = fetchAnime.animeEpisodeStreamingLinks(episodeId, serverName, category  )
-        if(jsonObjectServerInfo == null) return
+        if(jsonObjectServerInfo == null){
+            Log.e("ANIME_PLAYER", "PlAYER FAILED: $episodeId  , serverName: $serverName , category: $category, ")
+            return
+        }
+
+        Log.e("ANIME_PLAYER", "PlAYER STARTED: $episodeId  , serverName: $serverName , category: $category, ")
+
+        
+        saveContinueWatching()  // SAVE CURRENT PROGRESS BEFORE SWITCHING
+
+
+        currentEpisodeId =  episodeId
+        currentSeasonId = holdSeasonId
+        currentPoster = holdPoster
+        currentSeasonTitle = holdSeasonTitle
+        currentEpisodeNumber = holdEpisodeNo
+
 
         val data = jsonObjectServerInfo.getJSONObject("data")
 
@@ -461,7 +506,8 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         videoUrl = vidUrl
         val referer = data.getJSONObject("headers").optString("Referer")
 
-        Log.d("ANIME WATCH", "Loaded server=$serverName category=$category vidUrl=$vidUrl")
+        Log.e("ANIME_PLAYER", "Loaded server=$serverName category=$category vidUrl=$vidUrl")
+
 
         val btnServer = findViewById<TextView>(R.id.btn_server)
         btnServer.text = "$category: $serverName"
@@ -474,9 +520,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         exoPlayer?.let { player ->
             playerView.player = player
             player.addListener(this@Anime_Video_Player)
-            if (resumePosition > 0) {
-                player.seekTo(resumePosition)
-            }
             updatePlayPauseButton()
             updateMuteButton()
             updateSpeedButton()
@@ -495,6 +538,16 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
         episodeNum = episodeNum-1
         episodeContainer.getChildAt(episodeNum)?.requestFocus()
+    }
+
+    private fun playNextEpisode(){
+        val playNextTogol = findViewById<TextView>(R.id.btn_autoNext)
+
+        episodeButtons
+
+        playNextTogol. text = "Auto-next: On"
+        playNextTogol. text = "Auto-next: OFF"
+
     }
 
 

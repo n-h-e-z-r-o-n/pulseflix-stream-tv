@@ -128,13 +128,13 @@ object NavAction {
 
         if (hasFocus) {
             // View scaling
-            view.animate().scaleX(1.2f).scaleY(1.2f).setDuration(150).start()
+            view.animate().scaleX(1.2f).scaleY(1.2f).setDuration(50).start()
 
             label?.let {
                 it.setTypeface(null, Typeface.BOLD)
             }
         } else {
-            view.animate().scaleX(1f).scaleY(1f).setDuration(150).start()
+            view.animate().scaleX(1f).scaleY(1f).setDuration(50).start()
 
             label?.let {
                 it.setTypeface(null, Typeface.NORMAL)
@@ -189,7 +189,7 @@ object NavAction {
         view.animate()
             .scaleX(scaleX)
             .scaleY(scaleY)
-            .setDuration(150)
+            .setDuration(140)
             .setInterpolator(AccelerateDecelerateInterpolator())
             .start()
     }
@@ -248,48 +248,7 @@ object NavAction {
         })
     }
 
-    /* Sidebar expand/collapse
-    sidebar?.let {    ->
-        val anyFocused = allViews.any { it?.hasFocus() == true }
-        val layoutParams = mainBox.layoutParams as ViewGroup.MarginLayoutParams
 
-        val context = view.context
-        val density = context.resources.displayMetrics.density
-
-        if (anyFocused) {
-            //expandSidebar(view.context, bar, true)
-
-            mainBox.radius = 20 * context.resources.displayMetrics.density
-            animateCardViewScale(mainBox, 0.9f, 0.9f)
-
-
-            val marginLeft = (40 * context.resources.displayMetrics.density).toInt()
-            val marginTop = (0 * context.resources.displayMetrics.density).toInt()
-            val marginRight = (0 *context.resources.displayMetrics.density).toInt()
-            val marginBottom = (0 * context.resources.displayMetrics.density).toInt()
-            layoutParams.setMargins(marginLeft, marginTop, marginRight, marginBottom)
-
-
-            bar.visibility = View.VISIBLE
-
-        } else {
-            //expandSidebar(view.context, bar, false)
-            bar.visibility = View.GONE
-
-            val margin0dp = (0 * context.resources.displayMetrics.density).toInt()
-            layoutParams.setMargins(margin0dp, margin0dp, margin0dp, margin0dp)
-
-            animateCardViewScale(mainBox, 1f, 1f)
-
-            mainBox.radius = 0f
-
-        }
-        mainBox.layoutParams = layoutParams
-        mainBox.requestLayout() // Force layout update
-
-    }
-
-     */
 
 
 }

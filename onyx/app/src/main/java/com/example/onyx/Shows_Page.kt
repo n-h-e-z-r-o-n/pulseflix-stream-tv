@@ -324,15 +324,18 @@ class Shows_Page : AppCompatActivity() {
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         setupRecyclerViews()
-        HomeData()
-        categoryShow()
 
-        fetchMovies()
-        fetchTvShows()
-        filter()
-        tvFavoritesList()
-        notificationS()
-        watchedList()
+        CoroutineScope(Dispatchers.Main).launch {
+            HomeData()
+            categoryShow()
+
+            fetchMovies()
+            fetchTvShows()
+            filter()
+            tvFavoritesList()
+            notificationS()
+            watchedList()
+        }
     }
 
     override fun onResume() {
@@ -354,9 +357,11 @@ class Shows_Page : AppCompatActivity() {
         }
 
 
-        notificationS()
-        //tvFavoritesList()
-        watchedList()
+        CoroutineScope(Dispatchers.Main).launch {
+            notificationS()
+            tvFavoritesList()
+            watchedList()
+        }
     }
 
 

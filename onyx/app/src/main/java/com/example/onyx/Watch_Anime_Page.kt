@@ -116,9 +116,6 @@ class Watch_Anime_Page : AppCompatActivity() {
             }
 
         }
-
-
-
     }
 
 
@@ -374,13 +371,15 @@ class Watch_Anime_Page : AppCompatActivity() {
             val cWatchSeek_bar = cardView.findViewById<SeekBar>(R.id.cWatchSeek_bar)
 
 
-            try{
+            /*try{
                 val imageUrl = SeasonIMGArray.random()
                 Glide.with(this)
                     .load(imageUrl)
                     .centerCrop()
                     .into(epImg)
             }catch (e:Exception){}
+
+             */
 
 
 

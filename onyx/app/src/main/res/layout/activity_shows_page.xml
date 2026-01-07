@@ -126,9 +126,9 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:nextFocusLeft="@+id/HomeAnimeBtn"
-                    android:nextFocusUp="@+id/cNotificationAnimeBtn"
-                    android:nextFocusDown="@+id/DubbedAnimeBtn"
+                    android:nextFocusLeft="@+id/HomeBtn"
+                    android:nextFocusUp="@+id/cNotificationBtn"
+                    android:nextFocusDown="@+id/MoviesBtn"
                     android:background="@drawable/background_hovor"
                     android:padding="5dp"
                     tools:ignore="UseCompoundDrawables,UselessParent">
@@ -163,9 +163,9 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:nextFocusLeft="@+id/DubbedAnimeBtn"
-                    android:nextFocusUp="@+id/HomeAnimeBtn"
-                    android:nextFocusDown="@+id/PopularAnimeBtn"
+                    android:nextFocusLeft="@+id/MoviesBtn"
+                    android:nextFocusUp="@+id/HomeBtn"
+                    android:nextFocusDown="@+id/seriesBtn"
                     android:background="@drawable/background_hovor"
                     android:padding="5dp"
                     tools:ignore="UseCompoundDrawables,UselessParent">
@@ -200,9 +200,9 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:nextFocusLeft="@+id/PopularAnimeBtn"
-                    android:nextFocusUp="@+id/DubbedAnimeBtn"
-                    android:nextFocusDown="@+id/SearchAnimeBtn"
+                    android:nextFocusLeft="@+id/seriesBtn"
+                    android:nextFocusUp="@+id/MoviesBtn"
+                    android:nextFocusDown="@+id/SearchBtn"
                     android:background="@drawable/background_hovor"
                     android:padding="5dp"
                     tools:ignore="UseCompoundDrawables,UselessParent">
@@ -237,9 +237,9 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:nextFocusLeft="@+id/SearchAnimeBtn"
-                    android:nextFocusUp="@+id/PopularAnimeBtn"
-                    android:nextFocusDown="@+id/FavAnimeBtn"
+                    android:nextFocusLeft="@+id/SearchBtn"
+                    android:nextFocusUp="@+id/seriesBtn"
+                    android:nextFocusDown="@+id/FilterBtn"
                     android:background="@drawable/background_hovor"
                     android:padding="5dp"
                     tools:ignore="UseCompoundDrawables,UselessParent">
@@ -273,9 +273,9 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:nextFocusLeft="@+id/SearchAnimeBtn"
-                    android:nextFocusUp="@+id/PopularAnimeBtn"
-                    android:nextFocusDown="@+id/FavAnimeBtn"
+                    android:nextFocusLeft="@+id/FilterBtn"
+                    android:nextFocusUp="@+id/SearchBtn"
+                    android:nextFocusDown="@+id/FavBtn"
                     android:background="@drawable/background_hovor"
                     android:padding="5dp"
                     tools:ignore="UseCompoundDrawables,UselessParent">
@@ -310,9 +310,9 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:nextFocusLeft="@+id/FavAnimeBtn"
-                    android:nextFocusUp="@+id/SearchAnimeBtn"
-                    android:nextFocusDown="@+id/cWatchAnimeBtn"
+                    android:nextFocusLeft="@+id/FavBtn"
+                    android:nextFocusUp="@+id/FilterBtn"
+                    android:nextFocusDown="@+id/cWatchBtn"
                     android:background="@drawable/background_hovor"
                     android:padding="5dp"
                     tools:ignore="UseCompoundDrawables,UselessParent">
@@ -348,9 +348,9 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:nextFocusUp="@+id/FavAnimeBtn"
-                    android:nextFocusDown="@+id/cNotificationAnimeBtn"
-                    android:nextFocusLeft="@+id/cWatchAnimeBtn"
+                    android:nextFocusUp="@+id/FavBtn"
+                    android:nextFocusDown="@+id/cNotificationBtn"
+                    android:nextFocusLeft="@+id/cWatchBtn"
                     android:padding="5dp"
                     android:background="@drawable/background_hovor"
                     tools:ignore="UselessParent">
@@ -385,9 +385,9 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:nextFocusUp="@+id/cWatchAnimeBtn"
-                    android:nextFocusDown="@+id/HomeAnimeBtn"
-                    android:nextFocusLeft="@+id/cNotificationAnimeBtn"
+                    android:nextFocusUp="@+id/cWatchBtn"
+                    android:nextFocusDown="@+id/HomeBtn"
+                    android:nextFocusLeft="@+id/cNotificationBtn"
                     android:padding="5dp"
                     android:background="@drawable/background_hovor"
                     tools:ignore="UselessParent">
@@ -1197,6 +1197,6 @@
     </androidx.cardview.widget.CardView>
 
 
-    <include layout="@layout/side_bar"/>
+    <include layout="@layout/side_bar" android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

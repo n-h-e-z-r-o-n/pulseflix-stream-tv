@@ -34,10 +34,10 @@ import android.view.Gravity
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.AdapterView
 import com.example.onyx.Database.AppDatabase
-import com.example.onyx.OnyxObjects.GlobalUtils
-import com.example.onyx.OnyxObjects.LoadingAnimation
 import com.example.onyx.OnyxClasses.CustomKeyboardManager
 import com.example.onyx.OnyxClasses.OnSearchListener
+import com.example.onyx.OnyxObjects.GlobalUtils
+import com.example.onyx.OnyxObjects.LoadingAnimation
 
 
 class PayWall : AppCompatActivity() {
@@ -46,11 +46,12 @@ class PayWall : AppCompatActivity() {
     private var isProcessing: Boolean = false
     private var slideshowJob: Job? = null
     private lateinit var btnMpesaPayment: Button
+
+    private lateinit var keyboardLayout: LinearLayout
+
     private lateinit var etMpesaPhone: EditText
     private lateinit var progressBar: ProgressBar
     private lateinit var spCountry: Spinner
-    private lateinit var keyboardManager: CustomKeyboardManager
-    private lateinit var keyboardLayout: LinearLayout
 
     private lateinit var mpesaFeedbackBox: TextView
     private val INTASEND_SECRET_KEY = "Bearer ISSecretKey_live_e9d3162e-95cb-42a4-b64b-ee378525ca5a"
@@ -73,6 +74,7 @@ class PayWall : AppCompatActivity() {
         db = AppDatabase(this)
 
         ////////////////////////////////////////////////////////////////////////////////////////////
+
         progressBar =  findViewById<ProgressBar>(R.id.MpesaProgressBar)
         mpesaFeedbackBox = findViewById<TextView>(R.id.mpesaFeedbackBox)
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,32 +102,12 @@ class PayWall : AppCompatActivity() {
         etMpesaPhone  = findViewById<EditText>(R.id.etMpesaPhone)
         spCountry  = findViewById<Spinner>(R.id.spCountry)
 
-        // Prevent system keyboard from appearing
-        etMpesaPhone.showSoftInputOnFocus = false
-
-        keyboardLayout = findViewById(R.id.keyboard_layout)
-        keyboardManager = CustomKeyboardManager(this, etMpesaPhone, keyboardLayout, object : OnSearchListener {
-            override fun EnterActionTrigger(query: String) {
-                keyboardManager.hideKeyboard()
-            }
-        })
-
-        etMpesaPhone.setOnClickListener {
-            keyboardManager.showKeyboard()
-        }
-
-        etMpesaPhone.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                keyboardManager.showKeyboard()
-            } else {
-                // Optional: hide if focus lost, but might want to keep if interacting with keyboard
-            }
-        }
-
+        /*
         animateCardViewScale(PaymentContainer, 0.6f, 0.6f)
         val params = btnPurchase.layoutParams as LinearLayout.LayoutParams
         params.gravity = Gravity.CENTER_HORIZONTAL
         btnPurchase.layoutParams = params
+         */
 
         PaymentContainer.post {
             PaymentContainer.pivotX = PaymentContainer.width / 2f
@@ -277,12 +259,7 @@ class PayWall : AppCompatActivity() {
                 country.contains("Kenya", ignoreCase = true) -> {
                     sendStkPush(amount, phone)
                 }
-                country.contains("Uganda", ignoreCase = true) -> {
-                    sendIntaSendXbPush(amount, phone, "UGX")
-                }
-                country.contains("Tanzania", ignoreCase = true) -> {
-                    sendIntaSendXbPush(amount, phone, "TZS")
-                }
+
                 else -> {
                     Toast.makeText(this, "Please select a valid country", Toast.LENGTH_SHORT).show()
                     showLoading(false)
@@ -290,7 +267,10 @@ class PayWall : AppCompatActivity() {
             }
         }
 
+
     }
+
+
 
     
 
@@ -298,13 +278,9 @@ class PayWall : AppCompatActivity() {
 
     private fun getPriceAmount(country: String, plan: Plan): String {
         val isKenya = country.contains("Kenya", true)
-        val isUganda = country.contains("Uganda", true)
-        val isTanzania = country.contains("Tanzania", true)
 
         return when {
             isKenya -> when (plan) { Plan.MONTHLY -> "20"; Plan.QUARTERLY -> "50"; Plan.YEARLY -> "180" }
-            isUganda -> when (plan) { Plan.MONTHLY -> "5000"; Plan.QUARTERLY -> "12000"; Plan.YEARLY -> "42000" }
-            isTanzania -> when (plan) { Plan.MONTHLY -> "5000"; Plan.QUARTERLY -> "12000"; Plan.YEARLY -> "42000" }
             else -> when (plan) { Plan.MONTHLY -> "20"; Plan.QUARTERLY -> "50"; Plan.YEARLY -> "180" }
         }
     }
@@ -438,61 +414,7 @@ class PayWall : AppCompatActivity() {
         }
     }
 
-    private fun sendIntaSendXbPush(amount: String, phone: String, currency: String = "UGX") {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val url = URL("https://api.intasend.com/api/v1/payment/intasend-xb-push/")
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "POST"
-                connection.connectTimeout = 15000
-                connection.readTimeout = 15000
-                connection.setRequestProperty("accept", "application/json")
-                connection.setRequestProperty("Content-Type", "application/json")
-                connection.setRequestProperty("Authorization", INTASEND_SECRET_KEY)
-                connection.doOutput = true
 
-                val jsonBody = """
-                {
-                    "amount": "$amount",
-                    "phone_number": "$phone",
-                    "currency": "$currency"
-                }
-                """.trimIndent()
-
-                connection.outputStream.use { os ->
-                    val input = jsonBody.toByteArray(Charsets.UTF_8)
-                    os.write(input, 0, input.size)
-                }
-
-                val responseCode = connection.responseCode
-                val response = if (responseCode in 200..299) {
-                    connection.inputStream.bufferedReader().use { it.readText() }
-                } else {
-                    connection.errorStream?.bufferedReader()?.use { it.readText() } ?: "Error"
-                }
-
-                withContext(Dispatchers.Main) {
-                    if (responseCode == 200) {
-                        Log.d("INTASEND_XB_PUSH", "Response: $response")
-                        mpesaFeedbackBox.text = "STK Push sent! Check your phone."
-
-                        val json = JSONObject(response)
-                        val invoiceId = json.getJSONObject("invoice").getString("invoice_id")
-                        checkPaymentStatus(invoiceId)
-                    } else {
-                        mpesaFeedbackBox.text = response
-                        showLoading(false)
-
-                    }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    mpesaFeedbackBox.text = "Error: ${e.message}"
-                    showLoading(false)
-                }
-            }
-        }
-    }
 
 
     private fun checkPaymentStatus(invoiceId: String) {
@@ -549,8 +471,6 @@ class PayWall : AppCompatActivity() {
                         }
                         if (state == "COMPLETE" || state == "FAILED") break
                     }
-
-
                     delay(15000)
                     attempts++
                 } catch (e: Exception) {
@@ -592,15 +512,6 @@ class PayWall : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         slideshowJob?.cancel()
-    }
-
-
-    override fun onBackPressed() {
-        if (::keyboardManager.isInitialized && keyboardManager.isKeyboardVisible()) {
-            keyboardManager.hideKeyboard()
-        } else {
-            super.onBackPressed()
-        }
     }
 
 
