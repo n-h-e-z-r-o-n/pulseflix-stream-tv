@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.os.Process
@@ -16,10 +17,16 @@ import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.onyx.R
+import kotlin.Float
 import kotlin.random.Random
 
 object GlobalUtils {
@@ -383,6 +390,17 @@ object GlobalUtils {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+    private var dp50: Float = 0f
+    private var dp90: Float = 0f
+    private var dp120: Float = 0f
+    private var dp140: Float = 0f
+    private var dp150: Float = 0f
+    private var dp250: Float = 0f
+
+    private lateinit var elevations: FloatArray
+    private lateinit var scales : FloatArray
+    private lateinit var translations  : FloatArray
+
     fun setupCardStackFromContainer(
         container: FrameLayout,
         autoSwipeDelay: Long = 2500L
@@ -421,6 +439,21 @@ object GlobalUtils {
             autoSwipeHandler.postDelayed(autoSwipeRunnable!!, autoSwipeDelay)
         }
 
+
+        val context = container.context
+        dp50 = dp(context, 50f)
+        dp90 = dp(context, 90f)
+        dp120 = dp(context, 120f)
+        dp140 = dp(context, 140f)
+        dp150 = dp(context, 150f)
+        dp250 = dp(context, 250f)
+
+        translations = floatArrayOf(
+            0f, dp50, dp90, dp120, dp140, dp150
+        )
+        scales = floatArrayOf(1.0f, 0.95f, 0.9f, 0.85f, 0.8f, 0.7f)
+        elevations = floatArrayOf(6f, 5f, 4f, 3f, 2f, 1f)
+
         // ---------------- Setup Card Listeners ----------------
         cards.forEach { card ->
 
@@ -430,12 +463,17 @@ object GlobalUtils {
             card.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus) {
                     stopAutoSwipe()
+
+                    v.animate().cancel()    // Cancel ongoing animations before starting new ones
+
                     v.bringToFront()
                     v.animate()
                         .scaleX(1f)
                         .scaleY(1f)
                         .translationX(dp(container.context,0f))
                         .setDuration(200)
+                        .setInterpolator(AccelerateDecelerateInterpolator())
+                        .withLayer()
                         .start()
                     v.elevation = 7f
                 } else {
@@ -457,10 +495,24 @@ object GlobalUtils {
             }
         }
 
+        // ---------------- Cleanup on View Detach -------------------------------------------------
+        container.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(v: View) {}
+
+            override fun onViewDetachedFromWindow(v: View) {
+                stopAutoSwipe()
+                container.removeOnAttachStateChangeListener(this)
+
+                // Clear all listeners to prevent memory leaks
+                cards.forEach { card ->
+                    card.setOnFocusChangeListener(null)
+                    card.setOnKeyListener(null)
+                }
+            }
+        })
 
 
-
-        // ---------------- Initial Layout & Focus ----------------
+        // ---------------- Initial Layout & Focus -------------------------------------------------
         //container.getChildAt(container.childCount - 1)?.requestFocus()
         layoutStack(container)
         container.postDelayed({ if (!container.hasFocus()) startAutoSwipe() }, 2000)
@@ -474,25 +526,23 @@ object GlobalUtils {
         for (i in 0 until count) {
 
             val card = container.getChildAt(i)
+
             val posFromTop = count - 1 - i
 
-            val (tx, scale, elevation) = when (posFromTop) {
-                0 -> Triple(0f, 1.0f, 6f)
-                1 -> Triple(50f, 0.95f, 5f)
-                2 -> Triple(90f, 0.9f, 4f)
-                3 -> Triple(120f, 0.85f, 3f)
-                4 -> Triple(140f, 0.8f, 2f)
-                else -> Triple(150f, 0.7f, 1f)
-            }
+            val index = posFromTop.coerceAtMost(5)
+
+
 
             card.animate()
-                .translationX(dp(container.context,tx))
-                .scaleX(scale)
-                .scaleY(scale)
+                .translationX(translations[index])
+                .scaleX(scales[index])
+                .scaleY(scales[index])
                 .setDuration(220)
+                .setInterpolator(AccelerateDecelerateInterpolator())
+                .withLayer() // Use hardware layer for smoother animation
                 .start()
 
-            card.elevation = elevation
+            card.elevation = elevations[index]
         }
     }
 
@@ -501,15 +551,21 @@ object GlobalUtils {
         val top = container.getChildAt(container.childCount - 1)
 
         top.animate()
-            .translationXBy(dp(container.context,-250f))
+            .translationXBy(-dp250)
             .scaleX(0.85f)
             .scaleY(0.85f)
             .rotation(-5f)
             .setDuration(220)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .withLayer()
             .withEndAction {
                 top.rotation = 0f
-                container.removeView(top)
-                container.addView(top, 0)
+
+                // Optimized view reordering
+                val parent = top.parent as? ViewGroup
+                parent?.removeView(top)
+                parent?.addView(top, 0)
+
                 layoutStack(container)
 
                 if (keepFocus) {
@@ -524,15 +580,21 @@ object GlobalUtils {
         val bottom = container.getChildAt(0)
 
         bottom.animate()
-            .translationXBy(dp(container.context,-250f))
+            .translationXBy(-dp250)
             .scaleX(0.85f)
             .scaleY(0.85f)
             .rotation(-5f)
             .setDuration(220)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .withLayer()
             .withEndAction {
                 bottom.rotation = 0f
-                container.removeView(bottom)
-                container.addView(bottom)
+
+                // Optimized view reordering
+                val parent = bottom.parent as? ViewGroup
+                parent?.removeView(bottom)
+                parent?.addView(bottom)
+
                 layoutStack(container)
 
                 if (keepFocus) {
@@ -604,8 +666,61 @@ object GlobalUtils {
         attachFocusListeners(parent)
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    fun enableFullViewOnDescendantFocus(
+        parent: ViewGroup,
+        descendant: View
+    ) {
+        descendant.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) return@setOnFocusChangeListener
+
+            Log.d("FULL_FOCUS", "Focused: $v inside $parent")
+
+            parent.post {
+                scrollParentFullyIntoView(parent)
+            }
+        }
+    }
+
+    private fun scrollParentFullyIntoView(parent: View) {
+        val scrollContainer = findScrollParent(parent) ?: return
+
+        val rect = Rect()
+        parent.getDrawingRect(rect)
+
+        // Convert rect to scroll container coordinates
+        scrollContainer.offsetDescendantRectToMyCoords(parent, rect)
+
+        scrollContainer.requestChildRectangleOnScreen(
+            parent,
+            rect,
+            true
+        )
+    }
+
+
+    private fun findScrollParent(view: View): ViewGroup? {
+        var parent = view.parent
+        while (parent is ViewGroup) {
+            when (parent) {
+                is ScrollView,
+                is HorizontalScrollView,
+                is NestedScrollView -> return parent
+            }
+            parent = parent.parent
+        }
+        return null
+    }
+
+
+
+
 
 
 
 
 }
+
+

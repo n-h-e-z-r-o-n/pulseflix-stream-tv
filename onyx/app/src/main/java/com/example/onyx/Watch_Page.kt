@@ -70,6 +70,10 @@ class Watch_Page : AppCompatActivity() {
     private lateinit var trailerButton :LinearLayout
     private lateinit var serverButton: LinearLayout
 
+    private lateinit var UIsection1: FrameLayout
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,6 +102,8 @@ class Watch_Page : AppCompatActivity() {
         watchButton = findViewById<LinearLayout>(R.id.watchNowButton)
         trailerButton = findViewById<LinearLayout>(R.id.TrailerButton)
         serverButton = findViewById<LinearLayout>(R.id.serverButton)
+
+        UIsection1 = findViewById<FrameLayout>(R.id.widget_1)
 
 
         //-------- Get extras from Intent-----------------------------------------------------------
@@ -152,10 +158,10 @@ class Watch_Page : AppCompatActivity() {
         val screenHeight = displayMetrics.heightPixels
 
 
-        val mainWidget1 = findViewById<FrameLayout>(R.id.widget_1)
-        val params = mainWidget1.layoutParams
+
+        val params = UIsection1.layoutParams
         params.height = (screenHeight * 0.8).toInt()
-        mainWidget1.layoutParams = params
+        UIsection1.layoutParams = params
 
         // ---------- LOGOS ------------------------------------------------------------------------
         val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
@@ -299,7 +305,7 @@ class Watch_Page : AppCompatActivity() {
 
 
                 params.height = (screenHeight * 1).toInt()
-                mainWidget1.layoutParams = params
+                UIsection1  .layoutParams = params
 
 
                 watchButton.visibility = View.GONE
@@ -333,6 +339,11 @@ class Watch_Page : AppCompatActivity() {
 
             trailerButton.setOnClickListener {
             }
+
+            GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, serverButton )
+
+            GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, trailerButton )
+            GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, watchButton )
 
 
             setupFavoriteButton(
@@ -465,6 +476,8 @@ class Watch_Page : AppCompatActivity() {
 
             container.addView(seasonButton)
 
+            GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, seasonButton )
+
             if (track == 0) {
                 firstButton = seasonButton  // 👈 store reference to first button
             }
@@ -579,6 +592,7 @@ class Watch_Page : AppCompatActivity() {
                                 episodesDescription = episodes.optString("overview", ""),
                                 seriesId = seriesId,
                                 seasonNumber = episodes.optString("season_number", ""),
+                                parentView = UIsection1
                             )
                         )
                     }

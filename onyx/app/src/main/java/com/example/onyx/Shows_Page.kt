@@ -1,6 +1,7 @@
 package com.example.onyx
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +34,7 @@ import java.net.URL
 import com.bumptech.glide.request.target.Target
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import com.example.onyx.FetchData.TMDBapi
 import com.example.onyx.OnyxClasses.CategoryAdapter
 import com.example.onyx.OnyxClasses.CustomKeyboardManager
 import com.example.onyx.OnyxClasses.EqualSpaceItemDecoration
@@ -108,6 +111,8 @@ class Shows_Page : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
+
+    private lateinit var fetchTMDB: TMDBapi
     private var userId: Int = -1
 
 
@@ -122,7 +127,7 @@ class Shows_Page : AppCompatActivity() {
         LoadingAnimation.setup(this, R.raw.b)
         //LoadingAnimation.show(this)
         NavAction.setupSidebar(this)
-
+        fetchTMDB = TMDBapi(this)
         db = AppDatabase(this)         // Initialize database
         sm = SessionManger(this)
         userId = sm.getUserId()
@@ -325,10 +330,12 @@ class Shows_Page : AppCompatActivity() {
 
         setupRecyclerViews()
 
-        CoroutineScope(Dispatchers.Main).launch {
+
+
+
+        lifecycleScope.launch {
             HomeData()
             categoryShow()
-
             fetchMovies()
             fetchTvShows()
             filter()
@@ -336,6 +343,7 @@ class Shows_Page : AppCompatActivity() {
             notificationS()
             watchedList()
         }
+
     }
 
     override fun onResume() {
@@ -357,11 +365,23 @@ class Shows_Page : AppCompatActivity() {
         }
 
 
-        CoroutineScope(Dispatchers.Main).launch {
+        lifecycleScope.launch {
             notificationS()
             tvFavoritesList()
             watchedList()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // Clear all adapters
+        movieAdapter.clearItems()
+        tvAdapter.clearItems()
+        searchAdapter.clearItems()
+        filterAdapter.clearItems()
+
+
     }
 
 
@@ -426,11 +446,7 @@ class Shows_Page : AppCompatActivity() {
         //------------------------------------------------------------------------------------------
 
         faveRecyclerView = findViewById(R.id.faveRecycler)
-        faveRecyclerView.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
+        faveRecyclerView.layoutManager = GridLayoutManager(this@Shows_Page, 1)
         faveRecyclerView.addItemDecoration(EqualSpaceItemDecoration(Spacing))
 
         //------------------------------------------------------------------------------------------
@@ -539,39 +555,18 @@ class Shows_Page : AppCompatActivity() {
 
 
 
-        CoroutineScope(Dispatchers.IO).launch {
-
-            repeat(10) { attempt ->
-                try {
                     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-                    val url3 =
-                        "https://api.themoviedb.org/3/trending/all/day?primary_release_year=$currentYear"
-                    val connection3 = URL(url3).openConnection() as HttpURLConnection
-                    connection3.requestMethod = "GET"
-                    connection3.setRequestProperty("accept", "application/json")
-                    connection3.setRequestProperty(
-                        "Authorization",
-                        "Bearer ${BuildConfig.TM_K}"
-                    )
 
-                    val response3 = connection3.inputStream.bufferedReader().use { it.readText() }
-                    val jsonObject3 = org.json.JSONObject(response3)
-                    val moviesArray3 = jsonObject3.getJSONArray("results")
+
+                    val jsonObject = fetchTMDB.fetchTrendingData(currentYear.toString())
+                    Log.e("DEBUG_Watch", jsonObject.toString())
+                    if (jsonObject != null) {
+
+                    val moviesArray3 = jsonObject.getJSONArray("results")
 
                     Log.e("DEBUG_MAIN_Slider raw", moviesArray3.toString())
 
-                    withContext(Dispatchers.Main) {
 
-                        /*
-                        val mergedMoviesArray = JSONArray()
-
-                        listOf(moviesArray, moviesArray2, moviesArray3).forEach { array ->
-                            for (i in 0 until array.length()) {
-                                mergedMoviesArray.put(array.getJSONObject(i))
-                            }
-                        }
-
-                         */
 
 
                         for (i in 0 until moviesArray3.length()) {
@@ -648,7 +643,10 @@ class Shows_Page : AppCompatActivity() {
 
                             card.setOnClickListener {
                                 val context = card.context
-                                val intent = android.content.Intent(context, Watch_Anime_Page::class.java)
+                                val intent = Intent(context, Watch_Page::class.java)
+                                intent.putExtra("imdb_code", id)
+                                intent.putExtra("type", type)
+                                context.startActivity(intent)
 
                             }
 
@@ -656,22 +654,24 @@ class Shows_Page : AppCompatActivity() {
 
                         }
 
-                        GlobalUtils.setupCardStackFromContainer(container, 7000L)
-                        //LoadingAnimation.hide(this@Shows_Page)
-                    }
-
-                    return@launch
-                } catch (e: IOException) {
-                    withContext(Dispatchers.Main) {
-                        Log.e("DEBUG_MAINSliderPage", "Network error ", e)
+                        GlobalUtils.setupCardStackFromContainer(container, 11000L)
+                        LoadingAnimation.hide(this@Shows_Page)
+                    }else{
                         //LoadingAnimation.setup(this@Shows_Page, R.raw.error)
                         //LoadingAnimation.show(this@Shows_Page)
+
                     }
-                    delay(30_000)
-                }
-            }
-        }
+
+
+
+
+
+
+
     }
+
+
+
 
 
     private fun categoryShow() {

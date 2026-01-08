@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             finish()
-        }, 500)
+        }, 10000)
 
     }
 

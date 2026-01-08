@@ -327,7 +327,7 @@ class AnimeAiringAdapter(
                 KeyEvent.KEYCODE_DPAD_LEFT -> {
                     if (position == 0) {
                         // First item - stop focus from moving out to the left
-                        return@setOnKeyListener true
+                        //return@setOnKeyListener true
                     }
                 }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
@@ -341,26 +341,6 @@ class AnimeAiringAdapter(
             false
         }
 
-        /*
-        holder.CardViewcontiner.setOnKeyListener { v, keyCode, event ->
-            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
-            val now = System.currentTimeMillis()
-            if (now - lastKeyTime < KEY_DEBOUNCE_DELAY) return@setOnKeyListener true
-            lastKeyTime = now
-
-            when (keyCode) {
-                KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    if (position == 0) return@setOnKeyListener true
-                }
-                KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                    if (position == items.size-1) return@setOnKeyListener true
-                }
-            }
-
-            false
-        }
-
-         */
     }
 
     override fun getItemCount() = items.size

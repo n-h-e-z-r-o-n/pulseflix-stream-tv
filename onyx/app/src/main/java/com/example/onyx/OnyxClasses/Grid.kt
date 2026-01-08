@@ -29,6 +29,7 @@ import com.example.onyx.FetchData.TMDBapi
 
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.Play
 import com.example.onyx.R
 import com.example.onyx.Shows_Page
@@ -1129,7 +1130,7 @@ class FavAdapter(
                         // Backdrop image
                         Glide.with(backdropView.context)
                             .load(item.backdropUrl)
-                            .override(Target.SIZE_ORIGINAL, backdropView.height) // scale height to container
+                            //.override(Target.SIZE_ORIGINAL, backdropView.height) // scale height to container
                             .into(backdropView)
 
                         // ✅ Set text properties correctly
@@ -1333,6 +1334,8 @@ class EpisodesAdapter(
         holder.ratingView.text = "★ ${ep.episodesRating}"
         holder.descView.text = ep.episodesDescription
 
+        GlobalUtils.enableFullViewOnDescendantFocus(ep.parentView, holder.itemView)
+
 
         val url = "https://image.tmdb.org/t/p/original${ep.episodesImage}"
         Glide.with(holder.itemView.context)
@@ -1417,6 +1420,7 @@ data class EpisodeItem(
     val episodesDescription: String = "",
     val seriesId: String = "",
     val seasonNumber: String = "",
+    val parentView: ViewGroup
 
 )
 

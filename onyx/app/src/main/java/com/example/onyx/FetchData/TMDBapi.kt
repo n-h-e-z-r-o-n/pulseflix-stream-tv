@@ -135,6 +135,40 @@ class TMDBapi(private val context: Context) {
         }
     }
 
+
+    fun fetchTrendingData(currentYear: String): JSONObject? {
+        return runBlocking {
+            async(Dispatchers.IO) {
+                try {
+                    val tvUrl =  "https://api.themoviedb.org/3/trending/all/day?primary_release_year=$currentYear"
+                    val connection = URL(tvUrl).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("accept", "application/json")
+                    connection.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = JSONObject(response)
+
+                    jsonObject.optJSONObject("data") ?: jsonObject
+
+                } catch (e: IOException) {
+                    Log.e("fetchAnimeData", "Network error: ${e.message}")
+                    null
+                } catch (e: JSONException) {
+                    Log.e("fetchAnimeData", "JSON error: ${e.message}")
+                    null
+                } catch (e: Exception) {
+                    Log.e("fetchAnimeData", "Unexpected error: ${e.message}")
+                    null
+                }
+            }.await()
+        }
+    }
+
+
     fun fetchShowData(showId: String, type:String): JSONObject? {
         return runBlocking {
             async(Dispatchers.IO) {

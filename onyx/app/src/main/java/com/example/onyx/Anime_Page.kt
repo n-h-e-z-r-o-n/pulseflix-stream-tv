@@ -15,6 +15,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -111,6 +112,9 @@ class Anime_Page : AppCompatActivity() {
 
 
          NavAction.setupSidebar(this@Anime_Page)
+         //LoadingAnimation.setup(this@Anime_Page)
+         //LoadingAnimation.show(this@Anime_Page)
+
 
          db = AppDatabase(this)         // Initialize database
          sm = SessionManger(this)
@@ -347,7 +351,7 @@ class Anime_Page : AppCompatActivity() {
              false
          )
           */
-         faveRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,150,gapUsed))
+         faveRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,210,gapUsed))
 
          faveRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
 
@@ -366,17 +370,35 @@ class Anime_Page : AppCompatActivity() {
          ////////////////////////////////////////////////////////////////////////////////////////////
          ////////////////////////////////////////////////////////////////////////////////////////////
 
+         setupSearchUi()
 
-
-         CoroutineScope(Dispatchers.Main).launch {
-            LoadingAnimation.show(this@Anime_Page)
+         /*CoroutineScope(Dispatchers.Main).launch {
              animeHomeData()
              loadDubbedAnime()
              loadPopularAnime()
-             //loadRecentlyAnime()
-             setupSearchUi()
-             animeWatchedList()
-             notificationS()
+
+
+
+         }
+
+          */
+
+         window.decorView.post {
+
+                 lifecycleScope.launch {
+                     animeHomeData()
+                 }
+                 lifecycleScope.launch {
+                     loadDubbedAnime()
+
+                 }
+                 lifecycleScope.launch {
+                     loadPopularAnime()
+                 }
+                 lifecycleScope.launch {
+                     animeWatchedList()
+                     notificationS()
+                 }
          }
 
      }
@@ -419,8 +441,6 @@ class Anime_Page : AppCompatActivity() {
          val params = SpotlightContaner.layoutParams
          params.height = (screenHeight * 0.75).toInt()
          SpotlightContaner.layoutParams = params
-
-         LoadingAnimation.setup(this@Anime_Page, R.raw.b)
 
 
          val jsonObject = fetchAnimeAPI.animeHome()
@@ -499,8 +519,6 @@ class Anime_Page : AppCompatActivity() {
 
          GlobalUtils.setupCardStackFromContainer(SpotlightContaner, 7000L)
 
-         LoadingAnimation.hide(this@Anime_Page)
-
 
      }
 
@@ -543,7 +561,6 @@ class Anime_Page : AppCompatActivity() {
          Log.e("DEBUG_MAIN_Slider 1", trendingItems.toString())
 
 
-         LoadingAnimation.hide(this@Anime_Page)
          val recyclerView = findViewById<RecyclerView>(R.id.Anime_Trending_widget)
          recyclerView.layoutManager = LinearLayoutManager(
              this@Anime_Page,
@@ -585,7 +602,6 @@ class Anime_Page : AppCompatActivity() {
 
          Log.e("DEBUG_MAIN_Slider 1", airingItems.toString())
 
-         LoadingAnimation.hide(this@Anime_Page)
          val recyclerView = findViewById<RecyclerView>(R.id.Anime_Airing_widget)
          recyclerView.layoutManager = LinearLayoutManager(
              this@Anime_Page,
@@ -665,9 +681,7 @@ class Anime_Page : AppCompatActivity() {
 
                      return@launch
                  } catch (e: java.net.ConnectException) {
-                     withContext(Dispatchers.Main) {
-                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                     }
+
                      Log.e("DEBUG_TAG_ANIME dubbed", "Connect Error", e)
                      currentRecentlyAnimePage--
                      return@repeat
@@ -748,9 +762,7 @@ class Anime_Page : AppCompatActivity() {
 
                      return@launch
                  } catch (e: java.net.ConnectException) {
-                     withContext(Dispatchers.Main) {
-                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                     }
+
                      Log.e("DEBUG_TAG_ANIME Popular", "Connect Error", e)
                      currentPopularAnimePage--
                      return@repeat
@@ -831,17 +843,13 @@ class Anime_Page : AppCompatActivity() {
 
                      return@launch
                  } catch (e: java.net.ConnectException) {
-                     withContext(Dispatchers.Main) {
-                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                     }
+
                      Log.e("DEBUG_TAG_ANIME recent", "Connect Error", e)
                      currentRecentlyAnimePage--
                      return@repeat
 
                  } catch (e: java.io.FileNotFoundException) {
-                     withContext(Dispatchers.Main) {
-                         LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-                     }
+
                      Log.e(
                          "DEBUG_TAG_ANIME recent",
                          "URL Not Found (404/403) at page $currentRecentlyAnimePage",

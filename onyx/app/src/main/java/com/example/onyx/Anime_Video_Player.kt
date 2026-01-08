@@ -339,17 +339,15 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
                     Log.e("ANIME_PLAYER", "EPISODE: $eNumber  , ID: $episodeId, CLICKED")
 
-
-                    selectedEpisodeView?.isSelected = false
-                    episodeBtn.isSelected = true
-                    selectedEpisodeView = episodeBtn
-
-                    holdEpisodeNo = eNumber
-
                     saveContinueWatching()
 
                     CoroutineScope(Dispatchers.Main).launch {
+                        holdEpisodeNo = eNumber
                         fetchStreamingLinks(episodeId)
+
+                        selectedEpisodeView?.isSelected = false
+                        episodeBtn.isSelected = true
+                        selectedEpisodeView = episodeBtn
                     }
                 }
 
@@ -390,141 +388,186 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
     private fun fetchStreamingLinks(episodeId: String) {
         isEpisodeLoading = true
+        val maxAttempts = 3
+        var attempt = 0
 
-        val jsonObjectServerInfo = fetchAnime.animeEpisodeServers(episodeId)
-        if (jsonObjectServerInfo == null) {
-            isEpisodeLoading = false
-            Log.e("ANIME_PLAYER", "StreamingLinks=$episodeId FAILED")
-            return
-        }
-        Log.e("ANIME_PLAYER", "StreamingLinks=$episodeId FETCHED")
+        while (attempt < maxAttempts) {
+           attempt++
+           val jsonObjectServerInfo = fetchAnime.animeEpisodeServers(episodeId)
+           if (jsonObjectServerInfo != null) {
 
-        val dataServers = jsonObjectServerInfo.getJSONObject("data")
+               Log.e("ANIME_PLAYER", "StreamingLinks=$episodeId FETCHED")
 
-        val subServers = dataServers.getJSONArray("sub")
-        val dubServers = dataServers.getJSONArray("dub")
-        val rawServers = dataServers.getJSONArray("raw")
+               val dataServers = jsonObjectServerInfo.getJSONObject("data")
 
-        // Determine initial default
-        val (defaultServerName, defaultCategory) = when {
-            dubServers.length() > 0 -> dubServers.getJSONObject(0).getString("serverName") to "dub"
-            subServers.length() > 0 -> subServers.getJSONObject(0).getString("serverName") to "sub"
-            rawServers.length() > 0 -> rawServers.getJSONObject(0).getString("serverName") to "raw"
-            else -> return
-        }
+               val subServers = dataServers.getJSONArray("sub")
+               val dubServers = dataServers.getJSONArray("dub")
+               val rawServers = dataServers.getJSONArray("raw")
 
-        fetchServerSources(episodeId, defaultServerName, defaultCategory)
+               // Determine initial default
+               val (defaultServerName, defaultCategory) = when {
+                   dubServers.length() > 0 -> dubServers.getJSONObject(0)
+                       .getString("serverName") to "dub"
 
-        val btnServer = findViewById<TextView>(R.id.btn_server)
+                   subServers.length() > 0 -> subServers.getJSONObject(0)
+                       .getString("serverName") to "sub"
 
-        btnServer.setOnClickListener {
-            val builder = android.app.AlertDialog.Builder(this@Anime_Video_Player, R.style.CustomDialogTheme)
-            builder.setTitle("Select Server")
+                   rawServers.length() > 0 -> rawServers.getJSONObject(0)
+                       .getString("serverName") to "raw"
 
-            val container = LinearLayout(this@Anime_Video_Player).apply {
-                orientation = LinearLayout.VERTICAL
-                setPadding(40, 24, 40, 24)
-                setBackgroundColor(Color.TRANSPARENT)
+                   else -> return
+               }
+
+               fetchServerSources(episodeId, defaultServerName, defaultCategory)
+
+               val btnServer = findViewById<TextView>(R.id.btn_server)
+
+               btnServer.setOnClickListener {
+                   val builder = android.app.AlertDialog.Builder(
+                       this@Anime_Video_Player,
+                       R.style.CustomDialogTheme
+                   )
+                   builder.setTitle("Select Server")
+
+                   val container = LinearLayout(this@Anime_Video_Player).apply {
+                       orientation = LinearLayout.VERTICAL
+                       setPadding(40, 24, 40, 24)
+                       setBackgroundColor(Color.TRANSPARENT)
+                   }
+
+                   val scrollView = ScrollView(this@Anime_Video_Player).apply {
+                       addView(container)
+                   }
+
+                   var dialog: android.app.AlertDialog? = null
+
+                   fun addServerSection(title: String, servers: JSONArray) {
+                       val label = TextView(this@Anime_Video_Player).apply {
+                           text = "$title:"
+                           setTextColor(ContextCompat.getColor(context, android.R.color.white))
+                           textSize = 18f
+                           setTypeface(typeface, Typeface.BOLD)
+                           setPadding(0, 20, 0, 10)
+                       }
+                       container.addView(label)
+
+                       for (i in 0 until servers.length()) {
+                           val server = servers.getJSONObject(i)
+                           val serverName = server.getString("serverName")
+
+                           val serverBtn = Button(this@Anime_Video_Player).apply {
+                               text = serverName
+                               setAllCaps(false)
+                               textSize = 14f
+                               background = ContextCompat.getDrawable(
+                                   context,
+                                   R.drawable.item_anime_episode_focus
+                               )
+                               setTextColor(ContextCompat.getColor(context, android.R.color.white))
+                               setOnClickListener {
+                                   Toast.makeText(
+                                       context,
+                                       "Switching to $title → $serverName",
+                                       Toast.LENGTH_SHORT
+                                   ).show()
+                                   dialog?.dismiss()
+
+                                   fetchServerSources(episodeId, serverName, title)
+                               }
+                           }
+                           container.addView(serverBtn)
+                       }
+                   }
+
+                   // Add sections
+                   addServerSection("sub", subServers)
+                   addServerSection("dub", dubServers)
+                   addServerSection("raw", rawServers)
+
+                   builder.setView(scrollView)
+                   builder.setNegativeButton("Cancel", null)
+
+                   dialog = builder.create()
+                   dialog.show()
+               }
+               isEpisodeLoading = false
+
+               break
+           }
+
+           Log.e("ANIME_PLAYER", "StreamingLinks=$episodeId FAILED")
+
+            if (attempt < maxAttempts) {
+                Thread.sleep(3000) // ⏳ wait 3 seconds before retry
             }
 
-            val scrollView = ScrollView(this@Anime_Video_Player).apply {
-                addView(container)
-            }
-
-            var dialog: android.app.AlertDialog? = null
-
-            fun addServerSection(title: String, servers: JSONArray) {
-                val label = TextView(this@Anime_Video_Player).apply {
-                    text = "$title:"
-                    setTextColor(ContextCompat.getColor(context, android.R.color.white))
-                    textSize = 18f
-                    setTypeface(typeface, Typeface.BOLD)
-                    setPadding(0, 20, 0, 10)
-                }
-                container.addView(label)
-
-                for (i in 0 until servers.length()) {
-                    val server = servers.getJSONObject(i)
-                    val serverName = server.getString("serverName")
-
-                    val serverBtn = Button(this@Anime_Video_Player).apply {
-                        text = serverName
-                        setAllCaps(false)
-                        textSize = 14f
-                        background = ContextCompat.getDrawable(context, R.drawable.item_anime_episode_focus)
-                        setTextColor(ContextCompat.getColor(context, android.R.color.white))
-                        setOnClickListener {
-                            Toast.makeText(context, "Switching to $title → $serverName", Toast.LENGTH_SHORT).show()
-                            dialog?.dismiss()
-
-                            fetchServerSources(episodeId, serverName, title)
-                        }
-                    }
-                    container.addView(serverBtn)
-                }
-            }
-
-            // Add sections
-            addServerSection("sub", subServers)
-            addServerSection("dub", dubServers)
-            addServerSection("raw", rawServers)
-
-            builder.setView(scrollView)
-            builder.setNegativeButton("Cancel", null)
-
-            dialog = builder.create()
-            dialog.show()
-        }
+       }
         isEpisodeLoading = false
+
     }
 
     private fun fetchServerSources(episodeId: String, serverName: String, category: String) {
 
-        val jsonObjectServerInfo = fetchAnime.animeEpisodeStreamingLinks(episodeId, serverName, category  )
-        if(jsonObjectServerInfo == null){
-            Log.e("ANIME_PLAYER", "PlAYER FAILED: $episodeId  , serverName: $serverName , category: $category, ")
-            return
+        val maxAttempts = 3
+        var attempt = 0
+
+        while (attempt < maxAttempts) {
+            val jsonObjectServerInfo =fetchAnime.animeEpisodeStreamingLinks(episodeId, serverName, category)
+            if (jsonObjectServerInfo != null) {
+
+                Log.e(
+                    "ANIME_PLAYER",
+                    "PlAYER STARTED: $episodeId  , serverName: $serverName , category: $category, "
+                )
+
+
+                saveContinueWatching()  // SAVE CURRENT PROGRESS BEFORE SWITCHING
+
+
+                currentEpisodeId = episodeId
+                currentSeasonId = holdSeasonId
+                currentPoster = holdPoster
+                currentSeasonTitle = holdSeasonTitle
+                currentEpisodeNumber = holdEpisodeNo
+
+
+                val data = jsonObjectServerInfo.getJSONObject("data")
+
+                val sources = data.getJSONArray("sources")
+                val vidUrl = sources.getJSONObject(0).getString("url")
+                videoUrl = vidUrl
+                val referer = data.getJSONObject("headers").optString("Referer")
+
+                Log.e("ANIME_PLAYER", "Loaded server=$serverName category=$category vidUrl=$vidUrl")
+
+
+                val btnServer = findViewById<TextView>(R.id.btn_server)
+                btnServer.text = "$category: $serverName"
+
+                resumePosition =
+                    fetchResumePosition() //db.getResumePosition(userId, currentEpisodeId, "anime").toLong()
+                hasAppliedResumePosition = false
+                // (Re)initialize player with new stream
+                exoPlayer?.release()
+                exoPlayer = initializePlayer(vidUrl, referer)
+                exoPlayer?.let { player ->
+                    playerView.player = player
+                    player.addListener(this@Anime_Video_Player)
+                    updatePlayPauseButton()
+                    updateMuteButton()
+                    updateSpeedButton()
+                    updateQualityButton()
+                }
+
+                break
+
+
+            }
+                attempt++
+                Log.e( "ANIME_PLAYER", "PlAYER FAILED: $episodeId  , serverName: $serverName , category: $category,")
+                Thread.sleep(3000) // ⏳ wait 3 seconds before retry
         }
 
-        Log.e("ANIME_PLAYER", "PlAYER STARTED: $episodeId  , serverName: $serverName , category: $category, ")
-
-        
-        saveContinueWatching()  // SAVE CURRENT PROGRESS BEFORE SWITCHING
-
-
-        currentEpisodeId =  episodeId
-        currentSeasonId = holdSeasonId
-        currentPoster = holdPoster
-        currentSeasonTitle = holdSeasonTitle
-        currentEpisodeNumber = holdEpisodeNo
-
-
-        val data = jsonObjectServerInfo.getJSONObject("data")
-
-        val sources = data.getJSONArray("sources")
-        val vidUrl = sources.getJSONObject(0).getString("url")
-        videoUrl = vidUrl
-        val referer = data.getJSONObject("headers").optString("Referer")
-
-        Log.e("ANIME_PLAYER", "Loaded server=$serverName category=$category vidUrl=$vidUrl")
-
-
-        val btnServer = findViewById<TextView>(R.id.btn_server)
-        btnServer.text = "$category: $serverName"
-
-        resumePosition = fetchResumePosition() //db.getResumePosition(userId, currentEpisodeId, "anime").toLong()
-
-        // (Re)initialize player with new stream
-        exoPlayer?.release()
-        exoPlayer = initializePlayer(vidUrl, referer)
-        exoPlayer?.let { player ->
-            playerView.player = player
-            player.addListener(this@Anime_Video_Player)
-            updatePlayPauseButton()
-            updateMuteButton()
-            updateSpeedButton()
-            updateQualityButton()
-        }
     }
 
 
@@ -893,6 +936,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         }
     }
 
+    private var hasAppliedResumePosition = false
     override fun onPlaybackStateChanged(playbackState: Int) {
         runOnUiThread {
             when (playbackState) {
@@ -905,12 +949,16 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                     val duration = exoPlayer?.duration ?: 0L
                     txtDuration.text = formatTime(duration)
                     seekBar.max = 1000
+
                     // Update quality display when video is ready
                     updateQualityButton()
-                    if (resumePosition > 0) {
+
+                    if (resumePosition > 0 && !hasAppliedResumePosition) {
                         exoPlayer?.seekTo(resumePosition)
-                        resumePosition = fetchResumePosition()
+                        hasAppliedResumePosition = true
+                        Log.d("ANIME_PLAYER", "Applied resume position: $resumePosition")
                     }
+
                     if (exoPlayer?.isPlaying == true) {
                         startProgressTracking()
                     }
