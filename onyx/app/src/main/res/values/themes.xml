@@ -12,6 +12,10 @@
 
     </style>
 
+    <style name="Theme.Onyx.Splash" parent="Theme.Onyx.Dark">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
     <!-- Light Theme -->
     <style name="Theme.Onyx.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="BG_color">#F5F5F5</item>

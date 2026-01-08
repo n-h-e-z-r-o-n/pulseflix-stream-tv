@@ -20,6 +20,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_Onyx_Dark)
         GlobalUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
