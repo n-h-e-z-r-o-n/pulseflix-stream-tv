@@ -1,4 +1,4 @@
-# ONYX Streaming App
+# ONYX Streaming App(Android Tv)
 <img width="841" height="196" alt="Screenshot 2026-01-09 002912" src="https://github.com/user-attachments/assets/8d8bd9ce-9b7a-4a04-a6a5-267813ea0d55" />
 
 
@@ -378,7 +378,7 @@ Legal Notice
 
 IMPORTANT: This application is for educational and personal use only.
 
-    Streamflix does not host, store, or distribute any copyrighted content
+    ONYX does not host, store, or distribute any copyrighted content
     All content is sourced from third-party providers and websites
     Users are solely responsible for ensuring they have legal rights to access any content
     The developers do not endorse or encourage copyright infringement
@@ -405,15 +405,5 @@ See [TermsAndConditionsActivity](file:///c:/Users/n-h-e-z-r-o-n/Desktop/TV%20PRO
 
 This is a private project. For inquiries, please contact the development team.
 
-## 📞 Support
 
-For technical support or questions about the app:
-- Check the in-app instructions (`Instraction.kt`)
-- Review the Terms and Conditions
-- Contact: support@onyx-streaming.app *(placeholder)*
 
----
-
-**Built with ❤️ for Android TV**
-
-*Last updated: January 2026*
