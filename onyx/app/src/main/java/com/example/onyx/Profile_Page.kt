@@ -58,9 +58,13 @@ class Profile_Page : AppCompatActivity() {
     
     // Data class for update info
     data class UpdateInfo(
+        @com.google.gson.annotations.SerializedName("versionCode")
         val versionCode: Int,
+        @com.google.gson.annotations.SerializedName("versionName")
         val versionName: String,
+        @com.google.gson.annotations.SerializedName("changelog")
         val changelog: String,
+        @com.google.gson.annotations.SerializedName("downloadUrl")
         val downloadUrl: String
     )
     
