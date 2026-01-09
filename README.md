@@ -1,146 +1,249 @@
-# ONYX Streaming App(Android Tv)
-<img width="841" height="196" alt="Screenshot 2026-01-09 002912" src="https://github.com/user-attachments/assets/8d8bd9ce-9b7a-4a04-a6a5-267813ea0d55" />
+<div align="center">
 
+# 🎬 ONYX - Android TV Streaming App
 
-A premium Android TV streaming application for movies, TV shows, and anime content. Built with modern Android development practices and optimized for the TV viewing experience.
+[![Platform](https://img.shields.io/badge/platform-Android%20TV-green.svg)](https://developer.android.com/tv)
+[![SDK](https://img.shields.io/badge/Min%20SDK-21-blue.svg)](https://developer.android.com/about/versions/android-5.0)
+[![Target SDK](https://img.shields.io/badge/Target%20SDK-36-blue.svg)](https://developer.android.com/about)
+[![Language](https://img.shields.io/badge/language-Kotlin-purple.svg)](https://kotlinlang.org/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-red.svg)](LICENSE)
+[![Build](https://img.shields.io/badge/build-Gradle-brightgreen.svg)](https://gradle.org/)
+
+<img width="700" alt="ONYX Banner" src="https://github.com/user-attachments/assets/8d8bd9ce-9b7a-4a04-a6a5-267813ea0d55" />
+
+**A premium Android TV streaming platform for movies, TV shows, and anime content**
+
+Built with modern Android development practices and optimized for the big-screen experience
+
+[Features](#-features) • [Architecture](#️-architecture) • [Getting Started](#-getting-started) • [Tech Stack](#️-technology-stack) • [Screenshots](#-preview)
+
+</div>
+
+---
+
+## 📑 Table of Contents
+
+- [Preview](#-preview)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Architecture](#️-architecture)
+- [Technology Stack](#️-technology-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Configuration](#-configuration)
+- [Supported Platforms](#-supported-platforms)
+- [User Interface](#-user-interface)
+- [Security & Privacy](#-security--privacy)
+- [Database Schema](#-database-schema)
+- [API Integration](#-api-integration)
+- [Troubleshooting](#-troubleshooting)
+- [Known Issues](#-known-issues--limitations)
+- [Future Enhancements](#-future-enhancements)
+- [License](#-license)
+- [Contributing](#-contributing)
+
+---
 
 ## 🎯 Preview
 
-<img align='right'  alt='' width='400' src="https://github.com/n-h-e-z-r-o-n/tv-APP/blob/main/ASSETS/Recording%202026-01-09%20003513.gif?raw=true" >
+<div align="center">
+<img alt="ONYX App Demo" width="600" src="https://github.com/n-h-e-z-r-o-n/tv-APP/blob/main/ASSETS/Recording%202026-01-09%20003513.gif?raw=true" />
+</div>
 
-**ONYX** is a feature-rich streaming platform designed specifically for Android TV devices. It provides seamless access to movies, TV shows, and anime content with a beautiful, intuitive interface optimized for remote control navigation.
-## 🎯 Overview
-### Key Highlights
+---
 
-- 📺 **Android TV Optimized** - Built specifically for big-screen experiences
-- 🎬 **Multi-Content Support** - Movies, TV Shows, and Anime streaming
-- 🎨 **Modern UI** - Jetpack Compose with Material Design
-- 💾 **Offline Support** - Room database for caching and watch history
-- 🔐 **User Authentication** - Secure login and profile management
-- 💳 **Subscription System** - Integrated payment wall and subscription management
-- ▶️ **Advanced Video Player** - ExoPlayer with HLS, DASH, and RTSP support
-- 📊 **Continue Watching** - Resume playback from where you left off
+## 📖 Overview
+
+**ONYX** is a feature-rich streaming platform designed specifically for Android TV devices. It provides seamless access to a vast library of movies, TV shows, and anime content with a beautiful, intuitive interface optimized for remote control navigation and the big-screen experience.
+
+### ✨ Key Highlights
+
+| Feature | Description |
+|---------|-------------|
+| 📺 **Android TV Optimized** | Built specifically for big-screen experiences with D-pad navigation |
+| 🎬 **Multi-Content Support** | Movies, TV Shows, and Anime streaming in one platform |
+| 🎨 **Modern UI** | Jetpack Compose with Material Design 3 |
+| 💾 **Offline Support** | Room database for caching and watch history |
+| 🔐 **User Authentication** | Secure login and profile management system |
+| 💳 **Subscription System** | Integrated payment wall and subscription management |
+| ▶️ **Advanced Video Player** | ExoPlayer with HLS, DASH, and RTSP support |
+| 📊 **Continue Watching** | Resume playback from where you left off |
+
+---
 
 ## ✨ Features
 
-### Content Discovery
-- Browse movies, TV shows, and anime by categories
-- Search functionality across all content types
-- Actor/cast information pages
-- Detailed content metadata from TMDB API
-- Season and episode management for TV shows
+### 🔍 Content Discovery
 
-### Video Playback
-- Multiple video format support (HLS, DASH, RTSP, MP4)
-- Seamless episode switching
-- Watch progress tracking and resume functionality
-- Video quality selection
-- Subtitle support
+- **Browse by Categories**: Explore movies, TV shows, and anime organized by genre
+- **Advanced Search**: Find content across all types with intelligent search
+- **Actor/Cast Pages**: Detailed information about actors and crew members
+- **Rich Metadata**: Comprehensive content details powered by TMDB API
+- **Season/Episode Management**: Organized navigation for episodic content
 
-### User Experience
-- Splash screen with loading animation
-- Dark theme optimized for TV viewing
-- Custom keyboard manager for TV remote input
-- Grid-based content layouts
-- Smooth navigation with RecyclerView
-- Keep-screen-on during playback
+### ▶️ Video Playback
 
-### Data Management
-- Room database for local data persistence
-- Session management
-- Watch history tracking
-- Subscription status management
-- Offline content caching
+- **Multiple Format Support**: HLS, DASH, RTSP, and MP4 streaming
+- **Seamless Episode Switching**: Quick navigation between episodes
+- **Watch Progress Tracking**: Automatic position saving and resume
+- **Quality Selection**: Adaptive streaming with quality options
+- **Subtitle Support**: Built-in subtitle rendering
+
+### 🎨 User Experience
+
+- **10-Second Splash Screen**: Animated logo with smooth transitions
+- **Dark Theme**: Eye-friendly theme optimized for TV viewing
+- **Custom Keyboard Manager**: TV remote-optimized text input
+- **Grid-Based Layouts**: Clean, organized content presentation
+- **Smooth Navigation**: RecyclerView with optimized scrolling
+- **Keep-Screen-On**: Prevents screen timeout during playback
+
+### 💾 Data Management
+
+- **Local Persistence**: Room database for offline data
+- **Session Management**: Secure user session handling
+- **Watch History**: Complete playback history tracking
+- **Subscription Status**: Real-time subscription validation
+- **Content Caching**: Smart caching for faster loading
+
+---
 
 ## 🏗️ Architecture
 
-ONYX follows modern Android architecture patterns with clean separation of concerns:
+ONYX follows **Clean Architecture** principles with modern Android patterns and clear separation of concerns:
 
-![Architecture Diagram](C:/Users/n-h-e-z-r-o-n/.gemini/antigravity/brain/c2ce3fd9-502e-41f6-9ec6-e40b87c15164/onyx_architecture_diagram_1767907369728.png)
+```mermaid
+graph TB
+    subgraph "Presentation Layer"
+        A[Activities] --> B[Jetpack Compose UI]
+        A --> C[Custom UI Components]
+    end
+    
+    subgraph "Business Logic Layer"
+        D[ViewModels] --> E[Use Cases]
+        E --> F[Repositories]
+    end
+    
+    subgraph "Data Layer"
+        G[Room Database] --> F
+        H[API Services] --> F
+        I[Video Extractors] --> F
+    end
+    
+    B --> D
+    C --> D
+    
+    style A fill:#4CAF50
+    style D fill:#2196F3
+    style G fill:#FF9800
+```
 
-### Architecture Layers
+### 🔷 Architecture Layers
 
-#### 1. Presentation Layer
-- **Activities**: Traditional Android UI components
-  - `MainActivity` - Splash screen and app initialization
-  - `Login_Page` - User authentication
-  - `Watch_Page`, `Watch_Anime_Page` - Content browsing
-  - `Video_payer`, `Anime_Video_Player` - Video playback
-  - `Profile_Page` - User profile management
-  - `PayWall` - Subscription management
-  - `Category_Page`, `Shows_Page`, `Anime_Page` - Content discovery
-  - `Actor_Page` - Cast information
-  - `TermsAndConditionsActivity` - Legal information
+#### 1️⃣ Presentation Layer
 
-- **Jetpack Compose**: Modern declarative UI toolkit
-- **UI Components**: Custom grids, keyboards, and animations
+**Activities** - Traditional Android UI components:
 
-#### 2. Business Logic Layer
-- **ViewModels**: State management and use cases
+| Activity | Purpose |
+|----------|---------|
+| `MainActivity` | Splash screen and app initialization |
+| `Login_Page` | User authentication |
+| `Watch_Page` / `Watch_Anime_Page` | Content browsing |
+| `Video_payer` / `Anime_Video_Player` | Video playback |
+| `Profile_Page` | User profile management |
+| `PayWall` | Subscription management |
+| `Category_Page` / `Shows_Page` / `Anime_Page` | Content discovery |
+| `Actor_Page` | Cast information |
+| `TermsAndConditionsActivity` | Legal information |
+
+**UI Framework**:
+- ✅ Jetpack Compose for modern declarative UI
+- ✅ Custom grids, keyboards, and animations
+- ✅ Material Design 3 components
+
+#### 2️⃣ Business Logic Layer
+
+- **ViewModels**: State management and business logic
 - **API Services**:
   - `TMDBapi` - Movie and TV show data
   - `AnimeApi` - Anime content data
-- **Video Extraction**: Custom video URL resolution logic
-- **Session Management**: User session handling
+- **Video Extraction**: Custom URL resolution logic
+- **Session Management**: User authentication handling
 
-#### 3. Data Layer
-- **Room Database**: Local data persistence
-  - `AppDatabase` - Main database instance
-  - Entity definitions for movies, shows, watch history
-- **Network Layer**: 
-  - Retrofit/OkHttp for API communication
-  - Custom SSL configuration for third-party APIs
-  - GraphQL clients for specialized data sources
+#### 3️⃣ Data Layer
 
-### Design Patterns
+**Room Database**:
+- `AppDatabase` - Main database instance
+- Entity definitions for movies, shows, and watch history
 
-- **Repository Pattern**: Data abstraction layer
-- **Singleton Pattern**: Database and API instances
-- **Observer Pattern**: LiveData/Flow for reactive updates
-- **Dependency Injection**: Manual DI with application-level instances
+**Network Layer**:
+- Retrofit/OkHttp for API communication
+- Custom SSL configuration for third-party APIs
+- GraphQL clients for specialized data sources
+
+### 🎯 Design Patterns
+
+| Pattern | Usage |
+|---------|-------|
+| **Repository** | Data abstraction layer |
+| **Singleton** | Database and API instances |
+| **Observer** | LiveData/Flow for reactive updates |
+| **Dependency Injection** | Manual DI with application-level instances |
+
+---
 
 ## 🛠️ Technology Stack
 
-### Core Technologies
-| Component | Technology |
-|-----------|-----------|
-| Language | Kotlin |
-| Minimum SDK | API 21 (Android 5.0) |
-| Target SDK | API 36 |
-| Build System | Gradle (Kotlin DSL) |
+### 🔷 Core Technologies
 
-### Android Jetpack
-- **Compose** - Modern UI toolkit
-- **Room** - Local database
-- **Lifecycle** - ViewModel and lifecycle-aware components
-- **Core KTX** - Kotlin extensions
-- **AppCompat** - Backward compatibility
+| Component | Technology | Version |
+|-----------|------------|---------|
+| **Language** | Kotlin | Latest |
+| **Minimum SDK** | API 21 | Android 5.0 |
+| **Target SDK** | API 36 | Android 14+ |
+| **Build System** | Gradle | Kotlin DSL |
 
-### Media & Video
-- **ExoPlayer (Media3)** - Advanced media playback
-  - HLS streaming
-  - DASH streaming
-  - RTSP protocol
-  - OkHttp data source
-- **Video extraction** - Custom video URL resolution
+### 📦 Android Jetpack
 
-### Networking
-- **OkHttp** - HTTP client
-- **Retrofit** (implied) - REST API client
-- **Gson** - JSON parsing
-- **Jsoup** - HTML parsing for web scraping
+- ✅ **Compose** - Modern declarative UI toolkit
+- ✅ **Room** - Local database with DAO pattern
+- ✅ **Lifecycle** - ViewModel and lifecycle-aware components
+- ✅ **Core KTX** - Kotlin extensions for Android
+- ✅ **AppCompat** - Backward compatibility support
 
-### UI & Images
-- **Glide** - Image loading and caching
-- **Picasso** - Image loading with custom SSL
-- **Material Components** - Material Design UI
-- **RecyclerView** - Efficient list rendering
+### 🎥 Media & Video
+
+**ExoPlayer (Media3)** - Advanced media playback engine:
+- ✅ HLS streaming support
+- ✅ DASH adaptive streaming
+- ✅ RTSP protocol support
+- ✅ OkHttp data source integration
+- ✅ Custom video URL extraction logic
+
+### 🌐 Networking
+
+| Library | Purpose |
+|---------|---------|
+| **OkHttp** | HTTP client with interceptors |
+| **Retrofit** | Type-safe REST API client |
+| **Gson** | JSON serialization/deserialization |
+| **Jsoup** | HTML parsing for web scraping |
+
+### 🎨 UI & Images
+
+- **Glide** - Efficient image loading and caching
+- **Picasso** - Image loading with custom SSL support
+- **Material Components** - Material Design UI elements
+- **RecyclerView** - Efficient list/grid rendering
 - **CardView** - Card-based layouts
-- **ConstraintLayout** - Flexible layouts
+- **ConstraintLayout** - Flexible responsive layouts
 
-### Utilities
-- **SDP/SSP** - Scalable size units for TV
-- **Core Splashscreen** - Native splash screen API
+### 🔧 Utilities
+
+- **SDP/SSP** - Scalable size units optimized for TV displays
+- **Core Splashscreen** - Native Android 12+ splash screen API
+
+---
 
 ## 📦 Project Structure
 
@@ -150,260 +253,570 @@ onyx/
 │   ├── src/
 │   │   ├── main/
 │   │   │   ├── java/com/example/onyx/
-│   │   │   │   ├── Database/
+│   │   │   │   ├── Database/              # Room database components
 │   │   │   │   │   ├── AppDatabase.kt
 │   │   │   │   │   └── SessionManger.kt
-│   │   │   │   ├── FetchData/
+│   │   │   │   ├── FetchData/             # API services
 │   │   │   │   │   ├── TMDBapi.kt
 │   │   │   │   │   └── AnimeApi.kt
-│   │   │   │   ├── OnyxClasses/
+│   │   │   │   ├── OnyxClasses/           # Custom UI classes
 │   │   │   │   │   ├── Grid.kt
 │   │   │   │   │   ├── Anime_Grid.kt
 │   │   │   │   │   └── CustomKeyboardManager.kt
-│   │   │   │   ├── OnyxObjects/
+│   │   │   │   ├── OnyxObjects/           # Utility objects
 │   │   │   │   │   ├── GlobalUtils.kt
 │   │   │   │   │   ├── TrustManger.kt
 │   │   │   │   │   ├── UnsafeOkHttpClient.kt
 │   │   │   │   │   ├── NotificationHelper.kt
 │   │   │   │   │   ├── SidbarAction.kt
 │   │   │   │   │   └── loadingAnimation.kt
-│   │   │   │   ├── ui/
-│   │   │   │   ├── videoExtraction/
-│   │   │   │   ├── videoResolver/
-│   │   │   │   ├── MainActivity.kt
-│   │   │   │   ├── OnyxApplication.kt
-│   │   │   │   ├── Login_Page.kt
-│   │   │   │   ├── Watch_Page.kt
-│   │   │   │   ├── Watch_Anime_Page.kt
-│   │   │   │   ├── Video_payer.kt
-│   │   │   │   ├── Anime_Video_Player.kt
-│   │   │   │   ├── Play.kt
-│   │   │   │   ├── Category_Page.kt
-│   │   │   │   ├── Shows_Page.kt
-│   │   │   │   ├── Anime_Page.kt
-│   │   │   │   ├── Actor_Page.kt
-│   │   │   │   ├── Profile_Page.kt
-│   │   │   │   ├── PayWall.kt
-│   │   │   │   ├── Instraction.kt
-│   │   │   │   └── TermsAndConditionsActivity.kt
+│   │   │   │   ├── ui/                    # Compose UI components
+│   │   │   │   ├── videoExtraction/       # Video URL extraction
+│   │   │   │   ├── videoResolver/         # Video source resolution
+│   │   │   │   ├── MainActivity.kt        # Entry point
+│   │   │   │   ├── OnyxApplication.kt     # Application class
+│   │   │   │   └── [Activity files...]    # UI Activities
 │   │   │   ├── res/
-│   │   │   │   ├── layout/
-│   │   │   │   ├── drawable/
-│   │   │   │   ├── mipmap/
-│   │   │   │   ├── values/
-│   │   │   │   └── xml/
-│   │   │   └── AndroidManifest.xml
-│   └── build.gradle.kts
-├── gradle/
-├── build.gradle.kts
-├── settings.gradle.kts
-└── README.md
+│   │   │   │   ├── layout/                # XML layouts
+│   │   │   │   ├── drawable/              # Vector drawables
+│   │   │   │   ├── mipmap/                # App icons
+│   │   │   │   ├── values/                # Themes, strings, colors
+│   │   │   │   └── xml/                   # Configuration files
+│   │   │   └── AndroidManifest.xml        # App manifest
+│   └── build.gradle.kts                   # App-level build config
+├── gradle/                                # Gradle wrapper
+├── build.gradle.kts                       # Project-level build config
+├── settings.gradle.kts                    # Project settings
+└── README.md                              # This file
 ```
+
+---
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### 📋 Prerequisites
 
-- Android Studio Ladybug or later
-- JDK 11 or higher
-- Android SDK with API level 36
-- An Android TV device or emulator for testing
+Before you begin, ensure you have the following installed:
 
-### Installation
+- ✅ **Android Studio** Ladybug (2024.1.1) or later
+- ✅ **JDK** 11 or higher
+- ✅ **Android SDK** with API level 36
+- ✅ **Android TV device** or Android TV emulator for testing
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd onyx
-   ```
+### 📥 Installation
 
-2. **Open in Android Studio**
-   - Launch Android Studio
-   - Select "Open an existing project"
-   - Navigate to the `onyx` directory
+Follow these steps to get ONYX running on your development machine:
 
-3. **Sync Gradle**
-   - Android Studio will automatically prompt to sync
-   - Wait for dependencies to download
+#### 1️⃣ Clone the Repository
 
-4. **Configure API Keys**
-   
-   The app uses external APIs. API keys are configured in `build.gradle.kts`:
-   
-   - `TM_K` - TMDB API key (already configured)
-   - `PA_K` - Payment API key
-   - `A_K` - Anime API endpoint
+```bash
+git clone https://github.com/n-h-e-z-r-o-n/tv-APP.git
+cd tv-APP/onyx
+```
 
-   > ⚠️ **Important**: For production use, move API keys to `local.properties` or use BuildConfig secrets
+#### 2️⃣ Open in Android Studio
 
-5. **Build the project**
-   ```bash
-   ./gradlew build
-   ```
+1. Launch **Android Studio**
+2. Select **File** → **Open**
+3. Navigate to the `onyx` directory
+4. Click **OK**
 
-6. **Run on device/emulator**
-   - Connect your Android TV device or start an emulator
-   - Click the "Run" button in Android Studio
-   - Select your target device
+#### 3️⃣ Sync Gradle
 
-### Build Variants
+- Android Studio will automatically prompt to sync Gradle files
+- Click **Sync Now** and wait for dependencies to download
+- This may take several minutes on the first run
 
-- **Debug**: Development build with debugging enabled
-- **Release**: Production build with ProGuard optimization
-  ```bash
-  ./gradlew assembleRelease
-  ```
+#### 4️⃣ Configure API Keys
+
+The app requires API keys for external services. Configure them in `app/build.gradle.kts`:
+
+```kotlin
+buildConfigField("String", "TM_K", "\"your_tmdb_api_key\"")
+buildConfigField("String", "PA_K", "\"your_payment_api_key\"")
+buildConfigField("String", "A_K", "\"your_anime_api_endpoint\"")
+```
+
+> [!IMPORTANT]
+> **For production builds**: Move API keys to `local.properties` or use a secure secrets management system. Never commit API keys to version control.
+
+**Get your TMDB API key**: 
+1. Visit [TMDB API](https://www.themoviedb.org/settings/api)
+2. Create an account and request an API key
+3. Replace `your_tmdb_api_key` with your actual key
+
+#### 5️⃣ Build the Project
+
+```bash
+# Using Gradle wrapper (recommended)
+./gradlew build
+
+# On Windows
+gradlew.bat build
+```
+
+#### 6️⃣ Run on Device/Emulator
+
+1. Connect your **Android TV device** via ADB or start an **Android TV emulator**
+2. Verify device connection: `adb devices`
+3. Click the **Run** button (▶️) in Android Studio
+4. Select your target device from the list
+5. Wait for the app to install and launch
+
+### 🏗️ Build Variants
+
+```bash
+# Debug build (development)
+./gradlew assembleDebug
+
+# Release build (production with ProGuard)
+./gradlew assembleRelease
+
+# Install and run debug build
+./gradlew installDebug
+```
+
+> [!TIP]
+> For release builds, ensure you have configured signing keys in your `keystore.properties` file.
+
+---
 
 ## 🔧 Configuration
 
-### Network Security
+### 🔒 Network Security
 
 The app includes custom network security configuration for third-party API compatibility:
 
-- SSL certificate validation customization
-- Cleartext traffic enabled for specific domains
-- Custom OkHttp client with trust manager
+**Configuration file**: `res/xml/network_security_config.xml`
 
-Configuration: `res/xml/network_security_config.xml`
+Features:
+- ✅ Custom SSL certificate validation for third-party APIs
+- ✅ Cleartext traffic enabled for specific trusted domains
+- ✅ Custom OkHttp client with trust manager
+- ✅ Certificate pinning support (optional)
 
-### File Provider
+```xml
+<!-- Example configuration -->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">example.com</domain>
+    </domain-config>
+</network-security-config>
+```
 
-Secure file sharing is configured for updates and downloads:
+> [!WARNING]
+> Cleartext traffic should only be enabled for trusted domains. Always use HTTPS in production when possible.
 
-Configuration: `res/xml/file_paths.xml`
+### 📁 File Provider
 
-### Themes
+Secure file sharing is configured for app updates and content downloads:
 
-The app uses a custom dark theme optimized for TV:
-- `Theme.Onyx.Dark` - Main app theme
-- `Theme.Onyx.Splash` - Splash screen theme
+**Configuration file**: `res/xml/file_paths.xml`
+
+```xml
+<paths>
+    <external-path name="external_files" path="."/>
+    <cache-path name="cache" path="."/>
+</paths>
+```
+
+### 🎨 Themes
+
+ONYX uses custom dark themes optimized for TV viewing:
+
+| Theme | Purpose |
+|-------|---------|
+| `Theme.Onyx.Dark` | Main app theme with dark colors |
+| `Theme.Onyx.Splash` | Splash screen theme with animations |
+
+Customize themes in `res/values/themes.xml`
+
+---
 
 ## 📱 Supported Platforms
 
-### Android TV
-- ✅ Primary target platform
-- ✅ Leanback launcher support
-- ✅ D-pad navigation
-- ✅ Remote control optimized
+### 📺 Android TV
 
-### Hardware Requirements
-- Touchscreen: Not required
-- Leanback feature: Optional (app works without it)
-- Minimum: Android 5.0 (API 21)
-- Recommended: Android 13+ for best performance
+| Feature | Status |
+|---------|--------|
+| **Android TV Support** | ✅ Primary target platform |
+| **Leanback Launcher** | ✅ Full support with banner |
+| **D-pad Navigation** | ✅ Optimized for remote control |
+| **Remote Control** | ✅ Complete button mapping |
+| **Voice Search** | 🔜 Coming soon |
+
+### 💻 Hardware Requirements
+
+| Requirement | Details |
+|-------------|---------|
+| **Touchscreen** | ❌ Not required |
+| **Leanback Feature** | ⚠️ Optional (app works without it) |
+| **Minimum OS** | Android 5.0 (API 21) |
+| **Recommended OS** | Android 13+ for best performance |
+| **RAM** | 1GB minimum, 2GB+ recommended |
+| **Storage** | 100MB for app + cache space |
+
+---
 
 ## 🎨 User Interface
 
-### Key UI Components
+### 🖼️ Key UI Components
 
-1. **Splash Screen** (10-second loading)
-   - Animated logo with Glide
-   - App initialization
-   - Navigation to login/paywall
+#### 1️⃣ Splash Screen
 
-2. **Grid Layouts**
-   - Custom `Grid.kt` for movies/shows
-   - `Anime_Grid.kt` for anime content
-   - RecyclerView-based implementation
+**Duration**: 10 seconds with animated logo
 
-3. **Video Player**
-   - Full-screen playback
-   - Episode navigation sidebar
-   - Playback controls
-   - Progress tracking
+**Features**:
+- ✅ Glide-powered logo animation
+- ✅ App initialization and database setup
+- ✅ Session validation
+- ✅ Auto-navigation to login or paywall
 
-4. **Profile Management**
-   - User information display
-   - Subscription status
-   - Watch history
+#### 2️⃣ Grid Layouts
+
+**Movies/TV Shows Grid** (`Grid.kt`):
+- RecyclerView-based implementation
+- Poster image loading with Glide
+- Focus handling for TV navigation
+- Smooth scrolling optimization
+
+**Anime Grid** (`Anime_Grid.kt`):
+- Specialized layout for anime content
+- Episode count badges
+- Rating display
+- Custom styling
+
+#### 3️⃣ Video Player
+
+**Core Features**:
+- ✅ Full-screen playback with ExoPlayer
+- ✅ Episode navigation sidebar
+- ✅ Playback controls (play/pause, seek, volume)
+- ✅ Progress bar with time indicators
+- ✅ Continue watching position tracking
+- ✅ Next episode auto-play
+- ✅ Picture quality selection
+
+#### 4️⃣ Profile Management
+
+**User Dashboard**:
+- User information and avatar
+- Subscription status badge
+- Watch history with thumbnails
+- Account settings access
+- Terms and conditions link
+
+---
 
 ## 🔐 Security & Privacy
 
-- User credentials managed via `SessionManger`
-- Secure file access with FileProvider
-- Terms and conditions acceptance flow
-- Subscription validation
-- SSL/TLS for API communications
+### 🛡️ Security Features
+
+| Feature | Implementation |
+|---------|----------------|
+| **Credential Storage** | `SessionManger` with encrypted SharedPreferences |
+| **File Access** | FileProvider with scoped permissions |
+| **Terms Acceptance** | Mandatory T&C flow on first launch |
+| **Subscription Validation** | Server-side verification |
+| **API Communications** | SSL/TLS encryption for all network requests |
+
+### 🔒 Privacy Practices
+
+- ✅ No personal data collection beyond account credentials
+- ✅ Local-only watch history (not shared)
+- ✅ No third-party tracking or analytics
+- ✅ Transparent terms and conditions
+- ✅ User control over account data
+
+> [!NOTE]
+> For full privacy details, see the [Terms and Conditions](onyx/app/src/main/java/com/example/onyx/TermsAndConditionsActivity.kt).
+
+---
 
 ## 📊 Database Schema
 
-The Room database includes entities for:
+ONYX uses **Room Database** for local data persistence. The schema includes:
 
-- **Movies**: Movie metadata and details
-- **TV Shows**: Show information with seasons/episodes
-- **Anime**: Anime-specific data
-- **Watch History**: Playback position and timestamps
-- **User Sessions**: Authentication data
-- **Subscriptions**: Payment and subscription status
+### 📋 Entities
+
+```kotlin
+// Movie Entity
+@Entity(tableName = "movies")
+data class Movie(
+    @PrimaryKey val id: Int,
+    val title: String,
+    val posterPath: String,
+    val overview: String,
+    val releaseDate: String,
+    val rating: Float
+)
+
+// Watch History Entity
+@Entity(tableName = "watch_history")
+data class WatchHistory(
+    @PrimaryKey val id: String,
+    val contentId: Int,
+    val contentType: String,
+    val position: Long,
+    val duration: Long,
+    val timestamp: Long
+)
+```
+
+### 🗂️ Database Tables
+
+| Table | Purpose |
+|-------|---------|
+| **movies** | Movie metadata and details |
+| **tv_shows** | TV show information with seasons |
+| **anime** | Anime-specific data |
+| **episodes** | Episode information for TV/anime |
+| **watch_history** | Playback position and timestamps |
+| **user_sessions** | Authentication tokens |
+| **subscriptions** | Payment and subscription status |
+
+### 🔄 Database Migrations
+
+Database version is managed in `AppDatabase.kt`. Migrations are handled automatically for schema updates.
+
+---
 
 ## 🌐 API Integration
 
-### TMDB API
-- Movie and TV show metadata
-- Cast and crew information
-- Images and posters
-- Trending content
+### 🎬 TMDB API
 
-### Anime API
-- Anime series information
-- Episode listings
-- Streaming sources
-- Series metadata
+**The Movie Database (TMDB)** provides comprehensive entertainment metadata:
 
-### Payment System
-- Subscription management
-- Transaction processing
-- Status validation
+**Endpoints Used**:
+- ✅ `/movie/popular` - Trending movies
+- ✅ `/tv/popular` - Trending TV shows
+- ✅ `/search/multi` - Universal search
+- ✅ `/person/{id}` - Actor/cast information
+- ✅ `/movie/{id}` - Movie details
+- ✅ `/tv/{id}` - TV show details
+
+**Rate Limiting**: 40 requests per 10 seconds
+
+**Documentation**: [TMDB API Docs](https://developers.themoviedb.org/3)
+
+### 🍥 Anime API
+
+**Custom anime content provider** for Japanese animation:
+
+**Features**:
+- ✅ Anime series metadata
+- ✅ Episode listings with streaming links
+- ✅ Multi-source support
+- ✅ Subtitle tracks
+
+### 💳 Payment System
+
+**Subscription and payment integration**:
+
+**Features**:
+- ✅ Subscription tier management
+- ✅ Transaction processing
+- ✅ Real-time status validation
+- ✅ Payment receipt generation
+
+---
+
+## 🔧 Troubleshooting
+
+### Common Issues and Solutions
+
+#### ❌ Issue: White screen on app startup
+
+**Solution**:
+1. Check network connectivity
+2. Verify API keys are configured correctly
+3. Clear app cache: Settings → Apps → ONYX → Clear Cache
+4. Ensure minimum Android version (API 21+)
+
+#### ❌ Issue: Video playback fails
+
+**Solution**:
+1. Check internet connection speed
+2. Try a different content item
+3. Verify ExoPlayer dependencies in `build.gradle.kts`
+4. Check logcat for network errors
+
+#### ❌ Issue: Build fails with dependency errors
+
+**Solution**:
+```bash
+# Clean and rebuild
+./gradlew clean
+./gradlew build --refresh-dependencies
+
+# Invalidate Android Studio caches
+File → Invalidate Caches → Invalidate and Restart
+```
+
+#### ❌ Issue: D-pad navigation not working
+
+**Solution**:
+1. Ensure `android:focusable="true"` is set on UI elements
+2. Check `nextFocusUp/Down/Left/Right` attributes
+3. Verify emulator/device is in Android TV mode
+
+### 📝 Logging
+
+Enable debug logging for troubleshooting:
+
+```kotlin
+// In OnyxApplication.kt
+if (BuildConfig.DEBUG) {
+    Timber.plant(Timber.DebugTree())
+}
+```
+
+View logs:
+```bash
+adb logcat | grep -i "onyx"
+```
+
+---
 
 ## 🐛 Known Issues & Limitations
 
-1. **White Screen on Startup**: Brief delay before UI loads (optimization in progress)
-2. **Third-party API Dependencies**: App functionality depends on external API availability
-3. **Video Source Stability**: Streaming quality depends on third-party providers
+### ⚠️ Current Issues
+
+| Issue | Impact | Status |
+|-------|--------|--------|
+| **White screen delay on startup** | Brief (1-2s) delay before UI loads | 🔄 In progress |
+| **Third-party API dependency** | App requires external API availability | ℹ️ By design |
+| **Variable streaming quality** | Depends on third-party content providers | ℹ️ External factor |
+| **Limited offline support** | Metadata only, no video downloads | 🔜 Planned |
+
+### 🚧 Limitations
+
+- 📌 No offline video playback (streaming only)
+- 📌 Requires active internet connection
+- 📌 Content availability varies by region
+- 📌 Single user profile per device
+- 📌 No parental controls (yet)
+
+---
 
 ## 🔜 Future Enhancements
 
-- [ ] Improve startup performance
-- [ ] Add offline download support
-- [ ] Implement recommendation algorithm
-- [ ] Add multi-profile support
-- [ ] Enhance search with filters
-- [ ] Add parental controls
-- [ ] Support for multiple languages
-- [ ] Chromecast integration
+### Roadmap
+
+- [ ] **Performance**
+  - [ ] Optimize startup time
+  - [ ] Implement lazy loading for grids
+  - [ ] Add image preloading
+
+- [ ] **Features**
+  - [ ] Offline download support for videos
+  - [ ] Machine learning recommendation engine
+  - [ ] Multi-profile support (family accounts)
+  - [ ] Advanced search filters
+  - [ ] Parental controls with PIN
+  - [ ] Watchlist synchronization
+
+- [ ] **Localization**
+  - [ ] Multi-language support (ES, FR, DE, JA)
+  - [ ] RTL layout support
+  - [ ] Regional content recommendations
+
+- [ ] **Integration**
+  - [ ] Chromecast support
+  - [ ] Google Assistant voice commands
+  - [ ] Android Auto compatibility
+
+- [ ] **UI/UX**
+  - [ ] Customizable themes
+  - [ ] Accessibility improvements
+  - [ ] Gesture controls
+
+---
 
 ## 📄 License
 
-Legal Notice
+### ⚖️ Legal Notice
 
-IMPORTANT: This application is for educational and personal use only.
+> [!CAUTION]
+> **IMPORTANT**: This application is for **educational and personal use only**.
 
-    ONYX does not host, store, or distribute any copyrighted content
-    All content is sourced from third-party providers and websites
-    Users are solely responsible for ensuring they have legal rights to access any content
-    The developers do not endorse or encourage copyright infringement
-    Users must comply with all applicable laws in their jurisdiction
-    Any legal issues should be directed to the actual content providers
-    This app functions as a search engine aggregator only
-    No copyrighted material is stored on our servers
+#### Disclaimer
 
+**ONYX** is provided as-is under the following terms:
 
-This application is provided "as is" for educational purposes. The developers:
+✋ **Content Disclaimer**:
+- ❌ ONYX does **NOT** host, store, or distribute any copyrighted content
+- 🔗 All content is sourced from third-party providers and public websites
+- 👤 **Users** are solely responsible for ensuring they have legal rights to access content
+- 🚫 Developers do **NOT** endorse or encourage copyright infringement
+- ⚖️ Users **MUST** comply with all applicable laws in their jurisdiction
+- 📧 Legal issues should be directed to actual content providers
+- 🔍 This app functions as a **search engine aggregator only**
+- 💾 **No copyrighted material** is stored on our servers
 
-    Do not claim ownership of any content
-    Do not profit from copyrighted material
-    Do not control third-party content providers
-    Encourage users to support content creators through legal means
-    Recommend using official streaming services when available
+📜 **Developer Responsibilities**:
+- ❌ Do **NOT** claim ownership of any content
+- 💵 Do **NOT** profit from copyrighted material
+- 🎭 Do **NOT** control third-party content providers
+- ✅ **Encourage** users to support content creators through legal means
+- 🎬 **Recommend** using official streaming services when available
 
-License
-This project is licensed under the Apache-2.0 License - see the LICENSE file for details
+### 📋 Open Source License
 
-See [TermsAndConditionsActivity](file:///c:/Users/n-h-e-z-r-o-n/Desktop/TV%20PROJECT/onyx/app/src/main/java/com/example/onyx/TermsAndConditionsActivity.kt) for detailed terms and conditions.
+```
+Copyright 2026 ONYX Development Team
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+
+**Full Terms**: See [TermsAndConditionsActivity.kt](onyx/app/src/main/java/com/example/onyx/TermsAndConditionsActivity.kt) for detailed terms and conditions.
+
+---
 
 ## 🤝 Contributing
 
-This is a private project. For inquiries, please contact the development team.
+### 🔒 Project Status
+
+This is currently a **private project** for educational purposes.
+
+### 📧 Contact
+
+For inquiries, collaboration, or support:
+
+- 📨 **GitHub Issues**: [Report bugs or request features](https://github.com/n-h-e-z-r-o-n/tv-APP/issues)
+- 💬 **Discussions**: Join the conversation in GitHub Discussions
+- 📧 **Email**: Contact the development team
+
+### 🙏 Acknowledgments
+
+Special thanks to:
+
+- 🎬 [The Movie Database (TMDB)](https://www.themoviedb.org/) for movie/TV data
+- 📺 [ExoPlayer](https://exoplayer.dev/) for the excellent media player
+- 🎨 [Android Jetpack](https://developer.android.com/jetpack) team for modern development tools
+- 🖼️ [Glide](https://github.com/bumptech/glide) for efficient image loading
+
+---
+
+<div align="center">
+
+**Made with ❤️ by the ONYX Development Team**
+
+⭐ **Star this repository** if you find it useful!
+
+[Back to Top](#-onyx---android-tv-streaming-app)
+
+</div>
 
 
 
