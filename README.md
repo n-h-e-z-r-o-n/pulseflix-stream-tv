@@ -5,6 +5,7 @@
 A premium Android TV streaming application for movies, TV shows, and anime content. Built with modern Android development practices and optimized for the TV viewing experience.
 
 ## 🎯 Preview
+[](https://github.com/n-h-e-z-r-o-n/tv-APP/blob/main/ASSETS/Recording%202026-01-09%20003513.gif?raw=true)
 
 **ONYX** is a feature-rich streaming platform designed specifically for Android TV devices. It provides seamless access to movies, TV shows, and anime content with a beautiful, intuitive interface optimized for remote control navigation.
 ## 🎯 Overview
