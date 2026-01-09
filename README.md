@@ -1,10 +1,11 @@
 # ONYX Streaming App
+<img width="841" height="196" alt="Screenshot 2026-01-09 002912" src="https://github.com/user-attachments/assets/8d8bd9ce-9b7a-4a04-a6a5-267813ea0d55" />
 
-![ONYX Logo](../../icon.png)
+
 A premium Android TV streaming application for movies, TV shows, and anime content. Built with modern Android development practices and optimized for the TV viewing experience.
 
 ## 🎯 Preview
-![Recording 2026-01-09 003513.gif](../../Downloads/Recording%202026-01-09%20003513.gif)
+
 **ONYX** is a feature-rich streaming platform designed specifically for Android TV devices. It provides seamless access to movies, TV shows, and anime content with a beautiful, intuitive interface optimized for remote control navigation.
 ## 🎯 Overview
 ### Key Highlights
@@ -371,7 +372,30 @@ The Room database includes entities for:
 
 ## 📄 License
 
-© 2026 ONYX Streaming App. All rights reserved.
+Legal Notice
+
+IMPORTANT: This application is for educational and personal use only.
+
+    Streamflix does not host, store, or distribute any copyrighted content
+    All content is sourced from third-party providers and websites
+    Users are solely responsible for ensuring they have legal rights to access any content
+    The developers do not endorse or encourage copyright infringement
+    Users must comply with all applicable laws in their jurisdiction
+    Any legal issues should be directed to the actual content providers
+    This app functions as a search engine aggregator only
+    No copyrighted material is stored on our servers
+
+
+This application is provided "as is" for educational purposes. The developers:
+
+    Do not claim ownership of any content
+    Do not profit from copyrighted material
+    Do not control third-party content providers
+    Encourage users to support content creators through legal means
+    Recommend using official streaming services when available
+
+License
+This project is licensed under the Apache-2.0 License - see the LICENSE file for details
 
 See [TermsAndConditionsActivity](file:///c:/Users/n-h-e-z-r-o-n/Desktop/TV%20PROJECT/onyx/app/src/main/java/com/example/onyx/TermsAndConditionsActivity.kt) for detailed terms and conditions.
 
