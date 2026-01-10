@@ -183,7 +183,7 @@ class Login_Page : AppCompatActivity() {
 
 
             val username = usernameInput.text.toString().trim()
-            val gender = usernameGenderInput.text.toString().trim()
+            val gender = "NAN"//usernameGenderInput.text.toString().trim()
             val pin = usernamePinInput.text.toString().trim()
 
             if (username.isEmpty()) {
