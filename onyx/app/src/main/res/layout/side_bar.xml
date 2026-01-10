@@ -121,24 +121,26 @@
 
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:id="@+id/btnProfile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:foreground="@drawable/cast_focus"
                     android:layout_gravity="bottom|center_horizontal"
-                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardBackgroundColor="?attr/BG_color_up"
                     android:layout_marginBottom="70dp"
-                    android:elevation="0dp"
-                    app:cardCornerRadius="100dp">
+                    app:cardElevation="6dp"
+                    app:cardCornerRadius="100dp"
+                    android:nextFocusUp="@id/btnAnime"
+                    android:nextFocusDown="@id/btnMvTv">
 
                     <ImageView
-                        android:id="@+id/btnProfile"
+                        android:id="@+id/btnProfileImg"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/nav_icon_color_selector"
-                        android:clickable="true"
-                        android:focusable="true"
                         android:importantForAccessibility="no"
-                        android:nextFocusUp="@id/btnAnime"
-                        android:nextFocusDown="@id/btnMvTv"
                         tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
 
                     <TextView

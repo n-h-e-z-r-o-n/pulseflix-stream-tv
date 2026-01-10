@@ -20,7 +20,6 @@ android {
         buildConfigField( "String", "PA_K", "\"ISSecretKey_live_e9d3162e-95cb-42a4-b64b-ee378525ca5a\"")
         buildConfigField( "String", "A_K", "\"https://corsproxy.io/https://aniwatch-api-r4uo.vercel.app\"")
 
-
     }
 
     buildTypes {

@@ -33,7 +33,7 @@ object NavAction {
 
         val btnTvMv = activity.findViewById<ImageButton>(R.id.btnMvTv)
         val btnAnime = activity.findViewById<ImageButton>(R.id.btnAnime)
-        val btnProfile = activity.findViewById<View>(R.id.btnProfile)
+        val btnProfile = activity.findViewById<CardView>(R.id.btnProfile)
 
 
         val labelMvTv = activity.findViewById<TextView>(R.id.labelMvTv)
@@ -85,7 +85,7 @@ object NavAction {
             val label = labels[index]
             btn?.setOnFocusChangeListener { v, hasFocus ->
                 val mainBox = activity.findViewById<CardView>(R.id.mainBox)
-                handleFocusChange(mainBox, v, hasFocus, label, sidebar, buttons, labels)
+                handleFocusChange(mainBox, v, hasFocus, label, sidebar, buttons)
             }
         }
 
@@ -97,7 +97,7 @@ object NavAction {
         ////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////
         val sm = SessionManger(activity)         // Initialize database
-        val profileImage = activity.findViewById<ImageView>(R.id.btnProfile)
+        val profileImage = activity.findViewById<ImageView>(R.id.btnProfileImg)
         val assetPath = "file:///android_asset/${sm.getUserAvatar()}"
         Log.e("assetPath sibar", assetPath)
 
@@ -123,7 +123,6 @@ object NavAction {
         label: TextView?,
         sidebar: View?,
         allViews: List<View?>,
-        allLabels: List<TextView?>
     ) {
 
         if (hasFocus) {

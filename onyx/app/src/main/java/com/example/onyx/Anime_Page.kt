@@ -48,6 +48,7 @@ import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.LoadingAnimation
 import com.example.onyx.OnyxObjects.NavAction
 import com.example.onyx.OnyxObjects.NotificationHelper
+import com.example.onyx.R
 
 
 class Anime_Page : AppCompatActivity() {
@@ -112,8 +113,8 @@ class Anime_Page : AppCompatActivity() {
 
 
          NavAction.setupSidebar(this@Anime_Page)
-         //LoadingAnimation.setup(this@Anime_Page)
-         //LoadingAnimation.show(this@Anime_Page)
+         LoadingAnimation.setup(this@Anime_Page, R.raw.b)
+         LoadingAnimation.show(this@Anime_Page)
 
 
          db = AppDatabase(this)         // Initialize database
@@ -126,7 +127,7 @@ class Anime_Page : AppCompatActivity() {
 
          ////////////////////////////////////////////////////////////////////////////////////////
 
-        val navBar = findViewById<CardView>(R.id.animeNavBar)
+         val navBar = findViewById<CardView>(R.id.animeNavBar)
          val homeAnimeBtn = findViewById<LinearLayout>(R.id.HomeAnimeBtn)
          val favAnimeBtn = findViewById<LinearLayout>(R.id.FavAnimeBtn)
          val searchAnimeBtn = findViewById<LinearLayout>(R.id.SearchAnimeBtn)
@@ -425,6 +426,7 @@ class Anime_Page : AppCompatActivity() {
             animeWatchedList()
             animeFavoritesList()
             notificationS()
+            LoadingAnimation.hide(this@Anime_Page)
         }
     }
 
@@ -445,7 +447,8 @@ class Anime_Page : AppCompatActivity() {
 
          val jsonObject = fetchAnimeAPI.animeHome()
 
-         if (jsonObject == null) return
+         if (jsonObject == null){ LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+             return}
 
          Log.e("ANIME_STATUS HOME 2", jsonObject.toString())
 
@@ -518,8 +521,7 @@ class Anime_Page : AppCompatActivity() {
          showAiring(topAiringAnimes)
 
          GlobalUtils.setupCardStackFromContainer(SpotlightContaner, 7000L)
-
-
+         LoadingAnimation.hide(this@Anime_Page)
      }
 
 
