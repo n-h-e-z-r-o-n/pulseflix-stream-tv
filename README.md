@@ -15,6 +15,8 @@
 
 Built with modern Android development practices and optimized for the big-screen experience
 
+[Onyx.apk](https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs/heads/main/App/onyx.apk)
+
 [Features](#-features) • [Architecture](#️-architecture) • [Getting Started](#-getting-started) • [Tech Stack](#️-technology-stack) • [Screenshots](#-preview)
 
 </div>
