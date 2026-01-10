@@ -17,6 +17,10 @@ Built with modern Android development practices and optimized for the big-screen
 
 Download Link: [Onyx.apk](https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs/heads/main/App/onyx.apk)
 
+#SHOTS
+
+<img width="1344" height="768" alt="Gemini_Generated_Image_qbcsgiqbcsgiqbcs" src="https://github.com/user-attachments/assets/d18e5a03-cc82-44a4-824e-fa0d0862a8f8" />
+
 [Features](#-features) • [Architecture](#️-architecture) • [Getting Started](#-getting-started) • [Tech Stack](#️-technology-stack) • [Screenshots](#-preview)
 
 </div>
