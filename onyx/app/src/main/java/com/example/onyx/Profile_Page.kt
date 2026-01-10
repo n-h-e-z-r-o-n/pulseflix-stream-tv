@@ -251,9 +251,24 @@ class Profile_Page : AppCompatActivity() {
                     val updateInfo = com.google.gson.Gson().fromJson(reader, UpdateInfo::class.java)
                     
                     withContext(Dispatchers.Main) {
-                        val currentVersionCode = BuildConfig.VERSION_CODE
+                        // Get the ACTUAL installed version code from PackageManager
+                        // This is more reliable than BuildConfig.VERSION_CODE which is compiled at build time
+                        val installedVersionCode = try {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0)).longVersionCode.toInt()
+                            } else {
+                                @Suppress("DEPRECATION")
+                                packageManager.getPackageInfo(packageName, 0).versionCode
+                            }
+                        } catch (e: Exception) {
+                            // Fallback to BuildConfig if PackageManager fails
+                            BuildConfig.VERSION_CODE
+                        }
                         
-                        if (updateInfo.versionCode > currentVersionCode) {
+                        // Debug logging to help diagnose issues
+                        android.util.Log.d("UpdateCheck", "Installed versionCode: $installedVersionCode, Remote versionCode: ${updateInfo.versionCode}")
+                        
+                        if (updateInfo.versionCode > installedVersionCode) {
                             showUpdateConfirmation(updateInfo)
                         } else {
                             Toast.makeText(this@Profile_Page, "App is up to date", Toast.LENGTH_SHORT).show()
