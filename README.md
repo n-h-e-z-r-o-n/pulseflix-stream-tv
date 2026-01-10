@@ -53,7 +53,7 @@ Download Link: [Onyx.apk](https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs/heads
 ## 🎯 Preview
 
 <div align="center">
-<img alt="ONYX App Demo" width="600" src="https://github.com/n-h-e-z-r-o-n/tv-APP/blob/main/ASSETS/Recording%202026-01-09%20003513.gif?raw=true" />
+<img alt="ONYX App Demo" width="600" src="https://github.com/n-h-e-z-r-o-n/tv-APP/blob/main/ASSETS/3.png?raw=true" />
 </div>
 
 ---
