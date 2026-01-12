@@ -27,6 +27,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -219,10 +220,9 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         currentSeasonId = seasonId.toString()
 
 
-        CoroutineScope(Dispatchers.Main).launch {
+        lifecycleScope.launch {
             showData(seasonId.toString())
         }
-
     }
 
     private fun showData(SeasonId: String){
@@ -284,7 +284,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                         holdSeasonId = id
                     }
 
-                    CoroutineScope(Dispatchers.Main).launch {
+                    lifecycleScope.launch {
                         getEpisodes(season_id )
                         isSeasonLoading = false
                     }
@@ -304,7 +304,9 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
             holdPoster = poster
             holdSeasonId = SeasonId
 
-            getEpisodes(SeasonId)
+            lifecycleScope.launch {
+                getEpisodes(SeasonId)
+            }
         }
     }
 
@@ -341,7 +343,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
                     saveContinueWatching()
 
-                    CoroutineScope(Dispatchers.Main).launch {
+                    lifecycleScope.launch {
                         holdEpisodeNo = eNumber
                         fetchStreamingLinks(episodeId)
 
@@ -367,7 +369,8 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                         selectedEpisodeView = episodeBtn
                         holdEpisodeNo = eNumber
                         saveContinueWatching()
-                        CoroutineScope(Dispatchers.Main).launch {
+
+                        lifecycleScope.launch {
                             fetchStreamingLinks(episodeId)
                         }
 
@@ -380,9 +383,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                 }
             }
         }
-
-
-
 
     }
 
@@ -560,8 +560,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
                 }
 
                 break
-
-
             }
                 attempt++
                 Log.e( "ANIME_PLAYER", "PlAYER FAILED: $episodeId  , serverName: $serverName , category: $category,")
@@ -590,7 +588,6 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
         playNextTogol. text = "Auto-next: On"
         playNextTogol. text = "Auto-next: OFF"
-
     }
 
 

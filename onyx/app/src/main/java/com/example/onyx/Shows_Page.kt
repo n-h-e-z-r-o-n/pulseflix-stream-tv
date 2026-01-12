@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -126,14 +127,14 @@ class Shows_Page : AppCompatActivity() {
 
         LoadingAnimation.setup(this, R.raw.b)
         //LoadingAnimation.show(this)
-        NavAction.setupSidebar(this)
+        //NavAction.setupSidebar(this)
         fetchTMDB = TMDBapi(this)
         db = AppDatabase(this)         // Initialize database
         sm = SessionManger(this)
         userId = sm.getUserId()
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        val navBar = findViewById<CardView>(R.id.showsNavBar)
+        val navBar = findViewById<LinearLayout>(R.id.showsNavBar)
 
         val HomeBtn = findViewById<LinearLayout>(R.id.HomeBtn)
         val MoviesBtn = findViewById<LinearLayout>(R.id.MoviesBtn)
@@ -329,6 +330,7 @@ class Shows_Page : AppCompatActivity() {
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         setupRecyclerViews()
+        ExtraBnts()
 
 
 
@@ -380,8 +382,37 @@ class Shows_Page : AppCompatActivity() {
         tvAdapter.clearItems()
         searchAdapter.clearItems()
         filterAdapter.clearItems()
+    }
 
 
+    private fun ExtraBnts() {
+
+        val switchBtn = findViewById<LinearLayout>(R.id.switchBtn)
+        val btnProfileCard = findViewById<LinearLayout>(R.id.btnProfile)
+        val btnProfileImage = findViewById<ImageView>(R.id.btnProfileImg)
+
+        btnProfileCard.setOnClickListener {
+            val intent = Intent(this, Profile_Page::class.java)
+            startActivity(intent)
+        }
+
+        switchBtn.setOnClickListener {
+            val intent = Intent(this, Anime_Page::class.java)
+            startActivity(intent)
+        }
+
+        try {
+            val assetPath = "file:///android_asset/${sm.getUserAvatar()}"
+
+            Glide.with(this)
+                .load(assetPath)
+                .transform(CircleCrop())
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .into(btnProfileImage)
+        } catch (e: Exception) {
+
+        }
     }
 
 

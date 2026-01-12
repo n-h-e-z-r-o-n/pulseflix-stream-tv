@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 startActivity(Intent(this, Instraction::class.java))
             }else {
                 if (db.isSubscriptionActive()) {
-                    startActivity(Intent(this, Login_Page::class.java))
+                    startActivity(Intent(this, Anime_Page::class.java))
                 } else {
                     startActivity(Intent(this, PayWall::class.java))
                 }
@@ -51,11 +51,7 @@ class MainActivity : ComponentActivity() {
         }, 10000)
 
     }
-
-
-
-
-
+    
 }
 
 

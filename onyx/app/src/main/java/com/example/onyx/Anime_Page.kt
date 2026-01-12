@@ -1,5 +1,7 @@
 package com.example.onyx
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -28,6 +30,7 @@ import kotlin.String
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.onyx.FetchData.AnimeApi
 import com.example.onyx.OnyxClasses.AiringAnimeItem
 import com.example.onyx.OnyxClasses.AnimeAiringAdapter
@@ -46,9 +49,7 @@ import com.example.onyx.OnyxClasses.TrendingAnimeItem
 import com.example.onyx.OnyxClasses.cWatchingAdapter
 import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.LoadingAnimation
-import com.example.onyx.OnyxObjects.NavAction
 import com.example.onyx.OnyxObjects.NotificationHelper
-import com.example.onyx.R
 
 
 class Anime_Page : AppCompatActivity() {
@@ -60,12 +61,7 @@ class Anime_Page : AppCompatActivity() {
      private var userId: Int = -1
      private var urlHome = BuildConfig.A_K      //private var urlHome = "http://192.168.100.22:4000"
 
-
-
-
     //----------------------------------------------------------------------------------------------
-
-
      private lateinit var dubbedAdapter: AnimeGridAdapter
      private lateinit var dubbedRecyclerView: RecyclerView
      private var currentDubbedAnimePage = 0
@@ -112,12 +108,12 @@ class Anime_Page : AppCompatActivity() {
          setContentView(R.layout.activity_anime_page)
 
 
-         NavAction.setupSidebar(this@Anime_Page)
+         //NavAction.setupSidebar(this@Anime_Page)
          LoadingAnimation.setup(this@Anime_Page, R.raw.b)
          LoadingAnimation.show(this@Anime_Page)
 
 
-         db = AppDatabase(this)         // Initialize database
+         db = AppDatabase(this)         // Initialize database==
          sm = SessionManger(this)
          fetchAnimeAPI = AnimeApi(this)
 
@@ -127,7 +123,7 @@ class Anime_Page : AppCompatActivity() {
 
          ////////////////////////////////////////////////////////////////////////////////////////
 
-         val navBar = findViewById<CardView>(R.id.animeNavBar)
+         val navBar = findViewById<LinearLayout>(R.id.animeNavBar)
          val homeAnimeBtn = findViewById<LinearLayout>(R.id.HomeAnimeBtn)
          val favAnimeBtn = findViewById<LinearLayout>(R.id.FavAnimeBtn)
          val searchAnimeBtn = findViewById<LinearLayout>(R.id.SearchAnimeBtn)
@@ -372,6 +368,7 @@ class Anime_Page : AppCompatActivity() {
          ////////////////////////////////////////////////////////////////////////////////////////////
 
          setupSearchUi()
+         ExtraBnts()
 
          /*CoroutineScope(Dispatchers.Main).launch {
              animeHomeData()
@@ -414,13 +411,45 @@ class Anime_Page : AppCompatActivity() {
 
 
 
-
-        CoroutineScope(Dispatchers.Main).launch {
+        lifecycleScope.launch {
             animeWatchedList()
             animeFavoritesList()
             notificationS()
             LoadingAnimation.hide(this@Anime_Page)
         }
+    }
+
+
+    private fun ExtraBnts() {
+
+        val switchBtn = findViewById<LinearLayout>(R.id.switchBtn)
+        val btnProfileCard = findViewById<LinearLayout>(R.id.btnProfile)
+        val btnProfileImage = findViewById<ImageView>(R.id.btnProfileImg)
+
+        btnProfileCard.setOnClickListener {
+            val intent = Intent(this, Profile_Page::class.java)
+            startActivity(intent)
+        }
+
+        switchBtn.setOnClickListener {
+            val intent = Intent(this, Shows_Page::class.java)
+            startActivity(intent)
+        }
+
+
+            try {
+                val assetPath = "file:///android_asset/${sm.getUserAvatar()}"
+
+                Glide.with(this)
+                    .load(assetPath)
+                    .transform(CircleCrop())
+                    .placeholder(R.drawable.ic_person)
+                    .error(R.drawable.ic_person)
+                    .into(btnProfileImage)
+            } catch (e: Exception) {
+
+            }
+
     }
 
 
