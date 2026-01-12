@@ -105,6 +105,10 @@
                     android:singleLine="true"
                     android:text="PG-13"
                     android:textColor="#FFFFFF"
+                    android:shadowColor="#80000000"
+                    android:shadowDx="5"
+                    android:shadowDy="6"
+                    android:shadowRadius="4"
                     android:textSize="10sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
@@ -125,6 +129,10 @@
                     android:singleLine="true"
                     android:text="Mv"
                     android:textColor="#FFFFFF"
+                    android:shadowColor="#80000000"
+                    android:shadowDx="5"
+                    android:shadowDy="6"
+                    android:shadowRadius="4"
                     android:textSize="13sp"
                     tools:ignore="HardcodedText,Suspicious0dp" />
 
@@ -141,6 +149,10 @@
                     android:singleLine="false"
                     android:text="9.7"
                     android:textColor="#FFFFFF"
+                    android:shadowColor="#80000000"
+                    android:shadowDx="5"
+                    android:shadowDy="6"
+                    android:shadowRadius="4"
                     android:textSize="13sp"
                     tools:ignore="HardcodedText,Suspicious0dp" />
 
@@ -157,6 +169,10 @@
                     android:singleLine="false"
                     android:text="2025"
                     android:textColor="#FFFFFF"
+                    android:shadowColor="#80000000"
+                    android:shadowDx="5"
+                    android:shadowDy="6"
+                    android:shadowRadius="4"
                     android:textSize="13sp"
                     tools:ignore="HardcodedText,Suspicious0dp" />
 
@@ -290,6 +306,10 @@
                 android:maxLines="5"
                 android:singleLine="false"
                 android:textColor="#FFFFFF"
+                android:shadowColor="#80000000"
+                android:shadowDx="4"
+                android:shadowDy="5"
+                android:shadowRadius="3"
                 android:textSize="14sp"
                 tools:ignore="Suspicious0dp" />
 

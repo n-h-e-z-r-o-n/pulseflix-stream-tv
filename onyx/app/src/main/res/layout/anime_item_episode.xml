@@ -1,17 +1,26 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="190dp"
     android:layout_height="120dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="3dp"
+    app:cardCornerRadius="10dp"
     android:foreground="@drawable/item_episode_focus"
-    android:background="@drawable/item_episode_focus"
+    app:cardBackgroundColor="#409090C0"
     android:clickable="true"
     android:focusable="true"
     android:clipToOutline="true"
-    android:clipToPadding="true"
     android:focusableInTouchMode="true"
-    android:elevation="2dp"
-    tools:ignore="TouchTargetSizeCheck">
+    app:cardElevation="0dp"
+    tools:ignore="TouchTargetSizeCheck"
+    tools:targetApi="31">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#409090C0"/>
+
+
 
 
 
@@ -21,6 +30,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        android:background="#409090C0"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
@@ -50,7 +60,7 @@
             android:shadowDx="4"
             android:shadowDy="4"
             android:shadowRadius="4"
-            android:textColor="?attr/FG_color"
+            android:textColor="#FFFFFF"
             android:textSize="25sp"
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
@@ -68,7 +78,7 @@
             android:shadowRadius="2"
             android:text="createDebugApkListingFileRedirec"
             android:ellipsize="end"
-            android:textColor="?attr/FG_color"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             tools:ignore="HardcodedText,SmallSp" />
 
@@ -96,4 +106,4 @@
     </LinearLayout>
 
 
-</FrameLayout>
+</androidx.cardview.widget.CardView>

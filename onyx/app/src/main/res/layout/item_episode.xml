@@ -109,7 +109,7 @@
                             android:fontFamily="@font/o"
                             android:maxLines="1"
                             android:text="S1-E2"
-                            android:textColor="?attr/FG_color"
+                            android:textColor="#FFFFFF"
                             android:textSize="15sp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText" />
@@ -130,7 +130,7 @@
                             android:shadowDy="4"
                             android:shadowRadius="4"
                             android:text="Episode Title"
-                            android:textColor="?attr/FG_color"
+                            android:textColor="#FFFFFF"
                             android:textSize="10sp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText,SmallSp" />

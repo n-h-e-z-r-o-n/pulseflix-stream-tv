@@ -471,7 +471,7 @@ class CategoryAdapter(
 
     companion object {
         private var lastKeyTime = 0L
-        private val KEY_DEBOUNCE_DELAY = 400L // ms
+        private val KEY_DEBOUNCE_DELAY = 200L // ms
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

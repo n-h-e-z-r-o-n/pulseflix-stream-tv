@@ -36,7 +36,7 @@
         android:ellipsize="end"
         android:padding="4dp"
         android:text="Season 1"
-        android:textColor="?attr/FG_color"
+        android:textColor="#FFFFFF"
         android:fontFamily="@font/e"
         android:textSize="18sp"
         tools:ignore="HardcodedText,Suspicious0dp"

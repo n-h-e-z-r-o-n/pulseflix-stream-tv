@@ -377,14 +377,9 @@ class Anime_Page : AppCompatActivity() {
              animeHomeData()
              loadDubbedAnime()
              loadPopularAnime()
-
-
-
          }
-
           */
 
-         window.decorView.post {
 
                  lifecycleScope.launch {
                      animeHomeData()
@@ -400,8 +395,6 @@ class Anime_Page : AppCompatActivity() {
                      animeWatchedList()
                      notificationS()
                  }
-         }
-
      }
 
 

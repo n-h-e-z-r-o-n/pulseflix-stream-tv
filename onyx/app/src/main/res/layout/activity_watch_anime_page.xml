@@ -53,7 +53,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="2dp"
                     android:background="@drawable/overlay_bottom_gradient"
                     android:layout_gravity="bottom"/>
             </FrameLayout>
@@ -111,7 +111,7 @@
                             android:textSize="25sp"
                             android:fontFamily="@font/p"
                             android:text="Campfire Cooking in Another World with My Absurd Skill Season 2"
-                            android:textColor="?attr/FG_color"
+                            android:textColor="#FFFFFF"
                             tools:ignore="HardcodedText"
                             android:layout_gravity="center"
                             android:maxLines="2"
@@ -127,7 +127,7 @@
                             android:textSize="13sp"
                             android:fontFamily="@font/l"
                             android:text=""
-                            android:textColor="?attr/FG_color"
+                            android:textColor="#FFFFFF"
                             tools:ignore="HardcodedText,SmallSp"
                             android:shadowColor="#000000"
                             android:shadowDx="5"
@@ -197,7 +197,7 @@
                                         android:singleLine="true"
                                         android:text="HD"
                                         android:fontFamily="@font/p"
-                                        android:textColor="?attr/FG_color"
+                                        android:textColor="#FFFFFF"
                                         android:textSize="15sp"
                                         android:layout_marginHorizontal="4dp"
                                         tools:ignore="HardcodedText,Suspicious0dp" />
@@ -230,7 +230,7 @@
                                             android:layout_height="match_parent"
                                             android:src="@drawable/ic_sub"
                                             android:scaleType="centerCrop"
-                                            app:tint="?attr/FG_color"
+                                            app:tint="#FFFFFF"
                                             tools:ignore="ContentDescription,TooDeepLayout" />
                                         <TextView
                                             android:id="@+id/watchSub"
@@ -240,7 +240,7 @@
                                             android:maxLines="1"
                                             android:text="23"
                                             android:singleLine="true"
-                                            android:textColor="?attr/FG_color"
+                                            android:textColor="#FFFFFF"
                                             android:fontFamily="@font/p"
                                             android:textSize="15sp"
                                             android:layout_marginHorizontal="4dp"
@@ -273,7 +273,7 @@
                                             android:layout_width="16dp"
                                             android:layout_height="match_parent"
                                             android:src="@drawable/ic_dub"
-                                            app:tint="?attr/FG_color"
+                                            app:tint="#FFFFFF"
                                             tools:ignore="ContentDescription" />
 
                                         <TextView
@@ -284,7 +284,7 @@
                                             android:maxLines="1"
                                             android:text="43"
                                             android:singleLine="true"
-                                            android:textColor="?attr/FG_color"
+                                            android:textColor="#FFFFFF"
                                             android:fontFamily="@font/p"
                                             android:textSize="15sp"
                                             android:layout_marginHorizontal="4dp"
@@ -314,7 +314,7 @@
                                     android:maxLines="1"
                                     android:text="Tv"
                                     android:singleLine="true"
-                                    android:textColor="?attr/FG_color"
+                                    android:textColor="#FFFFFF"
                                     android:textSize="15sp"
                                     android:fontFamily="@font/n"
                                     android:alpha="0.7"
@@ -323,7 +323,8 @@
                                     android:layout_gravity="center"
                                     android:shadowColor="#000000"
                                     android:shadowDx="5"
-                                    android:shadowDy="6"/>
+                                    android:shadowDy="6"
+                                    android:shadowRadius="4"/>
 
                                 <View
                                     android:layout_width="1dp"
@@ -344,7 +345,7 @@
                                     android:maxLines="1"
                                     android:text=""
                                     android:singleLine="false"
-                                    android:textColor="?attr/FG_color"
+                                    android:textColor="#FFFFFF"
                                     android:textSize="15sp"
                                     android:fontFamily="@font/n"
                                     android:alpha="0.7"
@@ -352,7 +353,8 @@
                                     android:gravity="center"
                                     android:shadowColor="#000000"
                                     android:shadowDx="5"
-                                    android:shadowDy="6"/>
+                                    android:shadowDy="6"
+                                    android:shadowRadius="4"/>
 
                                 <View
                                     android:layout_width="1dp"
@@ -374,7 +376,7 @@
                                     android:maxLines="1"
                                     android:text=""
                                     android:singleLine="false"
-                                    android:textColor="?attr/FG_color"
+                                    android:textColor="#FFFFFF"
                                     android:textSize="18sp"
                                     android:fontFamily="@font/n"
                                     tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
@@ -383,7 +385,8 @@
                                     android:layout_marginStart="9dp"
                                     android:shadowColor="#000000"
                                     android:shadowDx="5"
-                                    android:shadowDy="6"/>
+                                    android:shadowDy="6"
+                                    android:shadowRadius="4"/>
                             </LinearLayout>
 
                             <TextView
@@ -397,7 +400,11 @@
                                 android:layout_marginTop="10dp"
                                 android:ellipsize="end"
                                 android:maxLines="3"
-                                android:textColor="?FG_color"
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="5"
+                                android:shadowDy="6"
+                                android:shadowRadius="4"
                                 android:textSize="15sp"
                                 tools:ignore="NestedWeights,SmallSp" />
 
@@ -421,7 +428,7 @@
                                     android:layout_width="34dp"
                                     android:layout_height="34dp"
                                     android:src="@drawable/ic_addfave"
-                                    app:tint="?attr/FG_color"
+                                    app:tint="#FFFFFF"
                                     android:background="@android:color/transparent"
                                     android:textColor="?attr/FG_color"
                                     android:textAllCaps="false"
@@ -432,10 +439,14 @@
                                     android:id="@+id/favoriteButtonText"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Add to Fav"
+                                    android:text="Add to Fav "
                                     android:textSize="15sp"
                                     android:fontFamily="@font/o"
-                                    android:textColor="?attr/FG_color"
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="5"
+                                    android:shadowDy="6"
+                                    android:shadowRadius="4"
                                     android:textStyle="bold"
                                     tools:ignore="HardcodedText" />
 
@@ -450,7 +461,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="seasons"
-                        android:textColor="?attr/FG_color"
+                        android:textColor="#FFFFFF"
                         android:paddingHorizontal="5dp"
                         android:textSize="23sp"
                         android:textStyle="bold"

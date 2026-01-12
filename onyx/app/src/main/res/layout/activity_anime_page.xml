@@ -415,7 +415,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     tools:ignore="UselessParent"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
 
                     <FrameLayout
@@ -560,7 +560,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="280dp"
@@ -647,9 +647,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="490dp"
-                            android:background="@drawable/background_hovor"
-                            android:focusableInTouchMode="false"
-                            android:clickable="false"
                             android:descendantFocusability="afterDescendants"
                             >
 
@@ -659,8 +656,8 @@
                                 android:layout_height="match_parent"
                                 android:clipToPadding="false"
                                 android:overScrollMode="never"
-                                android:descendantFocusability="afterDescendants"
                                 android:focusable="false"
+                                android:focusableInTouchMode="false"
                                 android:scrollbars="none"
                                 android:layout_margin="4dp"
                                 tools:ignore="NestedWeights"

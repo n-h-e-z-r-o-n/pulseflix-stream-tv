@@ -15,6 +15,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -223,7 +224,12 @@ class Watch_Anime_Page : AppCompatActivity() {
     }
 
     private fun tmdbRelation(animeName:String, animeType:String ) {
-        val type = "tv"
+        var type = "tv"
+        if(animeType == "tv"){
+            type = "tv"
+        }else{
+            type="movie"
+        }
         CoroutineScope(Dispatchers.IO).launch {
 
             val url_s =
@@ -364,7 +370,7 @@ class Watch_Anime_Page : AppCompatActivity() {
         for (i in 0 until episodes.length()) {
             val episode = episodes.getJSONObject(i)
 
-            val cardView = inflater.inflate(R.layout.anime_item_episode, container, false) as FrameLayout
+            val cardView = inflater.inflate(R.layout.anime_item_episode, container, false) as CardView
             val epTitle = cardView.findViewById<TextView>(R.id.episode_name)
             val epNumber = cardView.findViewById<TextView>(R.id.episode_Number)
             val epImg = cardView.findViewById<ImageView>(R.id.episode_image)
@@ -497,10 +503,10 @@ class Watch_Anime_Page : AppCompatActivity() {
             val isFav = db.isFavoriteAnime(userId, animeId)
             if (isFav) {
                 favoriteButtonImg.setImageResource(R.drawable.ic_tickfave)
-                favoriteButtonText.text = "Remove-Fav"
+                favoriteButtonText.text = "Remove-Fav "
             } else {
                 favoriteButtonImg.setImageResource(R.drawable.ic_addfave)
-                favoriteButtonText.text= "Add-to-Fav"
+                favoriteButtonText.text= "Add-to-Fav "
             }
         }
 
