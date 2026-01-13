@@ -370,11 +370,11 @@ class Shows_Page : AppCompatActivity() {
         }
 
 
-        lifecycleScope.launch {
+
             notificationS()
             tvFavoritesList()
             watchedList()
-        }
+
     }
 
     override fun onDestroy() {
@@ -395,13 +395,17 @@ class Shows_Page : AppCompatActivity() {
         val btnProfileImage = findViewById<ImageView>(R.id.btnProfileImg)
 
         btnProfileCard.setOnClickListener {
-            val intent = Intent(this, Profile_Page::class.java)
-            startActivity(intent)
+            lifecycleScope.launch(Dispatchers.Main) {
+                val intent = Intent(this@Shows_Page, Profile_Page::class.java)
+                startActivity(intent)
+            }
         }
 
         switchBtn.setOnClickListener {
-            val intent = Intent(this, Anime_Page::class.java)
-            startActivity(intent)
+            lifecycleScope.launch(Dispatchers.Main) {
+                val intent = Intent(this@Shows_Page, Anime_Page::class.java)
+                startActivity(intent)
+            }
         }
 
         try {
@@ -1520,167 +1524,153 @@ class Shows_Page : AppCompatActivity() {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private fun tvFavoritesList(){
+        lifecycleScope.launch(Dispatchers.Main) {
 
-        val FavBackdrop: ImageView = findViewById(R.id.FavBackdrop)
-        val FavTitle: TextView = findViewById(R.id.FavTitle)
-        val FavGenre: TextView = findViewById(R.id.FavGenre)
-        val FavType: TextView = findViewById(R.id.FavType)
-        val FavRating: TextView = findViewById(R.id.FavRating)
-        val FavYear: TextView = findViewById(R.id.FavYear)
-        val FavOverview: TextView = findViewById(R.id.FavOverview)
-        val RemoveFaveItem: LinearLayout = findViewById(R.id.RemoveFaveItem)
-
-
-        val showFavData = db.getFavoriteShows(userId)
-
-        Log.e("show_Notification", "data: ${showFavData.toString()}")
-
-        val items = mutableListOf<FavItem>()
-
-        for (anime in showFavData) {
-            findViewById<TextView>(R.id.favEmptyState).visibility = View.GONE
+                val FavBackdrop: ImageView = findViewById(R.id.FavBackdrop)
+                val FavTitle: TextView = findViewById(R.id.FavTitle)
+                val FavGenre: TextView = findViewById(R.id.FavGenre)
+                val FavType: TextView = findViewById(R.id.FavType)
+                val FavRating: TextView = findViewById(R.id.FavRating)
+                val FavYear: TextView = findViewById(R.id.FavYear)
+                val FavOverview: TextView = findViewById(R.id.FavOverview)
+                val RemoveFaveItem: LinearLayout = findViewById(R.id.RemoveFaveItem)
 
 
-            Log.d("Fav_anime", "show_id: ${anime["show_id"]}")
-            Log.d("Fav_anime", "title: ${anime["title"]}")
-            Log.d("Fav_anime", "poster: ${anime["poster"]}")
-            Log.d("Fav_anime", "type: ${anime["type"]}")
-            Log.d("Fav_anime", "noOfSeason: ${anime["noOfSeason"]}")
-            Log.d("Fav_anime", "lastSeason: ${anime["lastSeason"]}")
-            Log.d("Fav_anime", "lastEpisode: ${anime["lastEpisode"]}")
+                val showFavData =  withContext(Dispatchers.IO) { db.getFavoriteShows(userId)}
 
-            val genres = anime["genres"] ?: ""
-            items.add(
-                FavItem(
-                    title = anime["title"] ?: "",
-                    posterUrl = anime["poster"] ?: "",
-                    backdropUrl = anime["backdrop"] ?: "",
-                    releaseDate = anime["year"] ?: "",
-                    runtime = anime["runtime"] ?: "",
-                    overview = anime["overview"] ?: "",
-                    voteAverage = anime["rating"] ?: "",
-                    genres = genres,
-                    production = "",
-                    parentalGuide = anime["pg"] ?: "",
-                    imdbCode = anime["show_id"] ?: "",
-                    showType = anime["type"] ?: ""
+                Log.e("show_Notification", "data: ${showFavData.toString()}")
+
+                val items = mutableListOf<FavItem>()
+
+                for (anime in showFavData) {
+                    findViewById<TextView>(R.id.favEmptyState).visibility = View.GONE
+
+
+                    Log.d("Fav_anime", "show_id: ${anime["show_id"]}")
+                    Log.d("Fav_anime", "title: ${anime["title"]}")
+                    Log.d("Fav_anime", "poster: ${anime["poster"]}")
+                    Log.d("Fav_anime", "type: ${anime["type"]}")
+                    Log.d("Fav_anime", "noOfSeason: ${anime["noOfSeason"]}")
+                    Log.d("Fav_anime", "lastSeason: ${anime["lastSeason"]}")
+                    Log.d("Fav_anime", "lastEpisode: ${anime["lastEpisode"]}")
+
+                    val genres = anime["genres"] ?: ""
+                    items.add(
+                        FavItem(
+                            title = anime["title"] ?: "",
+                            posterUrl = anime["poster"] ?: "",
+                            backdropUrl = anime["backdrop"] ?: "",
+                            releaseDate = anime["year"] ?: "",
+                            runtime = anime["runtime"] ?: "",
+                            overview = anime["overview"] ?: "",
+                            voteAverage = anime["rating"] ?: "",
+                            genres = genres,
+                            production = "",
+                            parentalGuide = anime["pg"] ?: "",
+                            imdbCode = anime["show_id"] ?: "",
+                            showType = anime["type"] ?: ""
+                        )
+                    )
+                }
+
+                faveAdapter = FavAdapter(
+                    items,
+                    R.layout.square_card,
+                    FavBackdrop,
+                    FavTitle,
+                    FavGenre,
+                    FavType,
+                    FavRating,
+                    FavYear,
+                    FavOverview,
+                    RemoveFaveItem
                 )
-            )
+
+                faveRecyclerView.adapter = faveAdapter
+
         }
-
-        faveAdapter = FavAdapter(
-            items,
-            R.layout.square_card,
-            FavBackdrop,
-            FavTitle,
-            FavGenre,
-            FavType,
-            FavRating,
-            FavYear,
-            FavOverview,
-            RemoveFaveItem
-        )
-
-        faveRecyclerView.adapter = faveAdapter
-
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private fun notificationS() {
+        lifecycleScope.launch(Dispatchers.Main) {
 
-        val fetchedNot = NotificationHelper.getTvNotifications(this@Shows_Page)
-        Log.d("Fav_tv", "fetchedNot: $fetchedNot")
-        if(fetchedNot){
-            findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.VISIBLE
-        }
-
-
-
-
-        val dnot = db.getAllTvNotifications(userId)
-        val notifications = mutableListOf<NotificationItem>()
-
-        findViewById<TextView>(R.id.notificationHeadline).text = "notifications (${dnot.size})"
+            val fetchedNot = NotificationHelper.getTvNotifications(this@Shows_Page)
+            Log.d("Fav_tv", "fetchedNot: $fetchedNot")
+            if (fetchedNot) {
+                findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.VISIBLE
+            }
 
 
+            val dnot = withContext(Dispatchers.IO) { db.getAllTvNotifications(userId) }
+            val notifications = mutableListOf<NotificationItem>()
 
-        for (item in dnot) {
-
-            Log.d("Not_tv", "notificationId: ${item["id"]}")
-            Log.d("Not_tv", "anime_id: ${item["anime_id"]}")
-            Log.d("Not_tv", "title: ${item["title"]}")
-            Log.d("Not_tv", "poster: ${item["poster"]}")
-            Log.d("Not_tv", "noOfSeason: ${item["noOfSeason"]}")
-            Log.d("Not_tv", "lastSeason: ${item["lastSeason"]}")
-            Log.d("Not_tv", "lastEpisode: ${item["lastEpisode"]}")
-            Log.d("Not_tv", "notify_at: ${item["notify_at"]}\n\n\n")
+            findViewById<TextView>(R.id.notificationHeadline).text = "notifications (${dnot.size})"
 
 
-            val itemData = NotificationItem(
-                notificationId = item["id"].toString(),      // ✅ PASS ID
-                imdbCode = item["tv_id"].toString(),
-                title = item["title"].toString(),
-                imageUrl = item["poster"],
-                info = "Season ${item["lastSeason"]} - Episode ${item["lastEpisode"]}",
-                type = "tv",
-                newSeason = item["lastSeason"].toString(),
-                newEpisode = item["lastEpisode"].toString(),
-                time = item["notify_at"].toString()
+
+            for (item in dnot) {
+
+                Log.d("Not_tv", "notificationId: ${item["id"]}")
+                Log.d("Not_tv", "anime_id: ${item["anime_id"]}")
+                Log.d("Not_tv", "title: ${item["title"]}")
+                Log.d("Not_tv", "poster: ${item["poster"]}")
+                Log.d("Not_tv", "noOfSeason: ${item["noOfSeason"]}")
+                Log.d("Not_tv", "lastSeason: ${item["lastSeason"]}")
+                Log.d("Not_tv", "lastEpisode: ${item["lastEpisode"]}")
+                Log.d("Not_tv", "notify_at: ${item["notify_at"]}\n\n\n")
+
+
+                val itemData = NotificationItem(
+                    notificationId = item["id"].toString(),      // ✅ PASS ID
+                    imdbCode = item["tv_id"].toString(),
+                    title = item["title"].toString(),
+                    imageUrl = item["poster"],
+                    info = "Season ${item["lastSeason"]} - Episode ${item["lastEpisode"]}",
+                    type = "tv",
+                    newSeason = item["lastSeason"].toString(),
+                    newEpisode = item["lastEpisode"].toString(),
+                    time = item["notify_at"].toString()
+                )
+                notifications.add(itemData)
+            }
+
+
+            notificationAdapter = NotificationAdapter(
+                items = notifications.toMutableList(),
+                layoutResId = R.layout.item_notification
             )
-            notifications.add(itemData)
+            notificationRecyclerView.adapter = notificationAdapter
+
         }
-
-
-        notificationAdapter = NotificationAdapter(
-            items = notifications.toMutableList(),
-            layoutResId = R.layout.item_notification
-        )
-        notificationRecyclerView.adapter = notificationAdapter
-
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /*
-    private fun watchedList(){
-
-
-        val userId = sm.getUserId()
-        val cWatchingMv = db.getContinueWatchingAll(userId, "movie")
-        val cWatchingTv = db.getContinueWatchingAll(userId, "tv")
-
-
-        watchAdapter = cWatchingAdapter(
-            cWatching,
-            R.layout.item_watched
-        )
-        watchRecyclerView.adapter = watchAdapter
-
-    }
-
-     */
 
     private fun watchedList() {
-        val userId = sm.getUserId()
-        val cWatchingMv = db.getContinueWatchingAll(userId, "movie")
-        val cWatchingTv = db.getContinueWatchingAll(userId, "tv")
+        lifecycleScope.launch(Dispatchers.Main) {
+                val userId = sm.getUserId()
+                val cWatchingMv = withContext(Dispatchers.IO) { db.getContinueWatchingAll(userId, "movie")}
+                val cWatchingTv = withContext(Dispatchers.IO) { db.getContinueWatchingAll(userId, "tv")}
 
-        // Combine and sort in one operation
-        val combinedList = ArrayList<HashMap<String, String>>().apply {
-            addAll(cWatchingMv)
-            addAll(cWatchingTv)
-            // Sort by updated_at in descending order
-            sortByDescending { it["updated_at"]?.toLongOrNull() ?: 0L }
+                // Combine and sort in one operation
+                val combinedList = ArrayList<HashMap<String, String>>().apply {
+                    addAll(cWatchingMv)
+                    addAll(cWatchingTv)
+                    // Sort by updated_at in descending order
+                    sortByDescending { it["updated_at"]?.toLongOrNull() ?: 0L }
+                }
+
+                watchAdapter = cWatchingAdapter(
+                    combinedList,
+                    R.layout.item_watched
+                )
+                watchRecyclerView.adapter = watchAdapter
         }
-
-        watchAdapter = cWatchingAdapter(
-            combinedList,
-            R.layout.item_watched
-        )
-        watchRecyclerView.adapter = watchAdapter
     }
 
 

@@ -422,13 +422,17 @@ class Anime_Page : AppCompatActivity() {
         val btnProfileImage = findViewById<ImageView>(R.id.btnProfileImg)
 
         btnProfileCard.setOnClickListener {
-            val intent = Intent(this, Profile_Page::class.java)
-            startActivity(intent)
+            lifecycleScope.launch(Dispatchers.Main) {
+                val intent = Intent(this@Anime_Page, Profile_Page::class.java)
+                startActivity(intent)
+            }
         }
 
         switchBtn.setOnClickListener {
-            val intent = Intent(this, Shows_Page::class.java)
-            startActivity(intent)
+            lifecycleScope.launch(Dispatchers.Main) {
+                val intent = Intent(this@Anime_Page, Shows_Page::class.java)
+                startActivity(intent)
+            }
         }
 
 
