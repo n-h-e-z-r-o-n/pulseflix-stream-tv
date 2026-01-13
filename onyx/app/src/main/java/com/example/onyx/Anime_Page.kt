@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
@@ -369,6 +370,7 @@ class Anime_Page : AppCompatActivity() {
 
          setupSearchUi()
          ExtraBnts()
+         setupBackPressedCallback()
 
          /*CoroutineScope(Dispatchers.Main).launch {
              animeHomeData()
@@ -378,20 +380,16 @@ class Anime_Page : AppCompatActivity() {
           */
 
 
-                 lifecycleScope.launch {
+
                      animeHomeData()
-                 }
-                 lifecycleScope.launch {
+
                      loadDubbedAnime()
 
-                 }
-                 lifecycleScope.launch {
                      loadPopularAnime()
-                 }
-                 lifecycleScope.launch {
+
                      animeWatchedList()
                      notificationS()
-                 }
+
      }
 
 
@@ -409,14 +407,11 @@ class Anime_Page : AppCompatActivity() {
             notificationAdapter.clearItems()
         }
 
-
-
-        lifecycleScope.launch {
             animeWatchedList()
             animeFavoritesList()
             notificationS()
             LoadingAnimation.hide(this@Anime_Page)
-        }
+
     }
 
 
@@ -454,96 +449,100 @@ class Anime_Page : AppCompatActivity() {
 
 
      private fun animeHomeData() {
-         val displayMetrics = resources.displayMetrics
-         val screenWidth = displayMetrics.widthPixels     // in pixels
-         val screenHeight = displayMetrics.heightPixels    // in pixels
+         lifecycleScope.launch(Dispatchers.Main){
+             val displayMetrics = resources.displayMetrics
+             val screenWidth = displayMetrics.widthPixels     // in pixels
+             val screenHeight = displayMetrics.heightPixels    // in pixels
 
-         val inflater = LayoutInflater.from(this)
+             val inflater = LayoutInflater.from(this@Anime_Page)
 
-         val SpotlightContaner = findViewById<FrameLayout>(R.id.spotlightAnimes)
+             val SpotlightContaner = findViewById<FrameLayout>(R.id.spotlightAnimes)
 
-         val params = SpotlightContaner.layoutParams
-         params.height = (screenHeight * 0.75).toInt()
-         SpotlightContaner.layoutParams = params
-
-
-         val jsonObject = fetchAnimeAPI.animeHome()
-
-         if (jsonObject == null){ LoadingAnimation.setup(this@Anime_Page, R.raw.error)
-             return}
-
-         Log.e("ANIME_STATUS HOME 2", jsonObject.toString())
-
-         val ShowHomeData = jsonObject.getJSONObject("data")
-         Log.e("ANIME_STATUS HOME 3", ShowHomeData.toString())
+             val params = SpotlightContaner.layoutParams
+             params.height = (screenHeight * 0.75).toInt()
+             SpotlightContaner.layoutParams = params
 
 
-         val spotlightAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
-         val trendingAnimes = ShowHomeData.getJSONArray("trendingAnimes")
-         val latestEpisodeAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
-         val top10Animes = ShowHomeData.getJSONArray("spotlightAnimes")
-         val topAiringAnimes = ShowHomeData.getJSONArray("topAiringAnimes")
-         val latestCompletedAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
+             val jsonObject = withContext(Dispatchers.IO) {fetchAnimeAPI.animeHome()}
 
-
-
-         for (i in 0 until spotlightAnimes.length()) {
-
-             val card = inflater.inflate(
-                 R.layout.anime_card_spotlight,
-                 SpotlightContaner,
-                 false
-             ) as CardView
-
-
-             val item = spotlightAnimes.getJSONObject(i)
-             val title = item.getString("name")
-             val overview = item.getString("description")
-             val imageUrl = item.getString("poster")
-             val id = item.getString("id")
-             val type = item.getString("type")
-             val runtime = item.optJSONArray("otherInfo").optString(1, "")
-             val release_date = item.optJSONArray("otherInfo").optString(2, "")
-             val quality = item.optJSONArray("otherInfo").optString(3, "")
-             val sub = item.getJSONObject("episodes").optInt("sub", 0)
-             val dub = item.getJSONObject("episodes").optInt("dub", 0)
-
-             card.findViewById<TextView>(R.id.cardTitle).text = title
-             card.findViewById<TextView>(R.id.cardPg).text = "PG-13"
-             card.findViewById<TextView>(R.id.cardType).text = type
-             card.findViewById<TextView>(R.id.cardRuntime).text = runtime
-             card.findViewById<TextView>(R.id.cardYear).text = release_date
-             card.findViewById<TextView>(R.id.cardQuality).text = quality
-             card.findViewById<TextView>(R.id.cardSub).text = sub.toString()
-             card.findViewById<TextView>(R.id.cardDub).text = dub.toString()
-             card.findViewById<TextView>(R.id.cardOverview).text = overview
-
-             val SliderBackdrop = card.findViewById<ImageView>(R.id.SliderBackdrop)
-
-             Glide.with(card.context)
-                 .load(imageUrl)
-                 .centerInside()
-                 .into(SliderBackdrop)
-
-
-             card.setOnClickListener {
-                 val context = card.context
-                 val intent = android.content.Intent(context, Watch_Anime_Page::class.java)
-                 intent.putExtra("anime_code", id)
-                 intent.putExtra("anime_poster", imageUrl)
-                 context.startActivity(intent)
+             if (jsonObject == null){
+                 LoadingAnimation.setup(this@Anime_Page, R.raw.error)
+                 return@launch
              }
 
-             SpotlightContaner.addView(card)
+             Log.e("ANIME_STATUS HOME 2", jsonObject.toString())
 
+             val ShowHomeData = jsonObject.getJSONObject("data")
+             Log.e("ANIME_STATUS HOME 3", ShowHomeData.toString())
+
+
+             val spotlightAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
+             val trendingAnimes = ShowHomeData.getJSONArray("trendingAnimes")
+             val latestEpisodeAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
+             val top10Animes = ShowHomeData.getJSONArray("spotlightAnimes")
+             val topAiringAnimes = ShowHomeData.getJSONArray("topAiringAnimes")
+             val latestCompletedAnimes = ShowHomeData.getJSONArray("spotlightAnimes")
+
+
+
+             for (i in 0 until spotlightAnimes.length()) {
+
+                 val card = inflater.inflate(
+                     R.layout.anime_card_spotlight,
+                     SpotlightContaner,
+                     false
+                 ) as CardView
+
+
+                 val item = spotlightAnimes.getJSONObject(i)
+                 val title = item.getString("name")
+                 val overview = item.getString("description")
+                 val imageUrl = item.getString("poster")
+                 val id = item.getString("id")
+                 val type = item.getString("type")
+                 val runtime = item.optJSONArray("otherInfo").optString(1, "")
+                 val release_date = item.optJSONArray("otherInfo").optString(2, "")
+                 val quality = item.optJSONArray("otherInfo").optString(3, "")
+                 val sub = item.getJSONObject("episodes").optInt("sub", 0)
+                 val dub = item.getJSONObject("episodes").optInt("dub", 0)
+
+                 card.findViewById<TextView>(R.id.cardTitle).text = title
+                 card.findViewById<TextView>(R.id.cardPg).text = "PG-13"
+                 card.findViewById<TextView>(R.id.cardType).text = type
+                 card.findViewById<TextView>(R.id.cardRuntime).text = runtime
+                 card.findViewById<TextView>(R.id.cardYear).text = release_date
+                 card.findViewById<TextView>(R.id.cardQuality).text = quality
+                 card.findViewById<TextView>(R.id.cardSub).text = sub.toString()
+                 card.findViewById<TextView>(R.id.cardDub).text = dub.toString()
+                 card.findViewById<TextView>(R.id.cardOverview).text = overview
+
+                 val SliderBackdrop = card.findViewById<ImageView>(R.id.SliderBackdrop)
+
+                 Glide.with(card.context)
+                     .load(imageUrl)
+                     .centerInside()
+                     .into(SliderBackdrop)
+
+
+                 card.setOnClickListener {
+                     val context = card.context
+                     val intent = android.content.Intent(context, Watch_Anime_Page::class.java)
+                     intent.putExtra("anime_code", id)
+                     intent.putExtra("anime_poster", imageUrl)
+                     context.startActivity(intent)
+                 }
+
+                 SpotlightContaner.addView(card)
+
+             }
+
+
+             showTrending(trendingAnimes)
+             showAiring(topAiringAnimes)
+
+             GlobalUtils.setupCardStackFromContainer(SpotlightContaner, 7000L)
+             LoadingAnimation.hide(this@Anime_Page)
          }
-
-
-         showTrending(trendingAnimes)
-         showAiring(topAiringAnimes)
-
-         GlobalUtils.setupCardStackFromContainer(SpotlightContaner, 7000L)
-         LoadingAnimation.hide(this@Anime_Page)
      }
 
 
@@ -999,98 +998,103 @@ class Anime_Page : AppCompatActivity() {
      ///////////////////////////////////////////////////////////////////////////////////////////////
 
         private fun animeWatchedList(){
-            val userId = sm.getUserId()
-            val cWatching = db.getContinueWatchingAll(userId, "anime")
+            lifecycleScope.launch(Dispatchers.Main) {
+                val userId = sm.getUserId()
+                val cWatching = withContext(Dispatchers.IO) { db.getContinueWatchingAll(userId, "anime")}
 
-            watchAdapter = cWatchingAdapter(
-                cWatching,
-                R.layout.item_watched
-            )
-            watchRecyclerView.adapter = watchAdapter
-
-        }
-
-    private fun animeFavoritesList(){
-
-        val FavBackdrop: ImageView = findViewById(R.id.FavBackdrop)
-        val FavTitle: TextView = findViewById(R.id.FavTitle)
-        val FavGenre: TextView = findViewById(R.id.FavGenre)
-        val FavType: TextView = findViewById(R.id.FavType)
-        val FavRating: TextView = findViewById(R.id.FavRating)
-        val FavYear: TextView = findViewById(R.id.FavYear)
-        val FavOverview: TextView = findViewById(R.id.FavOverview)
-        val RemoveFaveItem: LinearLayout = findViewById(R.id.RemoveFaveItem)
-
-
-        val animeFavData = db.getFavoriteAnime(userId)
-
-        val items = mutableListOf<FavItem>()
-
-        for (anime in animeFavData) {
-
-            Log.d("Fav_anime", "anime_id: ${anime["anime_id"]}")
-            Log.d("Fav_anime", "title: ${anime["name"]}")
-            Log.d("Fav_anime", "poster: ${anime["poster"]}")
-            Log.d("Fav_anime", "type: ${anime["type"]}")
-            Log.d("Fav_anime", "seasons: ${anime["seasons"]}")
-            Log.d("Fav_anime", "sub: ${anime["sub"]}")
-            Log.d("Fav_anime", "dub: ${anime["dub"]}")
-
-            val genres = anime["genre"] ?: ""
-            items.add(
-                FavItem(
-                    title = anime["name"] ?: "",
-                    posterUrl = anime["poster"] ?: "",
-                    backdropUrl = anime["poster"] ?: "",
-                    releaseDate = anime["aired"] ?: "",
-                    runtime = anime["duration"] ?: "",
-                    overview = anime["description"] ?: "",
-                    voteAverage = anime["rating"] ?: "",
-                    genres = genres,
-                    production = "",
-                    parentalGuide = anime["rating"] ?: "",
-                    imdbCode = anime["anime_id"] ?: "",
-                    showType = "anime"
+                watchAdapter = cWatchingAdapter(
+                    cWatching,
+                    R.layout.item_watched
                 )
-            )
+                watchRecyclerView.adapter = watchAdapter
+            }
+
         }
 
-        faveAdapter = FavAdapter(
-            items,
-            R.layout.square_card,
-            FavBackdrop,
-            FavTitle,
-            FavGenre,
-            FavType,
-            FavRating,
-            FavYear,
-            FavOverview,
-            RemoveFaveItem
-        )
+    private fun animeFavoritesList() {
+        lifecycleScope.launch(Dispatchers.Main) {
 
-        faveRecyclerView.adapter = faveAdapter
+            val FavBackdrop: ImageView = findViewById(R.id.FavBackdrop)
+            val FavTitle: TextView = findViewById(R.id.FavTitle)
+            val FavGenre: TextView = findViewById(R.id.FavGenre)
+            val FavType: TextView = findViewById(R.id.FavType)
+            val FavRating: TextView = findViewById(R.id.FavRating)
+            val FavYear: TextView = findViewById(R.id.FavYear)
+            val FavOverview: TextView = findViewById(R.id.FavOverview)
+            val RemoveFaveItem: LinearLayout = findViewById(R.id.RemoveFaveItem)
 
+
+            val animeFavData = withContext(Dispatchers.IO) { db.getFavoriteAnime(userId)}
+
+            val items = mutableListOf<FavItem>()
+
+            for (anime in animeFavData) {
+
+                Log.d("Fav_anime", "anime_id: ${anime["anime_id"]}")
+                Log.d("Fav_anime", "title: ${anime["name"]}")
+                Log.d("Fav_anime", "poster: ${anime["poster"]}")
+                Log.d("Fav_anime", "type: ${anime["type"]}")
+                Log.d("Fav_anime", "seasons: ${anime["seasons"]}")
+                Log.d("Fav_anime", "sub: ${anime["sub"]}")
+                Log.d("Fav_anime", "dub: ${anime["dub"]}")
+
+                val genres = anime["genre"] ?: ""
+                items.add(
+                    FavItem(
+                        title = anime["name"] ?: "",
+                        posterUrl = anime["poster"] ?: "",
+                        backdropUrl = anime["poster"] ?: "",
+                        releaseDate = anime["aired"] ?: "",
+                        runtime = anime["duration"] ?: "",
+                        overview = anime["description"] ?: "",
+                        voteAverage = anime["rating"] ?: "",
+                        genres = genres,
+                        production = "",
+                        parentalGuide = anime["rating"] ?: "",
+                        imdbCode = anime["anime_id"] ?: "",
+                        showType = "anime"
+                    )
+                )
+            }
+
+            faveAdapter = FavAdapter(
+                items,
+                R.layout.square_card,
+                FavBackdrop,
+                FavTitle,
+                FavGenre,
+                FavType,
+                FavRating,
+                FavYear,
+                FavOverview,
+                RemoveFaveItem
+            )
+
+            faveRecyclerView.adapter = faveAdapter
+
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     private fun notificationS() {
 
-        val fetchedNot = NotificationHelper.getAnimeNotifications(this@Anime_Page)
-        Log.d("Not_anime", "fetchedNot: $fetchedNot")
-       if(fetchedNot){
+        lifecycleScope.launch(Dispatchers.Main) {
+
+            val fetchedNot = NotificationHelper.getAnimeNotifications(this@Anime_Page)
+            Log.d("Not_anime", "fetchedNot: $fetchedNot")
+            if (fetchedNot) {
                 findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.VISIBLE
-       }
+            }
+
+
+            val dnot = db.getAllAnimeNotifications(userId)
+            val notifications = mutableListOf<NotificationItem>()
+
+            findViewById<TextView>(R.id.notificationHeadline).text = "notifications (${dnot.size})"
 
 
 
-        val dnot = db.getAllAnimeNotifications(userId)
-        val notifications = mutableListOf<NotificationItem>()
-
-        findViewById<TextView>(R.id.notificationHeadline).text = "notifications (${dnot.size})"
-
-
-
-        for (item in dnot) {
+            for (item in dnot) {
 
                 Log.d("Not_anime", "notificationId: ${item["id"]}")
                 Log.d("Not_anime", "anime_id: ${item["anime_id"]}")
@@ -1102,18 +1106,18 @@ class Anime_Page : AppCompatActivity() {
                 Log.d("Not_anime", "notify_at: ${item["notify_at"]}\n\n\n")
 
 
-            val itemData = NotificationItem(
-                notificationId = item["id"].toString(),      // ✅ PASS ID
-                imdbCode = item["anime_id"].toString(),
-                title = item["title"].toString(),
-                imageUrl = item["poster"],
-                info = "sub: ${item["subStored"]} dub: ${item["dubStored"]}",
-                type = "anime",
-                newSeason = item["subStored"].toString(),
-                newEpisode = item["dubStored"].toString(),
-                time = item["notify_at"].toString()
-            )
-            notifications.add(itemData)
+                val itemData = NotificationItem(
+                    notificationId = item["id"].toString(),      // ✅ PASS ID
+                    imdbCode = item["anime_id"].toString(),
+                    title = item["title"].toString(),
+                    imageUrl = item["poster"],
+                    info = "sub: ${item["subStored"]} dub: ${item["dubStored"]}",
+                    type = "anime",
+                    newSeason = item["subStored"].toString(),
+                    newEpisode = item["dubStored"].toString(),
+                    time = item["notify_at"].toString()
+                )
+                notifications.add(itemData)
             }
 
 
@@ -1124,5 +1128,13 @@ class Anime_Page : AppCompatActivity() {
             notificationRecyclerView.adapter = notificationAdapter
 
 
+        }
+    }
+    private fun setupBackPressedCallback() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+            }
+        })
     }
  }

@@ -224,11 +224,10 @@ class Watch_Anime_Page : AppCompatActivity() {
     }
 
     private fun tmdbRelation(animeName:String, animeType:String ) {
-        var type = "tv"
-        if(animeType == "tv"){
-            type = "tv"
-        }else{
-            type="movie"
+        val type = if (animeType.equals("tv", ignoreCase = true)) {
+            "tv"
+        } else {
+            "movie"
         }
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -249,6 +248,7 @@ class Watch_Anime_Page : AppCompatActivity() {
 
             val resultArray = jsonObjectImg.getJSONArray("results")
 
+            Log.e("DEBUG_Watch_Images", "$animeName, AType: $animeType, UrlTYPE: $type")
             Log.e("DEBUG_Watch_Images", jsonObjectImg.toString())
             Log.e("DEBUG_Watch_Images", resultArray.toString())
 

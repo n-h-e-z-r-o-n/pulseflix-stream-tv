@@ -14,6 +14,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -133,6 +134,8 @@ class Shows_Page : AppCompatActivity() {
         sm = SessionManger(this)
         userId = sm.getUserId()
 
+
+        setupBackPressedCallback()
         ////////////////////////////////////////////////////////////////////////////////////////////
         val navBar = findViewById<LinearLayout>(R.id.showsNavBar)
 
@@ -1678,6 +1681,15 @@ class Shows_Page : AppCompatActivity() {
             R.layout.item_watched
         )
         watchRecyclerView.adapter = watchAdapter
+    }
+
+
+    private fun setupBackPressedCallback() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+            }
+        })
     }
 
 
