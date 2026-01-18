@@ -396,8 +396,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
 
             while (attempt < maxAttempts) {
                 attempt++
-                val jsonObjectServerInfo =
-                    withContext(Dispatchers.IO) { fetchAnime.animeEpisodeServers(episodeId) }
+                val jsonObjectServerInfo = withContext(Dispatchers.IO) { fetchAnime.animeEpisodeServers(episodeId) }
                 if (jsonObjectServerInfo != null) {
 
                     Log.e("ANIME_PLAYER", "StreamingLinks=$episodeId FETCHED")

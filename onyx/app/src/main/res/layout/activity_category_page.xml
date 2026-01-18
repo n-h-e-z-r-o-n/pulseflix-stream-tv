@@ -8,9 +8,17 @@
     android:background="?attr/BG_color"
     tools:context=".Category_Page">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@raw/test2"
+        tools:ignore="ContentDescription" />
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/transparentEffect">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,12 +33,17 @@
                     android:id="@+id/CategoryTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/f"
+                    android:fontFamily="@font/p"
                     android:textColor="?attr/AccentColor"
+                    android:shadowColor="#FFFFFF"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:paddingHorizontal="3dp"
                     android:layout_gravity="top|start"
                     tools:text="Marvel Studios" />
 
@@ -38,12 +51,17 @@
                     android:id="@+id/CategorySubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/e"
+                    android:fontFamily="@font/n"
                     android:textColor="?attr/FG_color"
+                    android:shadowColor="?attr/AccentColor"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
                     android:textSize="12sp"
                     android:alpha="0.7"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:paddingHorizontal="3dp"
                     android:layout_gravity="top|start"
                     tools:text="Movies &amp; TV titles" />
 
@@ -80,8 +98,8 @@
             <LinearLayout
                 android:id="@+id/CategoryMoviesButtonLayout"
                 android:layout_width="match_parent"
-                android:layout_height="70sp"
-                android:layout_marginBottom="10dp"
+                android:layout_height="100dp"
+                android:elevation="2dp"
                 android:background="@drawable/right_rounded"
                 android:gravity="center"
                 android:focusable="true"
@@ -94,15 +112,20 @@
                     android:text="Mv"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:fontFamily="@font/a"
+                    android:fontFamily="@font/l"
                     android:textColor="?attr/FG_color"
+                    android:shadowColor="#000000"
+                    android:shadowDx="1"
+                    android:shadowDy="3"
+                    android:shadowRadius="4"
+                    android:padding="3dp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/CategoryTvButtonLayout"
                 android:layout_width="match_parent"
-                android:layout_height="70sp"
+                android:layout_height="100sp"
                 android:background="@drawable/right_rounded"
                 android:gravity="center"
                 android:focusable="true"
@@ -115,8 +138,13 @@
                     android:text="Tv"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:fontFamily="@font/a"
+                    android:fontFamily="@font/l"
                     android:textColor="?attr/FG_color"
+                    android:shadowColor="#000000"
+                    android:shadowDx="1"
+                    android:shadowDy="3"
+                    android:shadowRadius="4"
+                    android:paddingHorizontal="3dp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 

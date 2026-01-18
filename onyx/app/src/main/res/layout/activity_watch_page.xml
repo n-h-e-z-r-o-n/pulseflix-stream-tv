@@ -176,6 +176,7 @@
                                     android:layout_height="wrap_content"
                                     app:cardCornerRadius="3dp"
                                     android:text="IMDB"
+                                    app:cardElevation="0dp"
 
                                     android:textSize="11sp"
                                     app:cardBackgroundColor="#99DAA520"
@@ -203,6 +204,10 @@
                                     android:text="8.5"
                                     android:layout_gravity="center"
                                     android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="3"
+                                    android:shadowRadius="4"
                                     android:textStyle="bold"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText" />
@@ -219,15 +224,19 @@
 
                             <TextView
                                 android:id="@+id/season_C"
-                                android:layout_width="wrap_content"
+                                android:layout_width="1dp"
                                 android:layout_height="wrap_content"
-                                android:text=""
                                 android:layout_gravity="center"
-                                android:gravity="center"
-                                android:textColor="#FFFFFF"
                                 android:fontFamily="@font/q"
+                                android:gravity="center"
+                                android:text=""
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="1"
+                                android:shadowDy="3"
+                                android:shadowRadius="4"
                                 android:textSize="11sp"
-                                tools:ignore="HardcodedText,SmallSp"/>
+                                tools:ignore="HardcodedText,SmallSp" />
 
                             <View
                                 android:layout_width="1dp"
@@ -260,6 +269,10 @@
                                     android:layout_height="wrap_content"
                                     android:text="2h 3min"
                                     android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="3"
+                                    android:shadowRadius="4"
                                     android:textStyle="bold"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText" />
@@ -287,7 +300,11 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="1dp"
                                     android:text="2025"
-                                    android:textColor="?attr/FG_color"
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="3"
+                                    android:shadowRadius="4"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText"
                                     android:textStyle="bold"    />
@@ -346,7 +363,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:src="@drawable/ic_hdr"
-                                    app:tint="?attr/FG_color"
+                                    app:tint="#FFFFFF"
                                     android:textSize="11sp"
                                     android:alpha="0.7"/>
 
@@ -355,7 +372,7 @@
                                     android:layout_width="24dp"
                                     android:layout_height="18dp"
                                     android:src="@drawable/ic_caption"
-                                    app:tint="?attr/FG_color"
+                                    app:tint="#FFFFFF"
                                     android:textSize="11sp"
                                     android:alpha="0.7"/>
 
@@ -398,7 +415,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Science fiction     drama   - action"
-                            android:textColor="?attr/FG_color"
+                            android:textColor="#FFFFFF"
+                            android:shadowColor="#000000"
+                            android:shadowDx="1"
+                            android:shadowDy="3"
+                            android:shadowRadius="4"
                             android:textSize="11sp"
                             tools:ignore="HardcodedText"
                             android:fontFamily="@font/n"
@@ -423,7 +444,7 @@
                             android:gravity="start"
                             android:orientation="horizontal"
                             android:paddingEnd="0dp"
-                            android:layout_marginBottom="9dp">
+                            android:layout_marginBottom="4dp">
 
                             <TextView
                                 android:id="@+id/overview_widget"
@@ -435,7 +456,11 @@
                                 android:maxLines="3"
                                 android:singleLine="false"
                                 android:text="An assassin, trained in the ways of the Ruska Roma, embarks on a quest for vengeance following the death of her father."
-                                android:textColor="?attr/FG_color"
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="1"
+                                android:shadowDy="3"
+                                android:shadowRadius="4"
                                 android:textSize="13sp"
                                 android:fontFamily="@font/p"
                                 tools:ignore="HardcodedText"
@@ -473,7 +498,7 @@
                                 android:layout_height="34dp"
                                 android:background="@android:color/transparent"
                                 android:src="@drawable/ic_play"
-                                app:tint="?attr/FG_color"
+                                app:tint="#FFFFFF"
                                 android:textAllCaps="false"
                                 tools:ignore="ContentDescription,UnusedAttribute" />
 
@@ -483,7 +508,11 @@
                                 android:text="Play"
                                 android:textSize="15sp"
                                 android:fontFamily="@font/o"
-                                android:textColor="?attr/FG_color"
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="1"
+                                android:shadowDy="3"
+                                android:shadowRadius="4"
                                 tools:ignore="HardcodedText" />
 
                             </LinearLayout>
@@ -538,9 +567,8 @@
                                     android:layout_width="34dp"
                                     android:layout_height="34dp"
                                     android:src="@drawable/ic_addfave"
-                                    app:tint="?attr/FG_color"
+                                    app:tint="#FFFFFF"
                                     android:background="@android:color/transparent"
-                                    android:textColor="?attr/FG_color"
                                     android:textAllCaps="false"
                                     android:tooltipText="Add to Favorites"
                                     tools:ignore="UnusedAttribute" />
@@ -552,7 +580,11 @@
                                     android:text="favorite"
                                     android:textSize="15sp"
                                     android:fontFamily="@font/o"
-                                    android:textColor="?attr/FG_color"
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="3"
+                                    android:shadowRadius="4"
                                     tools:ignore="HardcodedText" />
 
                             </LinearLayout>
@@ -578,7 +610,7 @@
                                     android:layout_height="34dp"
                                     android:background="@android:color/transparent"
                                     android:src="@drawable/ic_server"
-                                    app:tint="?attr/FG_color"
+                                    app:tint="#FFFFFF"
                                     android:textAllCaps="false"
                                     tools:ignore="ContentDescription" />
 
@@ -588,7 +620,11 @@
                                     android:text="Server"
                                     android:textSize="15sp"
                                     android:fontFamily="@font/o"
-                                    android:textColor="?attr/FG_color"
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="3"
+                                    android:shadowRadius="4"
                                     tools:ignore="HardcodedText" />
 
                             </LinearLayout>
@@ -664,31 +700,33 @@
                             android:clipToPadding="false"
                             android:scrollbars="none"
                             android:focusable="false"
-                            android:nextFocusUp="@id/TrailerButton"
-                            android:nextFocusDown="@id/Cast_widget"
                             android:descendantFocusability="afterDescendants"/>
 
 
 
                     </LinearLayout>
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/Cast_widget_mv"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:overScrollMode="never"
+                        android:layout_margin="10dp"
+                        android:scrollbars="none"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        tools:layout_editor_absoluteY="8dp"
+                        android:descendantFocusability="afterDescendants"/>
+
                 </LinearLayout>
-
-
             </FrameLayout>
 
 
-
-
-
-
-
-
-
-            <!-- Cast   -->
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/Cast_widget"
+                android:id="@+id/Cast_widget_tv"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"

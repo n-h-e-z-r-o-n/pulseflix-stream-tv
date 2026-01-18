@@ -82,7 +82,7 @@
                             <ImageView
                                 android:id="@+id/WatchImage"
                                 android:layout_width="93dp"
-                                android:layout_height="150dp"
+                                android:layout_height="130dp"
                                 android:layout_margin="10dp"
                                 android:scaleType="fitXY"
                                 android:elevation="15dp"

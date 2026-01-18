@@ -27,8 +27,8 @@
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:shadowColor="#000000"
-            android:shadowDx="5"
-            android:shadowDy="6"
+            android:shadowDx="1"
+            android:shadowDy="3"
             android:shadowRadius="4"
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
@@ -48,8 +48,8 @@
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:shadowColor="#000000"
-            android:shadowDx="5"
-            android:shadowDy="6"
+            android:shadowDx="1"
+            android:shadowDy="3"
             android:shadowRadius="4"
             tools:ignore="HardcodedText,SmallSp" />
 

@@ -25,6 +25,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 
 
@@ -44,6 +45,9 @@ import com.example.onyx.OnyxClasses.MovieItem
 import com.example.onyx.OnyxClasses.RecommendAdapter
 import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.LoadingAnimation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.format.DateTimeFormatter
 
 
@@ -105,6 +109,11 @@ class Watch_Page : AppCompatActivity() {
 
         UIsection1 = findViewById<FrameLayout>(R.id.widget_1)
 
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels
+        val params = UIsection1.layoutParams
+        params.height = (screenHeight * 1).toInt()
+        UIsection1.layoutParams = params
 
         //-------- Get extras from Intent-----------------------------------------------------------
         showId = intent.getStringExtra("imdb_code")?: ""
@@ -154,14 +163,6 @@ class Watch_Page : AppCompatActivity() {
     private fun fetchData() {
         LoadingAnimation.show(this@Watch_Page)
 
-        val displayMetrics = resources.displayMetrics
-        val screenHeight = displayMetrics.heightPixels
-
-
-
-        val params = UIsection1.layoutParams
-        params.height = (screenHeight * 0.8).toInt()
-        UIsection1.layoutParams = params
 
         // ---------- LOGOS ------------------------------------------------------------------------
         val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
@@ -304,9 +305,6 @@ class Watch_Page : AppCompatActivity() {
                 no_of_season = validSeasons.size
 
 
-                params.height = (screenHeight * 1).toInt()
-                UIsection1  .layoutParams = params
-
 
                 watchButton.visibility = View.GONE
                 val Season_widget = findViewById<LinearLayout>(R.id.Season_widget)
@@ -314,7 +312,7 @@ class Watch_Page : AppCompatActivity() {
 
                 //val season_count_widget = findViewById<TextView>(R.id.season_count_text)
                 //season_count_widget.text = "$no_of_season Seasons"
-                createSeasonButtons(no_of_season, validSeasons, showId, jsonObject)
+                createSeasonButtons(no_of_season, validSeasons, showId)
             }
 
             // ---------- BUTTONS ------------------------------------------------------------------
@@ -333,15 +331,13 @@ class Watch_Page : AppCompatActivity() {
                 startActivity(intent)
             }
 
-            serverButton.setOnClickListener {
-                showServerDialog()
+            serverButton.setOnClickListener {                showServerDialog()
             }
 
             trailerButton.setOnClickListener {
             }
 
             GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, serverButton )
-
             GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, trailerButton )
             GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, watchButton )
 
@@ -385,7 +381,6 @@ class Watch_Page : AppCompatActivity() {
         noOfSeasons: Int,
         seasonData: MutableList<JSONObject>,
         seasonID: String,
-        seasonAllData: JSONObject
     ) {
         val container = findViewById<LinearLayout>(R.id.season_selector_container)
         container.removeAllViews()
@@ -417,7 +412,6 @@ class Watch_Page : AppCompatActivity() {
                     dpToPx(120),
                     dpToPx(38)
                 ).apply { marginEnd = dpToPx(0) }
-                setTextColor(resolveAttrColor(context, R.attr.FG_color))
             }
 
             seasonButton.setOnClickListener {
@@ -431,7 +425,6 @@ class Watch_Page : AppCompatActivity() {
 
                 seasonButton.setTextColor(resolveAttrColor(this, R.attr.AccentColor))
                 selectedSeasonButton = seasonButton
-
                 seasonButton.isEnabled = false
                 ShowSeasonEpisodes(season_no, seasonData, seasonID)
                 seasonButton.postDelayed({ seasonButton.isEnabled = true }, 3000)
@@ -451,24 +444,6 @@ class Watch_Page : AppCompatActivity() {
                             if (index < container.childCount - 1) container.getChildAt(index + 1).requestFocus()
                             return@setOnKeyListener true
                         }
-
-                        KeyEvent.KEYCODE_DPAD_DOWN -> {
-                            val episodesRecycler = findViewById<RecyclerView>(R.id.episodes_recycler)
-                            val castRecycler = findViewById<RecyclerView>(R.id.Cast_widget)
-                            val recommendationRecycler = findViewById<RecyclerView>(R.id.Recommendation_widget)
-
-                            when {
-                                episodesRecycler.childCount > 0 -> episodesRecycler.getChildAt(0)?.requestFocus()
-                                castRecycler.childCount > 0 -> castRecycler.getChildAt(0)?.requestFocus()
-                                recommendationRecycler.childCount > 0 -> recommendationRecycler.getChildAt(0)?.requestFocus()
-                            }
-                            return@setOnKeyListener true
-                        }
-
-                        KeyEvent.KEYCODE_DPAD_UP -> {
-                            findViewById<LinearLayout>(R.id.serverButton)?.requestFocus()
-                            return@setOnKeyListener true
-                        }
                     }
                 }
                 false
@@ -485,11 +460,14 @@ class Watch_Page : AppCompatActivity() {
             track++
         }
 
-        // 👇 Auto-click the first button after layout is done
+        // Auto-click the first button after layout is done
+        /*
         firstButton?.post {
             firstButton?.performClick()
             firstButton?.requestFocus()  // optional: also focus it visually
         }
+
+         */
     }
 
 
@@ -512,17 +490,12 @@ class Watch_Page : AppCompatActivity() {
         val formatter = DateTimeFormatter.ISO_LOCAL_DATE
 
 
-         findViewById<ImageView>(R.id.backdropImageView)
-
-
-
         val selectedSeason = seasonData.firstOrNull {
             it.optInt("season_number") == SelectedSeasons
         }
         if (selectedSeason == null) {
             return
         }
-
 
         val airDate = selectedSeason.optString("air_date", "")
         var selectedSeasonPoster = selectedSeason.optString("poster_path", "")
@@ -544,9 +517,11 @@ class Watch_Page : AppCompatActivity() {
                 .into(posterWidget)
         }
 
+        lifecycleScope.launch(Dispatchers.Main) {
 
-        val jsonObject = fetch.fetchSeasonInfo(seriesId.toString(), SelectedSeasons.toString())
-        if (jsonObject != null) {
+                val jsonObject = withContext(Dispatchers.IO) {fetch.fetchSeasonInfo(seriesId.toString(), SelectedSeasons.toString())}
+
+                if (jsonObject != null) {
 
                     val episodesArray = jsonObject.getJSONArray("episodes")
 
@@ -559,23 +534,28 @@ class Watch_Page : AppCompatActivity() {
                     for (i in 0 until episodesArray.length()) {
                         val episodes = episodesArray.getJSONObject(i)
 
-                        val episodesAirDate =  episodes.optString("air_date", "")
+                        val episodesAirDate = episodes.optString("air_date", "")
                         try {
                             Log.e("DEBUG_Each E date", "airDate: $episodesAirDate,  today $today")
-                            val airLocalDate  = LocalDate.parse(episodesAirDate, formatter)
+                            val airLocalDate = LocalDate.parse(episodesAirDate, formatter)
                             if (airLocalDate.isAfter(today)) {
                                 continue
                             }
-                        }catch (e: Exception){
-                            Log.e("DEBUG_Each E date", "airDate: $airDate,  today $today, Error${e.message}")
+                        } catch (e: Exception) {
+                            Log.e(
+                                "DEBUG_Each E date",
+                                "airDate: $airDate,  today $today, Error${e.message}"
+                            )
                         }
 
 
                         val stillPathRaw = episodes.optString("still_path", "")
                         val runtimeRaw = episodes.optString("runtime", "")
 
-                        val stillPath = if (stillPathRaw.isNullOrEmpty() || runtimeRaw == "null") ""  else stillPathRaw
-                        val runtime = if (runtimeRaw.isNullOrEmpty() || runtimeRaw == "null") "0" else runtimeRaw
+                        val stillPath =
+                            if (stillPathRaw.isNullOrEmpty() || runtimeRaw == "null") "" else stillPathRaw
+                        val runtime =
+                            if (runtimeRaw.isNullOrEmpty() || runtimeRaw == "null") "0" else runtimeRaw
 
 
                         episodesList.add(
@@ -597,9 +577,10 @@ class Watch_Page : AppCompatActivity() {
                         )
                     }
 
-                        Log.e("DEBUG_Each E list", "${episodesList.size}")
-                        episodes_recycler.removeAllViews()
-                        episodes_recycler.adapter = EpisodesAdapter(episodesList)
+                    Log.e("DEBUG_Each E list", "${episodesList.size}")
+                    episodes_recycler.removeAllViews()
+                    episodes_recycler.adapter = EpisodesAdapter(episodesList)
+                }
         }
     }
 
@@ -624,7 +605,12 @@ class Watch_Page : AppCompatActivity() {
                         movies.add(CastItem(title, imgUrl, cast_id, type))
                     }
 
-                    val recyclerView = findViewById<RecyclerView>(R.id.Cast_widget)
+                    val recyclerView: RecyclerView = if (type == "tv") {
+                        findViewById(R.id.Cast_widget_tv)
+                    } else {
+                        findViewById(R.id.Cast_widget_mv)
+                    }
+                    recyclerView.visibility = View.VISIBLE
                     recyclerView.layoutManager = LinearLayoutManager(
                         this@Watch_Page,
                         LinearLayoutManager.HORIZONTAL, // 👈 makes it horizontal

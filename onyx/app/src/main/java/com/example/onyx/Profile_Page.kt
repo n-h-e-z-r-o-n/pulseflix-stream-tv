@@ -4,17 +4,21 @@ import android.Manifest
 import android.view.LayoutInflater
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.TypedValue
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -187,45 +191,66 @@ class Profile_Page : AppCompatActivity() {
         // Load watched series count using GlobalUtils
         seriesWatchedText.text = GlobalUtils.getSeriesWatched(this).toString()
     }
-    
-    private fun showQualityDialog() {
-        val qualities = arrayOf("720p", "1080p", "4K")
-        val currentQuality = qualityValueText.text.toString()
-        val currentIndex = qualities.indexOf(currentQuality)
-        
-        val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.CustomDialogTheme)
-        builder.setTitle("Select Video Quality")
-            .setSingleChoiceItems(qualities, currentIndex) { dialog, which ->
-                val selectedQuality = qualities[which]
-                qualityValueText.text = selectedQuality
-                GlobalUtils.setVideoQuality(this, selectedQuality)
-                Toast.makeText(this, "Video quality set to $selectedQuality", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-    
+
+
     private fun showThemeDialog() {
         val themes = GlobalUtils.getAvailableThemes()
         val currentTheme = GlobalUtils.getAppTheme(this)
         val currentIndex = themes.indexOf(currentTheme)
-        
+
+        val themeNames = themes
+            .map { it.replaceFirstChar { c -> c.uppercase() } }
+            .toTypedArray()
+
         val builder = androidx.appcompat.app.AlertDialog.Builder(this, R.style.CustomDialogTheme)
-        builder.setTitle("Select App Theme")
-            .setSingleChoiceItems(themes.map { it.replaceFirstChar { char -> char.uppercase() } }.toTypedArray(), currentIndex) { dialog, which ->
+            .setTitle("Select App Theme")
+            .setSingleChoiceItems(themeNames, currentIndex) { dialog, which ->
                 val selectedTheme = themes[which]
                 GlobalUtils.setAppTheme(this, selectedTheme)
                 themeValueText.text = selectedTheme.replaceFirstChar { it.uppercase() }
                 dialog.dismiss()
-                
-                // Show restart suggestion dialog
                 showThemeChangeDialog(selectedTheme)
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+        val dialog = builder.create()
+
+        dialog.setOnShowListener {
+            val alertDialog = it as AlertDialog
+            val listView = alertDialog.listView ?: return@setOnShowListener
+
+            // Resolve FG color
+            val fgValue = TypedValue()
+            theme.resolveAttribute(R.attr.FG_color, fgValue, true)
+            val fgColor = fgValue.data
+
+            // Resolve Accent color (focus / selection)
+            val accentValue = TypedValue()
+            theme.resolveAttribute(R.attr.AccentColor, accentValue, true)
+            val accentColor = accentValue.data
+
+            // Set focus/selection color
+            listView.selector = ColorDrawable(accentColor)
+            listView.choiceMode = ListView.CHOICE_MODE_SINGLE
+
+            // Ensure text color stays correct
+            for (i in 0 until listView.childCount) {
+                val child = listView.getChildAt(i)
+                if (child is TextView) {
+                    child.setTextColor(fgColor)
+                }
+            }
+
+            // Style negative button
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(fgColor)
+        }
+
+        dialog.show()
     }
-    
+
+
     private fun checkForUpdates() {
         Toast.makeText(this, "Checking for updates...", Toast.LENGTH_SHORT).show()
 

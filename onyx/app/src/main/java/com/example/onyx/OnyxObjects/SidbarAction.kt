@@ -202,7 +202,7 @@ object NavAction {
         view.animate()
             .scaleX(scaleX)
             .scaleY(scaleY)
-            .setDuration(140)
+            .setDuration(1)
             .setInterpolator(AccelerateDecelerateInterpolator())
             .start()
     }

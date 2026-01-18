@@ -1,43 +1,46 @@
 package com.example.onyx
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import android.view.View
 import android.view.WindowManager
-import androidx.activity.ComponentActivity
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.OnyxObjects.GlobalUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
 
+    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_Onyx_Dark)
         GlobalUtils.applyTheme(this)
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.hide()
+
+        // Keep screen on
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        // Hide navigation bar and status bar (Immersive mode)
+        GlobalUtils.hideSystemUI(this)
 
         db = AppDatabase(this)
 
-        val tv = findViewById<TextView>(R.id.onyxTitle)
-        val loadingImageView = findViewById<ImageView>(R.id.LoadingAnimation)
-        Glide.with(this)
-            .asGif()
-            .load(R.raw.c)
-            .into(loadingImageView)
 
+        val loadingBar = findViewById<View>(R.id.loading_bar)
+        val animation = AnimationUtils.loadAnimation(this, R.drawable.loading_slide)
+        loadingBar.startAnimation(animation)
 
         Handler(Looper.getMainLooper()).postDelayed({
 
@@ -47,9 +50,9 @@ class MainActivity : ComponentActivity() {
                     startActivity(Intent(this@MainActivity, Instraction::class.java))
                 } else {
                     if (db.isSubscriptionActive()) {
-                        startActivity(Intent(this@MainActivity, Anime_Page::class.java))
+                        startActivity(Intent(this@MainActivity, Login_Page::class.java))
                     } else {
-                        startActivity(Intent(this@MainActivity, PayWall::class.java))
+                        startActivity(Intent(this@MainActivity, Login_Page::class.java))
                     }
                 }
                 finish()
@@ -57,12 +60,18 @@ class MainActivity : ComponentActivity() {
         }, 10000)
     }
 
+
+    // This ensures the UI stays hidden when the activity regains focus
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            GlobalUtils.hideSystemUI(this)
+        }
+    }
+
+    // This handles when the immersive mode is interrupted
+    override fun onResume() {
+        super.onResume()
+        GlobalUtils.hideSystemUI(this)
+    }
 }
-
-
-
-
-
-
-
-
