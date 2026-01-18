@@ -931,7 +931,6 @@ class ProfileAdapter (
         val userid = currentItem.userid
         val avatarImg = currentItem.avatar
 
-        val db = AppDatabase(holder.itemView.context)
 
         holder.usernameWidget.text = username
 
@@ -959,26 +958,6 @@ class ProfileAdapter (
 
         holder.CardViewcontiner.setOnClickListener {
             onProfileSelected?.invoke(currentItem) ?: run {
-
-                Log.e("Profile_Log", "subscription :  ${db.isSubscriptionActive()}")
-
-
-                db.isSubscriptionActive()
-                 /*
-                 // Fallback to default behavior if callback not set
-                        val context = holder.itemView.context
-                        val intent = Intent(context, Shows_Page::class.java)
-                        intent.putExtra("UserId", userid)
-                        context.startActivity(intent)
-
-                        if (db.isSubscriptionActive()) {
-                            startActivity(Intent(context, Login_Page::class.java))
-                        } else {
-                            startActivity(Intent(context, Login_Page::class.java))
-                        }
-                    }
-
-                  */
 
             }
         }

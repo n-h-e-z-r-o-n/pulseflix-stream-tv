@@ -49,7 +49,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.format.DateTimeFormatter
-
+import android.graphics.Color
 
 class Watch_Page : AppCompatActivity() {
 
@@ -412,6 +412,14 @@ class Watch_Page : AppCompatActivity() {
                     dpToPx(120),
                     dpToPx(38)
                 ).apply { marginEnd = dpToPx(0) }
+
+                setTextColor(Color.WHITE)                // android:textColor="#FFFFFF"
+                setShadowLayer(
+                    3f,                                  // android:shadowRadius="4"
+                    2f,                                  // android:shadowDx="1"
+                    2f,                                  // android:shadowDy="3"
+                    Color.BLACK                          // android:shadowColor="#000000"
+                )
             }
 
             seasonButton.setOnClickListener {
@@ -461,13 +469,13 @@ class Watch_Page : AppCompatActivity() {
         }
 
         // Auto-click the first button after layout is done
-        /*
+
         firstButton?.post {
             firstButton?.performClick()
             firstButton?.requestFocus()  // optional: also focus it visually
         }
 
-         */
+
     }
 
 

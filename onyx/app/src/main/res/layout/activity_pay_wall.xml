@@ -17,14 +17,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:foreground="@drawable/overlay_left_gradient"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
-                android:foreground="@drawable/overlay_left_gradient"
                 android:scaleType="centerCrop"
                 android:src="@raw/test8"
                 android:layout_gravity="end"
@@ -34,12 +32,10 @@
 
             <ImageView
                 android:id="@+id/paywallShow"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:foreground="@drawable/overlay_left_gradient"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@raw/test8"
                 android:layout_gravity="end"
                 tools:ignore="ContentDescription,UnusedAttribute"/>
 
@@ -56,15 +52,21 @@
             tools:ignore="RtlSymmetry">
 
             <!-- App Logo -->
-            <ImageView
+            <TextView
                 android:id="@+id/appLogo"
-                android:layout_width="273dp"
-                android:layout_height="154dp"
-                android:clickable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/app_name"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:src="@raw/logo" />
+                android:text="ONYX"
+                android:textSize="90sp"
+                android:gravity="center"
+                android:fontFamily="@font/p"
+                android:textColor="?attr/BG_color"
+                android:shadowColor="#FFFFFF"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:shadowRadius="3"
+                tools:ignore="HardcodedText" />
 
             <!-- Welcome Text -->
 
@@ -75,6 +77,10 @@
                 android:gravity="center"
                 android:text="Unlimited Movies &amp; TV Shows"
                 android:textColor="?attr/FG_color"
+                android:shadowColor="?attr/BG_color"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="1"
                 android:textSize="18sp" />
 
             <!-- Payment Card -->
@@ -105,6 +111,10 @@
                             android:fontFamily="sans-serif-medium"
                             android:text="Premium Plan"
                             android:textColor="?attr/FG_color"
+                            android:shadowColor="?attr/BG_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="1"
                             android:textSize="20sp"
                             tools:ignore="HardcodedText" />
 
@@ -141,6 +151,10 @@
                             android:fontFamily="sans-serif-medium"
                             android:text="KSh"
                             android:textColor="?attr/FG_color"
+                            android:shadowColor="?attr/BG_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="1"
                             android:textSize="22sp"
                             tools:ignore="HardcodedText" />
 
@@ -151,6 +165,10 @@
                             android:fontFamily="@font/n"
                             android:text="15"
                             android:textColor="?attr/FG_color"
+                            android:shadowColor="?attr/BG_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="1"
                             android:textSize="34sp"
                             tools:ignore="HardcodedText" />
 
@@ -161,7 +179,12 @@
                             android:layout_marginStart="6dp"
                             android:alpha="0.7"
                             android:text="/ month"
+
                             android:textColor="?attr/FG_color"
+                            android:shadowColor="?attr/BG_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="1"
                             android:textSize="14sp"
                             tools:ignore="HardcodedText" />
 
@@ -196,6 +219,10 @@
                                 android:layout_height="wrap_content"
                                 android:text="Unlimited Movies &amp; TV Shows"
                                 android:textColor="?attr/FG_color"
+                                android:shadowColor="?attr/BG_color"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="1"
                                 android:textSize="14sp"
                                 tools:ignore="HardcodedText" />
 
@@ -223,6 +250,10 @@
                                 android:layout_height="wrap_content"
                                 android:text="No Ads Experience"
                                 android:textColor="?attr/FG_color"
+                                android:shadowColor="?attr/BG_color"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="1"
                                 android:textSize="14sp"
                                 tools:ignore="HardcodedText" />
 
@@ -250,6 +281,10 @@
                                 android:layout_height="wrap_content"
                                 android:text="Software Update Support"
                                 android:textColor="?attr/FG_color"
+                                android:shadowColor="?attr/BG_color"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="1"
                                 android:textSize="14sp"
                                 tools:ignore="HardcodedText" />
 
@@ -286,6 +321,10 @@
                             android:alpha="0.6"
                             android:text="Secure payments by IntaSend"
                             android:textColor="?attr/FG_color"
+                            android:shadowColor="?attr/BG_color"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="1"
                             android:textSize="11sp"
                             tools:ignore="HardcodedText,SmallSp" />
                     </LinearLayout>

@@ -31,6 +31,7 @@ class Login_Page : AppCompatActivity() {
     private lateinit var profileAdapter: ProfileAdapter
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
+    private var activeSub = false
     private val profiles = mutableListOf<profileItem>()
     private var selectedAvatar: String = ""
     private lateinit var profileContainer: LinearLayout
@@ -48,8 +49,9 @@ class Login_Page : AppCompatActivity() {
         db = AppDatabase(this)         // Initialize database
         sm = SessionManger(this)         // Initialize session manager
         //db.resetDatabase()
-        val userId = sm.getUserId()
+        activeSub = db.isSubscriptionActive()
 
+        val userId = sm.getUserId()
         if (userId == -1) {
             // No user logged in → redirect to Login page
         }else{
@@ -86,6 +88,7 @@ class Login_Page : AppCompatActivity() {
         profileAdapter = ProfileAdapter(profiles, R.layout.item_account)
         profileRecyclerView.adapter = profileAdapter
 
+
         // Handle profile selection
         profileAdapter.onProfileSelected = { profile ->
             Log.e("ProfileAdapter", "Selected profile: $profile")
@@ -95,9 +98,14 @@ class Login_Page : AppCompatActivity() {
                 CreateProfileContainer.visibility = LinearLayout.VISIBLE
                 profileContainer.visibility = LinearLayout.GONE
             }else{
-                sm.saveUserId(userId.toInt())
-                sm.saveAvatar(userAvatar.toString())
-                startActivity(Intent(this, Shows_Page::class.java))
+                if (activeSub) {
+                    sm.saveUserId(userId.toInt())
+                    sm.saveAvatar(userAvatar.toString())
+                    startActivity(Intent(this, Shows_Page::class.java))
+
+                } else {
+                    startActivity(Intent(this, PayWall ::class.java))
+                }
             }
 
         }

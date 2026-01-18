@@ -224,9 +224,10 @@
 
                             <TextView
                                 android:id="@+id/season_C"
-                                android:layout_width="1dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:maxLines="1"
                                 android:fontFamily="@font/q"
                                 android:gravity="center"
                                 android:text=""
