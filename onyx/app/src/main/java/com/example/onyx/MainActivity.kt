@@ -43,20 +43,11 @@ class MainActivity : AppCompatActivity() {
         loadingBar.startAnimation(animation)
 
         Handler(Looper.getMainLooper()).postDelayed({
+            startActivity(Intent(this@MainActivity, Login_Page::class.java))
+            finish()
 
-            lifecycleScope.launch(Dispatchers.Main) {
 
-                if (!GlobalUtils.isTv(this@MainActivity)) {
-                    startActivity(Intent(this@MainActivity, Instraction::class.java))
-                } else {
-                    if (db.isSubscriptionActive()) {
-                        startActivity(Intent(this@MainActivity, Login_Page::class.java))
-                    } else {
-                        startActivity(Intent(this@MainActivity, Login_Page::class.java))
-                    }
-                }
-                finish()
-            }
+
         }, 10000)
     }
 

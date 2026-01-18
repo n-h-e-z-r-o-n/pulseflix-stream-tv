@@ -149,7 +149,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/n"
-                            android:text="20"
+                            android:text="15"
                             android:textColor="?attr/FG_color"
                             android:textSize="34sp"
                             tools:ignore="HardcodedText" />
@@ -428,7 +428,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Monthly\nKSh 20"
+                                android:text="Monthly\nKSh 15"
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp"
                                 android:gravity="center"
@@ -463,7 +463,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Quarterly\nKSh 50"
+                                    android:text="Quarterly\nKSh 35"
                                     android:textColor="@android:color/white"
                                     android:textSize="12sp"
                                     android:gravity="center"
@@ -507,7 +507,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Yearly\nKSh 180"
+                                    android:text="Yearly\nKSh 150"
                                     android:textColor="@android:color/white"
                                     android:textSize="12sp"
                                     android:gravity="center"

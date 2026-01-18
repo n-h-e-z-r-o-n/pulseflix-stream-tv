@@ -166,7 +166,7 @@ object GlobalUtils {
 
     fun getAppTheme(context: Context): String {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return prefs.getString(KEY_APP_THEME, "dark") ?: "dark"
+        return prefs.getString(KEY_APP_THEME, "light") ?: "light"
     }
 
     fun setAppTheme(context: Context, theme: String) {

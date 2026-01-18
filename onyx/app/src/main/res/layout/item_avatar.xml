@@ -6,33 +6,24 @@
     android:layout_width="90dp"
     android:layout_height="90dp"
     android:clickable="true"
+    android:layout_margin="4dp"
     android:focusable="true"
     android:foreground="@drawable/card_focus"
     android:gravity="center"
     android:orientation="vertical"
-    card_view:cardBackgroundColor="@android:color/transparent"
-    card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="2dp"
+    card_view:cardBackgroundColor="?attr/BG_color_up"
+    card_view:cardCornerRadius="102dp"
+    card_view:cardElevation="3dp"
     tools:ignore="SpeakableTextPresentCheck">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            card_view:cardCornerRadius="12dp"
-            android:layout_margin="1dp"
-            card_view:cardElevation="0dp"
-            card_view:cardBackgroundColor="?attr/BG_color_up"
-            >
 
 
         <ImageView
             android:id="@+id/avatarImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background ="@android:color/transparent"
+            android:background ="?attr/BG_color_up"
             android:scaleType="fitXY"
             tools:ignore="ContentDescription" />
 
-        </androidx.cardview.widget.CardView>
 
 </androidx.cardview.widget.CardView>

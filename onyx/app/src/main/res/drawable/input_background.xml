@@ -2,32 +2,32 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <corners android:radius="9dp" />
-            <gradient
-                android:type="radial"
-                android:centerX="50%"
-                android:centerY="50%"
-                android:gradientRadius="80dp"
-                android:startColor="@android:color/transparent"
-                android:endColor="?attr/AccentColor"
-                />
-            <stroke android:width="1dp" android:color="?attr/AccentColor" />
-
-        </shape>
-    </item>
-
-    <item>
-        <shape android:shape="rectangle"  android:alpha="0.5">
-            <corners android:radius="9dp" />
+            <corners android:radius="29dp" />
             <gradient
                 android:type="radial"
                 android:centerX="50%"
                 android:centerY="50%"
                 android:gradientRadius="800dp"
                 android:startColor="@android:color/transparent"
+                android:endColor="?attr/AccentColor"
+                />
+            <stroke android:width="2dp" android:color="?attr/AccentColor" />
+
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle"  android:alpha="0.5">
+            <corners android:radius="29dp" />
+            <gradient
+                android:type="radial"
+                android:centerX="50%"
+                android:centerY="50%"
+                android:gradientRadius="80000dp"
+                android:startColor="@android:color/transparent"
                 android:endColor="?attr/BG_color"
                 />
-            <stroke android:width="1dp" android:color="?attr/BG_color" />
+            <stroke android:width="2dp" android:color="?attr/BG_color" />
 
         </shape>
     </item>

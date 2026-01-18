@@ -2,36 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="130dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:background="@android:color/transparent"
     android:gravity="center"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/profileCardContiner"
-            android:layout_width="match_parent"
+            android:layout_width="130dp"
             android:layout_height="130dp"
             card_view:cardCornerRadius="12dp"
             card_view:cardBackgroundColor="?attr/BG_color_up"
             android:foreground="@drawable/card_focus"
             android:clickable="true"
             android:focusableInTouchMode="true"
+            android:layout_margin="5dp"
             android:focusable="true"
-            card_view:cardElevation="2dp">
+            card_view:cardElevation="5dp">
 
                 <ImageView
                     android:id="@+id/itemUserAvatar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-
-                    android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     tools:ignore="ContentDescription,InefficientWeight" />
 
@@ -40,21 +36,19 @@
 
         <TextView
             android:id="@+id/itemUsername"
-            android:layout_width="match_parent"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/n"
+            android:ellipsize="end"
             android:textStyle="bold"
             android:textSize="17sp"
             android:gravity="center"
-            android:textColor="?attr/FG_color"
+            android:textColor="#FFFFFF"
             android:shadowColor="?attr/AccentColor"
-            android:shadowDx="5"
-            android:shadowDy="6"
-            android:shadowRadius="4"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="1"
             android:text="Hezron"
             tools:ignore="HardcodedText" />
-
-
-    </LinearLayout>
 
 </LinearLayout>

@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -32,7 +34,7 @@ class Login_Page : AppCompatActivity() {
     private val profiles = mutableListOf<profileItem>()
     private var selectedAvatar: String = ""
     private lateinit var profileContainer: LinearLayout
-    private lateinit var CreateProfileContainer: LinearLayout
+    private lateinit var CreateProfileContainer: FrameLayout
 
 
 
@@ -59,12 +61,15 @@ class Login_Page : AppCompatActivity() {
         loadProfiles()         // Load existing profiles
         setupBackPressedCallback()
 
+        val loadingBar = findViewById<View>(R.id.loading_bar)
+        val animation = AnimationUtils.loadAnimation(this, R.drawable.loading_slide)
+        loadingBar.startAnimation(animation)
     }
 
     private fun InitializeWindgets() {
 
-        CreateProfileContainer = findViewById<LinearLayout>(R.id.CreateProfileContainer)
-        profileContainer =  findViewById<LinearLayout>(R.id.profileContainer)
+        CreateProfileContainer = findViewById(R.id.CreateProfileContainer)
+        profileContainer =  findViewById(R.id.profileContainer)
 
         val Spacing = (4 * resources.displayMetrics.density).toInt()
 

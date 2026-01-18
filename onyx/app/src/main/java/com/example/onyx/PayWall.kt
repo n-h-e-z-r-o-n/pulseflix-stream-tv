@@ -33,6 +33,7 @@ import android.os.Handler
 import android.view.Gravity
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.AdapterView
+import androidx.lifecycle.lifecycleScope
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.OnyxClasses.CustomKeyboardManager
 import com.example.onyx.OnyxClasses.OnSearchListener
@@ -280,8 +281,8 @@ class PayWall : AppCompatActivity() {
         val isKenya = country.contains("Kenya", true)
 
         return when {
-            isKenya -> when (plan) { Plan.MONTHLY -> "20"; Plan.QUARTERLY -> "50"; Plan.YEARLY -> "180" }
-            else -> when (plan) { Plan.MONTHLY -> "20"; Plan.QUARTERLY -> "50"; Plan.YEARLY -> "180" }
+            isKenya -> when (plan) { Plan.MONTHLY -> "15"; Plan.QUARTERLY -> "35"; Plan.YEARLY -> "150" }
+            else -> when (plan) { Plan.MONTHLY -> "15"; Plan.QUARTERLY -> "35"; Plan.YEARLY -> "150" }
         }
     }
 
@@ -525,23 +526,16 @@ class PayWall : AppCompatActivity() {
         }
 
         // Save subscription using your function
-        db.setSubscription(
-            type = subType,
-            paymentRef = ""
-        )
+        lifecycleScope.launch(Dispatchers.IO) {
+            db.setSubscription(
+                type = subType,
+                paymentRef = ""
+            )
+        }
 
         val intent = Intent(this, Login_Page::class.java)
         startActivity(intent)
         finish()
-    }
-
-    private fun animateCardViewScale(view: View, scaleX: Float, scaleY: Float) {
-        view.animate()
-            .scaleX(scaleX)
-            .scaleY(scaleY)
-            .setDuration(200)
-            .setInterpolator(AccelerateDecelerateInterpolator())
-            .start()
     }
 
 

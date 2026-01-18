@@ -14,8 +14,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,12 +31,16 @@ import com.example.onyx.FetchData.TMDBapi
 
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import com.example.onyx.Instraction
+import com.example.onyx.Login_Page
 import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.Play
 import com.example.onyx.R
 import com.example.onyx.Shows_Page
 import com.example.onyx.Watch_Anime_Page
 import com.example.onyx.Watch_Page
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.text.toLongOrNull
 
 
@@ -925,14 +931,17 @@ class ProfileAdapter (
         val userid = currentItem.userid
         val avatarImg = currentItem.avatar
 
+        val db = AppDatabase(holder.itemView.context)
 
         holder.usernameWidget.text = username
 
         // Handle "Create Profile" button appearance
         if (userid == "CREATE") {
-            holder.profileImageWidget.setImageResource(android.R.drawable.ic_input_add)
+            holder.profileImageWidget.setImageResource(R.drawable.ic_account)
             holder.profileImageWidget.scaleType = ImageView.ScaleType.CENTER_INSIDE
             holder.profileImageWidget.setBackgroundColor(Color.parseColor("#00000000"))
+
+
         } else {
             // Handle avatar loading - if empty, use placeholder
             if (avatarImg.isNotEmpty()) {
@@ -950,11 +959,27 @@ class ProfileAdapter (
 
         holder.CardViewcontiner.setOnClickListener {
             onProfileSelected?.invoke(currentItem) ?: run {
-                // Fallback to default behavior if callback not set
-                val context = holder.itemView.context
-                val intent = Intent(context, Shows_Page::class.java)
-                intent.putExtra("UserId", userid)
-                context.startActivity(intent)
+
+                Log.e("Profile_Log", "subscription :  ${db.isSubscriptionActive()}")
+
+
+                db.isSubscriptionActive()
+                 /*
+                 // Fallback to default behavior if callback not set
+                        val context = holder.itemView.context
+                        val intent = Intent(context, Shows_Page::class.java)
+                        intent.putExtra("UserId", userid)
+                        context.startActivity(intent)
+
+                        if (db.isSubscriptionActive()) {
+                            startActivity(Intent(context, Login_Page::class.java))
+                        } else {
+                            startActivity(Intent(context, Login_Page::class.java))
+                        }
+                    }
+
+                  */
+
             }
         }
 
