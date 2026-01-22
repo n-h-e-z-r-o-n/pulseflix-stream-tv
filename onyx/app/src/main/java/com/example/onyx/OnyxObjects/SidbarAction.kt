@@ -1,278 +1,194 @@
 package com.example.onyx.OnyxObjects
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
-import android.graphics.Typeface
-import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.example.onyx.Anime_Page
+import com.example.onyx.*
 import com.example.onyx.Database.SessionManger
-import com.example.onyx.Profile_Page
-import com.example.onyx.R
-import com.example.onyx.Shows_Page
 
 object NavAction {
 
-    // Cache for views to avoid repeated findViewById calls
-    private val viewCache = mutableMapOf<Int, View?>()
-
-    // Prevent duplicate click listeners
-    private val clickListenersAdded = mutableSetOf<Int>()
-
-    @SuppressLint("DiscouragedApi")
     fun setupSidebar(activity: Activity) {
         val sidebar = activity.findViewById<FrameLayout>(R.id.sideBar)
+        val mainBox = activity.findViewById<CardView>(R.id.mainBox)
 
-        // Get all navigation elements
-        val btnTvMv = getOrFindView<ImageButton>(activity, R.id.btnMvTv)
-        val btnAnime = getOrFindView<ImageButton>(activity, R.id.btnAnime)
-        val btnProfileCard = getOrFindView<CardView>(activity, R.id.btnProfile)
-        val btnProfileImage = getOrFindView<ImageView>(activity, R.id.btnProfileImg)
+        if (sidebar == null || mainBox == null) return
 
-        val labelMvTv = getOrFindView<TextView>(activity, R.id.labelMvTv)
-        val labelAnime = getOrFindView<TextView>(activity, R.id.labelAnime)
-        val labelProfile = getOrFindView<TextView>(activity, R.id.labelProfile)
+        val btnShows = activity.findViewById<ImageButton>(R.id.sidebarBtnShows)
+        val btnAnime = activity.findViewById<ImageButton>(R.id.sidebarBtnAnime)
+        val btnProfile = activity.findViewById<CardView>(R.id.sidebarBtnProfile)
+        val profileImg = activity.findViewById<ImageView>(R.id.sidebarBtnProfileImg)
 
-        val navigationButtons = listOf(btnTvMv, btnAnime, btnProfileCard)
+        val labelMvTv = activity.findViewById<TextView>(R.id.sidebarLabelShows)
+        val labelAnime = activity.findViewById<TextView>(R.id.sidebarLabelAnime)
+        val labelProfile = activity.findViewById<TextView>(R.id.sidebarLabelProfile)
+
+        val buttons = listOf(btnShows, btnAnime, btnProfile)
         val labels = listOf(labelMvTv, labelAnime, labelProfile)
 
-        val navigationMap = mapOf<View, Class<*>>(
-            btnTvMv to Shows_Page::class.java,
+        val validButtons = buttons.filterNotNull()
+        val validLabels = labels.filterNotNull()
+
+        val navMap = mapOf(
+            btnShows to Shows_Page::class.java,
             btnAnime to Anime_Page::class.java,
-            btnProfileCard to Profile_Page::class.java
+            btnProfile to Profile_Page::class.java
         )
 
-        // Determine active view
-        val activeView = when (activity) {
-            is Shows_Page -> btnTvMv
+        val validNavMap = navMap.filterKeys { it != null }
+
+        val activeButton = when (activity) {
+            is Shows_Page -> btnShows
             is Anime_Page -> btnAnime
-            is Profile_Page -> btnProfileCard
-            else -> btnTvMv
+            is Profile_Page -> btnProfile
+            else -> btnShows
         }
 
-        // Setup navigation and UI
-        setupNavigation(activity, navigationMap, activeView)
-        setupFocusHandling(activity, navigationButtons, labels, sidebar)
+        validButtons.forEach { it.isSelected = it == activeButton }
 
-        if (activity is ComponentActivity) {
-            setupBackPressedCallback(activity, activeView)
-        }
-
-        // Load profile image
-        loadProfileImage(activity, btnProfileImage)
-    }
-
-    private fun <T : View> getOrFindView(activity: Activity, id: Int): T {
-        return viewCache.getOrPut(id) { activity.findViewById(id) } as T
-    }
-
-    private fun setupNavigation(
-        activity: Activity,
-        navigationMap: Map<View, Class<*>>,
-        activeView: View?
-    ) {
-        // Highlight active button
-        highlightActive(activeView, navigationMap.keys.toList())
-        activeView?.post { activeView.requestFocus() }
-
-        // Add click listeners (only once per activity)
-        navigationMap.forEach { (view, targetClass) ->
-            val key = activity.hashCode() + view.id
-            if (!clickListenersAdded.contains(key)) {
-                view.setOnClickListener {
-                    if (activity::class.java != targetClass) {
-                        navigateToActivity(activity, targetClass)
+        // Navigation clicks
+        validNavMap.forEach { (view, target) ->
+            view?.setOnClickListener {
+                if (activity::class.java != target) {
+                    val intent = Intent(activity, target)
+                        .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    try {
+                        activity.startActivity(intent)
+                        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
-                clickListenersAdded.add(key)
             }
         }
-    }
 
-    private fun navigateToActivity(activity: Activity, targetClass: Class<*>) {
-        val intent = Intent(activity, targetClass)
-            .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        activity.startActivity(intent)
-        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-    }
+        fun hasAnyButtonFocus(): Boolean = validButtons.any { it.hasFocus() }
 
-    private fun setupFocusHandling(
-        activity: Activity,
-        buttons: List<View>,
-        labels: List<TextView?>,
-        sidebar: FrameLayout
-    ) {
-        val mainBox = activity.findViewById<CardView>(R.id.mainBox)
-
-        buttons.forEachIndexed { index, button ->
-            val label = labels.getOrNull(index)
-
-            button.setOnFocusChangeListener { v, hasFocus ->
-                handleFocusChange(
-                    context = activity,
-                    view = v,
-                    hasFocus = hasFocus,
-                    label = label,
-                    sidebar = sidebar,
-                    allViews = buttons,
-                    mainBox = mainBox
-                )
+        fun focusActiveButton() {
+            if (sidebar.visibility == View.VISIBLE && !hasAnyButtonFocus() && activeButton != null) {
+                activeButton.requestFocus()
             }
         }
-    }
 
-    private fun handleFocusChange(
-        context: Activity,
-        view: View,
-        hasFocus: Boolean,
-        label: TextView?,
-        sidebar: FrameLayout,
-        allViews: List<View>,
-        mainBox: CardView
-    ) {
-        // Animate button scale
-        view.animate()
-            .scaleX(if (hasFocus) 1.2f else 1f)
-            .scaleY(if (hasFocus) 1.2f else 1f)
-            .setDuration(50)
-            .start()
+        // --- CRITICAL FOCUS LOGIC START ---
+        validButtons.forEachIndexed { index, view ->
+            view.setOnFocusChangeListener { _, hasFocus ->
+                // Visual feedback for focus
+                view.animate()
+                    .scaleX(if (hasFocus) 1.2f else 1f)
+                    .scaleY(if (hasFocus) 1.2f else 1f)
+                    .setDuration(80)
+                    .start()
 
-        // Update label font weight
-        label?.setTypeface(null, if (hasFocus) Typeface.BOLD else Typeface.NORMAL)
-
-        // Handle sidebar visibility and main box adjustments
-        val anyFocused = allViews.any { it.hasFocus() }
-        val layoutParams = mainBox.layoutParams as ViewGroup.MarginLayoutParams
-        val density = context.resources.displayMetrics.density
-
-        if (anyFocused) {
-            showSidebar(context, sidebar, mainBox, layoutParams, density)
-        } else {
-            hideSidebar(sidebar, mainBox, layoutParams, density)
-        }
-
-        mainBox.layoutParams = layoutParams
-        mainBox.requestLayout()
-    }
-
-    private fun showSidebar(
-        context: Activity,
-        sidebar: FrameLayout,
-        mainBox: CardView,
-        layoutParams: ViewGroup.MarginLayoutParams,
-        density: Float
-    ) {
-        sidebar.visibility = View.VISIBLE
-        mainBox.radius = 20 * density
-
-        animateCardViewScale(mainBox, 0.9f, 0.9f)
-
-        val marginLeft = (40 * density).toInt()
-        layoutParams.setMargins(marginLeft, 0, 0, 0)
-    }
-
-    private fun hideSidebar(
-        sidebar: FrameLayout,
-        mainBox: CardView,
-        layoutParams: ViewGroup.MarginLayoutParams,
-        density: Float
-    ) {
-        sidebar.visibility = View.GONE
-        mainBox.radius = 0f
-
-        animateCardViewScale(mainBox, 1f, 1f)
-
-        val margin0dp = (0 * density).toInt()
-        layoutParams.setMargins(margin0dp, margin0dp, margin0dp, margin0dp)
-    }
-
-    private fun animateCardViewScale(view: View, scaleX: Float, scaleY: Float) {
-        view.animate()
-            .scaleX(scaleX)
-            .scaleY(scaleY)
-            .setDuration(1)
-            .setInterpolator(AccelerateDecelerateInterpolator())
-            .start()
-    }
-
-    private fun highlightActive(activeView: View?, allViews: List<View?>) {
-        allViews.forEach { view ->
-            view?.isSelected = false
-        }
-        activeView?.isSelected = true
-    }
-
-    private fun setupBackPressedCallback(activity: ComponentActivity, activeView: View?) {
-        var previouslyFocusedView: View? = null
-        val sidebar = activity.findViewById<FrameLayout>(R.id.sideBar)
-        val mainBox = activity.findViewById<CardView>(R.id.mainBox)
-
-        activity.onBackPressedDispatcher.addCallback(activity, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (sidebar.visibility != View.VISIBLE) {
-                    previouslyFocusedView = activity.currentFocus
-
-                    showSidebar(
-                        context = activity,
-                        sidebar = sidebar,
-                        mainBox = mainBox,
-                        layoutParams = mainBox.layoutParams as ViewGroup.MarginLayoutParams,
-                        density = activity.resources.displayMetrics.density
+                if (index < validLabels.size) {
+                    validLabels[index].setTypeface(
+                        null,
+                        if (hasFocus) Typeface.BOLD else Typeface.NORMAL
                     )
+                }
 
-                    activeView?.postDelayed({ activeView.requestFocus() }, 50)
+                if (hasFocus) {
+                    // If a button gets focus, ensure sidebar is shown
+                    toggleSidebar(activity, sidebar, mainBox, true)
                 } else {
-                    hideSidebar(
-                        sidebar = sidebar,
-                        mainBox = mainBox,
-                        layoutParams = mainBox.layoutParams as ViewGroup.MarginLayoutParams,
-                        density = activity.resources.displayMetrics.density
-                    )
-
-                    previouslyFocusedView?.post {
-                        previouslyFocusedView?.requestFocus()
-                        previouslyFocusedView = null
-                    }
+                    /* When focus is lost, wait a frame to see where focus went.
+                       If no other button in the sidebar has focus, hide the sidebar.
+                    */
+                    view.postDelayed({
+                        if (!hasAnyButtonFocus()) {
+                            toggleSidebar(activity, sidebar, mainBox, false)
+                        }
+                    }, 50)
                 }
             }
-        })
+        }
+        // --- CRITICAL FOCUS LOGIC END ---
+
+        // Initial setup
+        if (activeButton != null) {
+            activeButton.post {
+                if (sidebar.visibility == View.VISIBLE) {
+                    activeButton.requestFocus()
+                }
+            }
+        }
+
+        // Back button handling
+        if (activity is ComponentActivity) {
+            activity.onBackPressedDispatcher.addCallback(
+                activity,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        if (sidebar.visibility == View.VISIBLE) {
+                            validButtons.forEach { it.clearFocus() }
+                            toggleSidebar(activity, sidebar, mainBox, false)
+                        } else {
+                            toggleSidebar(activity, sidebar, mainBox, true)
+                            focusActiveButton()
+                        }
+                    }
+                }
+            )
+        }
+
+        // Handle taps outside
+        mainBox.setOnClickListener {
+            if (sidebar.visibility == View.VISIBLE) {
+                validButtons.forEach { it.clearFocus() }
+                toggleSidebar(activity, sidebar, mainBox, false)
+            }
+        }
+
+        if (profileImg != null) loadProfileImage(activity, profileImg)
     }
 
-    private fun loadProfileImage(activity: Activity, profileImage: ImageView?) {
-        profileImage?.let { imageView ->
-            try {
-                val sm = SessionManger(activity)
-                val assetPath = "file:///android_asset/${sm.getUserAvatar()}"
+    private fun toggleSidebar(activity: Activity, sidebar: FrameLayout, mainBox: CardView, show: Boolean) {
+        if (sidebar.visibility == (if (show) View.VISIBLE else View.GONE)) return
 
-                Glide.with(activity)
-                    .load(assetPath)
-                    .transform(CircleCrop())
-                    .placeholder(R.drawable.ic_person)
-                    .error(R.drawable.ic_person)
-                    .into(imageView)
-            } catch (e: Exception) {
-                Log.e("NavAction", "Error loading profile image", e)
-                // Set default image on error
-                imageView.setImageResource(R.drawable.ic_person)
-            }
+        val density = activity.resources.displayMetrics.density
+        val params = mainBox.layoutParams as ViewGroup.MarginLayoutParams
+
+        sidebar.visibility = if (show) View.VISIBLE else View.GONE
+
+        if (mainBox.isLaidOut) {
+            mainBox.radius = if (show) 20 * density else 0f
+            mainBox.animate()
+                .scaleX(if (show) 0.9f else 1f)
+                .scaleY(if (show) 0.9f else 1f)
+                .setDuration(120)
+                .setInterpolator(AccelerateDecelerateInterpolator())
+                .start()
+
+            val margin = if (show) (40 * density).toInt() else 0
+            params.setMargins(margin, 0, 0, 0)
+            mainBox.layoutParams = params
         }
     }
 
-    // Clean up cache when activity is destroyed
-    fun clearCache() {
-        viewCache.clear()
-        clickListenersAdded.clear()
+    private fun loadProfileImage(activity: Activity, imageView: ImageView) {
+        try {
+            val avatar = SessionManger(activity).getUserAvatar()
+            val avatarPath = "file:///android_asset/$avatar"
+            Glide.with(activity)
+                .load(avatarPath)
+                .transform(CircleCrop())
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .into(imageView)
+        } catch (e: Exception) {
+            imageView.setImageResource(R.drawable.ic_person)
+        }
     }
 }

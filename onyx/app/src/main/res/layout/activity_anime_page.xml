@@ -42,10 +42,9 @@
 
         <LinearLayout
             android:id="@+id/animeNavBar"
-            android:layout_width="50dp"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
             android:orientation="vertical"
             android:gravity="center"
@@ -55,6 +54,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:layout_gravity="center_vertical"
             app:cardCornerRadius="20dp"
             android:elevation="15dp"
@@ -382,109 +382,6 @@
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                app:cardCornerRadius="15dp"
-                android:elevation="15dp"
-                android:padding="5dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="4dp"
-                app:cardBackgroundColor="?attr/BG_color_up">
-
-                <LinearLayout
-                    android:id="@+id/switchBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:gravity="center_vertical"
-                    android:nextFocusLeft="@+id/switchBtn"
-                    android:nextFocusUp="@+id/cNotificationAnimeIcon"
-                    android:nextFocusDown="@+id/btnProfile"
-                    android:background="@drawable/background_hovor"
-                    android:layout_margin="5dp"
-                    android:padding="3dp"
-                    tools:ignore="UseCompoundDrawables,UselessParent">
-
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/ic_switch"
-                        app:tint="?attr/FG_color"
-                        tools:ignore="ContentDescription" />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="9dp"
-                        android:fontFamily="@font/n"
-                        android:text="Shows"
-                        android:textColor="?attr/FG_color"
-                        android:textSize="18sp"
-                        android:singleLine="true"
-                        tools:ignore="HardcodedText,SmallSp" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                app:cardCornerRadius="15dp"
-                android:elevation="15dp"
-                app:cardBackgroundColor="?attr/BG_color_up">
-
-                <LinearLayout
-                    android:id="@+id/btnProfile"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal"
-                    android:focusableInTouchMode="true"
-                    android:gravity="center_vertical"
-                    android:nextFocusUp="@+id/switchBtn"
-                    android:nextFocusDown="@+id/HomeAnimeBtn"
-                    android:nextFocusLeft="@+id/btnProfile"
-                    android:layout_margin="5dp"
-                    android:padding="2dp"
-                    android:background="@drawable/background_hovor"
-                    tools:ignore="UselessParent">
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                app:cardCornerRadius="20dp">
-                                <ImageView
-                                    android:id="@+id/btnProfileImg"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:importantForAccessibility="no"
-                                    tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
-                            </androidx.cardview.widget.CardView>
-
-                            <TextView
-                                android:id="@+id/labelProfile"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="9dp"
-                                android:text="Profile"
-                                android:fontFamily="@font/n"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="17sp"
-                                android:singleLine="true"
-                                tools:ignore="HardcodedText,SmallSp" />
-                </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 

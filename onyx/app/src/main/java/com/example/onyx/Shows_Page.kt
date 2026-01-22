@@ -128,14 +128,14 @@ class Shows_Page : AppCompatActivity() {
 
         LoadingAnimation.setup(this, R.raw.b)
         //LoadingAnimation.show(this)
-        //NavAction.setupSidebar(this)
+        NavAction.setupSidebar(this)
         fetchTMDB = TMDBapi(this)
         db = AppDatabase(this)         // Initialize database
         sm = SessionManger(this)
         userId = sm.getUserId()
 
 
-        setupBackPressedCallback()
+        //setupBackPressedCallback()
         ////////////////////////////////////////////////////////////////////////////////////////////
         val navBar = findViewById<LinearLayout>(R.id.showsNavBar)
 
@@ -328,12 +328,11 @@ class Shows_Page : AppCompatActivity() {
         GlobalUtils.expandParentOnChildFocus(
             parent = navBar,
             expandedWidthDp = 140f,
-            collapsedWidthDp = 50f
+            collapsedWidthDp = 70f
         )
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         setupRecyclerViews()
-        ExtraBnts()
 
 
 
@@ -388,39 +387,6 @@ class Shows_Page : AppCompatActivity() {
     }
 
 
-    private fun ExtraBnts() {
-
-        val switchBtn = findViewById<LinearLayout>(R.id.switchBtn)
-        val btnProfileCard = findViewById<LinearLayout>(R.id.btnProfile)
-        val btnProfileImage = findViewById<ImageView>(R.id.btnProfileImg)
-
-        btnProfileCard.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.Main) {
-                val intent = Intent(this@Shows_Page, Profile_Page::class.java)
-                startActivity(intent)
-            }
-        }
-
-        switchBtn.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.Main) {
-                val intent = Intent(this@Shows_Page, Anime_Page::class.java)
-                startActivity(intent)
-            }
-        }
-
-        try {
-            val assetPath = "file:///android_asset/${sm.getUserAvatar()}"
-
-            Glide.with(this)
-                .load(assetPath)
-                .transform(CircleCrop())
-                .placeholder(R.drawable.ic_person)
-                .error(R.drawable.ic_person)
-                .into(btnProfileImage)
-        } catch (e: Exception) {
-
-        }
-    }
 
 
     private fun setupRecyclerViews() {
@@ -1597,22 +1563,13 @@ class Shows_Page : AppCompatActivity() {
     private fun notificationS() {
         lifecycleScope.launch(Dispatchers.Main) {
 
-            val fetchedNot = NotificationHelper.getTvNotifications(this@Shows_Page)
-            Log.d("Fav_tv", "fetchedNot: $fetchedNot")
-            if (fetchedNot) {
-                findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.VISIBLE
-            }
-
 
             val dnot = withContext(Dispatchers.IO) { db.getAllTvNotifications(userId) }
             val notifications = mutableListOf<NotificationItem>()
 
             findViewById<TextView>(R.id.notificationHeadline).text = "notifications (${dnot.size})"
 
-
-
             for (item in dnot) {
-
                 Log.d("Not_tv", "notificationId: ${item["id"]}")
                 Log.d("Not_tv", "anime_id: ${item["anime_id"]}")
                 Log.d("Not_tv", "title: ${item["title"]}")

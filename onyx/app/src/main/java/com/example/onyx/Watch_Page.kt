@@ -423,15 +423,21 @@ class Watch_Page : AppCompatActivity() {
             }
 
             seasonButton.setOnClickListener {
+                // Reset previous button if it exists
                 selectedSeasonButton?.let { previous ->
-                    previous.background = ContextCompat.getDrawable(
-                        this,
-                        R.drawable.season_selector
+                    previous.background = ContextCompat.getDrawable(this, R.drawable.season_selector)
+                    previous.setTextColor(Color.WHITE)
+                    previous.setShadowLayer(
+                        3f,        // shadowRadius
+                        2f,        // shadowDx
+                        2f,        // shadowDy
+                        Color.BLACK // shadowColor
                     )
-                    previous.setTextColor(resolveAttrColor(this, R.attr.FG_color))
                 }
 
                 seasonButton.setTextColor(resolveAttrColor(this, R.attr.AccentColor))
+                seasonButton.setShadowLayer(3f, 2f, 2f, Color.BLACK)
+
                 selectedSeasonButton = seasonButton
                 seasonButton.isEnabled = false
                 ShowSeasonEpisodes(season_no, seasonData, seasonID)

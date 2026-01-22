@@ -73,10 +73,9 @@
 
         <LinearLayout
             android:id="@+id/showsNavBar"
-            android:layout_width="50dp"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="5dp"
             android:orientation="vertical"
             android:gravity="center"
@@ -85,6 +84,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:layout_gravity="center_vertical"
             app:cardCornerRadius="20dp"
             app:cardBackgroundColor="?attr/BG_color_up">
@@ -444,108 +444,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            app:cardCornerRadius="15dp"
-            android:elevation="15dp"
-            android:padding="5dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="4dp"
-            app:cardBackgroundColor="?attr/BG_color_up">
 
-            <LinearLayout
-                android:id="@+id/switchBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="center_vertical"
-                android:nextFocusLeft="@+id/switchBtn"
-                android:nextFocusUp="@+id/cNotificationAnimeIcon"
-                android:nextFocusDown="@+id/btnProfile"
-                android:background="@drawable/background_hovor"
-                android:layout_margin="5dp"
-                android:padding="3dp"
-                tools:ignore="UseCompoundDrawables,UselessParent">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/ic_switch"
-                    app:tint="?attr/FG_color"
-                    tools:ignore="ContentDescription" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="9dp"
-                    android:fontFamily="@font/n"
-                    android:text="Anime"
-                    android:textColor="?attr/FG_color"
-                    android:textSize="18sp"
-                    android:singleLine="true"
-                    tools:ignore="HardcodedText,SmallSp" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            app:cardCornerRadius="15dp"
-            android:elevation="15dp"
-            app:cardBackgroundColor="?attr/BG_color_up">
-
-            <LinearLayout
-                android:id="@+id/btnProfile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="horizontal"
-                android:focusableInTouchMode="true"
-                android:gravity="center_vertical"
-                android:nextFocusUp="@+id/switchBtn"
-                android:nextFocusDown="@+id/HomeAnimeBtn"
-                android:nextFocusLeft="@+id/btnProfile"
-                android:layout_margin="5dp"
-                android:padding="2dp"
-                android:background="@drawable/background_hovor"
-                tools:ignore="UselessParent">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    app:cardCornerRadius="20dp">
-                    <ImageView
-                        android:id="@+id/btnProfileImg"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:importantForAccessibility="no"
-                        tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
-                </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:id="@+id/labelProfile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="9dp"
-                    android:text="Profile"
-                    android:fontFamily="@font/n"
-                    android:textColor="?attr/FG_color"
-                    android:textSize="17sp"
-                    android:singleLine="true"
-                    tools:ignore="HardcodedText,SmallSp" />
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
 
@@ -1055,7 +954,11 @@
                                             android:maxLines="1"
                                             android:text=""
                                             android:singleLine="false"
-                                            android:textColor="?attr/FG_color"
+                                            android:textColor="#FFFFFF"
+                                            android:shadowColor="#000000"
+                                            android:shadowDx="2"
+                                            android:shadowDy="2"
+                                            android:shadowRadius="3"
                                             android:textSize="40sp"
                                             android:textStyle="bold"
                                             android:layout_marginBottom="5dp"
@@ -1069,7 +972,11 @@
                                             android:maxLines="1"
                                             android:text=""
                                             android:singleLine="false"
-                                            android:textColor="?attr/FG_color"
+                                            android:textColor="#FFFFFF"
+                                            android:shadowColor="#000000"
+                                            android:shadowDx="2"
+                                            android:shadowDy="2"
+                                            android:shadowRadius="3"
                                             android:textSize="13sp"
                                             android:textStyle="bold"
                                             android:layout_marginBottom="10dp"
@@ -1080,7 +987,7 @@
                                             android:layout_height="20dp"
                                             android:orientation="horizontal"
                                             android:layout_marginBottom="10dp"
-                                            android:alpha="0.5">
+                                            android:alpha="0.8">
 
                                             <TextView
                                                 android:id="@+id/FavType"
@@ -1092,6 +999,10 @@
                                                 android:text=""
                                                 android:singleLine="false"
                                                 android:textColor="?attr/AccentColor"
+                                                android:shadowColor="#000000"
+                                                android:shadowDx="2"
+                                                android:shadowDy="2"
+                                                android:shadowRadius="3"
                                                 android:textSize="15sp"
                                                 android:fontFamily="@font/a"
                                                 android:gravity="center"
@@ -1104,7 +1015,6 @@
                                                 android:layout_height="wrap_content"
                                                 app:cardCornerRadius="3dp"
                                                 android:text="IMDB"
-
                                                 android:textSize="11sp"
                                                 app:cardBackgroundColor="#DAA520"
                                                 tools:ignore="HardcodedText"
@@ -1133,7 +1043,11 @@
                                                 android:maxLines="7"
                                                 android:text=""
                                                 android:singleLine="false"
-                                                android:textColor="?attr/FG_color"
+                                                android:textColor="#FFFFFF"
+                                                android:shadowColor="#000000"
+                                                android:shadowDx="2"
+                                                android:shadowDy="2"
+                                                android:shadowRadius="3"
                                                 android:textSize="13sp"
                                                 android:gravity="center"
                                                 android:textStyle="italic|bold"
@@ -1149,7 +1063,11 @@
                                                 android:maxLines="1"
                                                 android:text=""
                                                 android:singleLine="false"
-                                                android:textColor="?attr/FG_color"
+                                                android:textColor="#FFFFFF"
+                                                android:shadowColor="#000000"
+                                                android:shadowDx="2"
+                                                android:shadowDy="2"
+                                                android:shadowRadius="3"
                                                 android:textSize="13sp"
                                                 android:gravity="center"
                                                 android:textStyle="italic|bold"
@@ -1171,7 +1089,11 @@
                                             android:maxLines="5"
                                             android:singleLine="false"
                                             android:text=""
-                                            android:textColor="?attr/FG_color"
+                                            android:textColor="#FFFFFF"
+                                            android:shadowColor="#000000"
+                                            android:shadowDx="2"
+                                            android:shadowDy="2"
+                                            android:shadowRadius="3"
                                             android:fontFamily="@font/p"
                                             android:textSize="12sp"
                                             android:layout_marginBottom="20dp"
@@ -1184,8 +1106,8 @@
                                             android:focusable="true"
                                             android:focusableInTouchMode="true"
                                             android:clickable="true"
+                                            android:elevation="2dp"
                                             android:background="@drawable/watch_button"
-                                            android:nextFocusLeft="@+id/sideBar"
                                             android:paddingStart="9dp"
                                             android:paddingEnd="9dp"
                                             android:gravity="center">
@@ -1204,7 +1126,11 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="Remove From Favorites"
-                                                android:textColor="@android:color/white"
+                                                android:textColor="#FFFFFF"
+                                                android:shadowColor="#000000"
+                                                android:shadowDx="2"
+                                                android:shadowDy="2"
+                                                android:shadowRadius="3"
                                                 android:fontFamily="@font/q"
                                                 android:textSize="8sp"
                                                 android:layout_marginStart="2dp"
@@ -1216,6 +1142,7 @@
 
                                     <TextView
                                         android:id="@+id/favEmptyState"
+                                        android:visibility="gone"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:padding="150dp"

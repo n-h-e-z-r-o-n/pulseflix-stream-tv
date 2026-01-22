@@ -10,7 +10,7 @@
     android:foreground="@drawable/item_episode_focus"
     app:cardCornerRadius="9dp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="#406082B6">
+    app:cardBackgroundColor="?attr/transparentEffect">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -20,11 +20,10 @@
         <ImageView
             android:id="@+id/Ep_IMG"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
             android:background="?attr/BG_color_up"
-            android:src="@raw/test3"
             android:layout_gravity="left"
             tools:ignore="ContentDescription" />
 

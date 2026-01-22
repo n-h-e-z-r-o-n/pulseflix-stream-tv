@@ -22,6 +22,7 @@ import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.ScrollView
@@ -523,7 +524,69 @@ object GlobalUtils {
     }
 
 
+    private val cardLayerMap = mutableMapOf<View, Boolean>()
+
     private fun layoutStack(container: FrameLayout) {
+        val count = container.childCount
+
+        for (i in 0 until count) {
+            val card = container.getChildAt(i)
+            val posFromTop = count - 1 - i
+            val index = posFromTop.coerceAtMost(5)
+
+            // Optimization: Only animate if the card is within the visible stack range
+            // or if it was previously visible and is now hidden.
+            if (posFromTop <= 6) {
+                card.animate()
+                    .translationX(translations[index])
+                    .scaleX(scales[index])
+                    .scaleY(scales[index])
+                    .translationZ(elevations[index]) // Use translationZ instead of elevation
+                    .setDuration(220)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .withLayer()
+                    .start()
+            } else {
+                // Instantly hide or move cards deep in the stack to save GPU cycles
+                card.translationX = translations[5]
+                card.scaleX = scales[5]
+                card.scaleY = scales[5]
+                card.translationZ = 0f
+            }
+        }
+    }
+
+    private fun swapRight(container: FrameLayout, keepFocus: Boolean = true) {
+        if (container.childCount <= 1) return
+        val top = container.getChildAt(container.childCount - 1)
+
+        top.animate()
+            .translationXBy(-dp250)
+            .alpha(0f) // Fade out while swapping for smoother visual transition
+            .scaleX(0.85f)
+            .scaleY(0.85f)
+            .setDuration(200)
+            .setInterpolator(AccelerateInterpolator())
+            .withEndAction {
+                // Reordering views is expensive. Do it only when necessary.
+                container.removeView(top)
+                container.addView(top, 0)
+
+                // Reset state for when it reappears at the bottom
+                top.alpha = 1f
+                top.rotation = 0f
+
+                layoutStack(container)
+
+                if (keepFocus) {
+                    container.getChildAt(container.childCount - 1)?.requestFocus()
+                }
+            }
+            .start()
+    }
+
+
+    private fun r_layoutStack(container: FrameLayout) {
 
         val count = container.childCount
 
@@ -550,7 +613,7 @@ object GlobalUtils {
         }
     }
 
-    private fun swapRight(container: FrameLayout, keepFocus: Boolean = true) {
+    private fun r_swapRight(container: FrameLayout, keepFocus: Boolean = true) {
         if (container.childCount == 0) return
         val top = container.getChildAt(container.childCount - 1)
 

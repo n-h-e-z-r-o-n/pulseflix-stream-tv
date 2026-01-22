@@ -13,6 +13,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.OnyxObjects.GlobalUtils
+import com.example.onyx.OnyxObjects.NotificationHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -41,6 +42,9 @@ class MainActivity : AppCompatActivity() {
         val loadingBar = findViewById<View>(R.id.loading_bar)
         val animation = AnimationUtils.loadAnimation(this, R.drawable.loading_slide)
         loadingBar.startAnimation(animation)
+
+        NotificationHelper.getTvNotifications(this@MainActivity)
+        NotificationHelper.getAnimeNotifications(this@MainActivity)
 
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this@MainActivity, Login_Page::class.java))

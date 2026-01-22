@@ -50,7 +50,7 @@ import com.example.onyx.OnyxClasses.TrendingAnimeItem
 import com.example.onyx.OnyxClasses.cWatchingAdapter
 import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.LoadingAnimation
-import com.example.onyx.OnyxObjects.NotificationHelper
+import com.example.onyx.OnyxObjects.NavAction
 
 
 class Anime_Page : AppCompatActivity() {
@@ -109,7 +109,7 @@ class Anime_Page : AppCompatActivity() {
          setContentView(R.layout.activity_anime_page)
 
 
-         //NavAction.setupSidebar(this@Anime_Page)
+         NavAction.setupSidebar(this@Anime_Page)
          LoadingAnimation.setup(this@Anime_Page, R.raw.b)
          LoadingAnimation.show(this@Anime_Page)
 
@@ -286,7 +286,7 @@ class Anime_Page : AppCompatActivity() {
          GlobalUtils.expandParentOnChildFocus(
              parent = navBar,
              expandedWidthDp = 140f,
-             collapsedWidthDp = 50f
+             collapsedWidthDp = 70f
          )
 
 
@@ -368,27 +368,14 @@ class Anime_Page : AppCompatActivity() {
          ////////////////////////////////////////////////////////////////////////////////////////////
          ////////////////////////////////////////////////////////////////////////////////////////////
 
-         setupSearchUi()
-         ExtraBnts()
-         setupBackPressedCallback()
+        setupSearchUi()
+        setupBackPressedCallback()
 
-         /*CoroutineScope(Dispatchers.Main).launch {
-             animeHomeData()
-             loadDubbedAnime()
-             loadPopularAnime()
-         }
-          */
-
-
-
-                     animeHomeData()
-
-                     loadDubbedAnime()
-
-                     loadPopularAnime()
-
-                     animeWatchedList()
-                     notificationS()
+        animeHomeData()
+        loadDubbedAnime()
+        loadPopularAnime()
+        animeWatchedList()
+        notificationS()
 
      }
 
@@ -414,42 +401,6 @@ class Anime_Page : AppCompatActivity() {
 
     }
 
-
-    private fun ExtraBnts() {
-
-        val switchBtn = findViewById<LinearLayout>(R.id.switchBtn)
-        val btnProfileCard = findViewById<LinearLayout>(R.id.btnProfile)
-        val btnProfileImage = findViewById<ImageView>(R.id.btnProfileImg)
-
-        btnProfileCard.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.Main) {
-                val intent = Intent(this@Anime_Page, Profile_Page::class.java)
-                startActivity(intent)
-            }
-        }
-
-        switchBtn.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.Main) {
-                val intent = Intent(this@Anime_Page, Shows_Page::class.java)
-                startActivity(intent)
-            }
-        }
-
-
-            try {
-                val assetPath = "file:///android_asset/${sm.getUserAvatar()}"
-
-                Glide.with(this)
-                    .load(assetPath)
-                    .transform(CircleCrop())
-                    .placeholder(R.drawable.ic_person)
-                    .error(R.drawable.ic_person)
-                    .into(btnProfileImage)
-            } catch (e: Exception) {
-
-            }
-
-    }
 
 
      private fun animeHomeData() {
@@ -1084,11 +1035,6 @@ class Anime_Page : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.Main) {
 
-            val fetchedNot = NotificationHelper.getAnimeNotifications(this@Anime_Page)
-            Log.d("Not_anime", "fetchedNot: $fetchedNot")
-            if (fetchedNot) {
-                findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.VISIBLE
-            }
 
 
             val dnot = db.getAllAnimeNotifications(userId)
