@@ -8,6 +8,7 @@ import android.os.Looper
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         // Keep screen on
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        setupBackPressedCallback()
+
         // Hide navigation bar and status bar (Immersive mode)
         GlobalUtils.hideSystemUI(this)
 
@@ -49,9 +52,6 @@ class MainActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this@MainActivity, Login_Page::class.java))
             finish()
-
-
-
         }, 10000)
     }
 
@@ -68,5 +68,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         GlobalUtils.hideSystemUI(this)
+    }
+
+    private fun setupBackPressedCallback() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+            }
+        })
     }
 }

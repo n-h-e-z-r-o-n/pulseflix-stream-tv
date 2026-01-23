@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.TypedValue
+import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -120,6 +121,8 @@ class Profile_Page : AppCompatActivity() {
         setupFocusHandling()
 
         getRemainingDays()
+
+
     }
     
     private fun initializeViews() {
@@ -148,6 +151,7 @@ class Profile_Page : AppCompatActivity() {
         themeSetting.setOnClickListener {
             showThemeDialog()
         }
+        themeSetting.requestFocus()
         
         // Clear cache click
         val clearCache = findViewById<LinearLayout>(R.id.clearCache)

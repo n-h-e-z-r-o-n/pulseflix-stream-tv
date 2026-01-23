@@ -19,6 +19,9 @@ import com.example.onyx.*
 import com.example.onyx.Database.SessionManger
 
 object NavAction {
+    // Store previously focused view at the class level
+    private var previouslyFocusedView: View? = null
+    private var isSidebarOpen = false
 
     fun setupSidebar(activity: Activity) {
         val sidebar = activity.findViewById<FrameLayout>(R.id.sideBar)
@@ -65,6 +68,8 @@ object NavAction {
                     val intent = Intent(activity, target)
                         .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                     try {
+                        // Clear focus before transition
+                        validButtons.forEach { it.clearFocus() }
                         activity.startActivity(intent)
                         activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     } catch (e: Exception) {
@@ -82,7 +87,7 @@ object NavAction {
             }
         }
 
-        // --- CRITICAL FOCUS LOGIC START ---
+        // --- FOCUS MANAGEMENT LOGIC START ---
         validButtons.forEachIndexed { index, view ->
             view.setOnFocusChangeListener { _, hasFocus ->
                 // Visual feedback for focus
@@ -100,21 +105,23 @@ object NavAction {
                 }
 
                 if (hasFocus) {
-                    // If a button gets focus, ensure sidebar is shown
-                    toggleSidebar(activity, sidebar, mainBox, true)
+                    // When a button gets focus, show sidebar and store the previous focus
+                    if (!isSidebarOpen) {
+                        showSidebar(activity, sidebar, mainBox, activeButton)
+                    }
                 } else {
-                    /* When focus is lost, wait a frame to see where focus went.
-                       If no other button in the sidebar has focus, hide the sidebar.
+                    /* When focus is lost, check if sidebar should hide.
+                       Only hide if no button has focus and sidebar is open.
                     */
                     view.postDelayed({
-                        if (!hasAnyButtonFocus()) {
-                            toggleSidebar(activity, sidebar, mainBox, false)
+                        if (!hasAnyButtonFocus() && isSidebarOpen) {
+                            hideSidebar(activity, sidebar, mainBox)
                         }
                     }, 50)
                 }
             }
         }
-        // --- CRITICAL FOCUS LOGIC END ---
+        // --- FOCUS MANAGEMENT LOGIC END ---
 
         // Initial setup
         if (activeButton != null) {
@@ -131,12 +138,11 @@ object NavAction {
                 activity,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
-                        if (sidebar.visibility == View.VISIBLE) {
+                        if (isSidebarOpen) {
                             validButtons.forEach { it.clearFocus() }
-                            toggleSidebar(activity, sidebar, mainBox, false)
+                            hideSidebar(activity, sidebar, mainBox)
                         } else {
-                            toggleSidebar(activity, sidebar, mainBox, true)
-                            focusActiveButton()
+                            showSidebar(activity, sidebar, mainBox, activeButton)
                         }
                     }
                 }
@@ -145,35 +151,79 @@ object NavAction {
 
         // Handle taps outside
         mainBox.setOnClickListener {
-            if (sidebar.visibility == View.VISIBLE) {
+            if (isSidebarOpen) {
                 validButtons.forEach { it.clearFocus() }
-                toggleSidebar(activity, sidebar, mainBox, false)
+                hideSidebar(activity, sidebar, mainBox)
             }
         }
 
         if (profileImg != null) loadProfileImage(activity, profileImg)
     }
 
-    private fun toggleSidebar(activity: Activity, sidebar: FrameLayout, mainBox: CardView, show: Boolean) {
-        if (sidebar.visibility == (if (show) View.VISIBLE else View.GONE)) return
+    private fun showSidebar(activity: Activity, sidebar: FrameLayout, mainBox: CardView, activeButton: View?) {
+        if (isSidebarOpen) return
+
+        // Store the currently focused view before showing sidebar
+        previouslyFocusedView = activity.currentFocus
+
+        sidebar.visibility = View.VISIBLE
+        isSidebarOpen = true
 
         val density = activity.resources.displayMetrics.density
         val params = mainBox.layoutParams as ViewGroup.MarginLayoutParams
 
-        sidebar.visibility = if (show) View.VISIBLE else View.GONE
-
         if (mainBox.isLaidOut) {
-            mainBox.radius = if (show) 20 * density else 0f
+            mainBox.radius = 20 * density
             mainBox.animate()
-                .scaleX(if (show) 0.9f else 1f)
-                .scaleY(if (show) 0.9f else 1f)
+                .scaleX(0.9f)
+                .scaleY(0.9f)
                 .setDuration(120)
                 .setInterpolator(AccelerateDecelerateInterpolator())
                 .start()
 
-            val margin = if (show) (40 * density).toInt() else 0
+            val margin = (40 * density).toInt()
             params.setMargins(margin, 0, 0, 0)
             mainBox.layoutParams = params
+        }
+
+        // Request focus on active button after a short delay
+        activeButton?.postDelayed({
+            if (isSidebarOpen) {
+                activeButton.requestFocus()
+            }
+        }, 50)
+    }
+
+    private fun hideSidebar(activity: Activity, sidebar: FrameLayout, mainBox: CardView) {
+        if (!isSidebarOpen) return
+
+        sidebar.visibility = View.GONE
+        isSidebarOpen = false
+
+        val density = activity.resources.displayMetrics.density
+        val params = mainBox.layoutParams as ViewGroup.MarginLayoutParams
+
+        if (mainBox.isLaidOut) {
+            mainBox.radius = 0f
+            mainBox.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(120)
+                .setInterpolator(AccelerateDecelerateInterpolator())
+                .start()
+
+            params.setMargins(0, 0, 0, 0)
+            mainBox.layoutParams = params
+        }
+
+        // Restore focus to previously focused view
+        previouslyFocusedView?.post {
+            try {
+                previouslyFocusedView?.requestFocus()
+            } catch (e: Exception) {
+            } finally {
+                previouslyFocusedView = null
+            }
         }
     }
 

@@ -16,148 +16,6 @@ import com.example.onyx.Watch_Anime_Page
 import com.example.onyx.Watch_Page
 
 
-class AnimeSwiper(
-    private val  items: MutableList<AnimeSliderItem>,
-    private val layoutResId: Int
-) :  RecyclerView.Adapter<AnimeSwiper.ViewHolder>() {
-
-    companion object {
-        private var lastKeyTime = 0L
-        private val KEY_DEBOUNCE_DELAY = 450L // ms
-    }
-
-
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-        val CardViewcontiner: CardView = view.findViewById(R.id.spotlightAnimesCard)
-
-
-        val SliderBackdrop: ImageView = view.findViewById(R.id.SliderBackdrop)
-
-        val cardTitle: TextView = view.findViewById(R.id.cardTitle)
-
-        val cardOverview: TextView = view.findViewById(R.id.cardOverview)
-
-        val SliderButton: LinearLayout = view.findViewById(R.id.cardButton)
-
-        val cardType: TextView = view.findViewById(R.id.cardType)
-
-        val cardRuntime: TextView = view.findViewById(R.id.cardRuntime)
-
-        val cardYear: TextView = view.findViewById(R.id.cardYear)
-
-        val cardQuality: TextView = view.findViewById(R.id.cardQuality)
-
-
-        val cardDub: TextView = view.findViewById(R.id.cardDub)
-
-        val cardSub: TextView = view.findViewById(R.id.cardSub)
-
-
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(layoutResId, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val realPosition = position % items.size      // map to your real data
-
-
-        val currentItem = items[position]
-
-        val title = currentItem.title
-        val imageUrl = currentItem.imageUrl
-        val imdbCode = currentItem.id
-        val type = currentItem.type
-        val overview = currentItem.overview
-        val release_date = currentItem.release_date
-        val runtime = currentItem.runtime
-        val quality = currentItem.quality
-        val dub  = currentItem.dub
-        val sub  = currentItem.sub
-
-
-        holder.cardTitle.text = title
-
-        holder.cardType.text = type
-
-        holder.cardRuntime.text = runtime+"m"
-
-        holder.cardYear.text = release_date
-
-        holder.cardQuality.text = quality
-
-        holder.cardSub.text = sub
-
-        holder.cardDub.text = if (currentItem.dub == "null" || currentItem.dub.isEmpty()) "0" else currentItem.dub
-
-        holder.cardOverview.text = overview
-
-
-
-
-        Glide.with(holder.itemView.context)
-            .load(imageUrl)
-            .centerInside()
-            .into(holder.SliderBackdrop)
-
-
-        holder.SliderButton.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, Watch_Anime_Page::class.java)
-            intent.putExtra("anime_code", imdbCode)
-            intent.putExtra("anime_poster", imageUrl)
-            context.startActivity(intent)
-        }
-
- 
-
-        holder.CardViewcontiner.setOnKeyListener { v, keyCode, event ->
-            if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
-            val now = System.currentTimeMillis()
-            if (now - lastKeyTime < KEY_DEBOUNCE_DELAY) return@setOnKeyListener true
-            lastKeyTime = now
-
-            when (keyCode) {
-                KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    if (position == 0) return@setOnKeyListener true
-                }
-                KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                    if (position == items.size-1) return@setOnKeyListener true
-                }
-            }
-
-            false
-        }
-
-    }
-
-    override fun getItemCount() = items.size
-
-    // 👇 helper to add items one by one
-    fun addItem(item: AnimeSliderItem) {
-        items.add(item)
-        notifyItemInserted(items.size - 1)
-
-    }
-}
-
-data class AnimeSliderItem(
-    val title: String,
-    val imageUrl: String,
-    val id: String,
-    val type: String,
-    val overview: String,
-    val release_date: String,
-    val runtime: String,
-    val quality: String,
-    val sub: String,
-    val dub: String,
-)
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +27,7 @@ class AnimeTrendingAdapter(
 
     companion object {
         private var lastKeyTime = 0L
-        private val KEY_DEBOUNCE_DELAY = 350L // ms
+        private val KEY_DEBOUNCE_DELAY = 100L // ms
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -198,14 +56,9 @@ class AnimeTrendingAdapter(
         val rank = currentItem.rank
 
 
-
         holder.title.text = title
         holder.rank.text = rank
         holder.title.text = title
-
-
-
-
 
         Glide.with(holder.itemView.context)
             .load(imageUrl)
@@ -219,7 +72,6 @@ class AnimeTrendingAdapter(
             intent.putExtra("anime_poster", imageUrl)
             context.startActivity(intent)
         }
-
 
 
         holder.CardViewcontiner.setOnKeyListener { v, keyCode, event ->
@@ -270,7 +122,7 @@ class AnimeAiringAdapter(
 
     companion object {
         private var lastKeyTime = 0L
-        private val KEY_DEBOUNCE_DELAY = 350L // ms
+        private val KEY_DEBOUNCE_DELAY = 150L // ms
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -476,7 +328,7 @@ class AnimeGridAdapter(
         private const val VIEW_TYPE_MOVIE = 0
         private const val VIEW_TYPE_ADD_BUTTON = 1
         private var lastKeyTime = 0L
-        private val KEY_DEBOUNCE_DELAY = 450L // ms
+        private val KEY_DEBOUNCE_DELAY = 150L // ms
     }
 
     var onAddMoreClicked: (() -> Unit)? = null

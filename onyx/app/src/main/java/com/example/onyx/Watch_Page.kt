@@ -71,6 +71,7 @@ class Watch_Page : AppCompatActivity() {
     private lateinit var episodes_recycler : RecyclerView
 
     private lateinit var watchButton : LinearLayout
+    private lateinit var faveButton : LinearLayout
     private lateinit var trailerButton :LinearLayout
     private lateinit var serverButton: LinearLayout
 
@@ -103,17 +104,37 @@ class Watch_Page : AppCompatActivity() {
             false
         )
 
+
+
+
+
+        //-------- ---------------------------------------------------------------------------------
+
+        UIsection1 = findViewById<FrameLayout>(R.id.widget_1)
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels
+
+        /*
+        val params = UIsection1.layoutParams
+        params.height = (screenHeight * 1).toInt()
+        UIsection1.layoutParams = params
+         */
+
+        UIsection1.minimumHeight  = screenHeight
+
+        //-------- ---------------------------------------------------------------------------------
+
+
+        faveButton = findViewById<LinearLayout>(R.id.favoriteButton)
         watchButton = findViewById<LinearLayout>(R.id.watchNowButton)
         trailerButton = findViewById<LinearLayout>(R.id.TrailerButton)
         serverButton = findViewById<LinearLayout>(R.id.serverButton)
 
-        UIsection1 = findViewById<FrameLayout>(R.id.widget_1)
+        GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, faveButton )
+        GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, serverButton )
+        GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, trailerButton )
+        GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, watchButton )
 
-        val displayMetrics = resources.displayMetrics
-        val screenHeight = displayMetrics.heightPixels
-        val params = UIsection1.layoutParams
-        params.height = (screenHeight * 1).toInt()
-        UIsection1.layoutParams = params
 
         //-------- Get extras from Intent-----------------------------------------------------------
         showId = intent.getStringExtra("imdb_code")?: ""
@@ -337,9 +358,6 @@ class Watch_Page : AppCompatActivity() {
             trailerButton.setOnClickListener {
             }
 
-            GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, serverButton )
-            GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, trailerButton )
-            GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, watchButton )
 
 
             setupFavoriteButton(
@@ -624,6 +642,7 @@ class Watch_Page : AppCompatActivity() {
                     } else {
                         findViewById(R.id.Cast_widget_mv)
                     }
+
                     recyclerView.visibility = View.VISIBLE
                     recyclerView.layoutManager = LinearLayoutManager(
                         this@Watch_Page,
@@ -631,9 +650,6 @@ class Watch_Page : AppCompatActivity() {
                         false
                     )
                     recyclerView.adapter = CastAdapter(movies, R.layout.round_grid)
-                    val spacing = (9 * resources.displayMetrics.density).toInt()
-                    recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
-
                 }
     }
 
@@ -725,7 +741,6 @@ class Watch_Page : AppCompatActivity() {
         lastEpisode:Int
     ) {
 
-        val faveButton = findViewById<LinearLayout>(R.id.favoriteButton)
         val faveButtonImg = findViewById<ImageView>(R.id.favoriteButtonImg)
         val faveButtonText = findViewById<TextView>(R.id.favoriteButtonText)
 

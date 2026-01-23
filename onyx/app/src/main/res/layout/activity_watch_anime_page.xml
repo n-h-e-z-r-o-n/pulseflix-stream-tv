@@ -116,9 +116,9 @@
                             android:layout_gravity="center"
                             android:maxLines="2"
                             android:shadowColor="#000000"
-                            android:shadowDx="5"
-                            android:shadowDy="6"
-                            android:shadowRadius="4"/>
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="3"/>
 
                         <TextView
                             android:id="@+id/watchGenres"
@@ -168,6 +168,11 @@
                                             android:singleLine="true"
                                             android:text="PG-13"
                                             android:fontFamily="@font/p"
+                                            android:shadowColor="#000000"
+                                            android:shadowDx="2"
+                                            android:shadowDy="2"
+                                            android:shadowRadius="3"
+                                            android:paddingHorizontal="2dp"
                                             android:layout_marginHorizontal="4dp"
                                             android:textColor="@android:color/black"
                                             android:textSize="15sp"
@@ -198,6 +203,11 @@
                                         android:text="HD"
                                         android:fontFamily="@font/p"
                                         android:textColor="#FFFFFF"
+                                        android:shadowColor="#000000"
+                                        android:shadowDx="2"
+                                        android:shadowDy="2"
+                                        android:shadowRadius="3"
+                                        android:paddingHorizontal="2dp"
                                         android:textSize="15sp"
                                         android:layout_marginHorizontal="4dp"
                                         tools:ignore="HardcodedText,Suspicious0dp" />
@@ -241,6 +251,11 @@
                                             android:text="23"
                                             android:singleLine="true"
                                             android:textColor="#FFFFFF"
+                                            android:shadowColor="#000000"
+                                            android:shadowDx="2"
+                                            android:shadowDy="2"
+                                            android:shadowRadius="3"
+                                            android:paddingHorizontal="2dp"
                                             android:fontFamily="@font/p"
                                             android:textSize="15sp"
                                             android:layout_marginHorizontal="4dp"
@@ -285,6 +300,11 @@
                                             android:text="43"
                                             android:singleLine="true"
                                             android:textColor="#FFFFFF"
+                                            android:shadowColor="#000000"
+                                            android:shadowDx="2"
+                                            android:shadowDy="2"
+                                            android:shadowRadius="3"
+                                            android:paddingHorizontal="2dp"
                                             android:fontFamily="@font/p"
                                             android:textSize="15sp"
                                             android:layout_marginHorizontal="4dp"
@@ -322,9 +342,10 @@
                                     android:gravity="center"
                                     android:layout_gravity="center"
                                     android:shadowColor="#000000"
-                                    android:shadowDx="5"
-                                    android:shadowDy="6"
-                                    android:shadowRadius="4"/>
+                                    android:shadowDx="2"
+                                    android:shadowDy="2"
+                                    android:shadowRadius="3"
+                                    android:paddingHorizontal="2dp"/>
 
                                 <View
                                     android:layout_width="1dp"
@@ -352,9 +373,10 @@
                                     tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                                     android:gravity="center"
                                     android:shadowColor="#000000"
-                                    android:shadowDx="5"
-                                    android:shadowDy="6"
-                                    android:shadowRadius="4"/>
+                                    android:shadowDx="2"
+                                    android:shadowDy="2"
+                                    android:shadowRadius="3"
+                                    android:paddingHorizontal="2dp"/>
 
                                 <View
                                     android:layout_width="1dp"
@@ -384,9 +406,10 @@
                                     android:alpha="0.7"
                                     android:layout_marginStart="9dp"
                                     android:shadowColor="#000000"
-                                    android:shadowDx="5"
-                                    android:shadowDy="6"
-                                    android:shadowRadius="4"/>
+                                    android:shadowDx="2"
+                                    android:shadowDy="2"
+                                    android:shadowRadius="3"
+                                    android:paddingHorizontal="2dp"/>
                             </LinearLayout>
 
                             <TextView
@@ -402,9 +425,9 @@
                                 android:maxLines="3"
                                 android:textColor="#FFFFFF"
                                 android:shadowColor="#000000"
-                                android:shadowDx="5"
-                                android:shadowDy="6"
-                                android:shadowRadius="4"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="3"
                                 android:textSize="15sp"
                                 tools:ignore="NestedWeights,SmallSp" />
 
@@ -444,9 +467,10 @@
                                     android:fontFamily="@font/o"
                                     android:textColor="#FFFFFF"
                                     android:shadowColor="#000000"
-                                    android:shadowDx="5"
-                                    android:shadowDy="6"
-                                    android:shadowRadius="4"
+                                    android:shadowDx="2"
+                                    android:shadowDy="2"
+                                    android:shadowRadius="3"
+                                    android:paddingHorizontal="2dp"
                                     android:textStyle="bold"
                                     tools:ignore="HardcodedText" />
 
@@ -462,6 +486,10 @@
                         android:layout_height="wrap_content"
                         android:text="seasons"
                         android:textColor="#FFFFFF"
+                        android:shadowColor="#000000"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="3"
                         android:paddingHorizontal="5dp"
                         android:textSize="23sp"
                         android:textStyle="bold"
@@ -495,6 +523,11 @@
                                     android:layout_height="wrap_content"
                                     android:text=""
                                     android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="2"
+                                    android:shadowDy="2"
+                                    android:shadowRadius="3"
+                                    android:paddingHorizontal="2dp"
                                     android:textSize="13sp"
                                     android:alpha="0.7"
                                     android:textStyle="bold"

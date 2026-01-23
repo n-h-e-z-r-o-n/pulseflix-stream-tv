@@ -180,6 +180,7 @@ class Shows_Page : AppCompatActivity() {
             cNotificationBtn.isSelected = false
         }
         HomeBtn.performClick()
+        HomeBtn.requestFocus()
 
 
         MoviesBtn.setOnClickListener {
@@ -327,7 +328,7 @@ class Shows_Page : AppCompatActivity() {
 
         GlobalUtils.expandParentOnChildFocus(
             parent = navBar,
-            expandedWidthDp = 140f,
+            expandedWidthDp = 155f,
             collapsedWidthDp = 70f
         )
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -581,6 +582,7 @@ class Shows_Page : AppCompatActivity() {
                                 false
                             ) as CardView
 
+
                             val item = moviesArray3.getJSONObject(i)
                             val title = when {
                                 item.has("original_name") && !item.isNull("original_name") -> item.getString(
@@ -624,10 +626,25 @@ class Shows_Page : AppCompatActivity() {
                                 genreIdsJson.getInt(idx)
                             }
 
+                            val genreNames = mutableListOf<String>()
+                            if(type=="movie") {
+                                for (i in 0 until genreIdsJson.length()) {
+                                    val id = genreIdsJson.getInt(i)
+                                    GlobalUtils.movieGenreMap[id]?.let { genreNames.add(it) }
+                                }
+                            }else{
+                                for (i in 0 until genreIdsJson.length()) {
+                                    val id = genreIdsJson.getInt(i)
+                                    GlobalUtils.tvGenreMap[id]?.let { genreNames.add(it) }
+                                }
+                            }
+
+                            card.findViewById<TextView>(R.id.cardGenre).text =genreNames.joinToString(" • ")
+
 
 
                             card.findViewById<TextView>(R.id.cardTitle).text = title
-                            card.findViewById<TextView>(R.id.cardGenre).text = "genra"
+                            //card.findViewById<TextView>(R.id.cardGenre).text = genreNames.toString().trim('[', ']')
                             card.findViewById<TextView>(R.id.cardQuality).text = "HD"
                             card.findViewById<TextView>(R.id.cardPg).text = pg
                             card.findViewById<TextView>(R.id.cardType).text = type
@@ -651,14 +668,14 @@ class Shows_Page : AppCompatActivity() {
                                 intent.putExtra("imdb_code", id)
                                 intent.putExtra("type", type)
                                 context.startActivity(intent)
-
                             }
+
 
                             container.addView(card)
 
                         }
 
-                        GlobalUtils.setupCardStackFromContainer(container, 11000L)
+                        GlobalUtils.setupCardStackFromContainer(container, 20000L)
                         LoadingAnimation.hide(this@Shows_Page)
                     }else{
                         //LoadingAnimation.setup(this@Shows_Page, R.raw.error)
@@ -717,9 +734,6 @@ class Shows_Page : AppCompatActivity() {
         // Setup RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.CategoryRecyclerView)
         val adapter = CategoryAdapter(categoryItems, R.layout.item_category)
-
-        val tvSpacing = (1 * resources.displayMetrics.density).toInt()
-        recyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
 
         val layoutManager = LinearLayoutManager(
             this,

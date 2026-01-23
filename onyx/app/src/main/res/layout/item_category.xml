@@ -4,19 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="100dp"
+    android:layout_height="80dp"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:gravity="center"
-    android:orientation="vertical"
     android:layout_gravity="center_vertical"
+    android:layout_margin="5dp"
     card_view:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    app:cardUseCompatPadding="true"
+    app:cardElevation="2dp"
     card_view:cardBackgroundColor="#FFFFFF"
     android:foreground="@drawable/card_focus"
     android:id="@+id/categoryView">
+
 
 
 
@@ -27,7 +27,8 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:layout_margin="4dp"
+            android:padding="5dp"
+            android:background="?attr/transparentEffect"
             tools:ignore="ContentDescription" />
 
 </androidx.cardview.widget.CardView>

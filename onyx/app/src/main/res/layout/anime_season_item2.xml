@@ -30,8 +30,8 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:shadowColor="#000000"
-        android:shadowDx="4"
-        android:shadowDy="5"
+        android:shadowDx="2"
+        android:shadowDy="2"
         android:shadowRadius="3"
         android:textStyle="bold" />
 

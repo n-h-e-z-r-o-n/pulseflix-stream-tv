@@ -159,9 +159,10 @@
                         android:layout_marginStart="9dp"
                         android:fontFamily="@font/n"
                         android:text="Home"
+                        android:textSize="18sp"
                         android:singleLine="true"
-                        android:textColor="?attr/FG_color"                                android:textSize="13sp"
-                        tools:ignore="HardcodedText,SmallSp" />
+                        android:textColor="?attr/FG_color"
+                        tools:ignore="HardcodedText" />
 
                 </LinearLayout>
 
@@ -197,7 +198,8 @@
                         android:fontFamily="@font/n"
                         android:text="Movies"
                         android:singleLine="true"
-                        android:textColor="?attr/FG_color"                                android:textSize="13sp"
+                        android:textColor="?attr/FG_color"
+                        android:textSize="18sp"
                         tools:ignore="HardcodedText,SmallSp" />
 
                 </LinearLayout>
@@ -234,7 +236,8 @@
                         android:fontFamily="@font/n"
                         android:text="Series"
                         android:singleLine="true"
-                        android:textColor="?attr/FG_color"                                android:textSize="13sp"
+                        android:textColor="?attr/FG_color"
+                        android:textSize="18sp"
                         tools:ignore="HardcodedText,SmallSp" />
 
                 </LinearLayout>
@@ -271,7 +274,8 @@
                         android:fontFamily="@font/n"
                         android:text="Search"
                         android:singleLine="true"
-                        android:textColor="?attr/FG_color"                                android:textSize="13sp"
+                        android:textColor="?attr/FG_color"
+                        android:textSize="18sp"
                         tools:ignore="HardcodedText,SmallSp" />
 
                 </LinearLayout>
@@ -308,7 +312,7 @@
                         android:text="Filter"
                         android:singleLine="true"
                         android:textColor="?attr/FG_color"
-                        android:textSize="13sp"
+                        android:textSize="18sp"
                         tools:ignore="HardcodedText,SmallSp" />
 
                 </LinearLayout>
@@ -345,7 +349,7 @@
                         android:text="Favorites"
                         android:singleLine="true"
                         android:textColor="?attr/FG_color"
-                        android:textSize="13sp"
+                        android:textSize="18sp"
                         tools:ignore="HardcodedText,SmallSp" />
 
                 </LinearLayout>
@@ -383,7 +387,7 @@
                         android:fontFamily="@font/n"
                         android:singleLine="true"
                         android:textColor="?attr/FG_color"
-                        android:textSize="12sp"
+                        android:textSize="18sp"
                         tools:ignore="HardcodedText,SmallSp" />
 
                 </LinearLayout>
@@ -436,7 +440,7 @@
                         android:fontFamily="@font/n"
                         android:singleLine="true"
                         android:textColor="?attr/FG_color"
-                        android:textSize="12sp"
+                        android:textSize="18sp"
                         tools:ignore="HardcodedText,SmallSp" />
 
                 </LinearLayout>
@@ -478,7 +482,7 @@
                             android:id="@+id/HomePage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:orientation="vertical">
 
 
@@ -497,10 +501,9 @@
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/CategoryRecyclerView"
-                                android:layout_height="104dp"
+                                android:layout_height="wrap_content"
                                 android:layout_width="match_parent"
                                 android:layout_gravity="bottom"
-
                                 android:clipToPadding="false"
                                 android:scrollbars="none"
                                 tools:ignore="RtlSymmetry" />
@@ -834,7 +837,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
 
 

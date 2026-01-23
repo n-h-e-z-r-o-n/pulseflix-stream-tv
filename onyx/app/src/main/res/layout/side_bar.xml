@@ -6,34 +6,37 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginStart="10dp"
     android:visibility="visible"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent">
 
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="183dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/navbar_bg"
+        app:cardElevation="5dp"
+        app:cardBackgroundColor="?attr/BG_color"
+        app:cardCornerRadius="300dp"
+        android:layout_margin="10dp"
         android:orientation="vertical"
         tools:ignore="UselessParent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:background="@drawable/navbar_bg"
             android:orientation="vertical"
-            android:paddingHorizontal="4dp"
-            android:paddingVertical="10dp">
+            android:layout_margin="5dp"
+            >
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
@@ -71,7 +74,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
+                android:layout_marginBottom="30dp"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
@@ -110,6 +113,7 @@
                 android:id="@+id/sidebarBtnProfile"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginBottom="10dp"
                 android:layout_gravity="bottom|center_horizontal"
                 android:clickable="true"
                 android:focusable="true"
@@ -148,6 +152,6 @@
 
 
         </LinearLayout>
-    </FrameLayout>
+    </androidx.cardview.widget.CardView>
 
 </FrameLayout>

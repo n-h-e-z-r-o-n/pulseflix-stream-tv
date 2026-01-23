@@ -6,7 +6,7 @@
     android:layout_margin="3dp"
     app:cardCornerRadius="10dp"
     android:foreground="@drawable/item_episode_focus"
-    app:cardBackgroundColor="#409090C0"
+    app:cardBackgroundColor="?attr/transparentEffect"
     android:clickable="true"
     android:focusable="true"
     android:clipToOutline="true"
@@ -18,7 +18,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#409090C0"/>
+        android:background="?attr/transparentEffect"/>
 
 
 
@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:background="#409090C0"
+        android:background="?attr/transparentEffect"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="#409090C0"
+        android:background="?attr/transparentEffect"
         android:gravity="center_horizontal"
         android:orientation="vertical" />
 
@@ -57,9 +57,10 @@
             android:text="E12 "
             android:fontFamily="@font/o"
             android:shadowColor="#000000"
-            android:shadowDx="4"
-            android:shadowDy="4"
+            android:shadowDx="3"
+            android:shadowDy="3"
             android:shadowRadius="4"
+            android:paddingHorizontal="2dp"
             android:textColor="#FFFFFF"
             android:textSize="25sp"
             android:textStyle="bold"
@@ -73,9 +74,10 @@
             android:gravity="center_vertical"
             android:fontFamily="@font/o"
             android:shadowColor="#000000"
-            android:shadowDx="3"
-            android:shadowDy="3"
-            android:shadowRadius="2"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="3"
+            android:paddingHorizontal="2dp"
             android:text="createDebugApkListingFileRedirec"
             android:ellipsize="end"
             android:textColor="#FFFFFF"

@@ -338,7 +338,7 @@
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
                     android:nextFocusUp="@+id/cWatchAnimeBtn"
-                    android:nextFocusDown="@+id/switchBtn"
+                    android:nextFocusDown="@+id/HomeAnimeBtn"
                     android:nextFocusLeft="@+id/cNotificationAnimeBtn"
                     android:padding="5dp"
                     android:background="@drawable/background_hovor"
@@ -421,7 +421,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     tools:ignore="UselessParent"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
 
                     <FrameLayout
@@ -443,12 +443,16 @@
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="15dp"
+                            android:layout_height="wrap_content"
                             android:text=" Trending Anime"
                             android:textStyle="bold"
                             android:fontFamily="@font/p"
-                            android:textSize="13sp"
-                            android:textColor="?attr/FG_color"
+                            android:textSize="18sp"
+                            android:textColor="#FFFFFF"
+                            android:shadowColor="#000000"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="3"
                             tools:ignore="HardcodedText" />
 
 
@@ -469,8 +473,12 @@
                             android:text=" Top Airing Anime"
                             android:textStyle="bold"
                             android:fontFamily="@font/p"
-                            android:textSize="13sp"
-                            android:textColor="?attr/FG_color"
+                            android:textSize="18sp"
+                            android:textColor="#FFFFFF"
+                            android:shadowColor="#000000"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="3"
                             tools:ignore="HardcodedText"
                             android:layout_marginTop="10dp"/>
 
@@ -566,7 +574,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="280dp"
@@ -581,6 +589,7 @@
                                 android:layout_height="35dp"
                                 android:layout_marginTop="30dp"
                                 android:layout_marginBottom="30dp"
+                                android:background="?attr/transparentEffect"
                                 android:orientation="horizontal"
                                 android:focusableInTouchMode="true">
 
@@ -591,8 +600,9 @@
                                     android:layout_width="25dp"
                                     android:layout_height="match_parent"
                                     android:src="@drawable/ic_anime_filter"
-                                    app:tint="?attr/FG_color"
-                                    android:background="?attr/AccentColor"
+                                    app:tint="?attr/AccentColor"
+                                    android:padding="2dp"
+                                    android:background="?attr/transparentEffect"
                                     android:layout_gravity="center_vertical"
                                     tools:ignore="ContentDescription" />
 

@@ -165,6 +165,8 @@ class Anime_Page : AppCompatActivity() {
          }
 
          homeAnimeBtn.performClick()
+         homeAnimeBtn.requestFocus()
+
 
          favAnimeBtn.setOnClickListener {
              homePageAnime.visibility = View.GONE
@@ -285,7 +287,7 @@ class Anime_Page : AppCompatActivity() {
 
          GlobalUtils.expandParentOnChildFocus(
              parent = navBar,
-             expandedWidthDp = 140f,
+             expandedWidthDp = 155f,
              collapsedWidthDp = 70f
          )
 
@@ -369,8 +371,6 @@ class Anime_Page : AppCompatActivity() {
          ////////////////////////////////////////////////////////////////////////////////////////////
 
         setupSearchUi()
-        setupBackPressedCallback()
-
         animeHomeData()
         loadDubbedAnime()
         loadPopularAnime()
@@ -478,7 +478,6 @@ class Anime_Page : AppCompatActivity() {
                      .centerInside()
                      .into(SliderBackdrop)
 
-
                  card.setOnClickListener {
                      val context = card.context
                      val intent = android.content.Intent(context, Watch_Anime_Page::class.java)
@@ -486,16 +485,13 @@ class Anime_Page : AppCompatActivity() {
                      intent.putExtra("anime_poster", imageUrl)
                      context.startActivity(intent)
                  }
-
                  SpotlightContaner.addView(card)
-
              }
-
 
              showTrending(trendingAnimes)
              showAiring(topAiringAnimes)
 
-             GlobalUtils.setupCardStackFromContainer(SpotlightContaner, 7000L)
+             GlobalUtils.setupCardStackFromContainer(SpotlightContaner, 20000L)
              LoadingAnimation.hide(this@Anime_Page)
          }
      }

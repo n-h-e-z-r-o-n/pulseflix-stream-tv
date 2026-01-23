@@ -393,6 +393,8 @@ object GlobalUtils {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     private var dp50: Float = 0f
@@ -406,9 +408,12 @@ object GlobalUtils {
     private lateinit var scales : FloatArray
     private lateinit var translations  : FloatArray
 
+    private var animationD:Long = 100
+
+
     fun setupCardStackFromContainer(
         container: FrameLayout,
-        autoSwipeDelay: Long = 2500L
+        autoSwipeDelay: Long = 25000L
     ) {
 
         // Ensure container has CardView children
@@ -476,16 +481,14 @@ object GlobalUtils {
                         .scaleX(1f)
                         .scaleY(1f)
                         .translationX(dp(container.context,0f))
-                        .setDuration(200)
+                        .setDuration(animationD)
                         .setInterpolator(AccelerateDecelerateInterpolator())
                         .withLayer()
                         .start()
                     v.elevation = 7f
                 } else {
                     layoutStack(container)
-                    container.postDelayed({
-                        if (!container.hasFocus()) startAutoSwipe()
-                    }, 300)
+                    //container.postDelayed({if (!container.hasFocus()) startAutoSwipe()}, 300)
                 }
             }
 
@@ -520,73 +523,12 @@ object GlobalUtils {
         // ---------------- Initial Layout & Focus -------------------------------------------------
         //container.getChildAt(container.childCount - 1)?.requestFocus()
         layoutStack(container)
-        container.postDelayed({ if (!container.hasFocus()) startAutoSwipe() }, 2000)
+        //container.postDelayed({ if (!container.hasFocus()) startAutoSwipe() }, 2000)
     }
 
 
-    private val cardLayerMap = mutableMapOf<View, Boolean>()
 
     private fun layoutStack(container: FrameLayout) {
-        val count = container.childCount
-
-        for (i in 0 until count) {
-            val card = container.getChildAt(i)
-            val posFromTop = count - 1 - i
-            val index = posFromTop.coerceAtMost(5)
-
-            // Optimization: Only animate if the card is within the visible stack range
-            // or if it was previously visible and is now hidden.
-            if (posFromTop <= 6) {
-                card.animate()
-                    .translationX(translations[index])
-                    .scaleX(scales[index])
-                    .scaleY(scales[index])
-                    .translationZ(elevations[index]) // Use translationZ instead of elevation
-                    .setDuration(220)
-                    .setInterpolator(AccelerateDecelerateInterpolator())
-                    .withLayer()
-                    .start()
-            } else {
-                // Instantly hide or move cards deep in the stack to save GPU cycles
-                card.translationX = translations[5]
-                card.scaleX = scales[5]
-                card.scaleY = scales[5]
-                card.translationZ = 0f
-            }
-        }
-    }
-
-    private fun swapRight(container: FrameLayout, keepFocus: Boolean = true) {
-        if (container.childCount <= 1) return
-        val top = container.getChildAt(container.childCount - 1)
-
-        top.animate()
-            .translationXBy(-dp250)
-            .alpha(0f) // Fade out while swapping for smoother visual transition
-            .scaleX(0.85f)
-            .scaleY(0.85f)
-            .setDuration(200)
-            .setInterpolator(AccelerateInterpolator())
-            .withEndAction {
-                // Reordering views is expensive. Do it only when necessary.
-                container.removeView(top)
-                container.addView(top, 0)
-
-                // Reset state for when it reappears at the bottom
-                top.alpha = 1f
-                top.rotation = 0f
-
-                layoutStack(container)
-
-                if (keepFocus) {
-                    container.getChildAt(container.childCount - 1)?.requestFocus()
-                }
-            }
-            .start()
-    }
-
-
-    private fun r_layoutStack(container: FrameLayout) {
 
         val count = container.childCount
 
@@ -604,7 +546,7 @@ object GlobalUtils {
                 .translationX(translations[index])
                 .scaleX(scales[index])
                 .scaleY(scales[index])
-                .setDuration(220)
+                .setDuration(animationD)
                 .setInterpolator(AccelerateDecelerateInterpolator())
                 .withLayer() // Use hardware layer for smoother animation
                 .start()
@@ -613,7 +555,7 @@ object GlobalUtils {
         }
     }
 
-    private fun r_swapRight(container: FrameLayout, keepFocus: Boolean = true) {
+    private fun swapRight(container: FrameLayout, keepFocus: Boolean = true) {
         if (container.childCount == 0) return
         val top = container.getChildAt(container.childCount - 1)
 
@@ -622,7 +564,7 @@ object GlobalUtils {
             .scaleX(0.85f)
             .scaleY(0.85f)
             .rotation(-5f)
-            .setDuration(220)
+            .setDuration(animationD)
             .setInterpolator(AccelerateDecelerateInterpolator())
             .withLayer()
             .withEndAction {
@@ -651,7 +593,7 @@ object GlobalUtils {
             .scaleX(0.85f)
             .scaleY(0.85f)
             .rotation(-5f)
-            .setDuration(220)
+            .setDuration(animationD)
             .setInterpolator(AccelerateDecelerateInterpolator())
             .withLayer()
             .withEndAction {
@@ -680,6 +622,8 @@ object GlobalUtils {
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -812,6 +756,51 @@ object GlobalUtils {
                     )
         }
     }
+
+    ///////////////////////////////////////////////////////////
+
+    val movieGenreMap = mapOf(
+        28 to "Action",
+        12 to "Adventure",
+        16 to "Animation",
+        35 to "Comedy",
+        80 to "Crime",
+        99 to "Documentary",
+        18 to "Drama",
+        10751 to "Family",
+        14 to "Fantasy",
+        36 to "History",
+        27 to "Horror",
+        10402 to "Music",
+        9648 to "Mystery",
+        10749 to "Romance",
+        878 to "Sci-Fi",
+        10770 to "TV Movie",
+        53 to "Thriller",
+        10752 to "War",
+        37 to "Western"
+    )
+
+    val tvGenreMap = mapOf(
+        10759 to "Action & Adventure",
+        16 to "Animation",
+        35 to "Comedy",
+        80 to "Crime",
+        99 to "Documentary",
+        18 to "Drama",
+        10751 to "Family",
+        10762 to "Kids",
+        9648 to "Mystery",
+        10763 to "News",
+        10764 to "Reality",
+        10765 to "Sci-Fi & Fantasy",
+        10766 to "Soap",
+        10767 to "Talk",
+        10768 to "War & Politics",
+        37 to "Western"
+    )
+
+
 
 
 

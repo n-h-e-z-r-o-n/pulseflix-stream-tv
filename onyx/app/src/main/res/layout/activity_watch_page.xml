@@ -63,7 +63,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="bottom"
                         android:alpha="1"
                         android:background="@drawable/overlay_bottom_gradient" />
@@ -76,12 +76,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:orientation="vertical"
-                    android:paddingStart="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingEnd="16dp"
                     android:gravity="center"
                     tools:ignore="RtlSymmetry">
-
 
 
                     <ImageView
@@ -98,8 +94,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:orientation="vertical"
-                        android:paddingStart="0dp"
-                        android:paddingBottom="5dp"
+                        android:paddingStart="15dp"
+                        android:paddingBottom="1dp"
                         tools:ignore="RtlSymmetry">
 
                         <ImageView
@@ -714,12 +710,13 @@
                         android:layout_height="wrap_content"
                         android:clipToPadding="false"
                         android:overScrollMode="never"
-                        android:layout_margin="10dp"
                         android:scrollbars="none"
                         android:layout_gravity="center"
                         android:orientation="horizontal"
                         tools:layout_editor_absoluteY="8dp"
-                        android:descendantFocusability="afterDescendants"/>
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        />
 
                 </LinearLayout>
             </FrameLayout>
@@ -738,7 +735,8 @@
                 android:layout_gravity="center"
                 android:orientation="horizontal"
                 tools:layout_editor_absoluteY="8dp"
-                android:descendantFocusability="afterDescendants"/>
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
 
 
             <TextView
@@ -748,11 +746,15 @@
                 android:paddingEnd="16dp"
                 android:text=" You may also like"
                 android:fontFamily="@font/p"
-                android:textColor="?attr/FG_color"
+                android:textColor="#FFFFFF"
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="3"
+                android:paddingHorizontal="2dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginTop="20dp"
-                android:alpha="0.7"
                 tools:ignore="HardcodedText" />
 
 
