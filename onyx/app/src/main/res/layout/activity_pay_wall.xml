@@ -9,44 +9,18 @@
     android:background="?attr/BG_color"
     tools:context=".PayWall">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@raw/test8"
-                android:layout_gravity="end"
-                tools:ignore="ContentDescription"
-                tools:targetApi="23" />
-
-
-            <ImageView
-                android:id="@+id/paywallShow"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:layout_gravity="end"
-                tools:ignore="ContentDescription,UnusedAttribute"/>
-
-
-        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/payInfo"
             android:layout_width="420dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:background="?attr/BG_color"
             android:paddingStart="16dp"
             android:paddingEnd="12dp"
             tools:ignore="RtlSymmetry">
@@ -59,13 +33,14 @@
                 android:contentDescription="@string/app_name"
                 android:text="ONYX"
                 android:textSize="90sp"
+                android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:fontFamily="@font/p"
-                android:textColor="?attr/BG_color"
-                android:shadowColor="#FFFFFF"
+                android:textColor="#FFFFFF"
+                android:shadowColor="?attr/AccentColor"
                 android:shadowDx="3"
                 android:shadowDy="3"
-                android:shadowRadius="3"
+                android:shadowRadius="4"
                 tools:ignore="HardcodedText" />
 
             <!-- Welcome Text -->
@@ -76,24 +51,27 @@
                 android:layout_marginBottom="28dp"
                 android:gravity="center"
                 android:text="Unlimited Movies &amp; TV Shows"
+                android:layout_gravity="center_horizontal"
                 android:textColor="?attr/FG_color"
-                android:shadowColor="?attr/BG_color"
+                android:shadowColor="?attr/AccentColor"
+                android:fontFamily="@font/p"
                 android:shadowDx="2"
                 android:shadowDy="2"
-                android:shadowRadius="1"
+                android:shadowRadius="3"
                 android:textSize="18sp" />
 
             <!-- Payment Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@android:color/transparent"
+                app:cardBackgroundColor="?attr/BG_color_up"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
                     android:orientation="vertical">
 
                     <!-- Premium Plan Header -->
@@ -108,7 +86,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="sans-serif-medium"
                             android:text="Premium Plan"
                             android:textColor="?attr/FG_color"
                             android:shadowColor="?attr/BG_color"
@@ -210,7 +187,7 @@
                                 android:layout_marginEnd="12dp"
                                 android:fontFamily="sans-serif-medium"
                                 android:text="✓"
-                                android:textColor="?attr/BG_color_up"
+                                android:textColor="?attr/AccentColor"
                                 android:textSize="16sp"
                                 tools:ignore="HardcodedText" />
 
@@ -219,6 +196,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Unlimited Movies &amp; TV Shows"
                                 android:textColor="?attr/FG_color"
+                                android:fontFamily="@font/n"
                                 android:shadowColor="?attr/BG_color"
                                 android:shadowDx="2"
                                 android:shadowDy="2"
@@ -241,7 +219,7 @@
                                 android:layout_marginEnd="12dp"
                                 android:fontFamily="sans-serif-medium"
                                 android:text="✓"
-                                android:textColor="?attr/BG_color_up"
+                                android:textColor="?attr/AccentColor"
                                 android:textSize="16sp"
                                 tools:ignore="HardcodedText" />
 
@@ -250,6 +228,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="No Ads Experience"
                                 android:textColor="?attr/FG_color"
+                                android:fontFamily="@font/n"
                                 android:shadowColor="?attr/BG_color"
                                 android:shadowDx="2"
                                 android:shadowDy="2"
@@ -272,7 +251,7 @@
                                 android:layout_marginEnd="12dp"
                                 android:fontFamily="sans-serif-medium"
                                 android:text="✓"
-                                android:textColor="?attr/BG_color_up"
+                                android:textColor="?attr/AccentColor"
                                 android:textSize="16sp"
                                 tools:ignore="HardcodedText" />
 
@@ -281,6 +260,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Software Update Support"
                                 android:textColor="?attr/FG_color"
+                                android:fontFamily="@font/n"
                                 android:shadowColor="?attr/BG_color"
                                 android:shadowDx="2"
                                 android:shadowDy="2"
@@ -296,42 +276,60 @@
                     <Button
                         android:id="@+id/btnPurchase"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="46dp"
+                        android:layout_marginHorizontal="20dp"
                         android:background="@drawable/button_gradient"
                         android:clickable="true"
                         android:elevation="5dp"
                         android:focusable="true"
-                        android:fontFamily="sans-serif-medium"
+                        android:fontFamily="@font/o"
                         android:text="Unlock Premium"
                         android:textColor="#FFFFFF"
+                        android:shadowColor="#000000"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="3"
                         android:textSize="16sp"
                         tools:ignore="HardcodedText" />
 
-                    <!-- Secure payments line -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:alpha="0.6"
-                            android:text="Secure payments by IntaSend"
-                            android:textColor="?attr/FG_color"
-                            android:shadowColor="?attr/BG_color"
-                            android:shadowDx="2"
-                            android:shadowDy="2"
-                            android:shadowRadius="1"
-                            android:textSize="11sp"
-                            tools:ignore="HardcodedText,SmallSp" />
-                    </LinearLayout>
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
+
+            <!-- Secure payments line -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/ic_secure"/>
+
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.6"
+                    android:text="Secure payments by IntaSend"
+                    android:textColor="?attr/FG_color"
+                    android:shadowColor="?attr/BG_color"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="1"
+                    android:textSize="11sp"
+                    tools:ignore="HardcodedText,SmallSp" />
+            </LinearLayout>
 
 
             <!-- Terms and Privacy -->
@@ -344,6 +342,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:text="By purchasing, you agree to our Terms of Service and Privacy Policy"
                 android:textColor="?attr/FG_color"
@@ -356,13 +355,12 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/PaymentContainer"
-            android:layout_width="550dp"
+            android:layout_width="420dp"
             android:layout_height="match_parent"
-            app:cardBackgroundColor="?attr/BG_color_up"
+            app:cardBackgroundColor="?attr/BG_color"
             android:layout_marginStart="0dp"
             android:elevation="6dp"
             android:visibility="gone"
-            app:cardCornerRadius="16dp"
             >
 
             <ScrollView
@@ -390,14 +388,15 @@
                             android:gravity="center"
                             android:text="ONYX"
                             android:fontFamily="@font/p"
-                            android:shadowColor="?attr/BG_color"
-                            android:shadowDx="5"
-                            android:shadowDy="6"
+                            android:textColor="#FFFFFF"
+                            android:shadowColor="?attr/AccentColor"
+                            android:shadowDx="3"
+                            android:shadowDy="3"
                             android:shadowRadius="4"
                             android:textSize="45sp"
-                            android:textColor="?attr/FG_color"
                             tools:ignore="HardcodedText"
                             android:layout_weight="1"/>
+
 
                         <TextView
                             android:id="@+id/btnClosePayment"
@@ -429,12 +428,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Choose your Payment plan"
-                        android:textColor="?attr/FG_color"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:shadowColor="?attr/BG_color"
-                        android:shadowDx="5"
-                        android:shadowDy="6"
+                        android:textColor="#FFFFFF"
+                        android:shadowColor="?attr/AccentColor"
+                        android:shadowDx="3"
+                        android:shadowDy="3"
                         android:shadowRadius="4"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/n"
@@ -452,7 +451,7 @@
                             android:layout_width="0dp"
                             android:layout_height="56dp"
                             android:layout_weight="1"
-                            android:background="@drawable/tv_button_selector"
+                            android:background="@drawable/filter_button"
                             android:clickable="true"
                             android:focusable="true"
                             android:focusableInTouchMode="true"
@@ -482,7 +481,7 @@
                             android:layout_height="56dp"
                             android:layout_weight="1"
                             android:layout_marginStart="8dp"
-                            android:background="@drawable/tv_button_selector"
+                            android:background="@drawable/filter_button"
                             android:clickable="true"
                             android:focusable="true"
                             android:focusableInTouchMode="true"
@@ -526,7 +525,7 @@
                             android:layout_height="56dp"
                             android:layout_weight="1"
                             android:layout_marginStart="8dp"
-                            android:background="@drawable/tv_button_selector"
+                            android:background="@drawable/filter_button"
                             android:clickable="true"
                             android:focusable="true"
                             android:focusableInTouchMode="true"
@@ -746,9 +745,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Enter your M-Pesa phone number"
-                            android:textColor="?attr/FG_color"
-                            android:fontFamily="serif-monospace"
+                            android:text="Enter your M-Pesa phone  number"
+                            android:textColor="#B2BEB5"
+                            android:fontFamily="@font/n"
                             android:textSize="9sp"
                             android:layout_marginTop="8dp"
                             tools:ignore="HardcodedText" />
@@ -763,6 +762,7 @@
                             android:textColor="?attr/FG_color"
                             android:textSize="14sp"
                             android:inputType="phone"
+                            android:fontFamily="@font/n"
                             android:paddingHorizontal="12dp"
                             android:gravity="center_vertical"
                             tools:ignore="Autofill,HardcodedText"
@@ -812,6 +812,7 @@
                             android:shadowDx="5"
                             android:shadowDy="6"
                             android:shadowRadius="4"
+                            android:layout_marginHorizontal="15dp"
                             android:textSize="16sp"
                             android:fontFamily="sans-serif-medium"
                             android:layout_marginTop="24dp"
@@ -984,8 +985,46 @@
         </androidx.cardview.widget.CardView>
 
 
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    </FrameLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@raw/test8"
+                android:layout_gravity="end"
+                tools:ignore="ContentDescription"
+                tools:targetApi="23" />
+
+
+            <ImageView
+                android:id="@+id/paywallShow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:layout_gravity="end"
+                tools:ignore="ContentDescription,UnusedAttribute"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.8"
+                android:background="@drawable/overlay_left_gradient"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.8"
+                android:background="@drawable/overlay_left_gradient"
+                />
+        </FrameLayout>
+    </LinearLayout>
 
 
 

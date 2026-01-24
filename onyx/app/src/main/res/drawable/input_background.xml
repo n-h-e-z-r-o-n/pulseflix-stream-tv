@@ -27,7 +27,7 @@
                 android:startColor="@android:color/transparent"
                 android:endColor="?attr/BG_color"
                 />
-            <stroke android:width="2dp" android:color="?attr/BG_color" />
+            <stroke android:width="2dp" android:color="#50B2BEB5" />
 
         </shape>
     </item>
