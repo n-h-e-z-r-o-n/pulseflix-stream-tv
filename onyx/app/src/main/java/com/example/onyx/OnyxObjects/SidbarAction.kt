@@ -94,7 +94,7 @@ object NavAction {
                 view.animate()
                     .scaleX(if (hasFocus) 1.2f else 1f)
                     .scaleY(if (hasFocus) 1.2f else 1f)
-                    .setDuration(80)
+                    .setDuration(0)
                     .start()
 
                 if (index < validLabels.size) {
@@ -177,7 +177,7 @@ object NavAction {
             mainBox.animate()
                 .scaleX(0.9f)
                 .scaleY(0.9f)
-                .setDuration(120)
+                .setDuration(10)
                 .setInterpolator(AccelerateDecelerateInterpolator())
                 .start()
 
@@ -208,7 +208,7 @@ object NavAction {
             mainBox.animate()
                 .scaleX(1f)
                 .scaleY(1f)
-                .setDuration(120)
+                .setDuration(10)
                 .setInterpolator(AccelerateDecelerateInterpolator())
                 .start()
 
