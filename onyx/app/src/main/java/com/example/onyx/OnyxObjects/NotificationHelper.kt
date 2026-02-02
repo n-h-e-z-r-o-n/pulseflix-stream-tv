@@ -128,8 +128,8 @@ object NotificationHelper {
                 val poster = item["poster"]
 
 
-                var subStored = 1//item["sub"].toString().toIntOrNull() ?: 0
-                var dubStored = 1//item["dub"].toString().toIntOrNull() ?: 0
+                var subStored = item["sub"].toString().toIntOrNull() ?: 0
+                var dubStored = item["dub"].toString().toIntOrNull() ?: 0
                 val seasonsStored = item["seasons"]
 
                 val fetch = TMDBapi(context)

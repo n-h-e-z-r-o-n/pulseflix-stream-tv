@@ -345,10 +345,36 @@ class Anime_Page : AppCompatActivity() {
 
 
          popularRecyclerView = findViewById(R.id.popularRecycler)
-         popularRecyclerView.layoutManager = GridLayoutManager(
+         popularRecyclerView.layoutManager = object :GridLayoutManager(
              this@Anime_Page,
              GlobalUtils.calculateSpanCountV2(this@Anime_Page, anime_airing_item_width, gapUsed)
-         )
+         ){
+             override fun onInterceptFocusSearch(focused: View, direction: Int): View? {
+                 val currentPosition = getPosition(focused)
+                 if (currentPosition == RecyclerView.NO_POSITION) return null
+
+                 if (direction == View.FOCUS_RIGHT) {
+                     val span = spanCount
+                     val isLastColumn = (currentPosition + 1) % span == 0
+                     val nextRowFirstPos = currentPosition + 1
+
+                     if (isLastColumn) {
+                         if (nextRowFirstPos >= itemCount) {
+                             // Block focus at end of grid
+                             return focused
+                         }
+
+                         // Ensure view exists (scroll if needed)
+                         val nextView = findViewByPosition(nextRowFirstPos)
+                         return nextView ?: run {
+                             popularRecyclerView.scrollToPosition(nextRowFirstPos)
+                             focused
+                         }
+                     }
+                 }
+                 return super.onInterceptFocusSearch(focused, direction)
+             }
+         }
          popularRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
          popularAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
          popularRecyclerView.adapter = popularAdapter
@@ -411,7 +437,7 @@ class Anime_Page : AppCompatActivity() {
              false
          )
           */
-         faveRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,110,gapUsed))
+         faveRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,120,gapUsed))
          faveRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
 
          //------------------------------------------------------------------------------------------

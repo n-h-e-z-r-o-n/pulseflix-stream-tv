@@ -446,9 +446,9 @@
 
 
 
-                                <ImageButton
+                                <ImageView
                                     android:id="@+id/favoriteButtonImg"
-                                    android:layout_width="34dp"
+                                    android:layout_width="24dp"
                                     android:layout_height="34dp"
                                     android:src="@drawable/ic_addfave"
                                     app:tint="#FFFFFF"
