@@ -12,6 +12,7 @@
     android:orientation="vertical"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="2dp"
+    android:layout_margin="5dp"
     card_view:cardBackgroundColor="@android:color/transparent"
     android:foreground="@drawable/card_focus"
     android:id="@+id/CardViewcontiner"

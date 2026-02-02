@@ -51,7 +51,7 @@
             android:shadowColor="#000000"
             android:shadowDx="2"
             android:shadowDy="2"
-            android:shadowRadius="3"
+            android:shadowRadius="2"
             android:textSize="9sp"
             android:fontFamily="@font/p"
             tools:ignore="HardcodedText,SmallSp" />

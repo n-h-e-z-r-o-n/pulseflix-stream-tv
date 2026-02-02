@@ -191,6 +191,8 @@ class GridAdapter(
 
             false
         }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -1209,7 +1211,12 @@ class FavAdapter(
     fun addItem(item: FavItem) {
         items.add(item)
         notifyItemInserted(items.size - 1)
+    }
 
+    fun updateItems(newItems: List<FavItem>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
     }
     fun clearItems() {
         items.clear()
@@ -1553,6 +1560,12 @@ class NotificationAdapter(
         items.clear()
         notifyDataSetChanged()
     }
+
+    fun updateItems(newItems: List<NotificationItem>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
+    }
     
     // 👇 helper to remove specific item by imdbCode
     fun removeItem(imdbCode: String) {
@@ -1613,20 +1626,6 @@ class cWatchingAdapter(
         val lastPosition: TextView = view.findViewById(R.id.watchItemLastPosition)
         val duration: TextView = view.findViewById(R.id.watchItemDuration)
         val seekBar: SeekBar = view.findViewById(R.id.cWatchSeek_bar)
-
-        init {
-            // TV focus animation
-            /*
-            itemView.setOnFocusChangeListener { v, hasFocus ->
-                v.animate()
-                    .scaleX(if (hasFocus) 1.05f else 1f)
-                    .scaleY(if (hasFocus) 1.05f else 1f)
-                    .setDuration(150)
-                    .start()
-            }
-
-             */
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -1678,8 +1677,6 @@ class cWatchingAdapter(
                 sm = SessionManger(context)
 
                 Anime_Video_Player.Companion.playVideoExternally(context, itemId, episodeNumber, seasonNumber)
-
-                //Anime_Video_Player.playVideoExternally(context, itemId, JSONArray(), episodeNumber, posterUrl, seasonNumber, title, true)
             }
 
         }else if(type=="movie"){

@@ -33,7 +33,6 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:descendantFocusability="afterDescendants"
                 android:id="@+id/widget_1">
 
                 <!-- Backdrop image -->
@@ -49,7 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@raw/test3"
+                        android:src="@raw/test2"
                         android:layout_gravity="end"
                         android:adjustViewBounds="true"
                         tools:ignore="ContentDescription" />
@@ -127,9 +126,9 @@
                             android:textStyle="bold"
                             tools:ignore="HardcodedText"
                             android:shadowColor="#80000000"
-                            android:shadowDx="5"
-                            android:shadowDy="6"
-                            android:shadowRadius="4"/>
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="3"/>
 
 
 
@@ -202,8 +201,9 @@
                                     android:textColor="#FFFFFF"
                                     android:shadowColor="#000000"
                                     android:shadowDx="1"
-                                    android:shadowDy="3"
-                                    android:shadowRadius="4"
+                                    android:shadowDy="1"
+                                    android:paddingHorizontal="2dp"
+                                    android:shadowRadius="2"
                                     android:textStyle="bold"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText" />
@@ -230,8 +230,9 @@
                                 android:textColor="#FFFFFF"
                                 android:shadowColor="#000000"
                                 android:shadowDx="1"
-                                android:shadowDy="3"
-                                android:shadowRadius="4"
+                                android:shadowDy="1"
+                                android:paddingHorizontal="2dp"
+                                android:shadowRadius="2"
                                 android:textSize="11sp"
                                 tools:ignore="HardcodedText,SmallSp" />
 
@@ -268,8 +269,9 @@
                                     android:textColor="#FFFFFF"
                                     android:shadowColor="#000000"
                                     android:shadowDx="1"
-                                    android:shadowDy="3"
-                                    android:shadowRadius="4"
+                                    android:shadowDy="1"
+                                    android:paddingHorizontal="2dp"
+                                    android:shadowRadius="2"
                                     android:textStyle="bold"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText" />
@@ -300,8 +302,9 @@
                                     android:textColor="#FFFFFF"
                                     android:shadowColor="#000000"
                                     android:shadowDx="1"
-                                    android:shadowDy="3"
-                                    android:shadowRadius="4"
+                                    android:shadowDy="1"
+                                    android:paddingHorizontal="2dp"
+                                    android:shadowRadius="2"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText"
                                     android:textStyle="bold"    />
@@ -316,19 +319,18 @@
                                 android:alpha="0.5"/>
 
                             <!-- Pg -->
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:gravity="start"
-                                android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="PG "
                                     android:textColor="#FFFFFF"
-                                    android:fontFamily="@font/d"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="1"
+                                    android:paddingHorizontal="2dp"
+                                    android:shadowRadius="2"
+                                    android:fontFamily="@font/l"
                                     android:textStyle="bold"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText" />
@@ -338,11 +340,16 @@
                                     android:layout_height="wrap_content"
                                     android:text="13"
                                     android:textColor="#FFFFFF"
-                                    android:fontFamily="@font/p"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="1"
+                                    android:paddingHorizontal="2dp"
+                                    android:shadowRadius="2"
+                                    android:fontFamily="@font/l"
                                     android:textStyle="bold"
                                     android:textSize="11sp"
                                     tools:ignore="HardcodedText" />
-                            </LinearLayout>
+
 
                             <View
                                 android:layout_width="1dp"
@@ -415,8 +422,9 @@
                             android:textColor="#FFFFFF"
                             android:shadowColor="#000000"
                             android:shadowDx="1"
-                            android:shadowDy="3"
-                            android:shadowRadius="4"
+                            android:shadowDy="1"
+                            android:paddingHorizontal="2dp"
+                            android:shadowRadius="2"
                             android:textSize="11sp"
                             tools:ignore="HardcodedText"
                             android:fontFamily="@font/n"
@@ -455,9 +463,9 @@
                                 android:text="An assassin, trained in the ways of the Ruska Roma, embarks on a quest for vengeance following the death of her father."
                                 android:textColor="#FFFFFF"
                                 android:shadowColor="#000000"
-                                android:shadowDx="1"
-                                android:shadowDy="3"
-                                android:shadowRadius="4"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="3"
                                 android:textSize="13sp"
                                 android:fontFamily="@font/p"
                                 tools:ignore="HardcodedText"
@@ -483,6 +491,7 @@
                                 android:focusableInTouchMode="true"
                                 android:focusable="true"
                                 android:clickable="true"
+                                android:paddingVertical="4dp"
                                 android:paddingHorizontal="8dp"
                                 android:nextFocusLeft="@+id/serverButton"
                                 android:nextFocusRight="@+id/TrailerButton"
@@ -490,27 +499,25 @@
                                 android:layout_marginEnd="10dp">
 
 
-                            <ImageButton
-                                android:layout_width="34dp"
-                                android:layout_height="34dp"
-                                android:background="@android:color/transparent"
-                                android:src="@drawable/ic_play"
-                                app:tint="#FFFFFF"
-                                android:textAllCaps="false"
-                                tools:ignore="ContentDescription,UnusedAttribute" />
+                                    <ImageView
+                                        android:layout_width="28dp"
+                                        android:layout_height="28dp"
+                                        android:src="@drawable/ic_play"
+                                        android:focusable="false"
+                                        android:focusableInTouchMode="false"
+                                        android:clickable="false"
+                                        app:tint="#FFFFFF"
+                                        android:textAllCaps="false"
+                                        tools:ignore="ContentDescription,UnusedAttribute" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Play"
-                                android:textSize="15sp"
-                                android:fontFamily="@font/o"
-                                android:textColor="#FFFFFF"
-                                android:shadowColor="#000000"
-                                android:shadowDx="1"
-                                android:shadowDy="3"
-                                android:shadowRadius="4"
-                                tools:ignore="HardcodedText" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Play"
+                                        android:textSize="15sp"
+                                        android:fontFamily="@font/o"
+                                        android:textColor="#FFFFFF"
+                                        tools:ignore="HardcodedText" />
 
                             </LinearLayout>
 
@@ -523,23 +530,35 @@
                                 android:focusableInTouchMode="true"
                                 android:focusable="true"
                                 android:clickable="true"
-                                android:paddingHorizontal="14dp"
+                                android:paddingVertical="4dp"
+                                android:paddingHorizontal="8dp"
                                 android:nextFocusLeft="@+id/watchNowButton"
                                 android:nextFocusRight="@+id/favoriteButton"
-                                android:elevation="2dp"
-                                android:visibility="gone">
+                                android:elevation="2dp">
 
-                                <ImageButton
-                                android:layout_width="34dp"
-                                android:layout_height="34dp"
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
                                 android:layout_marginStart="12dp"
-                                android:background="@drawable/tv_button_selector"
+                                android:background="@android:color/transparent"
                                 android:src="@drawable/ic_trailer"
-                                app:tint="?attr/AccentColor"                                android:textSize="14sp"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:clickable="false"
+                                app:tint="#FFFFFF"
+                                android:textSize="14sp"
                                 android:textAllCaps="false"
                                 android:elevation="2dp"
-                                tools:ignore="ContentDescription,UnusedAttribute"
-/>
+                                tools:ignore="ContentDescription,UnusedAttribute"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Trailer"
+                                    android:textSize="15sp"
+                                    android:fontFamily="@font/o"
+                                    android:textColor="#FFFFFF"
+                                    tools:ignore="HardcodedText" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -552,6 +571,7 @@
                                 android:focusable="true"
                                 android:clickable="true"
                                 android:layout_marginEnd="10dp"
+                                android:paddingVertical="4dp"
                                 android:paddingHorizontal="9dp"
                                 android:nextFocusLeft="@+id/TrailerButton"
                                 android:nextFocusRight="@+id/serverButton"
@@ -559,12 +579,15 @@
 
 
 
-                                <ImageButton
+                                <ImageView
                                     android:id="@+id/favoriteButtonImg"
-                                    android:layout_width="34dp"
-                                    android:layout_height="34dp"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
                                     android:src="@drawable/ic_addfave"
                                     app:tint="#FFFFFF"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:clickable="false"
                                     android:background="@android:color/transparent"
                                     android:textAllCaps="false"
                                     android:tooltipText="Add to Favorites"
@@ -579,9 +602,6 @@
                                     android:fontFamily="@font/o"
                                     android:textColor="#FFFFFF"
                                     android:shadowColor="#000000"
-                                    android:shadowDx="1"
-                                    android:shadowDy="3"
-                                    android:shadowRadius="4"
                                     tools:ignore="HardcodedText" />
 
                             </LinearLayout>
@@ -596,18 +616,22 @@
                                 android:focusableInTouchMode="true"
                                 android:focusable="true"
                                 android:clickable="true"
+                                android:paddingVertical="4dp"
                                 android:paddingHorizontal="8dp"
                                 android:nextFocusLeft="@+id/favoriteButton"
                                 android:nextFocusRight="@+id/watchNowButton"
                                 android:elevation="2dp"
                                 android:layout_marginEnd="10dp">
 
-                                <ImageButton
-                                    android:layout_width="34dp"
-                                    android:layout_height="34dp"
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
                                     android:background="@android:color/transparent"
                                     android:src="@drawable/ic_server"
                                     app:tint="#FFFFFF"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:clickable="false"
                                     android:textAllCaps="false"
                                     tools:ignore="ContentDescription" />
 
@@ -618,10 +642,6 @@
                                     android:textSize="15sp"
                                     android:fontFamily="@font/o"
                                     android:textColor="#FFFFFF"
-                                    android:shadowColor="#000000"
-                                    android:shadowDx="1"
-                                    android:shadowDy="3"
-                                    android:shadowRadius="4"
                                     tools:ignore="HardcodedText" />
 
                             </LinearLayout>

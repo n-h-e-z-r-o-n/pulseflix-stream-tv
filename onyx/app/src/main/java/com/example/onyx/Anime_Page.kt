@@ -51,6 +51,7 @@ import com.example.onyx.OnyxClasses.cWatchingAdapter
 import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.LoadingAnimation
 import com.example.onyx.OnyxObjects.NavAction
+import kotlinx.coroutines.async
 
 
 class Anime_Page : AppCompatActivity() {
@@ -303,10 +304,40 @@ class Anime_Page : AppCompatActivity() {
          val gapUsed = 70
 
          dubbedRecyclerView = findViewById(R.id.dubbedRecycler)
-         dubbedRecyclerView.layoutManager = GridLayoutManager(
+         dubbedRecyclerView.layoutManager = object : GridLayoutManager(
              this@Anime_Page,
              GlobalUtils.calculateSpanCountV2(this@Anime_Page, anime_airing_item_width, gapUsed)
-         )
+         ){
+             override fun onInterceptFocusSearch(focused: View, direction: Int): View? {
+                 val currentPosition = getPosition(focused)
+                 if (currentPosition == RecyclerView.NO_POSITION) return null
+
+                 if (direction == View.FOCUS_RIGHT) {
+                     val span = spanCount
+                     val isLastColumn = (currentPosition + 1) % span == 0
+                     val nextRowFirstPos = currentPosition + 1
+
+                     if (isLastColumn) {
+                         if (nextRowFirstPos >= itemCount) {
+                             // Block focus at end of grid
+                             return focused
+                         }
+
+                         // Ensure view exists (scroll if needed)
+                         val nextView = findViewByPosition(nextRowFirstPos)
+                         return nextView ?: run {
+                             dubbedRecyclerView.scrollToPosition(nextRowFirstPos)
+                             focused
+                         }
+                     }
+                 }
+
+                 return super.onInterceptFocusSearch(focused, direction)
+             }
+         }
+
+
+
          dubbedRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
          dubbedAdapter = AnimeGridAdapter(mutableListOf(), R.layout.anime_airing_item)
          dubbedRecyclerView.adapter = dubbedAdapter
@@ -328,7 +359,36 @@ class Anime_Page : AppCompatActivity() {
          //-----------------------------------------------------------------------------------------
 
          searchRecyclerView = findViewById(R.id.SearchRecycler)
-         searchRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, 3)
+         searchRecyclerView.layoutManager =  object : GridLayoutManager(this@Anime_Page, 3){
+
+             override fun onInterceptFocusSearch(focused: View, direction: Int): View? {
+                 val currentPosition = getPosition(focused)
+                 if (currentPosition == RecyclerView.NO_POSITION) return null
+
+                 if (direction == View.FOCUS_RIGHT) {
+                     val span = spanCount
+                     val isLastColumn = (currentPosition + 1) % span == 0
+                     val nextRowFirstPos = currentPosition + 1
+
+                     if (isLastColumn) {
+                         if (nextRowFirstPos >= itemCount) {
+                             // Block focus at end of grid
+                             return focused
+                         }
+
+                         // Ensure view exists (scroll if needed)
+                         val nextView = findViewByPosition(nextRowFirstPos)
+                         return nextView ?: run {
+                             searchRecyclerView.scrollToPosition(nextRowFirstPos)
+                             focused
+                         }
+                     }
+                 }
+
+                 return super.onInterceptFocusSearch(focused, direction)
+             }
+
+         }
          searchAdapter  = AnimeSearchAdapter(mutableListOf(), R.layout.anime_airing_item)
          searchRecyclerView.adapter = searchAdapter
          searchRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
@@ -351,8 +411,7 @@ class Anime_Page : AppCompatActivity() {
              false
          )
           */
-         faveRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,210,gapUsed))
-
+         faveRecyclerView.layoutManager = GridLayoutManager(this@Anime_Page, GlobalUtils.calculateSpanCountV2(this@Anime_Page,110,gapUsed))
          faveRecyclerView.addItemDecoration(EqualSpaceItemDecoration(tvSpacing))
 
          //------------------------------------------------------------------------------------------
@@ -542,8 +601,7 @@ class Anime_Page : AppCompatActivity() {
              false
          )
          recyclerView.adapter = AnimeTrendingAdapter(trendingItems, R.layout.anime_trending_item)
-         val spacing = (9 * resources.displayMetrics.density).toInt() // 16dp to px
-         recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
+
 
      }
 
@@ -583,8 +641,7 @@ class Anime_Page : AppCompatActivity() {
              false
          )
          recyclerView.adapter = AnimeAiringAdapter(airingItems, R.layout.anime_airing_item)
-         val spacing = (9 * resources.displayMetrics.density).toInt() // 16dp to px
-         recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
+
      }
 
      ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -951,13 +1008,20 @@ class Anime_Page : AppCompatActivity() {
         private fun animeWatchedList(){
             lifecycleScope.launch(Dispatchers.Main) {
                 val userId = sm.getUserId()
-                val cWatching = withContext(Dispatchers.IO) { db.getContinueWatchingAll(userId, "anime")}
+                val cWatching = withContext(Dispatchers.IO) {
+                    val mv = async {db.getContinueWatchingAll(userId, "anime")}
+                    mv.await()
+                }
 
-                watchAdapter = cWatchingAdapter(
-                    cWatching,
-                    R.layout.item_watched
-                )
-                watchRecyclerView.adapter = watchAdapter
+                if (!::watchAdapter.isInitialized) {
+                    watchAdapter = cWatchingAdapter(
+                        cWatching,
+                        R.layout.item_watched
+                    )
+                    watchRecyclerView.adapter = watchAdapter
+                }else {
+                    watchAdapter.updateItems(cWatching)
+                }
             }
 
         }
@@ -977,9 +1041,11 @@ class Anime_Page : AppCompatActivity() {
 
             val animeFavData = withContext(Dispatchers.IO) { db.getFavoriteAnime(userId)}
 
-            val items = mutableListOf<FavItem>()
+            //val items = mutableListOf<FavItem>()
 
-            for (anime in animeFavData) {
+            //for (anime in animeFavData) {
+
+            val items = animeFavData.map { anime ->
 
                 Log.d("Fav_anime", "anime_id: ${anime["anime_id"]}")
                 Log.d("Fav_anime", "title: ${anime["name"]}")
@@ -990,7 +1056,7 @@ class Anime_Page : AppCompatActivity() {
                 Log.d("Fav_anime", "dub: ${anime["dub"]}")
 
                 val genres = anime["genre"] ?: ""
-                items.add(
+
                     FavItem(
                         title = anime["name"] ?: "",
                         posterUrl = anime["poster"] ?: "",
@@ -1005,39 +1071,41 @@ class Anime_Page : AppCompatActivity() {
                         imdbCode = anime["anime_id"] ?: "",
                         showType = "anime"
                     )
-                )
+
             }
 
-            faveAdapter = FavAdapter(
-                items,
-                R.layout.square_card,
-                FavBackdrop,
-                FavTitle,
-                FavGenre,
-                FavType,
-                FavRating,
-                FavYear,
-                FavOverview,
-                RemoveFaveItem
-            )
+            if (!::faveAdapter.isInitialized) {
+                faveAdapter = FavAdapter(
+                    items.toMutableList(),
+                    R.layout.square_card,
+                    FavBackdrop,
+                    FavTitle,
+                    FavGenre,
+                    FavType,
+                    FavRating,
+                    FavYear,
+                    FavOverview,
+                    RemoveFaveItem
+                )
 
-            faveRecyclerView.adapter = faveAdapter
+                faveRecyclerView.adapter = faveAdapter
+            }else {
+                faveAdapter.updateItems(items)
+            }
 
         }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private fun notificationS() {
+    private fun o_notificationS() {
 
         lifecycleScope.launch(Dispatchers.Main) {
-
 
 
             val dnot = db.getAllAnimeNotifications(userId)
             val notifications = mutableListOf<NotificationItem>()
 
             findViewById<TextView>(R.id.notificationHeadline).text = "notifications (${dnot.size})"
-
 
 
             for (item in dnot) {
@@ -1072,10 +1140,56 @@ class Anime_Page : AppCompatActivity() {
                 layoutResId = R.layout.item_notification
             )
             notificationRecyclerView.adapter = notificationAdapter
-
-
         }
     }
+
+    private fun notificationS() {
+        lifecycleScope.launch {
+
+            // DB call on IO
+            val notificationsFromDb = withContext(Dispatchers.IO) {
+                db.getAllAnimeNotifications(userId)
+            }
+
+            // Headline
+            findViewById<TextView>(R.id.notificationHeadline).text =  "notifications (${notificationsFromDb.size})"
+
+            if (notificationsFromDb.size > 0) findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.VISIBLE
+
+
+            // Map DB → UI model
+            val notifications = notificationsFromDb.map { item ->
+
+                NotificationItem(
+                    notificationId = item["id"]?.toString().orEmpty(),
+                    imdbCode = item["anime_id"]?.toString().orEmpty(),
+                    title = item["title"]?.toString().orEmpty(),
+                    imageUrl = item["poster"],
+                    info = "sub: ${item["subStored"]} dub: ${item["dubStored"]}",
+                    type = "anime",
+                    newSeason = item["subStored"]?.toString().orEmpty(),
+                    newEpisode = item["dubStored"]?.toString().orEmpty(),
+                    time = item["notify_at"]?.toString().orEmpty()
+                )
+            }
+
+            // Adapter setup / update
+            if (!::notificationAdapter.isInitialized) {
+                notificationAdapter = NotificationAdapter(
+                    items = notifications.toMutableList(),
+                    layoutResId = R.layout.item_notification
+                )
+                notificationRecyclerView.adapter = notificationAdapter
+            } else {
+                notificationAdapter.updateItems(notifications)
+            }
+        }
+    }
+
+
+
+
+
     private fun setupBackPressedCallback() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

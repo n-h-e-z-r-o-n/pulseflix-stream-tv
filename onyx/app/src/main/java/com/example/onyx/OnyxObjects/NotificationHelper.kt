@@ -26,7 +26,6 @@ object NotificationHelper {
         var results = false
 
 
-
         for (item in tvList) {
 
             Log.d("Fav_tv", "show_id: ${item["show_id"]}")
@@ -129,8 +128,8 @@ object NotificationHelper {
                 val poster = item["poster"]
 
 
-                var subStored = item["sub"].toString().toIntOrNull() ?: 0
-                var dubStored = item["dub"].toString().toIntOrNull() ?: 0
+                var subStored = 1//item["sub"].toString().toIntOrNull() ?: 0
+                var dubStored = 1//item["dub"].toString().toIntOrNull() ?: 0
                 val seasonsStored = item["seasons"]
 
                 val fetch = TMDBapi(context)
