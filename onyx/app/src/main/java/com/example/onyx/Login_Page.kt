@@ -142,6 +142,13 @@ class Login_Page : AppCompatActivity() {
         try {
             val cursor = db.getUsers()
 
+            if (cursor.count == 0) {
+                db.setSubscription(
+                    type = "MONTHLY",
+                    paymentRef = ""
+                )
+            }
+
             while (cursor.moveToNext()) {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
                 val username = cursor.getString(cursor.getColumnIndexOrThrow("username"))
