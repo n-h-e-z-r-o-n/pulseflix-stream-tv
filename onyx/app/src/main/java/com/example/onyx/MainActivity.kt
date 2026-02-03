@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this@MainActivity, Login_Page::class.java))
             finish()
-        }, 100000000)
+        }, 10000)
     }
 
 

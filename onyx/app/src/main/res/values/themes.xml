@@ -1,6 +1,16 @@
 <resources>
 
+
     <!-- Light Theme (default) -->
+    <style name="Theme.Onyx.Default" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="BG_color">#042c40</item>
+        <item name="FG_color">#FFFFFF</item>
+        <item name="BG_color_up">#0a3d5b</item>
+        <item name="AccentColor">#54becb</item>
+        <item name="transparentEffect">#40042c40</item>
+        <item name="notBudge">#290e05</item>
+    </style>
+
     <style name="Theme.Onyx.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="BG_color">#F5F5F5</item>
         <item name="FG_color">#000000</item>

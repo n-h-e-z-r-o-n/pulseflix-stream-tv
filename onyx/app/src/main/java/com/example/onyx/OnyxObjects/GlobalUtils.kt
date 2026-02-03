@@ -155,6 +155,7 @@ object GlobalUtils {
 
     // List of your theme keys
     private val availableThemes = listOf(
+        "Default",
         "light",
         "dark",
         "amoled",
@@ -178,6 +179,7 @@ object GlobalUtils {
 
     fun applyTheme(activity: Activity) {
         when (getAppTheme(activity)) {
+            "Default"-> activity.setTheme(R.style.Theme_Onyx_Default)
             "light"  -> activity.setTheme(R.style.Theme_Onyx_Light)
             "dark" -> activity.setTheme(R.style.Theme_Onyx_Dark)
             "amoled" -> activity.setTheme(R.style.Theme_Onyx_Amoled)
