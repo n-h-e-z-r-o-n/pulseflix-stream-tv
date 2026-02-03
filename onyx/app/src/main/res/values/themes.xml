@@ -73,9 +73,11 @@
         <item name="notBudge">#3D5AFE</item>
     </style>
 
-    <style name="Theme.Onyx.Splash" parent="Theme.Onyx.Light">
+
+    <style name="Theme.Onyx.Splash" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
+
 
 
 </resources>

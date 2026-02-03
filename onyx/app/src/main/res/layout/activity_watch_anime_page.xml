@@ -151,7 +151,6 @@
                                     android:layout_height="match_parent"
                                     app:cardCornerRadius="3dp"
                                     android:layout_gravity="center_horizontal"
-                                    app:cardBackgroundColor="#80A9A9A9"
                                     android:clipToPadding="true"
                                     app:cardElevation="0dp"
                                     app:cardUseCompatPadding="false"
@@ -172,9 +171,9 @@
                                             android:shadowDx="2"
                                             android:shadowDy="2"
                                             android:shadowRadius="3"
-                                            android:paddingHorizontal="2dp"
+                                            android:paddingHorizontal="4dp"
                                             android:layout_marginHorizontal="4dp"
-                                            android:textColor="@android:color/black"
+                                            android:textColor="@android:color/white"
                                             android:textSize="15sp"
                                             android:textStyle="bold"
                                             tools:ignore="HardcodedText,SmallSp,Suspicious0dp"  />
@@ -187,7 +186,6 @@
                                     android:layout_height="match_parent"
                                     app:cardCornerRadius="3dp"
                                     android:layout_gravity="center_horizontal"
-                                    app:cardBackgroundColor="#80DAA520"
                                     app:cardElevation="0dp"
                                     app:cardUseCompatPadding="false"
                                     android:layout_marginStart="5dp">
@@ -207,7 +205,7 @@
                                         android:shadowDx="2"
                                         android:shadowDy="2"
                                         android:shadowRadius="3"
-                                        android:paddingHorizontal="2dp"
+                                        android:paddingHorizontal="4dp"
                                         android:textSize="15sp"
                                         android:layout_marginHorizontal="4dp"
                                         tools:ignore="HardcodedText,Suspicious0dp" />
@@ -220,15 +218,15 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     app:cardCornerRadius="3dp"
-                                    android:layout_gravity="center_horizontal"
-                                    app:cardBackgroundColor="#800F52BA"
+                                    app:cardBackgroundColor="@android:color/transparent"
                                     app:cardElevation="0dp"
-                                    app:cardUseCompatPadding="false"                                    android:layout_marginStart="5dp">
+                                    app:cardUseCompatPadding="false"
+                                    android:layout_marginStart="15dp">
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:paddingHorizontal="5dp"
+                                        android:paddingHorizontal="2dp"
                                         android:gravity="center"
                                         android:layout_gravity="center"
                                         android:orientation="horizontal"
@@ -258,22 +256,22 @@
                                             android:paddingHorizontal="2dp"
                                             android:fontFamily="@font/p"
                                             android:textSize="15sp"
-                                            android:layout_marginHorizontal="4dp"
                                             tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                                             android:gravity="center"
                                             android:layout_gravity="center"/>
                                     </LinearLayout>
-
                                 </androidx.cardview.widget.CardView>
+
 
                                 <androidx.cardview.widget.CardView
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     app:cardCornerRadius="3dp"
                                     android:layout_gravity="center_horizontal"
-                                    app:cardBackgroundColor="#8073C2FB"
+                                    app:cardBackgroundColor="@android:color/transparent"
                                     app:cardElevation="0dp"
-                                    app:cardUseCompatPadding="false"                                    android:layout_marginStart="5dp">
+                                    app:cardUseCompatPadding="false"
+                                    android:layout_marginStart="15dp">
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
@@ -282,10 +280,8 @@
                                         android:layout_gravity="center"
                                         android:orientation="horizontal"
                                         tools:ignore="UseCompoundDrawables">
-
-
                                         <ImageView
-                                            android:layout_width="16dp"
+                                            android:layout_width="12dp"
                                             android:layout_height="match_parent"
                                             android:src="@drawable/ic_dub"
                                             app:tint="#FFFFFF"
@@ -307,14 +303,12 @@
                                             android:paddingHorizontal="2dp"
                                             android:fontFamily="@font/p"
                                             android:textSize="15sp"
-                                            android:layout_marginHorizontal="4dp"
                                             tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                                             android:gravity="center"
                                             android:layout_gravity="center"
                                             />
 
                                     </LinearLayout>
-
                                 </androidx.cardview.widget.CardView>
 
                                 <View
@@ -322,6 +316,7 @@
                                     android:layout_height="match_parent"
                                     android:background="@android:color/darker_gray"
                                     android:textSize="20sp"
+                                    android:alpha="0.3"
                                     android:gravity="center"
                                     android:layout_gravity="center"
                                     android:layout_marginHorizontal="5dp"/>
@@ -337,7 +332,6 @@
                                     android:textColor="#FFFFFF"
                                     android:textSize="15sp"
                                     android:fontFamily="@font/n"
-                                    android:alpha="0.7"
                                     tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                                     android:gravity="center"
                                     android:layout_gravity="center"
@@ -352,6 +346,7 @@
                                     android:layout_height="match_parent"
                                     android:background="@android:color/darker_gray"
                                     android:textSize="20sp"
+                                    android:alpha="0.3"
                                     android:gravity="center"
                                     android:layout_gravity="center"
                                     android:layout_marginHorizontal="5dp"
@@ -369,7 +364,6 @@
                                     android:textColor="#FFFFFF"
                                     android:textSize="15sp"
                                     android:fontFamily="@font/n"
-                                    android:alpha="0.7"
                                     tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                                     android:gravity="center"
                                     android:shadowColor="#000000"
@@ -383,6 +377,7 @@
                                     android:layout_height="match_parent"
                                     android:background="@android:color/darker_gray"
                                     android:textSize="20sp"
+                                    android:alpha="0.3"
                                     android:gravity="center"
                                     android:layout_gravity="center"
                                     android:layout_marginHorizontal="5dp"/>
@@ -403,7 +398,6 @@
                                     android:fontFamily="@font/n"
                                     tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                                     android:gravity="center"
-                                    android:alpha="0.7"
                                     android:layout_marginStart="9dp"
                                     android:shadowColor="#000000"
                                     android:shadowDx="2"
@@ -467,9 +461,9 @@
                                     android:fontFamily="@font/o"
                                     android:textColor="#FFFFFF"
                                     android:shadowColor="#000000"
-                                    android:shadowDx="2"
-                                    android:shadowDy="2"
-                                    android:shadowRadius="3"
+                                    android:shadowDx="1"
+                                    android:shadowDy="1"
+                                    android:shadowRadius="2"
                                     android:paddingHorizontal="2dp"
                                     android:textStyle="bold"
                                     tools:ignore="HardcodedText" />

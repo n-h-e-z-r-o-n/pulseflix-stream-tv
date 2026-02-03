@@ -200,7 +200,7 @@ class Watch_Anime_Page : AppCompatActivity() {
             getEpisodes(id)
         }
 
-        //showRecommendation(relatedAnimes, recommendedAnime)
+        showRecommendation(relatedAnimes, recommendedAnime)
         LoadingAnimation.hide(this@Watch_Anime_Page)
 
 
@@ -255,16 +255,13 @@ class Watch_Anime_Page : AppCompatActivity() {
             if(resultArray.length() > 0){
                 val item = resultArray.getJSONObject(0)
                 val id = item.getString("id")
-                val posterX = item.getString("poster_path")
                 val backdrop = item.optString("backdrop_path", item.optString("poster_path", ""))
                 val title = item.getString("name")
-                poster = "https://image.tmdb.org/t/p/original/$backdrop"
+                //poster = "https://image.tmdb.org/t/p/original/$backdrop"
 
                 SeasonIMGArray.add("https://image.tmdb.org/t/p/original/$backdrop")
 
-
                 withContext(Dispatchers.Main) {
-                    // ---------- LOGOS ------------------------------------------------------------------------
                     val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
                     val textLogo = findViewById<TextView>(R.id.watchTitle)
                     fetchTMDB.fetchLogos(type, id, cShowLogo, textLogo)
@@ -384,7 +381,6 @@ class Watch_Anime_Page : AppCompatActivity() {
                     .centerCrop()
                     .into(epImg)
             }catch (e:Exception){}
-
              */
 
 
@@ -491,7 +487,7 @@ class Watch_Anime_Page : AppCompatActivity() {
     ) {
         val userId = sm.getUserId()
         val favoriteButton =  findViewById<LinearLayout>(R.id.favoriteButton)
-        val favoriteButtonImg =  findViewById<ImageButton>(R.id.favoriteButtonImg)
+        val favoriteButtonImg =  findViewById<ImageView>(R.id.favoriteButtonImg)
         val favoriteButtonText =  findViewById<TextView>(R.id.favoriteButtonText)
 
 

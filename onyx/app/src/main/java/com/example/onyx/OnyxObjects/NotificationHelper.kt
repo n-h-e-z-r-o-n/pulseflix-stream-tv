@@ -144,7 +144,6 @@ object NotificationHelper {
                                 .getJSONObject("episodes").optString("dub", "").toIntOrNull() ?: 0
                         //val seasonsFetched = data.getJSONArray("seasons").length()?:0
 
-
                         var info = ""
 
                         if (subFetched > subStored) {

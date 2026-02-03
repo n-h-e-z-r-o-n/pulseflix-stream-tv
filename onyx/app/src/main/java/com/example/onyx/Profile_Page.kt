@@ -124,6 +124,11 @@ class Profile_Page : AppCompatActivity() {
 
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        findViewById<LinearLayout>(R.id.themeSetting).requestFocus()
+    }
     
     private fun initializeViews() {
         moviesWatchedText = findViewById(R.id.moviesWatched)
@@ -136,8 +141,6 @@ class Profile_Page : AppCompatActivity() {
     }
     
     private fun loadSettings() {
-
-
         // Load theme setting using GlobalUtils
         val currentTheme = GlobalUtils.getAppTheme(this)
         themeValueText.text = currentTheme.replaceFirstChar { it.uppercase() }
@@ -213,7 +216,13 @@ class Profile_Page : AppCompatActivity() {
                 GlobalUtils.setAppTheme(this, selectedTheme)
                 themeValueText.text = selectedTheme.replaceFirstChar { it.uppercase() }
                 dialog.dismiss()
-                showThemeChangeDialog(selectedTheme)
+
+                val intent = Intent(this, this::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
+
+                // Optional: finish current activity manually to be safe
+                //finish()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()

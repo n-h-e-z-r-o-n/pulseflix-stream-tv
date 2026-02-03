@@ -467,6 +467,9 @@ class Anime_Page : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        findViewById<LinearLayout>(R.id.HomeAnimeBtn).requestFocus()
+
         if (this::watchAdapter.isInitialized) {
             watchAdapter.clearItems()
         }

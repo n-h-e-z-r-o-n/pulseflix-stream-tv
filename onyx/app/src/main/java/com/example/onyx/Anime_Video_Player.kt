@@ -726,17 +726,37 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         }
     }
 
+
+    private var lastBackPressTime = 0L
+    private val DOUBLE_BACK_PRESS_INTERVAL = 1000L // 2 seconds
+
     private fun setupBackPressedCallback() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (!isMenuVisible) {
-                    showMenu()
-                } else {
-                    hideMenu()
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+
+                override fun handleOnBackPressed() {
+                    val currentTime = System.currentTimeMillis()
+
+                    // If menu is visible → hide it on single back
+                    if (isMenuVisible) {
+                        hideMenu()
+                        return
+                    }
+
+                    // Handle double back press to exit
+                    if (currentTime - lastBackPressTime < DOUBLE_BACK_PRESS_INTERVAL) {
+                        finish() // or finishAffinity()
+                    } else {
+                        lastBackPressTime = currentTime
+                        showMenu() // optional: or just show a toast
+
+                    }
                 }
             }
-        })
+        )
     }
+
 
     private fun togglePlayPause() {
         exoPlayer?.let { player ->

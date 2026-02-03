@@ -25,41 +25,40 @@
             />
 
         <!-- ONYX Title -->
-        <androidx.cardview.widget.CardView
+
+
+    <!-- Loading Animation -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        app:cardBackgroundColor="#54becb"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp">
+
+        <TextView
+            android:id="@+id/onyxTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
-            app:cardBackgroundColor="?attr/transparentEffect"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
-            android:layout_marginBottom="100dp"
-            >
-            <TextView
-                android:id="@+id/onyxTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="ONYX"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:textSize="150sp"
-                android:textColor="?attr/FG_color"
-                android:shadowColor="?attr/AccentColor"
-                android:maxLines="1"
-                android:shadowDx="5"
-                android:shadowDy="6"
-                android:shadowRadius="4"
-                android:fontFamily="@font/j"
-                tools:ignore="HardcodedText" />
+            android:layout_margin="10dp"
+            android:fontFamily="@font/j"
+            android:gravity="center"
+            android:maxLines="1"
+            android:shadowColor="@android:color/white"
+            android:shadowDx="5"
+            android:shadowDy="6"
+            android:shadowRadius="4"
+            android:text="ONYX"
+            android:textColor="#152755"
+            android:textSize="170sp"
+            tools:ignore="HardcodedText" />
 
-        </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-
-
-
-        <!-- Loading Animation -->
-        <LinearLayout
+    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
@@ -88,9 +87,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="©2026 ONYX MEDIA GROUP"
-                android:textColor="?attr/FG_color"
+                android:textColor="#0d1d4a"
                 android:textSize="12sp"
-                android:alpha="0.3"
                 android:fontFamily="@font/p"
                 tools:ignore="HardcodedText"
                 android:layout_marginBottom="20dp"/>
@@ -102,25 +100,25 @@
                     android:layout_height="15dp"
                     android:src="@drawable/ic_movie"
                     tools:ignore="ContentDescription"
-                    app:tint="?attr/FG_color"
+                    app:tint="#0d1d4a"
                     android:alpha="0.3"
-                    android:layout_marginHorizontal="5dp"/>
+                    android:layout_marginHorizontal="15dp"/>
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:src="@drawable/ic_laptop"
                     tools:ignore="ContentDescription"
-                    app:tint="?attr/FG_color"
+                    app:tint="#0d1d4a"
                     android:alpha="0.3"
-                    android:layout_marginHorizontal="5dp"/>
+                    android:layout_marginHorizontal="15dp"/>
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:src="@drawable/ic_tv"
                     tools:ignore="ContentDescription"
-                    app:tint="?attr/FG_color"
+                    app:tint="#0d1d4a"
                     android:alpha="0.3"
-                    android:layout_marginHorizontal="5dp"/>
+                    android:layout_marginHorizontal="15dp"/>
             </LinearLayout>
         </LinearLayout>
 

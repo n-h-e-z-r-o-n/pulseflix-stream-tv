@@ -185,6 +185,8 @@ class Shows_Page : AppCompatActivity() {
         HomeBtn.requestFocus()
 
 
+
+
         MoviesBtn.setOnClickListener {
             HomePage.visibility = View.GONE
             moviePage.visibility = View.VISIBLE
@@ -355,8 +357,7 @@ class Shows_Page : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val HomeBtn = findViewById<LinearLayout>(R.id.HomeBtn)
-        HomeBtn.requestFocus()
+        findViewById<LinearLayout>(R.id.HomeBtn).requestFocus()
 
         if (this::watchAdapter.isInitialized) {
             watchAdapter.clearItems()
