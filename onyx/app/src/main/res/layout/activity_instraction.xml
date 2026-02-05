@@ -5,10 +5,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="?attr/BG_color"
     tools:context=".Instraction">
 
     <ImageView
+        android:visibility="gone"
         android:id="@+id/pageBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,7 +26,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="15dp"
-        android:paddingTop="35dp"
+        android:layout_marginTop="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,45 +37,75 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ONYX"
-                android:textSize="65sp"
-                android:layout_gravity="center_horizontal"
-                android:textColor="?attr/FG_color"
-                tools:ignore="HardcodedText"
-                android:shadowColor="?attr/AccentColor"
-                android:shadowDx="5"
-                android:shadowDy="6"
-                android:shadowRadius="4"
-                android:fontFamily="@font/j"
-                android:visibility="visible" />
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ONYX"
+                    android:textSize="65sp"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="?attr/FG_color"
+                    tools:ignore="HardcodedText"
+                    android:shadowColor="?attr/AccentColor"
+                    android:shadowDx="5"
+                    android:shadowDy="6"
+                    android:shadowRadius="4"
+                    android:fontFamily="@font/p"
+                    android:visibility="visible" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="10dp"
+                    app:cardCornerRadius="50dp"
+                    app:cardBackgroundColor="?attr/AccentColor"
+                    android:layout_gravity="bottom"
+                    android:layout_height="10dp"/>
+
+            </LinearLayout>
+
+
 
             <TextView
                 android:id="@+id/textViewStep1Header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Stream Movies, Tv and Anime"
-                android:fontFamily="@font/e"
+                android:layout_marginBottom="15dp"
+                android:text="Stream Movies, Series and Anime on your tv"
+                android:fontFamily="@font/p"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal"
-                android:textColor="#FFC107"
-                android:textSize="30sp"
+                android:textColor="?attr/AccentColor"
+                android:textSize="20sp"
                 android:layout_marginTop="6dp"
                 style="@style/Widget.AppCompat.TextView"
                 tools:ignore="HardcodedText" />
-            <TextView
-                android:layout_width="match_parent"
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ad-ree"
-                android:fontFamily="@font/e"
-                android:gravity="center"
+                app:cardCornerRadius="50dp"
+                android:layout_marginBottom="15dp"
                 android:layout_gravity="center_horizontal"
-                android:textColor="?attr/FG_color"
-                android:textSize="30sp"
-                style="@style/Widget.AppCompat.TextView"
-                tools:ignore="HardcodedText" />
+                app:cardBackgroundColor="?attr/BG_color_up">
+
+                    <TextView
+                        android:layout_marginHorizontal="40dp"
+                        android:layout_marginVertical="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ad-free"
+                        android:fontFamily="@font/n"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="?attr/FG_color"
+                        android:textSize="30sp"
+                        style="@style/Widget.AppCompat.TextView"
+                        tools:ignore="HardcodedText" />
+
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -86,8 +117,9 @@
 
                 <!-- Outer Frame (TV body) -->
                 <androidx.cardview.widget.CardView
-                    android:layout_width="220dp"
-                    android:layout_height="130dp"
+                    android:layout_width="match_parent"
+                    android:layout_margin="0dp"
+                    android:layout_height="200dp"
                     android:elevation="6dp"
                     app:cardCornerRadius="16dp"
                     android:layout_gravity="center">
@@ -102,29 +134,92 @@
                         android:foreground="@drawable/tv_frame_background"
                         android:scaleType="fitXY"
                         tools:ignore="UnusedAttribute" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="?attr/AccentColor"
+                        app:cardCornerRadius="5dp"
+                        android:layout_margin="15dp"
+                        android:layout_gravity="bottom">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="2dp"
+                            android:text="Now Playing"
+                            android:textColor="@android:color/white"
+                            tools:ignore="HardcodedText" />
+
+                    </androidx.cardview.widget.CardView>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Download Instraction "
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/f"
-                android:layout_marginTop="8dp"
-                style="@style/Widget.AppCompat.TextView"
-                tools:ignore="HardcodedText" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" 1.Open the web browser on your TV and go to the following short address:"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                style="@style/Widget.AppCompat.TextView"
-                tools:ignore="HardcodedText" />
+                android:gravity="center"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_download"
+                        tools:ignore="ContentDescription"
+                        android:layout_marginEnd="9dp"
+                        app:tint="?attr/AccentColor"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Download Instraction "
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/o"
+                        style="@style/Widget.AppCompat.TextView"
+                        tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="25dp"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="50dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardBackgroundColor="?attr/transparentEffect">
+                    <TextView
+                        android:gravity="center"
+                        android:background="?attr/transparentEffect"
+                        android:layout_width="match_parent"
+                        android:textColor="?attr/AccentColor"
+                        android:layout_height="match_parent"
+                        android:fontFamily="monospace"
+                        android:text="1"
+                        tools:ignore="HardcodedText" />
+
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Open your TV's web browser and enter the following official download URL:"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    style="@style/Widget.AppCompat.TextView"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
@@ -132,18 +227,9 @@
                 app:cardCornerRadius="10dp"
                 android:layout_gravity="center_horizontal"
                 app:cardBackgroundColor="?attr/AccentColor"
-                android:elevation="0dp"
-                >
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                android:elevation="0dp" >
 
-                    <ImageView
-                        android:layout_width="250dp"
-                        android:layout_height="70dp"
-                        android:scaleType="centerCrop"
-                        android:src="@raw/gold"
-                        />
+
 
                     <TextView
                         android:id="@+id/textViewUrl"
@@ -153,12 +239,13 @@
                         android:textColor="@android:color/white"
                         android:textStyle="bold"
                         android:textSize="28sp"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginVertical="10dp"
                         android:layout_gravity="center"
                         style="@style/Widget.AppCompat.TextView"
                         tools:ignore="HardcodedText" />
 
 
-                </FrameLayout>
 
             </androidx.cardview.widget.CardView>
 
@@ -168,9 +255,11 @@
                 android:id="@+id/textViewStep1Footer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="This will download the installation file (app-release.apk or app-release.bin)."
+                android:layout_marginBottom="25dp"
+                android:text="The download for the application package (APK) will begin automatically"
                 android:textColor="@android:color/white"
                 android:textSize="9sp"
+                android:textStyle="italic"
                 android:alpha="0.8"
                 android:layout_marginTop="6dp"
                 android:layout_gravity="center_horizontal"
@@ -178,38 +267,120 @@
                 tools:ignore="HardcodedText" />
 
 
-            <TextView
-                android:id="@+id/textViewStep2Body"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text='2. If you don&apos;t  know how to install, On your android  tv go to  Google Play Store on your TV and install "File Manager+".'
-                android:textColor="@android:color/white"
-                android:textSize="13sp"
-                android:layout_marginTop="8dp"
-                style="@style/Widget.AppCompat.TextView"
-                tools:ignore="HardcodedText" />
 
-            <TextView
-                android:id="@+id/textViewStep2Body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text='3. Open your file manager, navigate to the "Download" folder, and find the file named app-release.apk or app-release.bin.'
-                android:textColor="@android:color/white"
-                android:textSize="13sp"
-                android:layout_marginTop="16dp"
-                style="@style/Widget.AppCompat.TextView"
-                tools:ignore="HardcodedText" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="25dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textViewStep2Body3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3. Select the file and install it using the Package Installer. You may need to grant permission to install from unknown sources."
-                android:textColor="@android:color/white"
-                android:textSize="13sp"
-                android:layout_marginTop="16dp"
-                style="@style/Widget.AppCompat.TextView"
-                tools:ignore="HardcodedText" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="50dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardBackgroundColor="?attr/transparentEffect">
+                    <TextView
+                        android:gravity="center"
+                        android:background="?attr/transparentEffect"
+                        android:layout_width="match_parent"
+                        android:textColor="?attr/AccentColor"
+                        android:layout_height="match_parent"
+                        android:fontFamily="monospace"
+                        android:text="2"
+                        tools:ignore="HardcodedText" />
+
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='If you require a file explorer, we recommend installing "File Manager+" from the Google Play Store.'
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    style="@style/Widget.AppCompat.TextView"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="25dp"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="50dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardBackgroundColor="?attr/transparentEffect">
+                    <TextView
+                        android:gravity="center"
+                        android:background="?attr/transparentEffect"
+                        android:layout_width="match_parent"
+                        android:textColor="?attr/AccentColor"
+                        android:layout_height="match_parent"
+                        android:fontFamily="monospace"
+                        android:text="3"
+                        tools:ignore="HardcodedText" />
+
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='Launch your file manager, navigate to the "Downloads" directory, and locate the installer file.'
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    style="@style/Widget.AppCompat.TextView"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="25dp"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="50dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardBackgroundColor="?attr/transparentEffect">
+                    <TextView
+                        android:gravity="center"
+                        android:background="?attr/transparentEffect"
+                        android:layout_width="match_parent"
+                        android:textColor="?attr/AccentColor"
+                        android:layout_height="match_parent"
+                        android:fontFamily="monospace"
+
+                        android:text="4"
+                        tools:ignore="HardcodedText" />
+
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select the file to begin installation. If prompted, please enable 'Install Unknown Apps' in your System Settings."
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    style="@style/Widget.AppCompat.TextView"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
     </ScrollView>

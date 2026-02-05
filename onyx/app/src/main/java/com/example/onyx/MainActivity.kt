@@ -5,18 +5,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.example.onyx.Database.AppDatabase
+import com.example.onyx.Database.SessionManger
 import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.NotificationHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+private lateinit var  sm: SessionManger
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,8 +29,8 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
-        GlobalUtils.applyTheme(this)
         installSplashScreen()
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -51,7 +55,16 @@ class MainActivity : AppCompatActivity() {
         NotificationHelper.getAnimeNotifications(this@MainActivity)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this@MainActivity, Login_Page::class.java))
+
+            if (!GlobalUtils.isTv(this)) {
+                sm = SessionManger(this)
+                sm.saveUserId(1453.toInt())
+                sm.saveAvatar("profile_avatars/1.png")
+                startActivity(Intent(this, Instraction::class.java))
+            }else{
+                startActivity(Intent(this@MainActivity, Login_Page::class.java))
+
+            }
             finish()
         }, 10000)
     }
@@ -64,6 +77,8 @@ class MainActivity : AppCompatActivity() {
             GlobalUtils.hideSystemUI(this)
         }
     }
+
+
 
     // This handles when the immersive mode is interrupted
     override fun onResume() {
