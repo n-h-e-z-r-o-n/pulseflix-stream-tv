@@ -37,151 +37,128 @@
             android:layout_height="wrap_content"
             android:visibility="gone"/>
 
-        <LinearLayout
+
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:orientation="horizontal"
+            android:layout_height="20dp"
+            android:elevation="0dp"
             android:layout_gravity="bottom"
-            android:alpha="0.9"
-            android:layout_marginBottom="9dp">
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="3dp">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:cardCornerRadius="3dp"
-            android:layout_gravity="center_vertical"
-
-            app:cardBackgroundColor="#DAA520"
-            android:elevation="0dp"
-            android:layout_margin="2dp"
-            >
-
-            <TextView
-                android:id="@+id/cardType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Tv"
-                android:singleLine="true"
-                android:textColor="#FFFFFF"
-                android:shadowColor="#000000"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="3"
-                android:paddingHorizontal="2dp"
-                android:textSize="10sp"
-                android:fontFamily="@font/p"
-                tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:textStyle="bold"
-                />
-
-        </androidx.cardview.widget.CardView>
-
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:cardCornerRadius="3dp"
-            android:layout_gravity="center_vertical"
-            app:cardBackgroundColor="#0F52BA"
-            android:elevation="0dp"
-            android:layout_margin="2dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingHorizontal="3dp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                >
-
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_sub"
-                    app:tint="#FFFFFF"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/cardSub"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="2"
-                    android:singleLine="true"
-                    android:textColor="#FFFFFF"
-                    android:shadowColor="#000000"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="3"
-                    android:paddingHorizontal="2dp"
-                    android:fontFamily="@font/p"
-                    android:textSize="13sp"
-                    tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="2dp"                android:elevation="0dp"
-                app:cardBackgroundColor="#73C2FB"
-                app:cardCornerRadius="3dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="3dp">
-
-
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="11dp"
-                        android:src="@drawable/ic_dub"
-                        app:tint="#FFFFFF"
-
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:id="@+id/cardDub"
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/p"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:text="2"
-                        android:textColor="#FFFFFF"
-                        android:shadowColor="#000000"
-                        android:shadowDx="2"
-                        android:shadowDy="2"
-                        android:shadowRadius="3"
-                        android:paddingHorizontal="2dp"
-                        android:textSize="13sp"
-                        tools:ignore="HardcodedText,Suspicious0dp" />
-                </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-            </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/cardType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Tv"
+                            android:singleLine="true"
+                            android:textColor="#FFFFFF"
+                            android:shadowColor="#000000"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="2"
+                            android:paddingHorizontal="2dp"
+                            android:textSize="10sp"
+                            android:fontFamily="@font/p"
+                            tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"/>
 
-        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="3dp"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            tools:ignore="UseCompoundDrawables">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_sub"
+                                app:tint="?attr/AccentColor"
+                                tools:ignore="ContentDescription" />
+
+                            <TextView
+                                android:id="@+id/cardSub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="2"
+                                android:singleLine="true"
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="2"
+                                android:paddingHorizontal="2dp"
+                                android:fontFamily="@font/p"
+                                android:textSize="13sp"
+                                tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                />
+
+                        </LinearLayout>
+
+
+
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="3dp"
+                                tools:ignore="UseCompoundDrawables">
+
+
+                                <ImageView
+                                    android:layout_width="12dp"
+                                    android:layout_height="11dp"
+                                    android:src="@drawable/ic_dub"
+                                    app:tint="?attr/AccentColor"
+                                    tools:ignore="ContentDescription" />
+
+                                <TextView
+                                    android:id="@+id/cardDub"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/p"
+                                    android:gravity="center"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:text="2"
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="2"
+                                    android:shadowDy="2"
+                                    android:shadowRadius="2"
+                                    android:paddingHorizontal="2dp"
+                                    android:textSize="13sp"
+                                    tools:ignore="HardcodedText,Suspicious0dp" />
+                            </LinearLayout>
+
+
+                    </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
 
 
