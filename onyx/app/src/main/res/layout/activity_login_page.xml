@@ -11,26 +11,15 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@raw/test5"
+        android:src="@raw/login_1"
         android:scaleType="centerCrop"
         tools:ignore="ContentDescription" />
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80000000"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80000000"/>
 
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#8000000">
+        android:background="#80000000">
 
         <LinearLayout
             android:id="@+id/profileContainer"
