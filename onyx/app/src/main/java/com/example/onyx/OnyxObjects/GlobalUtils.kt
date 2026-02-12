@@ -158,8 +158,8 @@ object GlobalUtils {
         "Default",
         "light",
         "dark",
-        "amoled",
-        "highContrast",
+        "Yellow",
+        "ghost",
         "green",
         "red",
         "purple"
@@ -182,8 +182,8 @@ object GlobalUtils {
             "Default"-> activity.setTheme(R.style.Theme_Onyx_Default)
             "light"  -> activity.setTheme(R.style.Theme_Onyx_Light)
             "dark" -> activity.setTheme(R.style.Theme_Onyx_Dark)
-            "amoled" -> activity.setTheme(R.style.Theme_Onyx_Amoled)
-            "highContrast" -> activity.setTheme(R.style.Theme_Onyx_HighContrast)
+            "Yellow" -> activity.setTheme(R.style.Theme_Onyx_Yellow)
+            "ghost" -> activity.setTheme(R.style.Theme_Onyx_Ghost)
             "green" -> activity.setTheme(R.style.Theme_Onyx_Green)
             "red" -> activity.setTheme(R.style.Theme_Onyx_Red)
             "purple" -> activity.setTheme(R.style.Theme_Onyx_Purple)
@@ -381,6 +381,33 @@ object GlobalUtils {
         update()
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    fun getServerUrl(context: Context, urlType: String?, showId: String?, seasonNo: String?, episodeNo: String?): String {
+        val serverIndex = getSavedServerIndex(context)
+
+        return if (urlType == "movie") {
+            when (serverIndex) {
+                0 -> "https://vidsrc.to/embed/movie/$showId"
+                1 -> "https://player.embed-api.stream/?id=$showId&type=movie"
+                2 -> "https://www.2embed.skin/embed/$showId"
+                3 -> "https://embedmaster.link/movie/$showId"
+                4 -> "https://www.primewire.si/embed/movie?tmdb=$showId"
+                5 -> "https://www.vidking.net/embed/movie/$showId"
+                else -> "https://vidsrc.to/embed/movie/$showId"
+            }
+        } else {
+            when (serverIndex) {
+                0 -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
+                1 -> "https://player.embed-api.stream/?id=$showId&s=$seasonNo&e=$episodeNo"
+                2 -> "https://www.2embed.cc/embedtv/$showId&s=$seasonNo&e=$episodeNo"
+                3 -> "https://embedmaster.link/tv/$showId/$seasonNo/$episodeNo"
+                4 -> "https://www.primewire.si/embed/tv?tmdb=$showId&season=$seasonNo&episode=$episodeNo"
+                5 -> "https://www.vidking.net/embed/tv/$showId/$seasonNo/$episodeNo"
+                else -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
+            }
+        }
+    }
 
     fun saveServerIndex(context: Context, index: Int) {
         val prefs = context.getSharedPreferences("server_prefs", Context.MODE_PRIVATE)

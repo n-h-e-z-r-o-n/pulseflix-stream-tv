@@ -801,7 +801,7 @@ class Watch_Page : AppCompatActivity() {
             "VidSrc",
             "Embed API",
             "2Embed",
-            "Embed.su",
+            "embedmaster",
             "PrimeWire",
             "vidking"
         )

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@raw/background_2"
+        android:src="?attr/themeImage"
         tools:ignore="ContentDescription" />
 
 
@@ -64,15 +64,15 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="180dp"
                         android:layout_height="180dp"
-                        android:layout_gravity="center_horizontal"
-                        app:cardBackgroundColor="?attr/transparentEffect"
-                        android:layout_margin="14dp"
-                        android:elevation="4dp"
+                        app:cardBackgroundColor="@android:color/transparent"
+                        app:cardElevation="0dp"
+                        android:layout_marginBottom="14dp"
                         app:cardCornerRadius="50dp">
                         <ImageView
                             android:id="@+id/ProfileImg"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
                             android:importantForAccessibility="no"
                           />
 
@@ -332,6 +332,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Dark"
                                 android:textColor="?attr/FG_color"
+                                android:alpha="0.7"
                                 android:textSize="12sp"
                                 android:layout_marginTop="2dp"
                                 tools:ignore="HardcodedText" />
@@ -383,6 +384,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="1.0.0"
                                 android:textColor="?attr/FG_color"
+                                android:alpha="0.7"
                                 android:textSize="12sp"
                                 android:layout_marginTop="2dp"
                                 tools:ignore="HardcodedText" />
@@ -434,6 +436,7 @@
                                 android:text="Free up storage space"
                                 android:textColor="?attr/FG_color"
                                 android:textSize="12sp"
+                                android:alpha="0.7"
                                 android:layout_marginTop="2dp"
                                 tools:ignore="HardcodedText" />
 
@@ -484,6 +487,7 @@
                                 android:text="Check and update up"
                                 android:textColor="?attr/FG_color"
                                 android:textSize="12sp"
+                                android:alpha="0.7"
                                 android:layout_marginTop="2dp"
                                 tools:ignore="HardcodedText" />
 
@@ -534,6 +538,7 @@
                                 android:text="Restart the application"
                                 android:textColor="?attr/FG_color"
                                 android:textSize="12sp"
+                                android:alpha="0.7"
                                 android:layout_marginTop="2dp"
                                 tools:ignore="HardcodedText" />
 
@@ -584,6 +589,7 @@
                                 android:text="View terms of service and privacy policy"
                                 android:textColor="?attr/FG_color"
                                 android:textSize="12sp"
+                                android:alpha="0.7"
                                 android:layout_marginTop="2dp"
                                 tools:ignore="HardcodedText" />
 

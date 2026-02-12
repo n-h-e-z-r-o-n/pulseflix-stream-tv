@@ -238,11 +238,12 @@ class Play : AppCompatActivity() {
                 val url = request?.url.toString()
                 return if (url.startsWith("https://vidsrc.to/") ||
                           url.startsWith("https://player.embed-api.stream/") ||
-                          url.startsWith("https://www.2embed.skin/") ||
-                          url.startsWith("https://www.2embed.cc/") ||
+                          url.startsWith("https://2embed") ||
+                          url.startsWith("https://embedmaster") ||
+                          url.startsWith("https://embdmstrplayer") ||
                           url.startsWith("https://embed.su/") ||
-                          url.startsWith("https://www.primewire.tf/") ||
-                          url.startsWith("https://www.vidking.net/")
+                          url.startsWith("https://primewire.si/") ||
+                          url.startsWith("https://vidking.net/")
                     ) {
                     false
                 } else {
@@ -267,7 +268,7 @@ class Play : AppCompatActivity() {
         webView.settings.setSupportMultipleWindows(false)
 
         // Get complete URL based on server selection and content type
-        val url = getServerUrl(showType, showId.trim(), showSNo.trim(), showENo.trim())
+        val url = GlobalUtils.getServerUrl(this, showType, showId.trim(), showSNo.trim(), showENo.trim())
 
         // Load the URL
         webView.loadUrl(url)
@@ -351,31 +352,7 @@ class Play : AppCompatActivity() {
         }
     }
 
-    private fun getServerUrl(urlType: String?, showId: String?, seasonNo: String?, episodeNo: String?): String {
-        val serverIndex = GlobalUtils.getSavedServerIndex(this)
 
-        return if (urlType == "movie") {
-            when (serverIndex) {
-                0 -> "https://vidsrc.to/embed/movie/$showId"
-                1 -> "https://player.embed-api.stream/?id=$showId&type=movie"
-                2 -> "https://www.2embed.skin/embed/$showId"
-                3 -> "https://embed.su/embed/movie/$showId"
-                4 -> "https://www.primewire.tf/embed/movie?tmdb=$showId"
-                5 -> "https://www.vidking.net/embed/movie/$showId"
-                else -> "https://vidsrc.to/embed/movie/$showId"
-            }
-        } else {
-            when (serverIndex) {
-                0 -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
-                1 -> "https://player.embed-api.stream/?id=$showId&s=$seasonNo&e=$episodeNo"
-                2 -> "https://www.2embed.cc/embedtv/$showId&s=$seasonNo&e=$episodeNo"
-                3 -> "https://embed.su/embed/tv/$showId/$seasonNo/$episodeNo"
-                4 -> "https://www.primewire.tf/embed/tv?tmdb=$showId&season=$seasonNo&episode=$episodeNo"
-                5 -> "https://www.vidking.net/embed/tv/$showId/$seasonNo/$episodeNo"
-                else -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
-            }
-        }
-    }
 
 
     private fun setupBackPressedCallback() {

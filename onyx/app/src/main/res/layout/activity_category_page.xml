@@ -11,8 +11,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@raw/test2"
+        android:scaleType="centerCrop"
+        android:src="?attr/themeImage"
         tools:ignore="ContentDescription" />
 
     <FrameLayout

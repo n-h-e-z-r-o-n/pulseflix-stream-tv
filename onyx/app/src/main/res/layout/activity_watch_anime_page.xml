@@ -436,7 +436,7 @@
                                 android:clickable="true"
                                 android:paddingHorizontal="14dp"
                                 android:elevation="2dp" >
-                                
+
                                 <ImageView
                                     android:id="@+id/favoriteButtonImg"
                                     android:layout_width="24dp"
