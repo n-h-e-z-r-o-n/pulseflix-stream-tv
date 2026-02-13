@@ -25,7 +25,9 @@
         android:theme="@style/Theme.Onyx.Default"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-
+        <activity
+            android:name=".web"
+            android:exported="false" />
         <activity
             android:name=".Login_Page"
             android:exported="false" />
@@ -50,12 +52,10 @@
         <activity
             android:name=".PayWall"
             android:exported="false" />
-
         <activity
             android:name=".Actor_Page"
             android:exported="false"
             android:launchMode="singleTop" />
-
         <activity
             android:name=".Profile_Page"
             android:exported="false" />
@@ -76,10 +76,11 @@
             android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.Onyx.Splash"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Onyx.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>

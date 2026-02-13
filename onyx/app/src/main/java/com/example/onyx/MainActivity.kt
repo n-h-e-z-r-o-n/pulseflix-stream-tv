@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        //installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, Instraction::class.java))
             }else{
                 startActivity(Intent(this@MainActivity, Login_Page::class.java))
+                //startActivity(Intent(this@MainActivity, web::class.java))
 
             }
             finish()
