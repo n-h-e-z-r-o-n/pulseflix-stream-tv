@@ -34,6 +34,9 @@ import com.example.onyx.R
 import kotlin.Float
 import kotlin.random.Random
 
+
+private val interpolator = AccelerateDecelerateInterpolator()
+
 object GlobalUtils {
 
     // SharedPreferences key constants
@@ -437,7 +440,7 @@ object GlobalUtils {
     private lateinit var scales : FloatArray
     private lateinit var translations  : FloatArray
 
-    private var animationD:Long = 100
+    private var animationD:Long = 300
 
 
     fun setupCardStackFromContainer(
@@ -516,8 +519,7 @@ object GlobalUtils {
                         .start()
                     v.elevation = 7f
                 } else {
-                    layoutStack(container)
-                    //container.postDelayed({if (!container.hasFocus()) startAutoSwipe()}, 300)
+                   container.postDelayed({if (!container.hasFocus()) startAutoSwipe()}, 300)
                 }
             }
 
@@ -548,16 +550,13 @@ object GlobalUtils {
             }
         })
 
-
-        // ---------------- Initial Layout & Focus -------------------------------------------------
-        //container.getChildAt(container.childCount - 1)?.requestFocus()
         layoutStack(container)
-        //container.postDelayed({ if (!container.hasFocus()) startAutoSwipe() }, 2000)
+        container.postDelayed({ if (!container.hasFocus()) startAutoSwipe() }, 2000)
     }
 
 
 
-    private fun layoutStack(container: FrameLayout) {
+    private fun layoutStack_old(container: FrameLayout) {
 
         val count = container.childCount
 
@@ -584,6 +583,47 @@ object GlobalUtils {
         }
     }
 
+    private fun layoutStack(container: FrameLayout) {
+
+        val count = container.childCount
+        if (count == 0) return
+
+        for (i in 0 until count) {
+
+            val card = container.getChildAt(i)
+
+            val posFromTop = count - 1 - i
+            val index = posFromTop.coerceAtMost(translations.lastIndex)
+
+            val targetTranslation = translations[index]
+            val targetScale = scales[index]
+            val targetElevation = elevations[index]
+
+            // Cancel any ongoing animation to prevent stacking conflicts
+            card.animate().cancel()
+
+            // Only animate if something actually changed
+            val needsTranslation = card.translationX != targetTranslation
+            val needsScale = card.scaleX != targetScale || card.scaleY != targetScale
+            val needsElevation = card.elevation != targetElevation
+
+            if (needsTranslation || needsScale) {
+                card.animate()
+                    .translationX(targetTranslation)
+                    .scaleX(targetScale)
+                    .scaleY(targetScale)
+                    .setDuration(animationD)
+                    .setInterpolator(interpolator)
+                    .start()
+            }
+
+            if (needsElevation) {
+                card.elevation = targetElevation
+            }
+        }
+    }
+
+
     private fun swapRight(container: FrameLayout, keepFocus: Boolean = true) {
         if (container.childCount == 0) return
         val top = container.getChildAt(container.childCount - 1)
@@ -601,10 +641,12 @@ object GlobalUtils {
 
                 // Optimized view reordering
                 val parent = top.parent as? ViewGroup
+
                 parent?.removeView(top)
                 parent?.addView(top, 0)
 
-                layoutStack(container)
+
+                layoutStack(container) // Re-layout stack positions
 
                 if (keepFocus) {
                     container.getChildAt(container.childCount - 1)?.requestFocus()
@@ -660,7 +702,7 @@ object GlobalUtils {
         parent: View,
         expandedWidthDp: Float,
         collapsedWidthDp: Float,
-        animationDuration: Long = 40L
+        animationDuration: Long = 10L
     ) {
         val context = parent.context
         val expandedWidthPx = dp(context, expandedWidthDp).toInt()

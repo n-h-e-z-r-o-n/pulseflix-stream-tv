@@ -81,6 +81,7 @@ dependencies {
     implementation("com.intuit.sdp:sdp-android:1.1.0")
     implementation("com.intuit.ssp:ssp-android:1.1.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2")
+    implementation("org.adblockplus:adblock-android-webview:4.4.0")
     
     // Room Database
     implementation(libs.androidx.room.runtime)

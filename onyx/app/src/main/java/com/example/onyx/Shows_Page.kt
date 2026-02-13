@@ -737,7 +737,7 @@ class Shows_Page : AppCompatActivity() {
 
             }
 
-            GlobalUtils.setupCardStackFromContainer(container, 20000L)
+            GlobalUtils.setupCardStackFromContainer(container, 10000L)
             LoadingAnimation.hide(this@Shows_Page)
         }else{
             //LoadingAnimation.setup(this@Shows_Page, R.raw.error)

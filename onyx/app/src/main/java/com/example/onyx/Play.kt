@@ -236,6 +236,7 @@ class Play : AppCompatActivity() {
                 request: WebResourceRequest?
             ): Boolean {
                 val url = request?.url.toString()
+
                 return if (url.startsWith("https://vidsrc.to/") ||
                           url.startsWith("https://player.embed-api.stream/") ||
                           url.startsWith("https://2embed") ||
@@ -250,6 +251,8 @@ class Play : AppCompatActivity() {
                     //Toast.makeText(this@Play, "Blocked $url", Toast.LENGTH_SHORT).show()
                     true
                 }
+
+
             }
 
 
