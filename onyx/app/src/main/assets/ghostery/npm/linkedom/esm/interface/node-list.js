@@ -1,0 +1,12 @@
+globalThis.chrome = globalThis.browser;
+
+// https://dom.spec.whatwg.org/#interface-nodelist
+
+/**
+ * @implements globalThis.NodeList
+ */
+class NodeList extends Array {
+  item(i) { return i < this.length ? this[i] : null; }
+}
+
+export { NodeList };

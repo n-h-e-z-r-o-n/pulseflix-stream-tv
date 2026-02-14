@@ -1,6 +1,6 @@
 [versions]
 agp = "8.13.2"
-kotlin = "2.0.21"
+kotlin = "2.2.21"
 coreKtx = "1.17.0"
 appcompat = "1.7.1"
 composeBom = "2024.09.00"
@@ -14,7 +14,7 @@ constraintlayout = "2.2.1"
 media3Ui = "1.8.0"
 media3Exoplayer = "1.8.0"
 room = "2.6.1"
-ksp = "2.0.21-1.0.28"
+ksp = "2.2.21-2.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

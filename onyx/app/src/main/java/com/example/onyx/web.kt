@@ -9,11 +9,9 @@ import android.view.MotionEvent
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import org.mozilla.geckoview.GeckoRuntime;
-import org.mozilla.geckoview.GeckoSession;
-import org.mozilla.geckoview.GeckoView;
+import org.mozilla.geckoview.GeckoRuntime
+import org.mozilla.geckoview.GeckoSession
+import org.mozilla.geckoview.GeckoView
 
 class web : AppCompatActivity() {
     private lateinit var geckoView: GeckoView
@@ -47,16 +45,59 @@ class web : AppCompatActivity() {
         if (sRuntime == null) {
             sRuntime = GeckoRuntime.create(this)
 
-            // Load your extensions
-            val extensionsToInstall = listOf(
-                "ublock_origin.xpi",
-                "dark_reader.xpi",
-                "ghostery.xpi"
+            /*
+            val extensions = listOf(
+
+                Pair(
+                    "resource://android/assets/ublock_origin/",
+                    "uBlock0@raymondhill.net"
+                ),
+
+                Pair(
+                    "resource://android/assets/darkreader/",
+                    "addon@darkreader.org"
+                ),
+
+                Pair(
+                    "resource://android/assets/ghostery/",
+                    "firefox@ghostery.com"
+                )
+
             )
 
-            extensionsToInstall.forEach { fileName ->
-                installExtension(fileName)
+            extensions.forEach { (path, id) ->
+
+                sRuntime!!.webExtensionController
+                    .ensureBuiltIn(path, id)
+                    .accept(
+
+                        { extension ->
+
+                            Log.d("GeckoView-extension", "Extension installed: ${extension?.id}")
+
+                        },
+
+                        { error ->
+
+                            Log.e("GeckoView-extension", "Extension install failed", error)
+
+                        }
+
+                    )
             }
+
+             */
+
+
+            sRuntime!!.getWebExtensionController()
+                .ensureBuiltIn("resource://android/assets/ublock_origin-1/", "uBlock0@raymondhill.net")
+                .accept(
+                    { extension -> Log.d("GeckoView-extension", "Extension installed: ${extension?.id}")},
+                    { error -> Log.e("GeckoView-extension", "Extension install failed", error)}
+                )
+
+
+
         }
 
 
@@ -96,8 +137,13 @@ class web : AppCompatActivity() {
             xPos = xPos.coerceIn(0f, geckoView.width - cursor.width.toFloat())
             yPos = yPos.coerceIn(0f, geckoView.height - cursor.height.toFloat())
 
-            cursor.translationX = xPos
-            cursor.translationY = yPos
+            cursor.animate()
+                .translationX(xPos)
+                .translationY(yPos)
+                .setDuration(40)
+                .start()
+
+            sendHoverEvent()
 
             return true
         }
@@ -108,11 +154,68 @@ class web : AppCompatActivity() {
 
     private fun performClickAtCursor() {
 
-        // Make sure coordinates stay inside GeckoView
-        xPos = xPos.coerceIn(0f, geckoView.width.toFloat())
-        yPos = yPos.coerceIn(0f, geckoView.height.toFloat())
-
         val downTime = SystemClock.uptimeMillis()
+        val eventTime = SystemClock.uptimeMillis()
+
+        val props = MotionEvent.PointerProperties().apply {
+            id = 0
+            toolType = MotionEvent.TOOL_TYPE_MOUSE
+        }
+
+        val coords = MotionEvent.PointerCoords().apply {
+            x = xPos
+            y = yPos
+            pressure = 1f
+            size = 1f
+        }
+
+        // Mouse button press
+        val press = MotionEvent.obtain(
+            downTime,
+            eventTime,
+            MotionEvent.ACTION_BUTTON_PRESS,
+            1,
+            arrayOf(props),
+            arrayOf(coords),
+            MotionEvent.BUTTON_PRIMARY,
+            MotionEvent.BUTTON_PRIMARY,
+            1f,
+            1f,
+            0,
+            0,
+            InputDevice.SOURCE_MOUSE,
+            0
+        )
+
+        // Mouse button release
+        val release = MotionEvent.obtain(
+            downTime,
+            eventTime + 50,
+            MotionEvent.ACTION_BUTTON_RELEASE,
+            1,
+            arrayOf(props),
+            arrayOf(coords),
+            0,
+            MotionEvent.BUTTON_PRIMARY,
+            1f,
+            1f,
+            0,
+            0,
+            InputDevice.SOURCE_MOUSE,
+            0
+        )
+
+        geckoView.dispatchGenericMotionEvent(press)
+        geckoView.dispatchGenericMotionEvent(release)
+
+        press.recycle()
+        release.recycle()
+
+        sendHoverEvent()
+    }
+
+    private fun sendHoverEvent() {
+
         val eventTime = SystemClock.uptimeMillis()
 
         val pointerProperties = MotionEvent.PointerProperties().apply {
@@ -123,15 +226,14 @@ class web : AppCompatActivity() {
         val pointerCoords = MotionEvent.PointerCoords().apply {
             x = xPos
             y = yPos
-            pressure = 1f
+            pressure = 0f
             size = 1f
         }
 
-        // ACTION_DOWN (mouse press)
-        val downEvent = MotionEvent.obtain(
-            downTime,
+        val hoverEvent = MotionEvent.obtain(
             eventTime,
-            MotionEvent.ACTION_DOWN,
+            eventTime,
+            MotionEvent.ACTION_HOVER_MOVE,
             1,
             arrayOf(pointerProperties),
             arrayOf(pointerCoords),
@@ -145,29 +247,9 @@ class web : AppCompatActivity() {
             0
         )
 
-        // ACTION_UP (mouse release)
-        val upEvent = MotionEvent.obtain(
-            downTime,
-            eventTime + 50, // small delay for realism
-            MotionEvent.ACTION_UP,
-            1,
-            arrayOf(pointerProperties),
-            arrayOf(pointerCoords),
-            0,
-            0,
-            1f,
-            1f,
-            0,
-            0,
-            InputDevice.SOURCE_MOUSE,
-            0
-        )
+        geckoView.dispatchGenericMotionEvent(hoverEvent)
 
-        geckoView.dispatchTouchEvent(downEvent)
-        geckoView.dispatchTouchEvent(upEvent)
-
-        downEvent.recycle()
-        upEvent.recycle()
+        hoverEvent.recycle()
     }
 
 }

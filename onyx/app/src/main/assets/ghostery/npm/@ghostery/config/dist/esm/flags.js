@@ -1,0 +1,31 @@
+globalThis.chrome = globalThis.browser;
+
+// Copyright 2025 Ghostery GmbH
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+const FLAG_CHROMIUM_INJECT_COSMETICS_ON_RESPONSE_STARTED = "chromium-inject-cosmetics-on-response-started";
+const FLAG_DYNAMIC_DNR_FIXES = "dynamic-dnr-fixes";
+const FLAG_EXTENDED_SELECTORS = "extended-selectors";
+const FLAG_FIREFOX_CONTENT_SCRIPT_SCRIPTLETS = "firefox-content-script-scriptlets";
+const FLAG_INJECTION_TARGET_DOCUMENT_ID = "injection-target-document-id";
+const FLAG_MODES = "modes";
+const FLAG_PAUSE_ASSISTANT = "pause-assistant";
+const FLAG_REDIRECT_PROTECTION = "redirect-protection";
+const FLAG_ONBOARDING_SURVEY = "onboarding-survey";
+const FLAG_NOTIFICATION_REVIEW = "notification-review";
+const FLAGS = [
+    FLAG_CHROMIUM_INJECT_COSMETICS_ON_RESPONSE_STARTED,
+    FLAG_DYNAMIC_DNR_FIXES,
+    FLAG_EXTENDED_SELECTORS,
+    FLAG_FIREFOX_CONTENT_SCRIPT_SCRIPTLETS,
+    FLAG_INJECTION_TARGET_DOCUMENT_ID,
+    FLAG_MODES,
+    FLAG_PAUSE_ASSISTANT,
+    FLAG_REDIRECT_PROTECTION,
+    FLAG_ONBOARDING_SURVEY,
+    FLAG_NOTIFICATION_REVIEW,
+];
+
+export { FLAGS, FLAG_CHROMIUM_INJECT_COSMETICS_ON_RESPONSE_STARTED, FLAG_DYNAMIC_DNR_FIXES, FLAG_EXTENDED_SELECTORS, FLAG_FIREFOX_CONTENT_SCRIPT_SCRIPTLETS, FLAG_INJECTION_TARGET_DOCUMENT_ID, FLAG_MODES, FLAG_NOTIFICATION_REVIEW, FLAG_ONBOARDING_SURVEY, FLAG_PAUSE_ASSISTANT, FLAG_REDIRECT_PROTECTION };

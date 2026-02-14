@@ -440,7 +440,7 @@ object GlobalUtils {
     private lateinit var scales : FloatArray
     private lateinit var translations  : FloatArray
 
-    private var animationD:Long = 300
+    private var animationD:Long = 0
 
 
     fun setupCardStackFromContainer(
