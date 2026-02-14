@@ -125,7 +125,6 @@ class Shows_Page : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_shows_page)
-
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         LoadingAnimation.setup(this, R.raw.b)
@@ -737,7 +736,7 @@ class Shows_Page : AppCompatActivity() {
 
             }
 
-            GlobalUtils.setupCardStackFromContainer(container, 10000L)
+            GlobalUtils.setupCardStackFromContainer(container)
             LoadingAnimation.hide(this@Shows_Page)
         }else{
             //LoadingAnimation.setup(this@Shows_Page, R.raw.error)

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.view.LayoutInflater
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -108,7 +109,7 @@ class Anime_Page : AppCompatActivity() {
          GlobalUtils.applyTheme(this)
          enableEdgeToEdge()
          setContentView(R.layout.activity_anime_page)
-
+         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
          NavAction.setupSidebar(this@Anime_Page)
          LoadingAnimation.setup(this@Anime_Page, R.raw.b)
@@ -579,7 +580,7 @@ class Anime_Page : AppCompatActivity() {
              showTrending(trendingAnimes)
              showAiring(topAiringAnimes)
 
-             GlobalUtils.setupCardStackFromContainer(SpotlightContaner, 20000L)
+             GlobalUtils.setupCardStackFromContainer(SpotlightContaner)
              LoadingAnimation.hide(this@Anime_Page)
          }
      }

@@ -62,7 +62,7 @@
         <item name="notBudge">#4b5b4d</item>
 
         <!-- Theme image -->
-        <item name="themeImage">@raw/background_2</item>
+        <item name="themeImage">@raw/background_ghost</item>
 
     </style>
 

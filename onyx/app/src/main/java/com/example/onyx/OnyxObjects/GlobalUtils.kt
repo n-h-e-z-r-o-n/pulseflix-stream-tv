@@ -440,12 +440,12 @@ object GlobalUtils {
     private lateinit var scales : FloatArray
     private lateinit var translations  : FloatArray
 
-    private var animationD:Long = 0
+    private var animationD:Long = 200
 
 
     fun setupCardStackFromContainer(
         container: FrameLayout,
-        autoSwipeDelay: Long = 25000L
+        autoSwipeDelay: Long = 10000L
     ) {
 
         // Ensure container has CardView children
@@ -496,30 +496,43 @@ object GlobalUtils {
         scales = floatArrayOf(1.0f, 0.95f, 0.9f, 0.85f, 0.8f, 0.7f)
         elevations = floatArrayOf(6f, 5f, 4f, 3f, 2f, 1f)
 
+        var autoSwipeResumeRunnable: Runnable? = null
+
         // ---------------- Setup Card Listeners ----------------
+
         cards.forEach { card ->
+
+            card.setLayerType(View.LAYER_TYPE_HARDWARE, null)             // Set a persistent hardware layer for smooth animations
+
 
             card.isFocusable = true
             card.isFocusableInTouchMode = true
 
+
             card.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus) {
-                    stopAutoSwipe()
+                    stopAutoSwipe() // stop any ongoing auto-swipe
+                    autoSwipeResumeRunnable?.let { container.removeCallbacks(it) } // cancel pending resumes
+                    autoSwipeResumeRunnable = null
 
-                    v.animate().cancel()    // Cancel ongoing animations before starting new ones
-
+                    v.animate().cancel()
                     v.bringToFront()
                     v.animate()
                         .scaleX(1f)
                         .scaleY(1f)
-                        .translationX(dp(container.context,0f))
+                        .translationX(0f)
                         .setDuration(animationD)
                         .setInterpolator(AccelerateDecelerateInterpolator())
-                        .withLayer()
                         .start()
                     v.elevation = 7f
                 } else {
-                   container.postDelayed({if (!container.hasFocus()) startAutoSwipe()}, 300)
+
+                    // Schedule auto-swipe restart after 300ms
+                    autoSwipeResumeRunnable?.let { container.removeCallbacks(it) }
+                    autoSwipeResumeRunnable = Runnable {
+                        if (!container.hasFocus()) startAutoSwipe()
+                    }
+                    container.postDelayed(autoSwipeResumeRunnable!!, 300)
                 }
             }
 
@@ -583,42 +596,51 @@ object GlobalUtils {
         }
     }
 
-    private fun layoutStack(container: FrameLayout) {
+    private val MAX_VISIBLE_CARDS = 4
 
+    private fun layoutStack(container: FrameLayout) {
         val count = container.childCount
         if (count == 0) return
 
         for (i in 0 until count) {
-
             val card = container.getChildAt(i)
 
             val posFromTop = count - 1 - i
-            val index = posFromTop.coerceAtMost(translations.lastIndex)
 
-            val targetTranslation = translations[index]
-            val targetScale = scales[index]
-            val targetElevation = elevations[index]
+            if (posFromTop >= MAX_VISIBLE_CARDS) {
+                // Hide cards below the visible stack
+                card.visibility = View.INVISIBLE
+                card.translationX = 0f
+                card.scaleX = 0.7f
+                card.scaleY = 0.7f
+                card.elevation = 0f
+            } else {
+                val index = posFromTop
+                val targetTranslation = translations.getOrElse(index) { translations.last() }
+                val targetScale = scales.getOrElse(index) { scales.last() }
+                val targetElevation = elevations.getOrElse(index) { elevations.last() }
 
-            // Cancel any ongoing animation to prevent stacking conflicts
-            card.animate().cancel()
+                card.visibility = View.VISIBLE
 
-            // Only animate if something actually changed
-            val needsTranslation = card.translationX != targetTranslation
-            val needsScale = card.scaleX != targetScale || card.scaleY != targetScale
-            val needsElevation = card.elevation != targetElevation
+                // Only animate if changed
+                val needsTranslation = card.translationX != targetTranslation
+                val needsScale = card.scaleX != targetScale || card.scaleY != targetScale
+                val needsElevation = card.elevation != targetElevation
 
-            if (needsTranslation || needsScale) {
-                card.animate()
-                    .translationX(targetTranslation)
-                    .scaleX(targetScale)
-                    .scaleY(targetScale)
-                    .setDuration(animationD)
-                    .setInterpolator(interpolator)
-                    .start()
-            }
+                card.animate().cancel()
+                if (needsTranslation || needsScale) {
+                    card.animate()
+                        .translationX(targetTranslation)
+                        .scaleX(targetScale)
+                        .scaleY(targetScale)
+                        .setDuration(animationD)
+                        .setInterpolator(interpolator)
+                        .start()
+                }
 
-            if (needsElevation) {
-                card.elevation = targetElevation
+                if (needsElevation) {
+                    card.elevation = targetElevation
+                }
             }
         }
     }

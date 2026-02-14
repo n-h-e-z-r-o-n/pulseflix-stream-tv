@@ -83,7 +83,7 @@
                                 android:id="@+id/WatchImage"
                                 android:layout_width="93dp"
                                 android:layout_height="130dp"
-                                android:layout_margin="10dp"
+                                android:layout_marginBottom="5dp"
                                 android:scaleType="fitXY"
                                 android:elevation="15dp"
                                 android:src="@raw/test4"
@@ -210,6 +210,39 @@
                                         android:layout_marginHorizontal="4dp"
                                         tools:ignore="HardcodedText,Suspicious0dp" />
 
+                                </androidx.cardview.widget.CardView>
+
+
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    app:cardCornerRadius="3dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:clipToPadding="true"
+                                    app:cardElevation="0dp"
+                                    android:layout_marginStart="5dp"
+                                    app:cardUseCompatPadding="false"
+                                    >
+
+                                    <TextView
+                                        android:id="@+id/watchRuntime"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="bottom"
+                                        android:ellipsize="end"
+                                        android:maxLines="1"
+                                        android:text="24m"
+                                        android:singleLine="false"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="15sp"
+                                        android:fontFamily="@font/n"
+                                        tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
+                                        android:gravity="center"
+                                        android:shadowColor="#000000"
+                                        android:shadowDx="2"
+                                        android:shadowDy="2"
+                                        android:shadowRadius="3"
+                                        android:paddingHorizontal="10dp"/>
                                 </androidx.cardview.widget.CardView>
 
 
@@ -352,35 +385,7 @@
                                     android:layout_marginHorizontal="5dp"
                                     />
 
-                                <TextView
-                                    android:id="@+id/watchRuntime"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="bottom"
-                                    android:ellipsize="end"
-                                    android:maxLines="1"
-                                    android:text=""
-                                    android:singleLine="false"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="15sp"
-                                    android:fontFamily="@font/n"
-                                    tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
-                                    android:gravity="center"
-                                    android:shadowColor="#000000"
-                                    android:shadowDx="2"
-                                    android:shadowDy="2"
-                                    android:shadowRadius="3"
-                                    android:paddingHorizontal="2dp"/>
 
-                                <View
-                                    android:layout_width="1dp"
-                                    android:layout_height="match_parent"
-                                    android:background="@android:color/darker_gray"
-                                    android:textSize="20sp"
-                                    android:alpha="0.3"
-                                    android:gravity="center"
-                                    android:layout_gravity="center"
-                                    android:layout_marginHorizontal="5dp"/>
 
 
 

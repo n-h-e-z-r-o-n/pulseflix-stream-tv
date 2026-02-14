@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
 
-    @SuppressLint("ResourceType")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         //installSplashScreen()
         enableEdgeToEdge()
@@ -36,8 +36,6 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        // Keep screen on
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         setupBackPressedCallback()
 
