@@ -83,7 +83,7 @@ dependencies {
     implementation("com.intuit.sdp:sdp-android:1.1.0")
     implementation("com.intuit.ssp:ssp-android:1.1.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2")
-    implementation("org.mozilla.geckoview:geckoview-omni:130.0.20240913135723")//https://mvnrepository.com/artifact/org.mozilla.geckoview/geckoview/versions
+    //implementation("org.mozilla.geckoview:geckoview-omni:130.0.20240913135723")//https://mvnrepository.com/artifact/org.mozilla.geckoview/geckoview/versions
 
     
     // Room Database
