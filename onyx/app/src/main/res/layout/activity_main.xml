@@ -20,7 +20,25 @@
             android:scaleType="fitXY"
             />
 
-        <!-- ONYX Title -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#40042c40"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#40042c40"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#40042c40"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#40042c40"/>
 
 
     <!-- Loading Animation -->
@@ -28,15 +46,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:background="#40042c40" >
+        android:gravity="center" >
 
         <TextView
             android:id="@+id/onyxTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@font/j"
+            android:fontFamily="@font/p"
             android:gravity="center"
             android:maxLines="1"
             android:shadowColor="@android:color/white"
@@ -60,34 +77,21 @@
             android:gravity="center"
             tools:ignore="UseCompoundDrawables">
 
-            <FrameLayout
-                android:layout_width="200dp"
-                android:layout_height="3dp"
-                android:background="@drawable/loading_track"
-                android:layout_gravity="center_horizontal|bottom"
-                android:layout_marginBottom="20dp"
-                android:clipChildren="true"
-                android:clipToPadding="true">
 
-                <View
-                    android:id="@+id/loading_bar"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/loading_bar"/>
-            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="©2026 ONYX MEDIA GROUP"
-                android:textColor="@android:color/white"
+                android:textColor="#80042c40"
                 android:textSize="13sp"
                 android:fontFamily="@font/p"
                 tools:ignore="HardcodedText"
                 android:layout_marginBottom="15dp"/>
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:alpha="0.7">
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"

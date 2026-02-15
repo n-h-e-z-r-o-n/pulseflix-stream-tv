@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.WindowManager
@@ -24,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -57,9 +59,7 @@ class Profile_Page : AppCompatActivity() {
     private var updateDialog: androidx.appcompat.app.AlertDialog? = null
     // installPermissionLauncher removed as it's not applicable for REQUEST_INSTALL_PACKAGES (requires Intent)
     
-    // GitHub raw URL for the APK file - replace with your actual URL
-    // TODO: USER - Update this link to point to your version.json file
-    private val versionJsonUrl = "https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs/heads/main/App/version.json"
+    private val versionJsonUrl = BuildConfig.APPV_J //"https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs/heads/main/App/version.json"
     
     // Data class for update info
     data class UpdateInfo(
@@ -275,8 +275,8 @@ class Profile_Page : AppCompatActivity() {
                 return
             }
         }
-        
-        CoroutineScope(Dispatchers.IO).launch {
+
+        lifecycleScope.launch(Dispatchers.IO){
             try {
                 val url = URL(versionJsonUrl)
                 val connection = url.openConnection() as HttpURLConnection
@@ -353,8 +353,8 @@ class Profile_Page : AppCompatActivity() {
         
         // Make the dialog background transparent to show the CardView corners
         updateDialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        
-        CoroutineScope(Dispatchers.IO).launch {
+
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val url = URL(downloadUrlString)
                 val connection = url.openConnection() as HttpURLConnection
@@ -541,14 +541,24 @@ class Profile_Page : AppCompatActivity() {
     private fun getRemainingDays() {
         val subscriptionWidget = findViewById<TextView>(R.id.SubscriptionLeft)
 
-        val remainingDays = db.getSubscriptionDaysLeft()  // <-- NEW DB function
+        // Launch coroutine on main thread (since we need to update UI)
+        lifecycleScope.launch(Dispatchers.Main) {
+            try {
+                // Switch to IO thread for database operation
+                val remainingDays = withContext(Dispatchers.IO) {
+                    db.getSubscriptionDaysLeft()
+                }
 
-        val displayText = when {
-            remainingDays <= 0 -> "expired"
-            else -> remainingDays.toString()
+                // Back on main thread to update UI
+                subscriptionWidget.text = when {
+                    remainingDays <= 0 -> "expired"
+                    else -> remainingDays.toString()
+                }
+            } catch (e: Exception) {
+                subscriptionWidget.text = "N/A"
+                Log.e("Profile_Page", "Error getting subscription days", e)
+            }
         }
-
-        subscriptionWidget.text = displayText
     }
 
 

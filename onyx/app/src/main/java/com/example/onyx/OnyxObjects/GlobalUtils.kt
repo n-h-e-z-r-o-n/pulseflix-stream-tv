@@ -442,6 +442,8 @@ object GlobalUtils {
 
     private var animationD:Long = 200
 
+    private var isAnimating = false
+
 
     fun setupCardStackFromContainer(
         container: FrameLayout,
@@ -568,34 +570,6 @@ object GlobalUtils {
     }
 
 
-
-    private fun layoutStack_old(container: FrameLayout) {
-
-        val count = container.childCount
-
-        for (i in 0 until count) {
-
-            val card = container.getChildAt(i)
-
-            val posFromTop = count - 1 - i
-
-            val index = posFromTop.coerceAtMost(5)
-
-
-
-            card.animate()
-                .translationX(translations[index])
-                .scaleX(scales[index])
-                .scaleY(scales[index])
-                .setDuration(animationD)
-                .setInterpolator(AccelerateDecelerateInterpolator())
-                .withLayer() // Use hardware layer for smoother animation
-                .start()
-
-            card.elevation = elevations[index]
-        }
-    }
-
     private val MAX_VISIBLE_CARDS = 4
 
     private fun layoutStack(container: FrameLayout) {
@@ -647,6 +621,10 @@ object GlobalUtils {
 
 
     private fun swapRight(container: FrameLayout, keepFocus: Boolean = true) {
+
+        if (isAnimating) return
+        isAnimating = true
+
         if (container.childCount == 0) return
         val top = container.getChildAt(container.childCount - 1)
 
@@ -673,11 +651,19 @@ object GlobalUtils {
                 if (keepFocus) {
                     container.getChildAt(container.childCount - 1)?.requestFocus()
                 }
+
+                container.postDelayed({
+                    isAnimating = false
+                }, animationD)
             }
             .start()
     }
 
     private fun swapLeft(container: FrameLayout, keepFocus: Boolean = true) {
+
+        if (isAnimating) return
+        isAnimating = true
+
         if (container.childCount == 0) return
         val bottom = container.getChildAt(0)
 
@@ -702,6 +688,11 @@ object GlobalUtils {
                 if (keepFocus) {
                     container.getChildAt(container.childCount - 1)?.requestFocus()
                 }
+
+
+                container.postDelayed({
+                    isAnimating = false
+                }, animationD)
             }
             .start()
     }
