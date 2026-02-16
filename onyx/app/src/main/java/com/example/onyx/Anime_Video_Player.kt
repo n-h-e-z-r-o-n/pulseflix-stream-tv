@@ -221,8 +221,7 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
         currentEpisodeNumber = episodesNumber.toString()
         currentSeasonId = seasonId.toString()
 
-
-            showData(seasonId.toString())
+        showData(seasonId.toString())
 
     }
 
