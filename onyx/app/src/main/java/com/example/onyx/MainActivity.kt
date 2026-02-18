@@ -105,9 +105,7 @@ class MainActivity : AppCompatActivity() {
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
 
-
         db = AppDatabase(this)
-
 
 
         NotificationHelper.getTvNotifications(this@MainActivity)
@@ -125,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                 //startActivity(Intent(this@MainActivity, web::class.java))
             }
             finish()
-        }, 2000)
+        }, 5000)
     }
 
 
