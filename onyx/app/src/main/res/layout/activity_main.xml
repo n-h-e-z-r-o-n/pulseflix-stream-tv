@@ -57,13 +57,13 @@
             android:gravity="center"
             android:maxLines="1"
             android:shadowColor="@android:color/white"
+            android:textFontWeight="900"
             android:shadowDx="5"
             android:shadowDy="6"
             android:shadowRadius="4"
             android:text="ONYX"
             android:textColor="#152755"
             android:textSize="200sp"
-            android:layout_marginBottom="100dp"
             tools:ignore="HardcodedText" />
 
     </LinearLayout>

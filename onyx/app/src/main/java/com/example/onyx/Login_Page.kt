@@ -1,5 +1,6 @@
 package com.example.onyx
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,21 +8,29 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
+import com.example.onyx.Database.GoogleDriveSyncManager
 import com.example.onyx.OnyxClasses.AvatarAdapter
 import com.example.onyx.OnyxClasses.EqualSpaceItemDecoration
 import com.example.onyx.OnyxClasses.ProfileAdapter
 import com.example.onyx.OnyxClasses.profileItem
 import com.example.onyx.OnyxObjects.GlobalUtils
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
+import com.google.api.services.drive.DriveScopes
 
 
 class Login_Page : AppCompatActivity() {
@@ -31,12 +40,37 @@ class Login_Page : AppCompatActivity() {
     private lateinit var profileAdapter: ProfileAdapter
     private lateinit var db: AppDatabase
     private lateinit var  sm: SessionManger
+    private lateinit var  driveSync : GoogleDriveSyncManager
     private var activeSub = false
     private val profiles = mutableListOf<profileItem>()
     private var selectedAvatar: String = ""
-    private lateinit var profileContainer: LinearLayout
+    private lateinit var profileContainer: FrameLayout
+
+    private lateinit var settingButton: ImageView
+
     private lateinit var CreateProfileContainer: FrameLayout
 
+    private val signInLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+
+            if (result.resultCode == Activity.RESULT_OK) {
+
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+
+                try {
+
+                    val account = task.getResult(ApiException::class.java)
+
+                    driveSync.initDrive(account)
+
+                    Log.d("DriveSync", "Drive initialized successfully")
+
+                } catch (e: Exception) {
+
+                    Log.e("DriveSync", "Sign in failed", e)
+                }
+            }
+        }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +78,51 @@ class Login_Page : AppCompatActivity() {
         enableEdgeToEdge()
         GlobalUtils.applyTheme(this)
         setContentView(R.layout.activity_login_page)
+
+
+        driveSync  = GoogleDriveSyncManager(this)
+
+
+        settingButton = findViewById(R.id.settingButton)
+        settingButton.setOnClickListener {
+            GlobalUtils.exitApp(this)
+        }
+
+
+        driveSync.signInIfNeeded(signInLauncher)
+
+        /*
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+
+        if (account != null) {
+
+            val success = driveSync.initDrive(account)
+
+            if (success) {
+
+                Log.d("G-Drive", "Drive Ready")
+
+            } else {
+
+                Log.d("G-Drive", "Drive Init Failed")
+            }
+
+        }else{
+
+                val options = GoogleSignInOptions.Builder(
+                    GoogleSignInOptions.DEFAULT_SIGN_IN
+                )
+                    .requestEmail()
+                    .requestScopes(Scope(DriveScopes.DRIVE_APPDATA))
+                    .build()
+
+                val client = GoogleSignIn.getClient(this, options)
+
+                startActivityForResult(client.signInIntent, 1001)
+        }
+
+         */
+
 
 
         db = AppDatabase(this)         // Initialize database
@@ -63,9 +142,7 @@ class Login_Page : AppCompatActivity() {
         loadProfiles()         // Load existing profiles
         setupBackPressedCallback()
 
-        val loadingBar = findViewById<View>(R.id.loading_bar)
-        val animation = AnimationUtils.loadAnimation(this, R.drawable.loading_slide)
-        loadingBar.startAnimation(animation)
+
     }
 
     private fun InitializeWindgets() {
@@ -249,8 +326,6 @@ class Login_Page : AppCompatActivity() {
                 Log.e("Login_Page", "Error creating profile: ${e.message}", e)
                 Toast.makeText(this, "Error creating profile", Toast.LENGTH_SHORT).show()
             }
-
-
         }
 
         cancelProfileBtn.setOnClickListener {

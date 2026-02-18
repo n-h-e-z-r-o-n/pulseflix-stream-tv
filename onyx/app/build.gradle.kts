@@ -47,6 +47,29 @@ android {
         buildConfig = true
     }
 
+    packaging {
+
+        resources {
+
+            excludes += "META-INF/DEPENDENCIES"
+
+            excludes += "META-INF/LICENSE"
+
+            excludes += "META-INF/LICENSE.txt"
+
+            excludes += "META-INF/license.txt"
+
+            excludes += "META-INF/NOTICE"
+
+            excludes += "META-INF/NOTICE.txt"
+
+            excludes += "META-INF/notice.txt"
+
+            excludes += "META-INF/ASL2.0"
+
+        }
+    }
+
 }
 
 
@@ -85,6 +108,14 @@ dependencies {
     implementation("com.intuit.sdp:sdp-android:1.1.0")
     implementation("com.intuit.ssp:ssp-android:1.1.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2")
+
+    //dRIVE
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.google.http-client:google-http-client-gson:1.43.3")
+    implementation("com.google.api-client:google-api-client-android:2.2.0")
+    implementation("com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0")
+    implementation("com.google.http-client:google-http-client-android:1.43.3")
+
     //implementation("org.mozilla.geckoview:geckoview-omni:130.0.20240913135723")//https://mvnrepository.com/artifact/org.mozilla.geckoview/geckoview/versions
 
     

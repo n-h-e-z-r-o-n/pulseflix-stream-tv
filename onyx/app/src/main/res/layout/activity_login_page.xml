@@ -21,7 +21,7 @@
         android:layout_height="match_parent"
         android:background="#80000000">
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/profileContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,24 +39,42 @@
                 android:clipToPadding="false"
                 android:padding="20dp" />
 
-            <TextView
-                android:id="@+id/ErrorBox"
+            <ImageView
+                android:id="@+id/settingButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:clickable="true"
-                android:focusableInTouchMode="true"
-                android:layout_gravity="center"
-                android:fontFamily="serif-monospace"
-                android:textStyle="bold"
-                android:padding="5dp"
-                android:textColor="?attr/FG_color"
-                android:background="@drawable/rounded_background"
-                android:text=" "
-                tools:ignore="HardcodedText"
-                android:visibility="gone"/>
+                android:layout_gravity="bottom"
+                android:alpha="0.5"
+                android:src="@drawable/ic_settings"
+                android:layout_margin="5dp"
+                android:background="@drawable/card_focus"
+                tools:ignore="ContentDescription" />
 
-        </LinearLayout>
+            <TextView
+
+                android:id="@+id/DriveApp"
+                android:layout_marginTop="70dp"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
+                android:layout_gravity="bottom"
+                android:fontFamily="@font/p"
+                android:textStyle="bold"
+                android:paddingHorizontal="30dp"
+                android:padding="3dp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/card_focus"
+                android:text="Back-Up"
+                android:visibility="gone"
+                tools:ignore="HardcodedText"
+                />
+
+        </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"

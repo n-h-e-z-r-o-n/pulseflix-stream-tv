@@ -883,6 +883,64 @@ object GlobalUtils {
         10768 to "War & Politics",
         37 to "Western"
     )
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    fun exitApp(activity: Activity) {
+
+        // Finish all activities
+        activity.finishAffinity()
+
+        // Remove from recent apps
+        activity.finishAndRemoveTask()
+
+        // Kill process (optional, only if you really want full exit)
+        android.os.Process.killProcess(android.os.Process.myPid())
+
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+    fun startSignIn() {
+        val options = GoogleSignInOptions.Builder(
+            GoogleSignInOptions.DEFAULT_SIGN_IN
+        )
+            .requestEmail()
+            .requestScopes(Scope(DriveScopes.DRIVE_APPDATA))
+            .build()
+
+        val client = GoogleSignIn.getClient(this, options)
+
+        startActivityForResult(client.signInIntent, 1001)
+    }
+    fun signOut() {
+
+        // Configure the same GoogleSignInOptions as in sign-in
+        val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .requestScopes(Scope(DriveScopes.DRIVE_APPDATA))
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(this, options)
+
+        // Sign out
+        googleSignInClient.signOut()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Clear local references to GoogleDriveSyncManager or account
+                    driveSync = null
+
+                    Toast.makeText(this, "Signed out successfully", Toast.LENGTH_SHORT).show()
+                    Log.d("Drive", "User signed out")
+                } else {
+                    Toast.makeText(this, "Sign out failed", Toast.LENGTH_SHORT).show()
+                    Log.e("Drive", "Sign out failed", task.exception)
+                }
+            }
+    }
+
+     */
 
 
 
