@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                 //startActivity(Intent(this@MainActivity, web::class.java))
             }
             finish()
-        }, 5000)
+        }, 7000)
     }
 
 

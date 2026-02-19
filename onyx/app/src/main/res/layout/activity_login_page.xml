@@ -48,31 +48,94 @@
                 android:layout_gravity="bottom"
                 android:alpha="0.5"
                 android:src="@drawable/ic_settings"
-                android:layout_margin="5dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/card_focus"
                 tools:ignore="ContentDescription" />
 
-            <TextView
 
-                android:id="@+id/DriveApp"
-                android:layout_marginTop="70dp"
-                android:layout_width="wrap_content"
-                android:gravity="center"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:clickable="true"
-                android:focusableInTouchMode="true"
-                android:layout_gravity="bottom"
-                android:fontFamily="@font/p"
-                android:textStyle="bold"
-                android:paddingHorizontal="30dp"
-                android:padding="3dp"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/card_focus"
-                android:text="Back-Up"
+            <FrameLayout
                 android:visibility="gone"
-                tools:ignore="HardcodedText"
-                />
+                android:layout_width="210dp"
+                android:layout_height="200dp"
+                android:layout_margin="10dp"
+                android:id="@+id/settingUi"
+                android:layout_gravity="bottom"
+                android:background="?attr/transparentEffect">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@raw/blur"
+                    android:scaleType="fitXY"
+                    tools:ignore="ContentDescription" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    tools:ignore="UselessLeaf">
+
+                    <TextView
+                        android:id="@+id/gDriveBackup"
+                        android:layout_width="match_parent"
+                        android:paddingHorizontal="13dp"
+                        android:paddingVertical="4dp"
+                        android:nextFocusDown="@+id/exitApp"
+                        android:nextFocusLeft="@+id/exitApp"
+                        android:nextFocusUp="@+id/exitSetting"
+                        android:nextFocusRight="@+id/exitSetting"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="@font/p"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/background_hovor"
+                        android:text="Back-Up G-Drive"
+                        android:textColor="#FFFFFF"
+                        tools:ignore="HardcodedText"
+                        android:layout_marginBottom="10dp"/>
+
+                    <TextView
+                        android:id="@+id/exitApp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="13dp"
+                        android:nextFocusDown="@+id/exitSetting"
+                        android:nextFocusLeft="@+id/exitSetting"
+                        android:nextFocusUp="@+id/gDriveBackup"
+                        android:nextFocusRight="@+id/gDriveBackup"
+                        android:clickable="true"
+                        android:fontFamily="@font/p"
+                        android:focusable="true"
+                        android:paddingVertical="4dp"
+                        android:background="@drawable/background_hovor"
+                        android:text="Close App"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="10dp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/exitSetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="13dp"
+                        android:nextFocusDown="@+id/gDriveBackup"
+                        android:nextFocusLeft="@+id/gDriveBackup"
+                        android:nextFocusUp="@+id/exitApp"
+                        android:nextFocusRight="@+id/exitApp"
+                        android:clickable="true"
+                        android:fontFamily="@font/p"
+                        android:focusable="true"
+                        android:paddingVertical="4dp"
+                        android:background="@drawable/background_hovor"
+                        android:text="Exit Settings"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="10dp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+
 
         </FrameLayout>
 

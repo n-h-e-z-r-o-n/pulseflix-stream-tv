@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+
+    <!-- Backup your Room database -->
+    <include domain="database" path="app_data.db"/>
+
+    <!-- Backup shared preferences if any -->
+    <include domain="sharedpref" path="."/>
+
+    <!-- Backup internal files if any -->
+    <include domain="file" path="."/>
+
+</full-backup-content>
