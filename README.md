@@ -1,7 +1,6 @@
 <div align="center">
 
-
-# 🎬 PulseFlix – Cinematic Streaming Reimagined for Android TV
+# 🎬 PulseFlix – Sleek Android TV Streaming for Movies & Anime
 
 [![Platform](https://img.shields.io/badge/platform-Android%20TV-green.svg)](https://developer.android.com/tv)
 [![SDK](https://img.shields.io/badge/Min%20SDK-21-blue.svg)](https://developer.android.com/about/versions/android-5.0)
@@ -10,17 +9,14 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-red.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/build-Gradle-brightgreen.svg)](https://gradle.org/)
 
+<img width="700" alt="PulseFlix Banner" src="https://github.com/n-h-e-z-r-o-n/pulseflix-stream-tv/blob/main/ASSETS/imte.png?raw=true" />
+
+</div>
+
+<div>
+    
+
 **Your premium gateway to blockbuster movies, binge-worthy TV shows, and the hottest anime — optimized for the big screen.**
-
-Immersive. Fluid. Remote-ready.  
-Built from the ground up with Jetpack Compose, ExoPlayer (Media3), and clean architecture for buttery-smooth performance and that true leanback vibe.
-
-- 🔥 Discover endless content with stunning category grids, powerful search, and personalized watchlists  
-- 📺 True Android TV magic: D-pad navigation, 10-foot UI, dark mode, continue watching, subtitles & multi-audio support  
-- 🎥 Premium playback: Adaptive streaming (HLS/DASH), episode switching, cast pages, and anime-optimized episode browsing  
-- 🔒 Secure & modern: Clean Architecture, Room caching, encrypted credentials, and no unnecessary data collection  
-
-**PulseFlix turns your TV into a next-gen streaming beast — no subscriptions locked behind walls (beta access is free!).**
 
 ### Quick Start (Beta)
 Download the latest APK and sideload it onto your Android TV:  
@@ -28,7 +24,13 @@ Download the latest APK and sideload it onto your Android TV:
 
 (Pro tip: Enable "Unknown Sources" in Settings → Security & restrictions)
 
-### Sneak Peek
+</div>
+
+<div align="center">
+
+# Sneak Peek
+
+<img width="1344" height="768" alt="Gemini_Generated_Image_qbcsgiqbcsgiqbcs" src="https://github.com/user-attachments/assets/d18e5a03-cc82-44a4-824e-fa0d0862a8f8" />
 
 [Features](#-features) • [Architecture](#️-architecture) • [Getting Started](#-getting-started) • [Tech Stack](#️-technology-stack) • [Screenshots](#-preview)
 
@@ -832,6 +834,3 @@ Special thanks to:
 [Back to Top](#-PulseFlix---android-tv-streaming-app)
 
 </div>
-
-
-
