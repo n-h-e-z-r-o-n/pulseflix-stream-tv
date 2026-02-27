@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎬 ONYX - Android TV Streaming App
+# 🎬 PulseFlix – Sleek Android TV Streaming for Movies & Anime
 
 [![Platform](https://img.shields.io/badge/platform-Android%20TV-green.svg)](https://developer.android.com/tv)
 [![SDK](https://img.shields.io/badge/Min%20SDK-21-blue.svg)](https://developer.android.com/about/versions/android-5.0)
@@ -9,13 +9,13 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-red.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/build-Gradle-brightgreen.svg)](https://gradle.org/)
 
-<img width="700" alt="ONYX Banner" src="https://github.com/n-h-e-z-r-o-n/pulseflix-stream-tv/blob/main/ASSETS/imte.png?raw=true" />
+<img width="700" alt="PulseFlix Banner" src="https://github.com/n-h-e-z-r-o-n/pulseflix-stream-tv/blob/main/ASSETS/imte.png?raw=true" />
 
 **A premium Android TV streaming platform for movies, TV shows, and anime content**
 
 Built with modern Android development practices and optimized for the big-screen experience
 
-Download Link(beta): [Onyx.apk](https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs/heads/main/App/onyx.apk)
+Download Link(beta): [PulseFlix.apk](https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs/heads/main/App/PulseFlix.apk)
 
 #SHOTS
 
@@ -53,14 +53,14 @@ Download Link(beta): [Onyx.apk](https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs
 ## 🎯 Preview
 
 <div align="center">
-<img alt="ONYX App Demo" width="600" src="https://github.com/n-h-e-z-r-o-n/tv-APP/blob/main/ASSETS/3.png?raw=true" />
+<img alt="PulseFlix App Demo" width="600" src="https://github.com/n-h-e-z-r-o-n/tv-APP/blob/main/ASSETS/3.png?raw=true" />
 </div>
 
 ---
 
 ## 📖 Overview
 
-**ONYX** is a feature-rich streaming platform designed specifically for Android TV devices. It provides seamless access to a vast library of movies, TV shows, and anime content with a beautiful, intuitive interface optimized for remote control navigation and the big-screen experience.
+**PulseFlix** is a feature-rich streaming platform designed specifically for Android TV devices. It provides seamless access to a vast library of movies, TV shows, and anime content with a beautiful, intuitive interface optimized for remote control navigation and the big-screen experience.
 
 ### ✨ Key Highlights
 
@@ -116,7 +116,7 @@ Download Link(beta): [Onyx.apk](https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs
 
 ## 🏗️ Architecture
 
-ONYX follows **Clean Architecture** principles with modern Android patterns and clear separation of concerns:
+PulseFlix follows **Clean Architecture** principles with modern Android patterns and clear separation of concerns:
 
 ```mermaid
 graph TB
@@ -254,22 +254,22 @@ graph TB
 ## 📦 Project Structure
 
 ```
-onyx/
+PulseFlix/
 ├── app/
 │   ├── src/
 │   │   ├── main/
-│   │   │   ├── java/com/example/onyx/
+│   │   │   ├── java/com/example/PulseFlix/
 │   │   │   │   ├── Database/              # Room database components
 │   │   │   │   │   ├── AppDatabase.kt
 │   │   │   │   │   └── SessionManger.kt
 │   │   │   │   ├── FetchData/             # API services
 │   │   │   │   │   ├── TMDBapi.kt
 │   │   │   │   │   └── AnimeApi.kt
-│   │   │   │   ├── OnyxClasses/           # Custom UI classes
+│   │   │   │   ├── PulseFlixClasses/           # Custom UI classes
 │   │   │   │   │   ├── Grid.kt
 │   │   │   │   │   ├── Anime_Grid.kt
 │   │   │   │   │   └── CustomKeyboardManager.kt
-│   │   │   │   ├── OnyxObjects/           # Utility objects
+│   │   │   │   ├── PulseFlixObjects/           # Utility objects
 │   │   │   │   │   ├── GlobalUtils.kt
 │   │   │   │   │   ├── TrustManger.kt
 │   │   │   │   │   ├── UnsafeOkHttpClient.kt
@@ -280,7 +280,7 @@ onyx/
 │   │   │   │   ├── videoExtraction/       # Video URL extraction
 │   │   │   │   ├── videoResolver/         # Video source resolution
 │   │   │   │   ├── MainActivity.kt        # Entry point
-│   │   │   │   ├── OnyxApplication.kt     # Application class
+│   │   │   │   ├── PulseFlixApplication.kt     # Application class
 │   │   │   │   └── [Activity files...]    # UI Activities
 │   │   │   ├── res/
 │   │   │   │   ├── layout/                # XML layouts
@@ -311,20 +311,20 @@ Before you begin, ensure you have the following installed:
 
 ### 📥 Installation
 
-Follow these steps to get ONYX running on your development machine:
+Follow these steps to get PulseFlix running on your development machine:
 
 #### 1️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/n-h-e-z-r-o-n/tv-APP.git
-cd tv-APP/onyx
+cd tv-APP/PulseFlix
 ```
 
 #### 2️⃣ Open in Android Studio
 
 1. Launch **Android Studio**
 2. Select **File** → **Open**
-3. Navigate to the `onyx` directory
+3. Navigate to the `PulseFlix` directory
 4. Click **OK**
 
 #### 3️⃣ Sync Gradle
@@ -428,12 +428,12 @@ Secure file sharing is configured for app updates and content downloads:
 
 ### 🎨 Themes
 
-ONYX uses custom dark themes optimized for TV viewing:
+PulseFlix uses custom dark themes optimized for TV viewing:
 
 | Theme | Purpose |
 |-------|---------|
-| `Theme.Onyx.Dark` | Main app theme with dark colors |
-| `Theme.Onyx.Splash` | Splash screen theme with animations |
+| `Theme.PulseFlix.Dark` | Main app theme with dark colors |
+| `Theme.PulseFlix.Splash` | Splash screen theme with animations |
 
 Customize themes in `res/values/themes.xml`
 
@@ -535,13 +535,13 @@ Customize themes in `res/values/themes.xml`
 - ✅ User control over account data
 
 > [!NOTE]
-> For full privacy details, see the [Terms and Conditions](onyx/app/src/main/java/com/example/onyx/TermsAndConditionsActivity.kt).
+> For full privacy details, see the [Terms and Conditions](PulseFlix/app/src/main/java/com/example/PulseFlix/TermsAndConditionsActivity.kt).
 
 ---
 
 ## 📊 Database Schema
 
-ONYX uses **Room Database** for local data persistence. The schema includes:
+PulseFlix uses **Room Database** for local data persistence. The schema includes:
 
 ### 📋 Entities
 
@@ -636,7 +636,7 @@ Database version is managed in `AppDatabase.kt`. Migrations are handled automati
 **Solution**:
 1. Check network connectivity
 2. Verify API keys are configured correctly
-3. Clear app cache: Settings → Apps → ONYX → Clear Cache
+3. Clear app cache: Settings → Apps → PulseFlix → Clear Cache
 4. Ensure minimum Android version (API 21+)
 
 #### ❌ Issue: Video playback fails
@@ -671,7 +671,7 @@ File → Invalidate Caches → Invalidate and Restart
 Enable debug logging for troubleshooting:
 
 ```kotlin
-// In OnyxApplication.kt
+// In PulseFlixApplication.kt
 if (BuildConfig.DEBUG) {
     Timber.plant(Timber.DebugTree())
 }
@@ -679,7 +679,7 @@ if (BuildConfig.DEBUG) {
 
 View logs:
 ```bash
-adb logcat | grep -i "onyx"
+adb logcat | grep -i "PulseFlix"
 ```
 
 ---
@@ -748,10 +748,10 @@ adb logcat | grep -i "onyx"
 
 #### Disclaimer
 
-**ONYX** is provided as-is under the following terms:
+**PulseFlix** is provided as-is under the following terms:
 
 ✋ **Content Disclaimer**:
-- ❌ ONYX does **NOT** host, store, or distribute any copyrighted content
+- ❌ PulseFlix does **NOT** host, store, or distribute any copyrighted content
 - 🔗 All content is sourced from third-party providers and public websites
 - 👤 **Users** are solely responsible for ensuring they have legal rights to access content
 - 🚫 Developers do **NOT** endorse or encourage copyright infringement
@@ -770,7 +770,7 @@ adb logcat | grep -i "onyx"
 ### 📋 Open Source License
 
 ```
-Copyright 2026 ONYX Development Team
+Copyright 2026 PulseFlix Development Team
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -785,7 +785,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-**Full Terms**: See [TermsAndConditionsActivity.kt](onyx/app/src/main/java/com/example/onyx/TermsAndConditionsActivity.kt) for detailed terms and conditions.
+**Full Terms**: See [TermsAndConditionsActivity.kt](PulseFlix/app/src/main/java/com/example/PulseFlix/TermsAndConditionsActivity.kt) for detailed terms and conditions.
 
 ---
 
@@ -816,11 +816,11 @@ Special thanks to:
 
 <div align="center">
 
-**Made with ❤️ by the ONYX Development Team**
+**Made with ❤️ by the PulseFlix Development Team**
 
 ⭐ **Star this repository** if you find it useful!
 
-[Back to Top](#-onyx---android-tv-streaming-app)
+[Back to Top](#-PulseFlix---android-tv-streaming-app)
 
 </div>
 
