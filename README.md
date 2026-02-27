@@ -18,13 +18,16 @@
 
 **Your premium gateway to blockbuster movies, binge-worthy TV shows, and the hottest anime — optimized for the big screen.**
 
-### Quick Start (Beta)
-Download the latest APK and sideload it onto your Android TV:  
-[⬇️ PulseFlix Beta APK](https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs/heads/main/App/PulseFlix.apk)
+#Quick Start (Beta)
+#
+Download the latest APK and sideload it onto your Android TV [⬇️ PulseFlix Beta APK(download)](https://github.com/n-h-e-z-r-o-n/tv-APP/raw/refs/heads/main/App/PulseFlix.apk)
 
 (Pro tip: Enable "Unknown Sources" in Settings → Security & restrictions)
 
 </div>
+
+
+
 
 <div align="center">
 
