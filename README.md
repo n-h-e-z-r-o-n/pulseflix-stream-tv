@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-red.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/build-Gradle-brightgreen.svg)](https://gradle.org/)
 
-<img width="700" alt="ONYX Banner" src="https://github.com/user-attachments/assets/8d8bd9ce-9b7a-4a04-a6a5-267813ea0d55" />
+<img width="700" alt="ONYX Banner" src="https://github.com/n-h-e-z-r-o-n/pulseflix-stream-tv/blob/main/ASSETS/imte.png?raw=true" />
 
 **A premium Android TV streaming platform for movies, TV shows, and anime content**
 
