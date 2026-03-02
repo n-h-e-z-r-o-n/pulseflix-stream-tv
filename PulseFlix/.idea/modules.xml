@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/PulseFlix.iml" filepath="$PROJECT_DIR$/.idea/PulseFlix.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PulseFlix.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PulseFlix.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PulseFlix.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PulseFlix.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PulseFlix.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PulseFlix.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PulseFlix.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PulseFlix.app.unitTest.iml" />
+    </modules>
+  </component>
+</project>

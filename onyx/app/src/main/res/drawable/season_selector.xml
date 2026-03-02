@@ -42,9 +42,9 @@
                 android:centerX="50%"
                 android:centerY="80%"
                 android:angle="270"
-                android:gradientRadius="800dp"
+                android:gradientRadius="400dp"
                 android:startColor="@android:color/transparent"
-                android:endColor="?attr/transparentEffect"
+                android:endColor="@android:color/transparent"
                 />
             <stroke android:width="0dp" android:color="@android:color/transparent" />
         </shape>

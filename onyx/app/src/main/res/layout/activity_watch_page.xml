@@ -67,6 +67,25 @@
                         android:alpha="1"
                         android:background="@drawable/overlay_bottom_gradient" />
 
+
+                    <FrameLayout
+                        android:id="@+id/trailer_C"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <WebView
+                            android:id="@+id/trailerWebView"
+                            android:layout_width="match_parent"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:visibility="gone"
+                            android:layout_height="match_parent"
+                            />
+
+                    </FrameLayout>
+
                 </FrameLayout>
 
 
@@ -534,12 +553,12 @@
                                 android:paddingHorizontal="8dp"
                                 android:nextFocusLeft="@+id/watchNowButton"
                                 android:nextFocusRight="@+id/favoriteButton"
+                                android:layout_marginEnd="10dp"
                                 android:elevation="2dp">
 
                                 <ImageView
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                android:layout_marginStart="12dp"
                                 android:background="@android:color/transparent"
                                 android:src="@drawable/ic_trailer"
                                 android:focusable="false"

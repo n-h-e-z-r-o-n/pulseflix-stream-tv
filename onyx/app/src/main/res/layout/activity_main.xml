@@ -75,6 +75,7 @@
             android:orientation="vertical"
             android:layout_marginBottom="10dp"
             android:gravity="center"
+            android:alpha="0.7"
             tools:ignore="UseCompoundDrawables">
 
 
@@ -82,8 +83,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="©2026 ONYX MEDIA GROUP"
-                android:textColor="#80042c40"
+                android:text="©2026 PULSEFLIX MEDIA GROUP"
+                android:textColor="#FFFFFF"
                 android:textSize="13sp"
                 android:fontFamily="@font/p"
                 tools:ignore="HardcodedText"
@@ -91,7 +92,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.7">
+                >
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"

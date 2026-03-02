@@ -168,6 +168,45 @@ class TMDBapi(private val context: Context) {
         }
     }
 
+    fun fetchVideoData(sid: String, stype: String): JSONObject? {
+        return runBlocking {
+            async(Dispatchers.IO) {
+                try {
+                    var urlString =
+                        "https://api.themoviedb.org/3/tv/$sid/videos?language=en-US"
+
+                    if (stype == "movie") {
+                        urlString =
+                            "https://api.themoviedb.org/3/movie/$sid/videos?language=en-US"
+                    }
+
+                    val connection = URL(urlString).openConnection() as HttpURLConnection
+                    connection.requestMethod = "GET"
+                    connection.setRequestProperty("accept", "application/json")
+                    connection.setRequestProperty(
+                        "Authorization",
+                        "Bearer ${BuildConfig.TM_K}"
+                    )
+
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    val jsonObject = JSONObject(response)
+
+                    jsonObject.optJSONObject("data") ?: jsonObject
+
+                } catch (e: IOException) {
+                    Log.e("fetchAnimeData", "Network error: ${e.message}")
+                    null
+                } catch (e: JSONException) {
+                    Log.e("fetchAnimeData", "JSON error: ${e.message}")
+                    null
+                } catch (e: Exception) {
+                    Log.e("fetchAnimeData", "Unexpected error: ${e.message}")
+                    null
+                }
+            }.await()
+        }
+    }
+
 
     fun fetchShowData(showId: String, type:String): JSONObject? {
         return runBlocking {

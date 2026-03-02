@@ -50,6 +50,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.format.DateTimeFormatter
 import android.graphics.Color
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import java.net.HttpURLConnection
+import java.net.URL
+import androidx.webkit.WebViewAssetLoader
 
 class Watch_Page : AppCompatActivity() {
 
@@ -63,6 +74,8 @@ class Watch_Page : AppCompatActivity() {
     private var showTitle: String = ""
     private var showPoster: String = ""
     private var showBackdrop: String = ""
+
+    private var trailerOn = false
 
 
 
@@ -175,7 +188,6 @@ class Watch_Page : AppCompatActivity() {
             showType = "movie"
             fetchData()
         }
-
     }
 
 
@@ -356,6 +368,16 @@ class Watch_Page : AppCompatActivity() {
             }
 
             trailerButton.setOnClickListener {
+
+                val webView = findViewById<WebView>(R.id.trailerWebView)
+                if(!trailerOn){
+                     GlobalUtils.playTrailer(this, showId, showType, webView, muted = 0)
+                    trailerOn = true
+                }else {
+                    GlobalUtils.closeWebView(webView)
+                    trailerOn = false
+                }
+
             }
 
 
@@ -387,7 +409,6 @@ class Watch_Page : AppCompatActivity() {
         }else{
             LoadingAnimation.setup(this@Watch_Page, R.raw.error)
         }
-
     }
 
 
@@ -433,9 +454,9 @@ class Watch_Page : AppCompatActivity() {
 
                 setTextColor(Color.WHITE)                // android:textColor="#FFFFFF"
                 setShadowLayer(
-                    3f,                                  // android:shadowRadius="4"
-                    2f,                                  // android:shadowDx="1"
-                    2f,                                  // android:shadowDy="3"
+                    2f,                                  // android:shadowRadius="4"
+                    1f,                                  // android:shadowDx="1"
+                    1f,                                  // android:shadowDy="3"
                     Color.BLACK                          // android:shadowColor="#000000"
                 )
             }
@@ -446,15 +467,15 @@ class Watch_Page : AppCompatActivity() {
                     previous.background = ContextCompat.getDrawable(this, R.drawable.season_selector)
                     previous.setTextColor(Color.WHITE)
                     previous.setShadowLayer(
-                        3f,        // shadowRadius
-                        2f,        // shadowDx
-                        2f,        // shadowDy
+                        2f,        // shadowRadius
+                        1f,        // shadowDx
+                        1f,        // shadowDy
                         Color.BLACK // shadowColor
                     )
                 }
 
                 seasonButton.setTextColor(resolveAttrColor(this, R.attr.AccentColor))
-                seasonButton.setShadowLayer(3f, 2f, 2f, Color.BLACK)
+                seasonButton.setShadowLayer(2f, 1f, 1f, Color.BLACK)
 
                 selectedSeasonButton = seasonButton
                 seasonButton.isEnabled = false
@@ -498,7 +519,6 @@ class Watch_Page : AppCompatActivity() {
             firstButton?.performClick()
             firstButton?.requestFocus()  // optional: also focus it visually
         }
-
 
     }
 

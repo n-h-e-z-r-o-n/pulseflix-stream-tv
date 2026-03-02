@@ -131,14 +131,12 @@
             android:orientation="horizontal">
 
             <Button android:id="@+id/key_clear" android:text="Clear"
-                android:fontFamily="serif-monospace"
                 style="@style/KeyboardKeySpecial" />
 
             <Button android:id="@+id/key_space" android:text="Space"
                 style="@style/KeyboardKeySpace" />
 
             <Button android:id="@+id/key_enter" android:text="Enter"
-                android:fontFamily="serif-monospace"
                 style="@style/KeyboardKeySpecial" />
 
 

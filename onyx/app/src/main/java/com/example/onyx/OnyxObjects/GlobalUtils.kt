@@ -3,15 +3,22 @@ package com.example.onyx.OnyxObjects
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.UiModeManager
+import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.Process
+import android.provider.MediaStore
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.util.TypedValue
@@ -23,6 +30,11 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.ScrollView
@@ -30,9 +42,24 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.webkit.WebViewAssetLoader
+import com.example.onyx.FetchData.TMDBapi
 import com.example.onyx.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.net.HttpURLConnection
+import java.net.URL
 import kotlin.Float
 import kotlin.random.Random
+import android.webkit.CookieManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 private val interpolator = AccelerateDecelerateInterpolator()
@@ -110,7 +137,7 @@ object GlobalUtils {
     // ==================== SETTINGS MANAGEMENT ====================
 
     /**
-     * Set auto-play setting
+     * Set autoplay setting
      */
     fun setAutoPlay(context: Context, enabled: Boolean) {
         getSharedPreferences(context).edit().putBoolean(KEY_AUTO_PLAY, enabled).apply()
@@ -118,7 +145,7 @@ object GlobalUtils {
     }
 
     /**
-     * Get auto-play setting
+     * Get autoplay setting
      */
     fun isAutoPlayEnabled(context: Context): Boolean {
         return getSharedPreferences(context).getBoolean(KEY_AUTO_PLAY, true)
@@ -942,10 +969,367 @@ object GlobalUtils {
 
      */
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    suspend fun ipCheck(context: Context): Boolean {
+        Log.e("Login_Page IP_CHECK", "Starting...")
+
+        // 1️⃣ Check if already saved
+        val savedCountry = getSavedCountryCode(context)
+        if (savedCountry.isNotEmpty()) {
+            Log.e("Login_Page IP_CHECK", "Using cached country: $savedCountry")
+            return savedCountry.equals("KE", ignoreCase = true)
+        }
+
+        // 2️⃣ If not saved → call network
+        return withContext(Dispatchers.IO) {
+            var connection: HttpURLConnection? = null
+            try {
+                val url = URL("https://ipapi.co/json/")
+                connection = url.openConnection() as HttpURLConnection
+                connection.setRequestProperty("User-Agent", "Android-TV-App")
+                connection.requestMethod = "GET"
+                connection.connectTimeout = 5000
+                connection.readTimeout = 5000
+
+                if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                    return@withContext false
+                }
+
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                val json = org.json.JSONObject(response)
+                val countryCode = json.optString("country", "")
+
+                Log.e("Login_Page IP_CHECK", "Detected Country: $countryCode")
+
+                if (countryCode.isNotEmpty()) {
+                    saveCountryCode(context, countryCode)
+                }
+
+                countryCode.equals("KE", ignoreCase = true)
+
+            } catch (e: Exception) {
+                Log.e("Login_Page IP_CHECK", "Error: ${e.message}")
+                false
+            } finally {
+                connection?.disconnect()
+            }
+        }
+    }
+
+    fun saveCountryCode(context: Context, country: String) {
+        Log.e("Login_Page IP_CHECK", "Saved Country: $country")
+        val prefs = context.getSharedPreferences("country_prefs", Context.MODE_PRIVATE)
+        prefs.edit().putString("detected_country_code", country).apply()
+    }
+
+    fun getSavedCountryCode(context: Context): String {
+        val prefs = context.getSharedPreferences("country_prefs", Context.MODE_PRIVATE)
+        val saved = prefs.getString("detected_country_code", "") ?: ""
+        Log.e("Login_Page IP_CHECK", "Retrieved Country: $saved")
+        return saved
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
+     fun playTrailer(context: Context, idPlay: String, showType: String, webView: WebView, muted: Int = 1) {
+
+
+
+        var videoId: String = ""
+
+        val fetch = TMDBapi(context)
+
+        val jsonObject = fetch.fetchVideoData(idPlay, showType)
+        Log.e("Trailer ", "Json $jsonObject")
+        if (jsonObject != null) {
+            val results = jsonObject.getJSONArray("results")
+            Log.e("Trailer", "results $results")
+
+            if (results.length() == 0) return
+
+
+            // Better: find real trailer from YouTube
+            for (i in 0 until results.length()) {
+                val obj = results.getJSONObject(i)
+                if (obj.getString("site") == "YouTube" &&
+                    obj.getString("type") == "Trailer"&&
+                    obj.getBoolean("official")
+                ) {
+
+                    videoId = obj.getString("key")
+                    Log.e("Trailer", "videoId $videoId")
+
+                    setupWebView(context, webView, videoId, muted)
+                    break
+
+                }
+            }
+        }
+
+    }
+
+
+
+     fun setupWebView(context: Context, webView: WebView, videoId: String, muted:Int=1) {
+
+        val assetLoader = WebViewAssetLoader.Builder()
+            .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(context))
+            .build()
+
+        webView.apply {
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+            settings.mediaPlaybackRequiresUserGesture = false
+            settings.userAgentString =
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+
+            webChromeClient = WebChromeClient()
+            webViewClient = object : WebViewClient() {
+                override fun shouldInterceptRequest(
+                    view: WebView?,
+                    request: WebResourceRequest
+                ): WebResourceResponse? {
+                    return assetLoader.shouldInterceptRequest(request.url)
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    Log.d("WebView", "Player Loaded")
+                }
+            }
+        }
+
+        // Build HTML dynamically and save to assets (optional)
+         //src="https://www.youtube-nocookie.com/embed/$videoId?autoplay=1&rel=0&mute=1"
+        val html = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body { margin: 0; padding: 0; background-color: #000; }
+                .container { position: relative; width: 100vw; height: 100vh; }
+                iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <iframe
+                    
+                    src="https://www.youtube-nocookie.com/embed/$videoId?autoplay=1&rel=0&mute=$muted&loop=1&playlist=$videoId"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </body>
+        </html>
+    """.trimIndent()
+
+        // Load HTML from fake HTTPS domain via asset loader
+        webView.visibility = View.VISIBLE
+        webView.loadDataWithBaseURL(
+            "https://appassets.androidplatform.net/assets/",
+            html,
+            "text/html",
+            "utf-8",
+            null
+        )
+    }
+
+
+    fun closeWebView(webView: WebView) {
+        webView.visibility = View.GONE
+        // Stop any ongoing loading
+        webView.stopLoading()
+
+        // Clear cache & history
+        webView.clearCache(true)
+        webView.clearHistory()
+        webView.clearFormData()
+
+        // Clear cookies
+        val cookieManager = CookieManager.getInstance()
+        cookieManager.removeAllCookies(null)
+        cookieManager.flush()
+
+        // Remove from parent to prevent memory leaks
+        (webView.parent as? ViewGroup)?.removeView(webView)
+
+        // Destroy WebView
+        webView.removeAllViews()
+        webView.destroy()
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    private const val DATABASE_NAME = "app_data.db"
+    private const val DATABASE_VERSION = 1
+
+    fun autoBackupDatabase(context: Context) {
+        try {
+            val dbHelper = object : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+                override fun onCreate(db: SQLiteDatabase) {}
+                override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+            }
+            dbHelper.writableDatabase.close()
+
+            val dbFile = context.getDatabasePath(DATABASE_NAME)
+            if (!dbFile.exists()) {
+                Log.e("Database_backup", "Database file not found")
+                return
+            }
+
+            val resolver = context.contentResolver
+            val backupName = "app_data_backup.db"
+            val backupPath = "Documents/OnyxBackup/"
+
+            // 1️⃣ Check for existing backup and delete it
+            val selection = "${MediaStore.Files.FileColumns.DISPLAY_NAME}=? AND ${MediaStore.Files.FileColumns.RELATIVE_PATH}=?"
+            val selectionArgs = arrayOf(backupName, backupPath)
+
+            resolver.query(
+                MediaStore.Files.getContentUri("external"),
+                arrayOf(MediaStore.Files.FileColumns._ID),
+                selection,
+                selectionArgs,
+                null
+            )?.use { cursor ->
+                val idIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
+                while (cursor.moveToNext()) {
+                    val existingUri = ContentUris.withAppendedId(
+                        MediaStore.Files.getContentUri("external"),
+                        cursor.getLong(idIndex)
+                    )
+                    resolver.delete(existingUri, null, null)
+                    Log.d("Database_backup", "Deleted existing backup")
+                }
+            }
+
+            // 2️⃣ Insert new backup
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Files.FileColumns.DISPLAY_NAME, backupName)
+                put(MediaStore.Files.FileColumns.MIME_TYPE, "application/octet-stream")
+                put(MediaStore.Files.FileColumns.RELATIVE_PATH, backupPath)
+                put(MediaStore.Files.FileColumns.IS_PENDING, 1)
+            }
+
+            val uri = resolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
+                ?: run {
+                    Log.e("Database_backup", "Failed to create MediaStore entry")
+                    return
+                }
+
+            resolver.openOutputStream(uri)?.use { output ->
+                FileInputStream(dbFile).use { input ->
+                    input.copyTo(output)
+                }
+            }
+
+            // Mark as complete
+            contentValues.clear()
+            contentValues.put(MediaStore.Files.FileColumns.IS_PENDING, 0)
+            resolver.update(uri, contentValues, null, null)
+
+            Log.d("Database_backup", "Database backed up successfully via MediaStore")
+
+        } catch (e: Exception) {
+            Log.e("Database_backup", "Backup failed: ${e.message}")
+        }
+    }
+
+    fun autoRestoreDatabaseIfNeeded(context: Context) {
+        try {
+            val dbHelper = object : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+                override fun onCreate(db: SQLiteDatabase) {}
+                override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+            }
+
+            val db = dbHelper.readableDatabase
+            val cursor = db.rawQuery("SELECT COUNT(*) FROM users", null)
+            cursor.moveToFirst()
+            val userCount = cursor.getInt(0)
+            cursor.close()
+            db.close()
+
+            if (userCount > 0) {
+                Log.d("Database_backup", "Database already has data, skipping restore")
+                return
+            }
+
+            val resolver = context.contentResolver
+
+            val projection = arrayOf(
+                MediaStore.MediaColumns._ID,
+                MediaStore.MediaColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.RELATIVE_PATH
+            )
+
+            val selection = """
+            ${MediaStore.MediaColumns.DISPLAY_NAME} = ? AND
+            ${MediaStore.MediaColumns.RELATIVE_PATH} = ?
+        """.trimIndent()
+
+            val selectionArgs = arrayOf(
+                "app_data_backup.db",
+                "Documents/OnyxBackup/"
+            )
+
+            val queryCursor = resolver.query(
+                MediaStore.Files.getContentUri("external"),
+                projection,
+                selection,
+                selectionArgs,
+                null
+            )
+
+            if (queryCursor == null || !queryCursor.moveToFirst()) {
+                Log.d("Database_backup", "Backup NOT found in MediaStore")
+                queryCursor?.close()
+                return
+            }
+
+            val id = queryCursor.getLong(
+                queryCursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)
+            )
+
+            queryCursor.close()
+
+            val contentUri = ContentUris.withAppendedId(
+                MediaStore.Files.getContentUri("external"),
+                id
+            )
+
+            val dbFile = context.getDatabasePath(DATABASE_NAME)
+            dbFile.parentFile?.mkdirs()
+
+            dbHelper.close()
+
+            resolver.openInputStream(contentUri)?.use { input ->
+                FileOutputStream(dbFile).use { output ->
+                    input.copyTo(output)
+                    output.fd.sync()
+                }
+            } ?: run {
+                Log.e("Database_backup", "Could not open backup stream")
+                return
+            }
+
+            Log.d("Database_backup", "Database restored successfully")
+
+        } catch (e: Exception) {
+            Log.e("Database_backup", "Restore failed: ${e.message}")
+        }
+    }
 
 
 }

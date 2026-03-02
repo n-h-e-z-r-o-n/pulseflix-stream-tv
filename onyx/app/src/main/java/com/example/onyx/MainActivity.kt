@@ -1,19 +1,12 @@
 package com.example.onyx
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Matrix
 import android.graphics.Shader
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
-import android.view.View
-import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -21,33 +14,31 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
 import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.NotificationHelper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-private lateinit var  sm: SessionManger
+import kotlinx.coroutines.withContext
+
 
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var db: AppDatabase
-
+    private lateinit var  sm: SessionManger
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //installSplashScreen()
+        installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         supportActionBar?.hide()
-
-
         setupBackPressedCallback()
 
         // Hide navigation bar and status bar (Immersive mode)
-        GlobalUtils.hideSystemUI(this)
+        //GlobalUtils.hideSystemUI(this)
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,25 +96,40 @@ class MainActivity : AppCompatActivity() {
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
 
-        db = AppDatabase(this)
 
 
-        NotificationHelper.getTvNotifications(this@MainActivity)
-        NotificationHelper.getAnimeNotifications(this@MainActivity)
 
-        Handler(Looper.getMainLooper()).postDelayed({
 
-            if (!GlobalUtils.isTv(this)) {
-                sm = SessionManger(this)
-                sm.saveUserId(1453.toInt())
-                sm.saveAvatar("profile_avatars/1.png")
-                startActivity(Intent(this, Instraction::class.java))
-            }else{
-                startActivity(Intent(this@MainActivity, Login_Page::class.java))
-                //startActivity(Intent(this@MainActivity, web::class.java))
+
+        lifecycleScope.launch {
+
+            // 1️⃣ Wait until restore finishes (runs on IO thread)
+            withContext(Dispatchers.IO) {
+
+                NotificationHelper.getTvNotifications(this@MainActivity)
+                NotificationHelper.getAnimeNotifications(this@MainActivity)
+
+                GlobalUtils.autoRestoreDatabaseIfNeeded(this@MainActivity)
             }
-            finish()
-        }, 7000)
+
+            delay(7000)
+
+            if (!GlobalUtils.isTv(this@MainActivity)) {
+
+                //sm = SessionManger(this@MainActivity)
+                //sm.saveUserId(1453)
+                //sm.saveAvatar("profile_avatars/1.png")
+                //startActivity(Intent(this@MainActivity, Instraction::class.java))
+
+                val r = GlobalUtils.ipCheck(this@MainActivity)
+                startActivity(Intent(this@MainActivity, Login_Page::class.java))
+
+            } else {
+                val r = GlobalUtils.ipCheck(this@MainActivity)
+                startActivity(Intent(this@MainActivity, Login_Page::class.java))
+            }
+        }
+
     }
 
 

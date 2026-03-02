@@ -64,7 +64,7 @@ class PayWall : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        GlobalUtils.applyTheme(this)
+        setTheme(R.style.Theme_Onyx_Ghost)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_pay_wall)

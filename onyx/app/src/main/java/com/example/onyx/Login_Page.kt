@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -14,8 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.onyx.Database.AppDatabase
@@ -25,6 +24,12 @@ import com.example.onyx.OnyxClasses.EqualSpaceItemDecoration
 import com.example.onyx.OnyxClasses.ProfileAdapter
 import com.example.onyx.OnyxClasses.profileItem
 import com.example.onyx.OnyxObjects.GlobalUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 
@@ -39,16 +44,11 @@ class Login_Page : AppCompatActivity() {
     private val profiles = mutableListOf<profileItem>()
     private var selectedAvatar: String = ""
     private lateinit var profileContainer: FrameLayout
-
     private lateinit var settingButton: ImageView
     private lateinit var settingUi: FrameLayout
     private lateinit var gDriveBackup: TextView
     private lateinit var exitApp: TextView
     private lateinit var exitSetting: TextView
-
-
-
-
     private lateinit var CreateProfileContainer: FrameLayout
 
 
@@ -62,7 +62,6 @@ class Login_Page : AppCompatActivity() {
 
 
         settingUi = findViewById(R.id.settingUi)
-
         settingButton = findViewById(R.id.settingButton)
         gDriveBackup = findViewById(R.id.gDriveBackup)
         exitApp = findViewById(R.id.exitApp)
@@ -75,6 +74,12 @@ class Login_Page : AppCompatActivity() {
 
         exitApp.setOnClickListener {
             GlobalUtils.exitApp(this)
+        }
+
+        gDriveBackup.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                GlobalUtils.autoBackupDatabase(this@Login_Page)
+            }
         }
 
         exitSetting.setOnClickListener {
@@ -91,6 +96,8 @@ class Login_Page : AppCompatActivity() {
         sm = SessionManger(this)         // Initialize session manager
         //db.resetDatabase()
         activeSub = db.isSubscriptionActive()
+
+
 
         val userId = sm.getUserId()
         if (userId == -1) {
@@ -127,7 +134,6 @@ class Login_Page : AppCompatActivity() {
         profileAdapter = ProfileAdapter(profiles, R.layout.item_account)
         profileRecyclerView.adapter = profileAdapter
 
-
         // Handle profile selection
         profileAdapter.onProfileSelected = { profile ->
             Log.e("ProfileAdapter", "Selected profile: $profile")
@@ -143,7 +149,14 @@ class Login_Page : AppCompatActivity() {
                     startActivity(Intent(this, Shows_Page::class.java))
 
                 } else {
-                    startActivity(Intent(this, PayWall ::class.java))
+                    lifecycleScope.launch {
+                        val ipState =  GlobalUtils.getSavedCountryCode(this@Login_Page)
+                        if (ipState.equals("KE", ignoreCase = true)) {
+                            startActivity(Intent(this@Login_Page, PayWall::class.java))
+                        } else {
+                            startActivity(Intent(this@Login_Page, Shows_Page::class.java))
+                        }
+                    }
                 }
             }
 
@@ -159,7 +172,7 @@ class Login_Page : AppCompatActivity() {
                 avatarPaths.add("profile_avatars/$file")
             }
         } catch (e: Exception) {
-            Log.e("Login_Page", "Error loading avatar files: ${e.message}", e)
+            Log.e("Login_Page avatar", "Error loading avatar files: ${e.message}", e)
         }
         avatarRecycler.addItemDecoration(EqualSpaceItemDecoration(Spacing))
         val avatarLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
@@ -169,29 +182,36 @@ class Login_Page : AppCompatActivity() {
         avatarAdapter.onAvatarSelected = { avatarPath ->         // Handle avatar selection
 
             selectedAvatar = avatarPath
-            Log.d("Login_Page", "Selected avatar: $avatarPath")
+            Log.d("Login_Page avatar", "Selected avatar: $avatarPath")
         }
         setupProfileUI()
     }
 
 
-
     private fun loadProfiles() {
-        profiles.clear()
-        try {
-            val cursor = db.getUsers()
 
-            if (cursor.count == 0) {
-                db.setSubscription(
-                    type = "MONTHLY",
-                    paymentRef = ""
-                )
+        lifecycleScope.launch {
+        try {
+            val users = withContext(Dispatchers.IO) {
+                db.getUsers()
             }
 
-            while (cursor.moveToNext()) {
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
-                val username = cursor.getString(cursor.getColumnIndexOrThrow("username"))
-                val avatar = cursor.getString(cursor.getColumnIndexOrThrow("avatar")) ?: ""
+            Log.e("Login_Page cursor", "cursor t-no: ${users.count}")
+
+            if (users.count == 0) {
+                withContext(Dispatchers.IO) {
+                    db.setSubscription("MONTHLY", "")
+                }
+                activeSub = db.isSubscriptionActive()
+            }
+
+
+            profiles.clear() // Clear profiles first to avoid duplicates
+
+            while (users.moveToNext()) {
+                val id = users.getInt(users.getColumnIndexOrThrow("id"))
+                val username = users.getString(users.getColumnIndexOrThrow("username"))
+                val avatar = users.getString(users.getColumnIndexOrThrow("avatar")) ?: ""
 
                 profiles.add(
                     profileItem(
@@ -202,7 +222,7 @@ class Login_Page : AppCompatActivity() {
                 )
             }
 
-            cursor.close()
+            users.close()
 
             // Add "Create Profile" button as last item
             profiles.add(
@@ -217,8 +237,9 @@ class Login_Page : AppCompatActivity() {
 
         } catch (e: Exception) {
             Log.e("Login_Page", "Error loading profiles: ${e.message}", e)
-            Toast.makeText(this, "Error loading profiles", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@Login_Page, "Error loading profiles", Toast.LENGTH_SHORT).show()
         }
+    }
     }
 
 

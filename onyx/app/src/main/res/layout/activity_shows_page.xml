@@ -587,7 +587,6 @@
                             tools:ignore="DisableBaselineAlignment">
 
 
-
                             <LinearLayout
                                 android:layout_width="280dp"
                                 android:layout_height="match_parent"
@@ -647,35 +646,33 @@
                                     android:layout_height="wrap_content"
                                     android:text="Show Search Results"
                                     android:textStyle="bold"
-                                    android:fontFamily="sans-serif-smallcaps"
+                                    android:fontFamily="@font/n"
                                     android:textSize="20sp"
                                     android:paddingStart="10dp"
-                                    android:textColor="?attr/FG_color"
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="1"
+                                    android:shadowRadius="2"
                                     tools:ignore="HardcodedText,RtlSymmetry"
                                     android:layout_marginTop="7dp"/>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="490dp"
-                                    android:background="@drawable/background_hovor"
+                                    android:layout_height="match_parent"
                                     android:focusableInTouchMode="false"
+                                    android:focusable="false"
                                     android:clickable="false"
-                                    android:descendantFocusability="afterDescendants"
-                                    >
+                                    android:orientation="vertical">
 
                                     <androidx.recyclerview.widget.RecyclerView
                                         android:id="@+id/SearchResults"
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
+                                        android:layout_height="wrap_content"
                                         android:clipToPadding="false"
                                         android:overScrollMode="never"
-                                        android:descendantFocusability="afterDescendants"
-                                        android:focusable="false"
-                                        android:scrollbars="none"
-                                        android:layout_margin="4dp"
-                                        tools:ignore="NestedWeights"
-
-                                        />
+                                        android:scrollbars="vertical"
+                                        android:layout_margin="4dp" />
                                 </LinearLayout>
 
 
@@ -1189,7 +1186,11 @@
                                 android:fontFamily="@font/p"
                                 android:textSize="13sp"
                                 android:alpha="0.5"
-                                android:textColor="?attr/FG_color"
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:shadowRadius="2"
                                 tools:ignore="HardcodedText"/>
 
                             <androidx.recyclerview.widget.RecyclerView
@@ -1243,6 +1244,12 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Clear All"
+                                        android:fontFamily="@font/n"
+                                        android:textColor="#FFFFFF"
+                                        android:shadowColor="#000000"
+                                        android:shadowDx="1"
+                                        android:shadowDy="1"
+                                        android:shadowRadius="2"
                                         android:paddingHorizontal="15dp"
                                         android:paddingVertical="2dp"
                                         android:background="@drawable/filter_button"
