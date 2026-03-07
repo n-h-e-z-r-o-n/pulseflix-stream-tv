@@ -1,16 +1,11 @@
 package com.example.onyx
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
-import android.view.View
 import android.webkit.*
-import android.widget.FrameLayout
-import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn

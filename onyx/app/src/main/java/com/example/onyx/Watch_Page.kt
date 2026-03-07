@@ -27,7 +27,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-
+import android.os.Handler
+import android.os.Looper
 
 import org.json.JSONObject
 import java.time.LocalDate
@@ -50,17 +51,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.format.DateTimeFormatter
 import android.graphics.Color
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import android.webkit.WebViewClient
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import java.net.HttpURLConnection
-import java.net.URL
-import androidx.webkit.WebViewAssetLoader
 
 class Watch_Page : AppCompatActivity() {
 
@@ -74,31 +65,23 @@ class Watch_Page : AppCompatActivity() {
     private var showTitle: String = ""
     private var showPoster: String = ""
     private var showBackdrop: String = ""
-
     private var trailerOn = false
-
-
-
     private var currentServerIndex = 0
-
     private lateinit var episodes_recycler : RecyclerView
-
     private lateinit var watchButton : LinearLayout
     private lateinit var faveButton : LinearLayout
     private lateinit var trailerButton :LinearLayout
     private lateinit var serverButton: LinearLayout
-
     private lateinit var UIsection1: FrameLayout
 
 
 
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_watch_page)
+
         LoadingAnimation.setup(this@Watch_Page, R.raw.b)
         LoadingAnimation.show(this@Watch_Page)
 
@@ -108,7 +91,6 @@ class Watch_Page : AppCompatActivity() {
 
         userId = sm.getUserId()
 
-
         episodes_recycler = findViewById<RecyclerView>(R.id.episodes_recycler)
         //episodes_recycler.layoutManager = GridLayoutManager(this@Watch_Page, 4)
         episodes_recycler.layoutManager = LinearLayoutManager(
@@ -116,9 +98,6 @@ class Watch_Page : AppCompatActivity() {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-
-
-
 
 
         //-------- ---------------------------------------------------------------------------------
@@ -181,31 +160,49 @@ class Watch_Page : AppCompatActivity() {
 
 
 
-        if(!showId.isNullOrEmpty()){
-            fetchData()
-        }else{
+
+        if(showId.isNullOrEmpty()){
             showId = "533444"
             showType = "movie"
-            fetchData()
         }
+
+        lifecycleScope.launch {
+
+            try {
+
+                val jsonObject = withContext(Dispatchers.IO) {
+                    fetch.fetchShowData(showId, showType)
+                }
+
+                if (jsonObject == null) {
+                    LoadingAnimation.setup(this@Watch_Page, R.raw.error)
+                    return@launch
+                }
+
+                showData(jsonObject)
+
+            } catch (e: Exception) {
+
+                Log.e("Watch_Page", "Failed to fetch data", e)
+                LoadingAnimation.setup(this@Watch_Page, R.raw.error)
+            }
+        }
+
     }
 
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun fetchData() {
-        LoadingAnimation.show(this@Watch_Page)
+    private fun showData(jsonObject: JSONObject) {
 
+            // ---------- LOGOS ------------------------------------------------------------------------
+            val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
+            val textLogo = findViewById<TextView>(R.id.title_widget)
+            fetch.fetchLogos(showType, showId, cShowLogo, textLogo)
 
-        // ---------- LOGOS ------------------------------------------------------------------------
-        val cShowLogo = findViewById<ImageView>(R.id.cShowLogo)
-        val textLogo = findViewById<TextView>(R.id.title_widget)
-        fetch.fetchLogos(showType, showId, cShowLogo, textLogo)
+            // ---------- DATA -------------------------------------------------------------------------
 
-        // ---------- DATA -------------------------------------------------------------------------
-        val jsonObject = fetch.fetchShowData(showId, showType)
-        Log.e("DEBUG_Watch", jsonObject.toString())
-        if (jsonObject != null) {
+            Log.e("DEBUG_Watch", jsonObject.toString())
+
 
             val overview = jsonObject.optString("overview", "")
             val voteAverage = jsonObject.optString("vote_average", "0")
@@ -218,7 +215,7 @@ class Watch_Page : AppCompatActivity() {
 
             val releaseDate = jsonObject.optString("release_date").ifEmpty {
                 jsonObject.optString("first_air_date")
-            }.substring(0, 4)
+            }.take(4)
 
             val PG = if (jsonObject.optBoolean("adult", false)) "18 +" else "13"
 
@@ -364,22 +361,25 @@ class Watch_Page : AppCompatActivity() {
                 startActivity(intent)
             }
 
-            serverButton.setOnClickListener {                showServerDialog()
+            serverButton.setOnClickListener {
+                showServerDialog()
             }
 
             trailerButton.setOnClickListener {
 
                 val webView = findViewById<WebView>(R.id.trailerWebView)
-                if(!trailerOn){
-                     GlobalUtils.playTrailer(this, showId, showType, webView, muted = 0)
-                    trailerOn = true
-                }else {
-                    GlobalUtils.closeWebView(webView)
-                    trailerOn = false
+                lifecycleScope.launch {
+                    if (!trailerOn) {
+                        findViewById<TextView>(R.id.trailer_text).text = "Stop Trailer"
+                        GlobalUtils.playTrailer( this@Watch_Page,showId,showType,webView, muted = 0 )
+                        trailerOn = true
+                    } else {
+                        GlobalUtils.closeWebView(webView)
+                        findViewById<TextView>(R.id.trailer_text).text = "Play Trailer"
+                        trailerOn = false
+                    }
                 }
-
             }
-
 
 
             setupFavoriteButton(
@@ -402,20 +402,17 @@ class Watch_Page : AppCompatActivity() {
 
             //--------------------------------------------------------------------------------------
 
-
             LoadingAnimation.hide(this@Watch_Page)
             Cast_Data(showId.toString(), showType.toString())
             Watch_Recomendation_Data(showId.toString(), showType.toString())
-        }else{
-            LoadingAnimation.setup(this@Watch_Page, R.raw.error)
-        }
+
     }
 
 
 
     private var selectedSeasonButton: Button? = null
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun createSeasonButtons(
         noOfSeasons: Int,
         seasonData: MutableList<JSONObject>,
@@ -524,6 +521,8 @@ class Watch_Page : AppCompatActivity() {
 
 
 
+
+
     //setBackgroundColor(Color.parseColor("#3D5AFE"))
     private fun resolveAttrColor(context: Context, attr: Int): Int {
         val typedValue = TypedValue()
@@ -535,12 +534,11 @@ class Watch_Page : AppCompatActivity() {
         return (dp * resources.displayMetrics.density).toInt()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun ShowSeasonEpisodes(SelectedSeasons: Int, seasonData : MutableList<JSONObject>, seriesId: String) {
 
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ISO_LOCAL_DATE
-
 
         val selectedSeason = seasonData.firstOrNull {
             it.optInt("season_number") == SelectedSeasons
@@ -563,7 +561,7 @@ class Watch_Page : AppCompatActivity() {
         if (selectedSeasonPoster !== "") {
             selectedSeasonPoster = "https://image.tmdb.org/t/p/original/$selectedSeasonPoster"
             val posterWidget = findViewById<ImageView>(R.id.posterImageView)
-            Glide.with(posterWidget.context)
+            Glide.with(this)
                 .load(selectedSeasonPoster)
                 .centerCrop()
                 .into(posterWidget)
@@ -674,26 +672,23 @@ class Watch_Page : AppCompatActivity() {
     }
 
     private fun Watch_Recomendation_Data(show_id: String, type: String) {
+        lifecycleScope.launch {
 
-                val jsonObject = fetch.fetchShowRecommendation(show_id, type)
+                val jsonObject =  withContext(Dispatchers.IO) { fetch.fetchShowRecommendation(show_id, type) }
 
                 if (jsonObject != null) {
                     Log.e("DEBUG_WATCH_RECO", jsonObject.toString())
                     val moviesArray = jsonObject.getJSONArray("results")
 
-                    val dmoviesArray = if (moviesArray.length() ==  0){
-                            val fallback = """[{"adult":false,"backdrop_path":"/7HqLLVjdjhXS0Qoz1SgZofhkIpE.jpg","id":1087192,"title":"How to Train Your Dragon","original_title":"How to Train Your Dragon","overview":"On the rugged isle of Berk, where Vikings and dragons have been bitter enemies for generations, Hiccup stands apart, defying centuries of tradition when he befriends Toothless, a feared Night Fury dragon. Their unlikely bond reveals the true nature of dragons, challenging the very foundations of Viking society.","poster_path":"\/q5pXRYTycaeW6dEgsCrd4mYPmxM.jpg","media_type":"movie","original_language":"en","genre_ids":[14,10751,28,12],"popularity":261.0336,"release_date":"2025-06-06","video":false,"vote_average":8.022,"vote_count":1651},{"adult":false,"backdrop_path":"\/zNriRTr0kWwyaXPzdg1EIxf0BWk.jpg","id":1234821,"title":"Jurassic World Rebirth","original_title":"Jurassic World Rebirth","overview":"Five years after the events of Jurassic World Dominion, covert operations expert Zora Bennett is contracted to lead a skilled team on a top-secret mission to secure genetic material from the world's three most massive dinosaurs. When Zora's operation intersects with a civilian family whose boating expedition was capsized, they all find themselves stranded on an island where they come face-to-face with a sinister, shocking discovery that's been hidden from the world for decades.","poster_path":"\/1RICxzeoNCAO5NpcRMIgg1XT6fm.jpg","media_type":"movie","original_language":"en","genre_ids":[878,12,28],"popularity":554.8251,"release_date":"2025-07-01","video":false,"vote_average":6.375,"vote_count":1645},{"adult":false,"backdrop_path":"\/962KXsr09uK8wrmUg9TjzmE7c4e.jpg","id":1119878,"title":"Ice Road: Vengeance","original_title":"Ice Road: Vengeance","overview":"Big rig ice road driver Mike McCann travels to Nepal to scatter his late brother’s ashes on Mt. Everest. While on a packed tour bus traversing the deadly 12,000 ft. terrain of the infamous Road to the Sky, McCann and his mountain guide encounter a group of mercenaries and must fight to save themselves, the busload of innocent travelers, and the local villagers’ homeland.","poster_path":"\/cQN9rZj06rXMVkk76UF1DfBAico.jpg","media_type":"movie","original_language":"en","genre_ids":[28,53,18],"popularity":106.818,"release_date":"2025-06-27","video":false,"vote_average":6.848,"vote_count":174},{"adult":false,"backdrop_path":"\/7Q2CmqIVJuDAESPPp76rWIiA0AD.jpg","id":1011477,"title":"Karate Kid: Legends","original_title":"Karate Kid: Legends","overview":"After a family tragedy, kung fu prodigy Li Fong is uprooted from his home in Beijing and forced to move to New York City with his mother. When a new friend needs his help, Li enters a karate competition – but his skills alone aren't enough. Li's kung fu teacher Mr. Han enlists original Karate Kid Daniel LaRusso for help, and Li learns a new way to fight, merging their two styles into one for the ultimate martial arts showdown.","poster_path":"\/AEgggzRr1vZCLY86MAp93li43z.jpg","media_type":"movie","original_language":"en","genre_ids":[28,12,18],"popularity":133.6611,"release_date":"2025-05-08","video":false,"vote_average":7.151,"vote_count":687},{"adult":false,"backdrop_path":"\/7Zx3wDG5bBtcfk8lcnCWDOLM4Y4.jpg","id":552524,"title":"Lilo & Stitch","original_title":"Lilo & Stitch","overview":"The wildly funny and touching story of a lonely Hawaiian girl and the fugitive alien who helps to mend her broken family.","poster_path":"\/tUae3mefrDVTgm5mRzqWnZK6fOP.jpg","media_type":"movie","original_language":"en","genre_ids":[10751,878,35,12],"popularity":164.7425,"release_date":"2025-05-17","video":false,"vote_average":7.322,"vote_count":1357}]"""
-                            JSONArray(fallback)
-                    }else{
-                         moviesArray
-                    }
+                    if (moviesArray.length() ==  0){  return@launch }
+
 
                     //Log.e("DEBUG_WATCH_Results", jsonObject.toString())
 
                     val movies = mutableListOf<MovieItem>()
 
-                    for (i in 0 until dmoviesArray.length()) {
-                        val item = dmoviesArray.getJSONObject(i)
+                    for (i in 0 until moviesArray.length()) {
+                        val item = moviesArray.getJSONObject(i)
                         //val title = item.getString("original_title")
 
                         val title = if (item.has("name") && !item.isNull("name")) {
@@ -737,9 +732,10 @@ class Watch_Page : AppCompatActivity() {
                         recyclerView.adapter = RecommendAdapter(movies, R.layout.recomendation_card)
                         val spacing = (19 * resources.displayMetrics.density).toInt() // 16dp to px
                         recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))
-
                 }
+        }
     }
+
 
 
 
@@ -841,7 +837,6 @@ class Watch_Page : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
-
 
 
 }

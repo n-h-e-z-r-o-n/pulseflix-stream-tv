@@ -217,7 +217,7 @@ object GlobalUtils {
             "green" -> activity.setTheme(R.style.Theme_Onyx_Green)
             "red" -> activity.setTheme(R.style.Theme_Onyx_Red)
             "purple" -> activity.setTheme(R.style.Theme_Onyx_Purple)
-            else     -> activity.setTheme(R.style.Theme_Onyx_Light)
+            else     -> activity.setTheme(R.style.Theme_Onyx_Default)
         }
     }
 
@@ -596,7 +596,6 @@ object GlobalUtils {
         container.postDelayed({ if (!container.hasFocus()) startAutoSwipe() }, 2000)
     }
 
-
     private val MAX_VISIBLE_CARDS = 4
 
     private fun layoutStack(container: FrameLayout) {
@@ -685,6 +684,7 @@ object GlobalUtils {
             }
             .start()
     }
+
 
     private fun swapLeft(container: FrameLayout, keepFocus: Boolean = true) {
 
@@ -1035,46 +1035,43 @@ object GlobalUtils {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-     fun playTrailer(context: Context, idPlay: String, showType: String, webView: WebView, muted: Int = 1) {
-
-
-
-        var videoId: String = ""
+    suspend fun playTrailer(
+        context: Context,
+        idPlay: String,
+        showType: String,
+        webView: WebView,
+        muted: Int = 1
+    ) {
 
         val fetch = TMDBapi(context)
 
-        val jsonObject = fetch.fetchVideoData(idPlay, showType)
-        Log.e("Trailer ", "Json $jsonObject")
+        val jsonObject = withContext(Dispatchers.IO) {
+            fetch.fetchVideoData(idPlay, showType)
+        }
+
+        var videoId = ""
+
         if (jsonObject != null) {
             val results = jsonObject.getJSONArray("results")
-            Log.e("Trailer", "results $results")
 
             if (results.length() == 0) return
 
-
-            // Better: find real trailer from YouTube
             for (i in 0 until results.length()) {
                 val obj = results.getJSONObject(i)
+
                 if (obj.getString("site") == "YouTube" &&
-                    obj.getString("type") == "Trailer"&&
+                    obj.getString("type") == "Trailer" &&
                     obj.getBoolean("official")
                 ) {
 
                     videoId = obj.getString("key")
-                    Log.e("Trailer", "videoId $videoId")
 
                     setupWebView(context, webView, videoId, muted)
                     break
-
                 }
             }
         }
-
     }
-
 
 
      fun setupWebView(context: Context, webView: WebView, videoId: String, muted:Int=1) {
@@ -1106,6 +1103,10 @@ object GlobalUtils {
             }
         }
 
+         val typedValue = TypedValue()
+         context.theme.resolveAttribute(R.attr.BG_color, typedValue, true)
+         webView.setBackgroundColor(typedValue.data)
+
         // Build HTML dynamically and save to assets (optional)
          //src="https://www.youtube-nocookie.com/embed/$videoId?autoplay=1&rel=0&mute=1"
         val html = """
@@ -1122,7 +1123,7 @@ object GlobalUtils {
             <div class="container">
                 <iframe
                     
-                    src="https://www.youtube-nocookie.com/embed/$videoId?autoplay=1&rel=0&mute=$muted&loop=1&playlist=$videoId"
+                    src="https://www.youtube-nocookie.com/embed/$videoId?autoplay=1&rel=0&mute=$muted&controls=0&modestbranding=1&playsinline=1&loop=1&playlist=$videoId"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen>
@@ -1133,7 +1134,7 @@ object GlobalUtils {
     """.trimIndent()
 
         // Load HTML from fake HTTPS domain via asset loader
-        webView.visibility = View.VISIBLE
+
         webView.loadDataWithBaseURL(
             "https://appassets.androidplatform.net/assets/",
             html,
@@ -1141,30 +1142,26 @@ object GlobalUtils {
             "utf-8",
             null
         )
+         webView.visibility = View.VISIBLE
     }
 
 
     fun closeWebView(webView: WebView) {
-        webView.visibility = View.GONE
-        // Stop any ongoing loading
-        webView.stopLoading()
 
-        // Clear cache & history
-        webView.clearCache(true)
-        webView.clearHistory()
-        webView.clearFormData()
+        webView.apply {
 
-        // Clear cookies
-        val cookieManager = CookieManager.getInstance()
-        cookieManager.removeAllCookies(null)
-        cookieManager.flush()
+            // stop video playback
+            loadUrl("about:blank")
+            stopLoading()
 
-        // Remove from parent to prevent memory leaks
-        (webView.parent as? ViewGroup)?.removeView(webView)
+            // clear temporary data
+            clearHistory()
+            clearFormData()
+            clearCache(false)
 
-        // Destroy WebView
-        webView.removeAllViews()
-        webView.destroy()
+            // hide player
+            visibility = View.GONE
+        }
     }
 
 
