@@ -7,6 +7,7 @@ import android.graphics.LinearGradient
 import android.graphics.Matrix
 import android.graphics.Shader
 import android.os.Bundle
+import android.view.View
 import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -49,6 +50,15 @@ class MainActivity : AppCompatActivity() {
             scaleY = 0.7f
             translationY = 80f
             letterSpacing = 0f
+
+
+            setLayerType(View.LAYER_TYPE_SOFTWARE, paint)
+            paint.setShadowLayer(
+                4f,   // radius
+                5f,   // dx
+                6f,   // dy
+                Color.parseColor("#FFFFFF")
+            )
         }
 
         logo.animate()
@@ -67,33 +77,38 @@ class MainActivity : AppCompatActivity() {
                     .start()
             }
             .start()
+        // Wait for layout before measuring width
+        logo.post {
+            val paint = logo.paint
+            val width = paint.measureText(logo.text.toString())
 
-        val paint = logo.paint
-        val width = paint.measureText(logo.text.toString())
+            val textShader = LinearGradient(
+                0f, 0f, width, 0f,
+                intArrayOf(
+                    Color.parseColor("#000d1a"), // Original Color
+                    Color.parseColor("#4A90E2"), // Highlight Color
+                    Color.parseColor("#000d1a")  // Original Color
+                ), null, Shader.TileMode.CLAMP
+            )
 
-        val textShader = LinearGradient(
-            0f, 0f, width, 0f,
-            intArrayOf(
-                Color.parseColor("#152755"), // Original Color
-                Color.parseColor("#4A90E2"), // Highlight Color
-                Color.parseColor("#152755")  // Original Color
-            ), null, Shader.TileMode.CLAMP
-        )
+            logo.paint.shader = textShader
 
-        // Animate the gradient position
-        ValueAnimator.ofFloat(0f, 2f * width).apply {
-            duration = 2000
-            repeatCount = ValueAnimator.INFINITE
-            addUpdateListener {
-                val dx = it.animatedValue as Float
-                val matrix = Matrix()
-                matrix.setTranslate(dx - width, 0f)
-                textShader.setLocalMatrix(matrix)
-                logo.paint.shader = textShader
-                logo.invalidate()
+            // Animate the gradient position
+            val matrix = Matrix()
+            ValueAnimator.ofFloat(0f, 2f * width).apply {
+                duration = 2000
+                repeatCount = ValueAnimator.INFINITE
+                addUpdateListener {
+                    val dx = it.animatedValue as Float
+                    matrix.setTranslate(dx - width, 0f)
+                    textShader.setLocalMatrix(matrix)
+                    logo.paint.shader = textShader
+                    logo.invalidate()
+                }
+                start()
             }
-            start()
         }
+
         ////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -112,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                 GlobalUtils.autoRestoreDatabaseIfNeeded(this@MainActivity)
             }
 
-            delay(7000)
+            delay(9000)
 
             if (!GlobalUtils.isTv(this@MainActivity)) {
 

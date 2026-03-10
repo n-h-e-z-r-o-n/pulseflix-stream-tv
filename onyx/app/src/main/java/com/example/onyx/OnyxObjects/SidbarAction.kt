@@ -9,6 +9,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
@@ -17,10 +18,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.onyx.*
 import com.example.onyx.Database.SessionManger
+import java.lang.ref.WeakReference
+
 
 object NavAction {
     // Store previously focused view at the class level
-    private var previouslyFocusedView: View? = null
+    private var previouslyFocusedView: WeakReference<View>? = null
     private var isSidebarOpen = false
 
     fun setupSidebar(activity: Activity) {
@@ -66,7 +69,7 @@ object NavAction {
             view?.setOnClickListener {
                 if (activity::class.java != target) {
                     val intent = Intent(activity, target)
-                        .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                     try {
                         // Clear focus before transition
                         validButtons.forEach { it.clearFocus() }
@@ -164,10 +167,13 @@ object NavAction {
         if (isSidebarOpen) return
 
         // Store the currently focused view before showing sidebar
-        previouslyFocusedView = activity.currentFocus
+        //previouslyFocusedView = activity.currentFocus
+        previouslyFocusedView = WeakReference(activity.currentFocus)
 
         sidebar.visibility = View.VISIBLE
         isSidebarOpen = true
+
+        try {  activity.findViewById<LinearLayout>(R.id.NavBar).visibility = View.GONE  } catch(e: Exception) {}
 
         val density = activity.resources.displayMetrics.density
         val params = mainBox.layoutParams as ViewGroup.MarginLayoutParams
@@ -200,6 +206,8 @@ object NavAction {
         sidebar.visibility = View.GONE
         isSidebarOpen = false
 
+        try {  activity.findViewById<LinearLayout>(R.id.NavBar).visibility = View.VISIBLE  } catch(e: Exception) {}
+
         val density = activity.resources.displayMetrics.density
         val params = mainBox.layoutParams as ViewGroup.MarginLayoutParams
 
@@ -216,15 +224,20 @@ object NavAction {
             mainBox.layoutParams = params
         }
 
-        // Restore focus to previously focused view
-        previouslyFocusedView?.post {
-            try {
-                previouslyFocusedView?.requestFocus()
-            } catch (e: Exception) {
-            } finally {
-                previouslyFocusedView = null
+
+        /*
+        previouslyFocusedView?.get()?.post {
+            previouslyFocusedView?.get()?.requestFocus()
+        }
+
+         */
+
+        previouslyFocusedView?.get()?.let { view ->
+            if (view.isAttachedToWindow) {
+                view.requestFocus()
             }
         }
+        previouslyFocusedView = null
     }
 
     private fun loadProfileImage(activity: Activity, imageView: ImageView) {
@@ -234,11 +247,12 @@ object NavAction {
             Glide.with(activity)
                 .load(avatarPath)
                 .transform(CircleCrop())
-                .placeholder(R.drawable.ic_person)
-                .error(R.drawable.ic_person)
+                .placeholder(R.drawable.tv_banner)
+                .error(R.drawable.tv_banner)
+                .dontAnimate()
                 .into(imageView)
         } catch (e: Exception) {
-            imageView.setImageResource(R.drawable.ic_person)
+            imageView.setImageResource(R.drawable.tv_banner)
         }
     }
 }

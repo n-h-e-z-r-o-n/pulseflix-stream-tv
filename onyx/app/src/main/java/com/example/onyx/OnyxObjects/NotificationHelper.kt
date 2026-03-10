@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
 import com.example.onyx.FetchData.TMDBapi
+import org.json.JSONArray
 
 object NotificationHelper {
 
@@ -99,7 +100,7 @@ object NotificationHelper {
     }
 
 
-     fun getAnimeNotifications(context: Context) : Boolean{
+    fun getAnimeNotifications(context: Context) : Boolean{
         db = AppDatabase(context)         // Initialize database
         sm = SessionManger(context)
 
@@ -130,49 +131,62 @@ object NotificationHelper {
 
                 var subStored = item["sub"].toString().toIntOrNull() ?: 0
                 var dubStored = item["dub"].toString().toIntOrNull() ?: 0
-                val seasonsStored = item["seasons"]
+
+                Log.e("anime_Not_fetched", "seasonsStored:" + JSONArray(item["seasons"]).length() + item["seasons"] )
+
+                val seasonsStored = try {
+                    JSONArray(item["seasons"]).length()
+                } catch (e: Exception) {
+                    0
+                }
+
+
 
                 val fetch = TMDBapi(context)
 
                 val data = fetch.fetchAnimeData(item["anime_id"].toString())
                 if (data != null) {
-                        val subFetched =
-                            data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats")
-                                .getJSONObject("episodes").optString("sub", "").toIntOrNull() ?: 0
-                        val dubFetched =
-                            data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats")
-                                .getJSONObject("episodes").optString("dub", "").toIntOrNull() ?: 0
-                        //val seasonsFetched = data.getJSONArray("seasons").length()?:0
+                    val subFetched =
+                        data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats")
+                            .getJSONObject("episodes").optString("sub", "").toIntOrNull() ?: 0
+                    val dubFetched =
+                        data.getJSONObject("anime").getJSONObject("info").getJSONObject("stats")
+                            .getJSONObject("episodes").optString("dub", "").toIntOrNull() ?: 0
+                    val seasonsFetched = data.getJSONArray("seasons").length()?:0
 
-                        var info = ""
+                    var info = "\n"
+                    var notSub = 0
+                    var notDub = 0
 
-                        if (subFetched > subStored) {
-                            val cal = subFetched - subStored
-                            info = info + "$cal SUB added\n"
-                        }
-                        if (dubFetched > dubStored) {
-                            val cal = dubFetched - dubStored
-                            info = info + "$cal DUB added\n"
-                        }
+                    if (subFetched > subStored) {
+                        val cal = subFetched - subStored
+                        notSub = subFetched
+                        info = info + "$cal SUB added\n"
+                    }
+                    if (dubFetched > dubStored) {
+                        notDub = dubFetched
+                        val cal = dubFetched - dubStored
+                        info = info + "$cal DUB added\n"
+                    }
 
-                        Log.e("anime_Not_fetched", "info isNotEmpty: ${info.isNotEmpty()}, title: $name ,dubFetched $dubFetched , subFetched $subFetched \n\n")
+                    Log.e("anime_Not_fetched", "info isNotEmpty: ${info.isNotEmpty()}, title: $name ,dubFetched $dubFetched , subFetched $subFetched \n")
 
-                        if (info.isNotEmpty()) {
+                    if (info.isNotEmpty()) {
 
-                            db.insertAnimeNotification(
-                                userId = userId,
-                                animeId = animeId.toString(),
-                                title =  name.toString(),
-                                poster = poster.toString(),
-                                subStored = subFetched,
-                                dubStored = dubFetched,
-                                seasonsStored = 0
-                            )
-                            db.updateAnimeProgress(userId, animeId.toString(), subFetched, dubFetched)
+                        db.insertAnimeNotification(
+                            userId = userId,
+                            animeId = animeId.toString(),
+                            title =  name.toString(),
+                            poster = poster.toString(),
+                            subStored = notSub,
+                            dubStored = notDub,
+                            seasonsStored = 0
+                        )
+                        db.updateAnimeProgress(userId, animeId.toString(), subFetched, dubFetched)
 
                         results = true
-                        }
                     }
+                }
 
 
 

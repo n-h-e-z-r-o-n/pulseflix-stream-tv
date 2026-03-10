@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -57,7 +56,6 @@ import com.example.onyx.OnyxClasses.filterItemOne
 import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.LoadingAnimation
 import com.example.onyx.OnyxObjects.NavAction
-import com.example.onyx.OnyxObjects.NotificationHelper
 import kotlinx.coroutines.async
 import java.io.IOException
 import java.util.Calendar
@@ -138,7 +136,7 @@ class Shows_Page : AppCompatActivity() {
 
         //setupBackPressedCallback()
         ////////////////////////////////////////////////////////////////////////////////////////////
-        val navBar = findViewById<LinearLayout>(R.id.showsNavBar)
+        val navBar = findViewById<LinearLayout>(R.id.NavBar)
 
         val HomeBtn = findViewById<LinearLayout>(R.id.HomeBtn)
         val MoviesBtn = findViewById<LinearLayout>(R.id.MoviesBtn)
@@ -334,6 +332,18 @@ class Shows_Page : AppCompatActivity() {
             expandedWidthDp = 155f,
             collapsedWidthDp = 70f
         )
+
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels
+        val screenWidth = displayMetrics.widthPixels
+
+
+        val dp70 = (70 * displayMetrics.density).toInt()
+        val container = findViewById<LinearLayout>(R.id.contentContainer)
+        container.minimumWidth = screenWidth - dp70
+
+
+
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         setupRecyclerViews()
@@ -356,7 +366,12 @@ class Shows_Page : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        findViewById<LinearLayout>(R.id.HomeBtn).requestFocus()
+
+        // Only request focus if nothing has focus
+        val rootView = window.decorView.rootView
+        if (rootView.findFocus() == null) {
+            findViewById<LinearLayout>(R.id.HomeBtn).requestFocus()
+        }
 
         if (this::watchAdapter.isInitialized) {
             watchAdapter.clearItems()

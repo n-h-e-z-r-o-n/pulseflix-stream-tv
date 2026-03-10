@@ -127,7 +127,10 @@ class Profile_Page : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        findViewById<LinearLayout>(R.id.themeSetting).requestFocus()
+        val rootView = window.decorView.rootView
+        if (rootView.findFocus() == null) {
+            findViewById<LinearLayout>(R.id.themeSetting).requestFocus()
+        }
     }
     
     private fun initializeViews() {
@@ -147,8 +150,6 @@ class Profile_Page : AppCompatActivity() {
     }
     
     private fun setupClickListeners() {
-
-
         // Theme setting click
         val themeSetting = findViewById<LinearLayout>(R.id.themeSetting)
         themeSetting.setOnClickListener {
@@ -255,7 +256,6 @@ class Profile_Page : AppCompatActivity() {
                     child.setTextColor(fgColor)
                 }
             }
-
             // Style negative button
             alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(fgColor)
         }

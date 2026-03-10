@@ -1403,17 +1403,12 @@ class EpisodesAdapter(
 
     override fun getItemCount(): Int = episodes.size
 
-    fun addEpisode(item: EpisodeItem) {
-        episodes.add(item)
-        notifyItemInserted(episodes.size - 1)
-    }
 
-    fun clearEpisodes() {
-        val size = episodes.size
-        if (size > 0) {
-            episodes.clear()
-            notifyItemRangeRemoved(0, size)
-        }
+
+    fun updateData(newList: List<EpisodeItem>) {
+        episodes.clear()
+        episodes.addAll(newList)
+        notifyDataSetChanged()
     }
 }
 

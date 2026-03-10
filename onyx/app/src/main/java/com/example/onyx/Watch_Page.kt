@@ -68,6 +68,7 @@ class Watch_Page : AppCompatActivity() {
     private var trailerOn = false
     private var currentServerIndex = 0
     private lateinit var episodes_recycler : RecyclerView
+    private lateinit var episodesAdapter: EpisodesAdapter
     private lateinit var watchButton : LinearLayout
     private lateinit var faveButton : LinearLayout
     private lateinit var trailerButton :LinearLayout
@@ -92,12 +93,13 @@ class Watch_Page : AppCompatActivity() {
         userId = sm.getUserId()
 
         episodes_recycler = findViewById<RecyclerView>(R.id.episodes_recycler)
-        //episodes_recycler.layoutManager = GridLayoutManager(this@Watch_Page, 4)
         episodes_recycler.layoutManager = LinearLayoutManager(
             this@Watch_Page,
             LinearLayoutManager.HORIZONTAL,
             false
         )
+        episodesAdapter = EpisodesAdapter(mutableListOf())
+        episodes_recycler.adapter = episodesAdapter
 
 
         //-------- ---------------------------------------------------------------------------------
@@ -423,6 +425,7 @@ class Watch_Page : AppCompatActivity() {
 
         var track = 0
         var firstButton: Button? = null  // 👈 Keep a reference to the first
+        var isSeasonLoading = false
 
         while (track < noOfSeasons) {
             val selectedSeason = seasonData[track]
@@ -459,25 +462,17 @@ class Watch_Page : AppCompatActivity() {
             }
 
             seasonButton.setOnClickListener {
-                // Reset previous button if it exists
-                selectedSeasonButton?.let { previous ->
-                    previous.background = ContextCompat.getDrawable(this, R.drawable.season_selector)
-                    previous.setTextColor(Color.WHITE)
-                    previous.setShadowLayer(
-                        2f,        // shadowRadius
-                        1f,        // shadowDx
-                        1f,        // shadowDy
-                        Color.BLACK // shadowColor
-                    )
-                }
 
-                seasonButton.setTextColor(resolveAttrColor(this, R.attr.AccentColor))
-                seasonButton.setShadowLayer(2f, 1f, 1f, Color.BLACK)
+                if (isSeasonLoading) return@setOnClickListener
+                isSeasonLoading = true
+
+                selectedSeasonButton?.isSelected = false
+                seasonButton.isSelected = true
+
 
                 selectedSeasonButton = seasonButton
-                seasonButton.isEnabled = false
                 ShowSeasonEpisodes(season_no, seasonData, seasonID)
-                seasonButton.postDelayed({ seasonButton.isEnabled = true }, 3000)
+                seasonButton.postDelayed({isSeasonLoading = false }, 3000)
             }
 
             // DPAD navigation
@@ -555,19 +550,19 @@ class Watch_Page : AppCompatActivity() {
         findViewById<TextView>(R.id.season_C).text = "Season $SelectedSeasons"
         findViewById<TextView>(R.id.Rating_widget).text = "$selectedSeasonRating"
 
-        if (selectedSeasonOverview !== "") {
+        if (selectedSeasonOverview.isNotEmpty()) {
             findViewById<TextView>(R.id.overview_widget).text = selectedSeasonOverview
         }
-        if (selectedSeasonPoster !== "") {
+        if (selectedSeasonPoster.isNotEmpty()) {
             selectedSeasonPoster = "https://image.tmdb.org/t/p/original/$selectedSeasonPoster"
             val posterWidget = findViewById<ImageView>(R.id.posterImageView)
-            Glide.with(this)
+            Glide.with(posterWidget)
                 .load(selectedSeasonPoster)
                 .centerCrop()
                 .into(posterWidget)
         }
 
-        lifecycleScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch {
 
                 val jsonObject = withContext(Dispatchers.IO) {fetch.fetchSeasonInfo(seriesId.toString(), SelectedSeasons.toString())}
 
@@ -628,8 +623,9 @@ class Watch_Page : AppCompatActivity() {
                     }
 
                     Log.e("DEBUG_Each E list", "${episodesList.size}")
-                    episodes_recycler.removeAllViews()
-                    episodes_recycler.adapter = EpisodesAdapter(episodesList)
+                    //episodes_recycler.removeAllViews()
+                    //episodes_recycler.adapter = EpisodesAdapter(episodesList)
+                    episodesAdapter.updateData(episodesList)
                 }
         }
     }

@@ -38,10 +38,15 @@
             android:layout_height="match_parent"
             android:background="?attr/transparentEffect"/>
 
+        <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="horizontal">
+
 
 
         <LinearLayout
-            android:id="@+id/animeNavBar"
+            android:id="@+id/NavBar"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
@@ -382,692 +387,686 @@
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
         </LinearLayout>
 
 
 
-    <LinearLayout
-        android:id="@+id/AnimeHomeContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:orientation="horizontal"
-        android:overScrollMode="never"
-        android:layout_marginVertical="10dp"
-        android:layout_marginStart="70dp"
-        tools:ignore="RtlSymmetry">
-
-        <ScrollView
+        <LinearLayout
+            android:id="@+id/contentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:scrollbars="none"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
             android:overScrollMode="never"
-            tools:ignore="UselessParent">
+            android:layout_marginVertical="10dp"
+            tools:ignore="RtlSymmetry">
 
-            <LinearLayout
-                android:orientation="vertical"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-
-                <!-- //////////////////////// HOME PAGE ///////////////////////////////////////////// -->
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:scrollbars="none"
+                android:overScrollMode="never"
+                tools:ignore="UselessParent">
 
                 <LinearLayout
-                    android:id="@+id/HomePageAnime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    tools:ignore="UselessParent"
-                    android:visibility="gone">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
 
-                    <FrameLayout
-                        android:id="@+id/spotlightAnimes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:descendantFocusability="afterDescendants"
-                        android:clipChildren="false"
-                        android:clipToPadding="false"/>
 
+                    <!-- //////////////////////// HOME PAGE ///////////////////////////////////////////// -->
 
                     <LinearLayout
+                        android:id="@+id/HomePageAnime"
                         android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:layout_height="wrap_content">
+                        tools:ignore="UselessParent"
+                        android:visibility="gone">
 
-                        <TextView
+
+                        <FrameLayout
+                            android:id="@+id/spotlightAnimes"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text=" Trending Anime"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/p"
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF"
-                            android:shadowColor="#000000"
-                            android:shadowDx="2"
-                            android:shadowDy="2"
-                            android:shadowRadius="3"
-                            tools:ignore="HardcodedText" />
+                            android:layout_gravity="center"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:descendantFocusability="afterDescendants"
+                            android:clipChildren="false"
+                            android:clipToPadding="false"/>
 
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/Anime_Trending_widget"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clipToPadding="false"
-                            android:nextFocusUp="@+id/spotlightAnimes"
-                            android:nextFocusDown="@+id/Anime_Airing_widget"
-                            android:overScrollMode="never"
-                            android:scrollbars="none"
-                            tools:ignore="NestedWeights" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=" Top Airing Anime"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/p"
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF"
-                            android:shadowColor="#000000"
-                            android:shadowDx="2"
-                            android:shadowDy="2"
-                            android:shadowRadius="3"
-                            tools:ignore="HardcodedText"
-                            android:layout_marginTop="10dp"/>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/Anime_Airing_widget"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:clipToPadding="false"
-                            android:overScrollMode="never"
-                            android:scrollbars="none"
-                            tools:ignore="NestedWeights"
-                            android:nextFocusUp="@+id/Anime_Trending_widget"
-                            android:nextFocusDown="@+id/Anime_Airing_widget"/>
-
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- //////////////////////// DUBBED PAGE ////////////////////////////////////// -->
-                <LinearLayout
-                    android:id="@+id/DubbedPageAnime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Dubbed Page Anime"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/p"
-                        android:textSize="13sp"
-                        android:textColor="?attr/FG_color"
-                        android:alpha="0.4"
-                        android:layout_marginTop="10dp"
-                        tools:ignore="HardcodedText"/>
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/dubbedRecycler"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:clipToPadding="false"
-                        android:scrollbars="none"
-                        tools:ignore="RtlSymmetry"/>
-
-                </LinearLayout>
-
-
-
-                <!-- //////////////////////// POPULAR PAGE ////////////////////////////////////// -->
-                <LinearLayout
-                    android:id="@+id/PopularPageAnime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Most Popular Animes"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/p"
-                        android:textSize="13sp"
-                        android:alpha="0.4"
-                        android:layout_marginTop="10dp"
-                        android:textColor="?attr/FG_color"
-                        tools:ignore="HardcodedText"/>
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/popularRecycler"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_gravity=""
-                        android:clipToPadding="false"
-                        android:scrollbars="none"
-                        tools:ignore="RtlSymmetry"/>
-
-                </LinearLayout>
-
-                <!-- //////////////////////// SEARCH PAGE ////////////////////////////////////// -->
-
-
-
-                <LinearLayout
-                    android:id="@+id/SearchPageAnime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <LinearLayout
-                        android:layout_width="280dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="35dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="30dp"
-                                android:background="?attr/transparentEffect"
-                                android:orientation="horizontal"
-                                android:focusableInTouchMode="true">
-
-
-
-                                <!-- Search Icon -->
-                                <ImageView
-                                    android:layout_width="25dp"
-                                    android:layout_height="match_parent"
-                                    android:src="@drawable/ic_anime_filter"
-                                    app:tint="?attr/AccentColor"
-                                    android:padding="2dp"
-                                    android:background="?attr/transparentEffect"
-                                    android:layout_gravity="center_vertical"
-                                    tools:ignore="ContentDescription" />
-
-
-                                <!-- Search Text Input -->
-
-
-
-                                <EditText
-                                    android:id="@+id/AnimeSearchInput"
-                                    android:layout_width="250dp"
-                                    android:layout_height="match_parent"
-                                    android:hint="Search for anime..."
-                                    android:textColor="?attr/FG_color"
-                                    android:textColorHint="?attr/FG_color"
-                                    android:padding = "3dp"
-                                    android:inputType="text"
-                                    android:textSize="15sp"
-                                    android:singleLine="true"
-                                    android:clickable="false"
-                                    android:focusable="false"
-                                    android:fontFamily="@font/p"
-                                    android:focusableInTouchMode="true"
-                                    android:background="?attr/transparentEffect"
-                                    android:imeOptions="actionSearch"
-                                    tools:ignore="Autofill,HardcodedText" />
-
-                            </LinearLayout>
-
-                        <include layout="@layout/keyboard_layout"/>
-
-                    </LinearLayout>
-
-
-
-
-
-
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/searchTextDisplay"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Anime Search Results"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/n"                            android:textSize="20sp"
-                            android:paddingStart="10dp"
-                            android:textColor="#FFFFFF"
-                            android:shadowColor="#000000"
-                            android:shadowDx="1"
-                            android:shadowDy="1"
-                            android:shadowRadius="2"
-                            tools:ignore="HardcodedText,RtlSymmetry"
-                            android:layout_marginTop="7dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="490dp"
-                            android:descendantFocusability="afterDescendants"
-                            >
+                            android:orientation="vertical"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text=" Trending Anime"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/p"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="3"
+                                tools:ignore="HardcodedText" />
+
 
                             <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/SearchRecycler"
+                                android:id="@+id/Anime_Trending_widget"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:clipToPadding="false"
+                                android:nextFocusUp="@+id/spotlightAnimes"
+                                android:nextFocusDown="@+id/Anime_Airing_widget"
                                 android:overScrollMode="never"
-                                android:focusable="false"
-                                android:focusableInTouchMode="false"
                                 android:scrollbars="none"
-                                android:layout_margin="4dp"
-                                tools:ignore="NestedWeights"
+                                tools:ignore="NestedWeights" />
 
-                                />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text=" Top Airing Anime"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/p"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="3"
+                                tools:ignore="HardcodedText"
+                                android:layout_marginTop="10dp"/>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/Anime_Airing_widget"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clipToPadding="false"
+                                android:overScrollMode="never"
+                                android:scrollbars="none"
+                                tools:ignore="NestedWeights"
+                                android:nextFocusUp="@+id/Anime_Trending_widget"
+                                android:nextFocusDown="@+id/Anime_Airing_widget"/>
+
+
                         </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- //////////////////////// DUBBED PAGE ////////////////////////////////////// -->
+                    <LinearLayout
+                        android:id="@+id/DubbedPageAnime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dubbed Page Anime"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/p"
+                            android:textSize="13sp"
+                            android:textColor="?attr/FG_color"
+                            android:alpha="0.4"
+                            android:layout_marginTop="10dp"
+                            tools:ignore="HardcodedText"/>
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/dubbedRecycler"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:clipToPadding="false"
+                            android:scrollbars="none"
+                            tools:ignore="RtlSymmetry"/>
+
                     </LinearLayout>
 
 
 
-                </LinearLayout>
-
-                <!-- //////////////////////// ANIME FAVORITE PAGE ////////////////////////////////////// -->
-                <LinearLayout
-                    android:id="@+id/FavPageAnime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Favorite List"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/p"
-                        android:textSize="13sp"
-                        android:textColor="?attr/FG_color"
-                        tools:ignore="HardcodedText"
-                        android:alpha="0.5"
-                        android:layout_marginTop="10dp"/>
-
-
-                    <androidx.cardview.widget.CardView
+                    <!-- //////////////////////// POPULAR PAGE ////////////////////////////////////// -->
+                    <LinearLayout
+                        android:id="@+id/PopularPageAnime"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginVertical="10dp"
-                        app:cardBackgroundColor="?attr/BG_color"
-                        app:cardCornerRadius="20dp"
-                        android:orientation="horizontal"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
                         android:visibility="gone">
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
+
+
+                        <TextView
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Most Popular Animes"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/p"
+                            android:textSize="13sp"
+                            android:alpha="0.4"
+                            android:layout_marginTop="10dp"
+                            android:textColor="?attr/FG_color"
+                            tools:ignore="HardcodedText"/>
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/popularRecycler"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_gravity=""
+                            android:clipToPadding="false"
+                            android:scrollbars="none"
+                            tools:ignore="RtlSymmetry"/>
+
+                    </LinearLayout>
+
+                    <!-- //////////////////////// SEARCH PAGE ////////////////////////////////////// -->
+
+
+
+                    <LinearLayout
+                        android:id="@+id/SearchPageAnime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="280dp"
                             android:layout_height="match_parent"
-                            android:layout_gravity="end">
+                            android:orientation="vertical">
 
-                            <ImageView
-                                android:id="@+id/FavBackdrop"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:adjustViewBounds="true"
-                                android:scaleType="fitCenter"
-                                android:src="@raw/test4"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent" />
 
-                            <!-- Bottom Gradient Overlay: covers 30% of height -->
-                            <View
-                                android:id="@+id/BottomOverlay"
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:background="@drawable/overlay_bottom_gradient"
 
-                                app:layout_constraintBottom_toBottomOf="@id/FavBackdrop"
-                                app:layout_constraintStart_toStartOf="@id/FavBackdrop"
-                                app:layout_constraintEnd_toEndOf="@id/FavBackdrop"
-                                app:layout_constraintHeight_percent="0.35" />
 
-                            <!-- Left Gradient Overlay: covers 25% of width -->
-                            <View
-                                android:id="@+id/LeftOverlay"
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:background="@drawable/overlay_left_gradient"
-                                app:layout_constraintStart_toStartOf="@id/FavBackdrop"
-                                app:layout_constraintTop_toTopOf="@id/FavBackdrop"
-                                app:layout_constraintBottom_toBottomOf="@id/FavBackdrop"
-                                app:layout_constraintWidth_percent="0.40" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="35dp"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="30dp"
+                                    android:background="?attr/transparentEffect"
+                                    android:orientation="horizontal"
+                                    android:focusableInTouchMode="true">
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                                    <!-- Search Icon -->
+                                    <ImageView
+                                        android:layout_width="25dp"
+                                        android:layout_height="match_parent"
+                                        android:src="@drawable/ic_anime_filter"
+                                        app:tint="?attr/AccentColor"
+                                        android:padding="2dp"
+                                        android:background="?attr/transparentEffect"
+                                        android:layout_gravity="center_vertical"
+                                        tools:ignore="ContentDescription" />
+
+
+                                    <!-- Search Text Input -->
+
+
+
+                                    <EditText
+                                        android:id="@+id/AnimeSearchInput"
+                                        android:layout_width="250dp"
+                                        android:layout_height="match_parent"
+                                        android:hint="Search for anime..."
+                                        android:textColor="?attr/FG_color"
+                                        android:textColorHint="?attr/FG_color"
+                                        android:padding = "3dp"
+                                        android:inputType="text"
+                                        android:textSize="15sp"
+                                        android:singleLine="true"
+                                        android:clickable="false"
+                                        android:focusable="false"
+                                        android:fontFamily="@font/p"
+                                        android:focusableInTouchMode="true"
+                                        android:background="?attr/transparentEffect"
+                                        android:imeOptions="actionSearch"
+                                        tools:ignore="Autofill,HardcodedText" />
+
+                                </LinearLayout>
+
+                            <include layout="@layout/keyboard_layout"/>
+
+                        </LinearLayout>
+
+
+
+
+
 
 
                         <LinearLayout
-                            android:id="@+id/FaveData"
-                            android:layout_width="450dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="match_parent"
-                            android:layout_gravity="bottom"
-                            android:gravity="bottom"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginBottom="10dp"
                             android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/searchTextDisplay"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Anime Search Results"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/n"                            android:textSize="20sp"
+                                android:paddingStart="10dp"
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:shadowRadius="2"
+                                tools:ignore="HardcodedText,RtlSymmetry"
+                                android:layout_marginTop="7dp"/>
 
-                            <TextView
-                                android:id="@+id/FavTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
-                                android:ellipsize="end"
-                                android:maxLines="3"
-                                android:text="Sakamoto Days Part 2"
-                                android:singleLine="false"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="40sp"
-                                android:textStyle="bold"
-                                android:layout_marginBottom="5dp"
-                                android:fontFamily="@font/l"
-                                tools:ignore="HardcodedText" />
-                            <TextView
-                                android:id="@+id/FavGenre"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:maxLines="1"
-                                android:text="Action"
-                                android:singleLine="false"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="13sp"
-                                android:textStyle="bold"
-                                android:layout_marginBottom="10dp"
-                                android:fontFamily="@font/q"
-                                tools:ignore="HardcodedText" />
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="20dp"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="10dp"
-                                android:alpha="0.5">
+                                android:layout_height="490dp"
+                                android:descendantFocusability="afterDescendants"
+                                >
 
-                                <TextView
-                                    android:id="@+id/FavType"
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/SearchRecycler"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clipToPadding="false"
+                                    android:overScrollMode="never"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:scrollbars="none"
+                                    android:layout_margin="4dp"
+                                    tools:ignore="NestedWeights"
+
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
+
+                    <!-- //////////////////////// ANIME FAVORITE PAGE ////////////////////////////////////// -->
+                    <LinearLayout
+                        android:id="@+id/FavPageAnime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Favorite List"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/p"
+                            android:textSize="13sp"
+                            android:textColor="?attr/FG_color"
+                            tools:ignore="HardcodedText"
+                            android:alpha="0.5"
+                            android:layout_marginTop="10dp"/>
+
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginVertical="10dp"
+                            app:cardBackgroundColor="?attr/BG_color"
+                            app:cardCornerRadius="20dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="end">
+
+                                <ImageView
+                                    android:id="@+id/FavBackdrop"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
+                                    android:adjustViewBounds="true"
+                                    android:scaleType="fitCenter"
+                                    android:src="@raw/test4"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <!-- Bottom Gradient Overlay: covers 30% of height -->
+                                <View
+                                    android:id="@+id/BottomOverlay"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:background="@drawable/overlay_bottom_gradient"
+
+                                    app:layout_constraintBottom_toBottomOf="@id/FavBackdrop"
+                                    app:layout_constraintStart_toStartOf="@id/FavBackdrop"
+                                    app:layout_constraintEnd_toEndOf="@id/FavBackdrop"
+                                    app:layout_constraintHeight_percent="0.35" />
+
+                                <!-- Left Gradient Overlay: covers 25% of width -->
+                                <View
+                                    android:id="@+id/LeftOverlay"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:background="@drawable/overlay_left_gradient"
+                                    app:layout_constraintStart_toStartOf="@id/FavBackdrop"
+                                    app:layout_constraintTop_toTopOf="@id/FavBackdrop"
+                                    app:layout_constraintBottom_toBottomOf="@id/FavBackdrop"
+                                    app:layout_constraintWidth_percent="0.40" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/FaveData"
+                                android:layout_width="450dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="bottom"
+                                android:gravity="bottom"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/FavTitle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:layout_gravity="bottom"
                                     android:ellipsize="end"
-                                    android:maxLines="7"
-                                    android:text=""
+                                    android:maxLines="3"
+                                    android:text="Sakamoto Days Part 2"
                                     android:singleLine="false"
-                                    android:textColor="?attr/AccentColor"
-                                    android:textSize="15sp"
-                                    android:fontFamily="@font/a"
-                                    android:gravity="center"
+                                    android:textColor="?attr/FG_color"
+                                    android:textSize="40sp"
                                     android:textStyle="bold"
-                                    android:layout_marginEnd="15dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:fontFamily="@font/l"
+                                    tools:ignore="HardcodedText" />
+                                <TextView
+                                    android:id="@+id/FavGenre"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="Action"
+                                    android:singleLine="false"
+                                    android:textColor="?attr/FG_color"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginBottom="10dp"
+                                    android:fontFamily="@font/q"
+                                    tools:ignore="HardcodedText" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="20dp"
+                                    android:orientation="horizontal"
+                                    android:layout_marginBottom="10dp"
+                                    android:alpha="0.5">
+
+                                    <TextView
+                                        android:id="@+id/FavType"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="bottom"
+                                        android:ellipsize="end"
+                                        android:maxLines="7"
+                                        android:text=""
+                                        android:singleLine="false"
+                                        android:textColor="?attr/AccentColor"
+                                        android:textSize="15sp"
+                                        android:fontFamily="@font/a"
+                                        android:gravity="center"
+                                        android:textStyle="bold"
+                                        android:layout_marginEnd="15dp"
+                                        />
+
+                                    <androidx.cardview.widget.CardView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        app:cardCornerRadius="3dp"
+                                        android:text="IMDB"
+
+                                        android:textSize="11sp"
+                                        app:cardBackgroundColor="#DAA520"
+                                        tools:ignore="HardcodedText"
+                                        android:textStyle="bold">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="IMDb"
+                                            android:paddingVertical="2dp"
+                                            android:paddingHorizontal="5dp"
+                                            android:textColor="#000000"
+                                            android:textStyle="bold"
+                                            android:textSize="11sp"
+                                            android:fontFamily="@font/p"
+                                            tools:ignore="HardcodedText" />
+
+                                    </androidx.cardview.widget.CardView>
+
+                                    <TextView
+                                        android:id="@+id/FavRating"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="bottom"
+                                        android:ellipsize="end"
+                                        android:maxLines="7"
+                                        android:text=""
+                                        android:singleLine="false"
+                                        android:textColor="?attr/FG_color"
+                                        android:textSize="13sp"
+                                        android:gravity="center"
+                                        android:textStyle="italic|bold"
+                                        android:layout_marginEnd="15dp"
+                                        android:layout_marginStart="2dp"
+                                        />
+                                    <TextView
+                                        android:id="@+id/FavYear"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="bottom"
+                                        android:ellipsize="end"
+                                        android:maxLines="1"
+                                        android:text=""
+                                        android:singleLine="false"
+                                        android:textColor="?attr/FG_color"
+                                        android:textSize="13sp"
+                                        android:gravity="center"
+                                        android:textStyle="italic|bold"
+                                        android:layout_marginEnd="15dp"
+                                        />
+
+
+
+
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/FavOverview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="bottom"
+                                    android:ellipsize="end"
+                                    android:maxLines="5"
+                                    android:singleLine="false"
+                                    android:text="  at com.android.server.wm.WindowOrganizerController.onTransact(WindowOrganizerController.java:223)"
+                                    android:textColor="?attr/FG_color"
+                                    android:fontFamily="@font/p"
+                                    android:textSize="12sp"
+                                    android:layout_marginBottom="20dp"
                                     />
 
-                                <androidx.cardview.widget.CardView
+                                <LinearLayout
+                                    android:id="@+id/RemoveFaveItem"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:cardCornerRadius="3dp"
-                                    android:text="IMDB"
+                                    android:layout_height="30dp"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
+                                    android:clickable="true"
+                                    android:background="@drawable/watch_button"
+                                    android:nextFocusLeft="@+id/sideBar"
+                                    android:paddingStart="9dp"
+                                    android:paddingEnd="9dp"
+                                    android:gravity="center">
 
-                                    android:textSize="11sp"
-                                    app:cardBackgroundColor="#DAA520"
-                                    tools:ignore="HardcodedText"
-                                    android:textStyle="bold">
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:contentDescription="TODO"
+                                        android:src="@drawable/remove_fave"
+                                        app:tint="?attr/AccentColor"
+                                        tools:ignore="ContentDescription,HardcodedText" />
+
+
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="IMDb"
-                                        android:paddingVertical="2dp"
-                                        android:paddingHorizontal="5dp"
-                                        android:textColor="#000000"
-                                        android:textStyle="bold"
-                                        android:textSize="11sp"
-                                        android:fontFamily="@font/p"
-                                        tools:ignore="HardcodedText" />
+                                        android:text="Remove From Favorites"
+                                        android:textColor="@android:color/white"
+                                        android:fontFamily="@font/q"
+                                        android:textSize="8sp"
+                                        android:layout_marginStart="2dp"
+                                        tools:ignore="HardcodedText,SmallSp"
+                                        />
 
-                                </androidx.cardview.widget.CardView>
-
-                                <TextView
-                                    android:id="@+id/FavRating"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="bottom"
-                                    android:ellipsize="end"
-                                    android:maxLines="7"
-                                    android:text=""
-                                    android:singleLine="false"
-                                    android:textColor="?attr/FG_color"
-                                    android:textSize="13sp"
-                                    android:gravity="center"
-                                    android:textStyle="italic|bold"
-                                    android:layout_marginEnd="15dp"
-                                    android:layout_marginStart="2dp"
-                                    />
-                                <TextView
-                                    android:id="@+id/FavYear"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="bottom"
-                                    android:ellipsize="end"
-                                    android:maxLines="1"
-                                    android:text=""
-                                    android:singleLine="false"
-                                    android:textColor="?attr/FG_color"
-                                    android:textSize="13sp"
-                                    android:gravity="center"
-                                    android:textStyle="italic|bold"
-                                    android:layout_marginEnd="15dp"
-                                    />
-
-
-
-
-
+                                </LinearLayout>
                             </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/faveRecycler"
+                            android:layout_marginHorizontal="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_width="match_parent"
+                            android:clipToPadding="false"
+                            android:scrollbars="none"
+                            tools:ignore="RtlSymmetry"/>
+
+
+                    </LinearLayout>
+
+                    <!-- //////////////////////// WATCHLIST PAGE ////////////////////////////////////// -->
+                   <LinearLayout
+                       android:id="@+id/WatchedListPageAnime"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:orientation="vertical"
+                       android:visibility="gone">
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="Continue Watching"
+                           android:textStyle="bold"
+                           android:fontFamily="@font/p"
+                           android:textSize="13sp"
+                           android:alpha="0.5"
+                           android:textColor="#FFFFFF"
+                           android:shadowColor="#000000"
+                           android:shadowDx="1"
+                           android:shadowDy="1"
+                           android:shadowRadius="2"
+                           tools:ignore="HardcodedText"
+                           android:layout_marginTop="10dp"/>
+
+                       <androidx.recyclerview.widget.RecyclerView
+                           android:id="@+id/watchingRecycler"
+                           android:layout_height="match_parent"
+                           android:layout_width="match_parent"
+                           android:clipToPadding="false"
+                           android:scrollbars="none"
+                           tools:ignore="RtlSymmetry"/>
+
+                   </LinearLayout>
+
+                    <!-- //////////////////////// NOTIFICATION  PAGE ////////////////////////////////////// -->
+                    <LinearLayout
+                        android:id="@+id/notificationPageAnime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="10dp">
 
                             <TextView
-                                android:id="@+id/FavOverview"
-                                android:layout_width="match_parent"
+                                android:id="@+id/notificationHeadline"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
-                                android:ellipsize="end"
-                                android:maxLines="5"
-                                android:singleLine="false"
-                                android:text="  at com.android.server.wm.WindowOrganizerController.onTransact(WindowOrganizerController.java:223)"
-                                android:textColor="?attr/FG_color"
+                                android:text="notifications"
+                                android:textStyle="bold"
                                 android:fontFamily="@font/p"
-                                android:textSize="12sp"
-                                android:layout_marginBottom="20dp"
+                                android:textSize="13sp"
+                                android:alpha="0.5"
+                                android:textColor="?attr/FG_color"
+                                tools:ignore="HardcodedText"
                                 />
 
-                            <LinearLayout
-                                android:id="@+id/RemoveFaveItem"
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"/>
+
+                            <TextView
+                                android:id="@+id/clearNotBtn"
                                 android:layout_width="wrap_content"
-                                android:layout_height="30dp"
-                                android:focusable="true"
-                                android:focusableInTouchMode="true"
-                                android:clickable="true"
-                                android:background="@drawable/watch_button"
-                                android:nextFocusLeft="@+id/sideBar"
-                                android:paddingStart="9dp"
-                                android:paddingEnd="9dp"
-                                android:gravity="center">
+                                android:layout_height="wrap_content"
+                                android:text="Clear All"
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:shadowRadius="2"
+                                android:paddingHorizontal="15dp"
+                                android:paddingVertical="2dp"
+                                android:background="@drawable/filter_button"
+                                android:layout_marginRight="20dp"
+                                tools:ignore="HardcodedText" />
 
-                                <ImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:contentDescription="TODO"
-                                    android:src="@drawable/remove_fave"
-                                    app:tint="?attr/AccentColor"
-                                    tools:ignore="ContentDescription,HardcodedText" />
-
-
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Remove From Favorites"
-                                    android:textColor="@android:color/white"
-                                    android:fontFamily="@font/q"
-                                    android:textSize="8sp"
-                                    android:layout_marginStart="2dp"
-                                    tools:ignore="HardcodedText,SmallSp"
-                                    />
-
-                            </LinearLayout>
                         </LinearLayout>
-                    </androidx.cardview.widget.CardView>
 
 
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/faveRecycler"
-                        android:layout_marginHorizontal="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent"
-                        android:clipToPadding="false"
-                        android:scrollbars="none"
-                        tools:ignore="RtlSymmetry"/>
-
-
-                </LinearLayout>
-
-                <!-- //////////////////////// WATCHLIST PAGE ////////////////////////////////////// -->
-               <LinearLayout
-                   android:id="@+id/WatchedListPageAnime"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:orientation="vertical"
-                   android:visibility="gone">
-
-                   <TextView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:text="Continue Watching"
-                       android:textStyle="bold"
-                       android:fontFamily="@font/p"
-                       android:textSize="13sp"
-                       android:alpha="0.5"
-                       android:textColor="#FFFFFF"
-                       android:shadowColor="#000000"
-                       android:shadowDx="1"
-                       android:shadowDy="1"
-                       android:shadowRadius="2"
-                       tools:ignore="HardcodedText"
-                       android:layout_marginTop="10dp"/>
-
-                   <androidx.recyclerview.widget.RecyclerView
-                       android:id="@+id/watchingRecycler"
-                       android:layout_height="match_parent"
-                       android:layout_width="match_parent"
-                       android:clipToPadding="false"
-                       android:scrollbars="none"
-                       tools:ignore="RtlSymmetry"/>
-                   
-               </LinearLayout>
-
-                <!-- //////////////////////// NOTIFICATION  PAGE ////////////////////////////////////// -->
-                <LinearLayout
-                    android:id="@+id/notificationPageAnime"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="10dp">
-
-                        <TextView
-                            android:id="@+id/notificationHeadline"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="notifications"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/p"
-                            android:textSize="13sp"
-                            android:alpha="0.5"
-                            android:textColor="?attr/FG_color"
-                            tools:ignore="HardcodedText"
-                            />
-
-                        <View
-                            android:layout_width="0dp"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/notificationRecycler"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"/>
-
-                        <TextView
-                            android:id="@+id/clearNotBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Clear All"
-                            android:textColor="#FFFFFF"
-                            android:shadowColor="#000000"
-                            android:shadowDx="1"
-                            android:shadowDy="1"
-                            android:shadowRadius="2"
-                            android:paddingHorizontal="15dp"
-                            android:paddingVertical="2dp"
-                            android:background="@drawable/filter_button"
-                            android:layout_marginRight="20dp"
-                            tools:ignore="HardcodedText" />
+                            android:layout_width="match_parent"
+                            android:clipToPadding="false"
+                            android:scrollbars="none"
+                            tools:ignore="RtlSymmetry"/>
 
                     </LinearLayout>
 
 
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/notificationRecycler"
-                        android:layout_height="match_parent"
-                        android:layout_width="match_parent"
-                        android:clipToPadding="false"
-                        android:scrollbars="none"
-                        tools:ignore="RtlSymmetry"/>
-
                 </LinearLayout>
+            </ScrollView>
 
+        </LinearLayout>
 
-            </LinearLayout>
-        </ScrollView>
+        <include layout="@layout/laod_animation" />
 
-    </LinearLayout>
-
-
-
-
-
-
-
-    <include layout="@layout/laod_animation" />
-
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <include layout="@layout/side_bar" android:visibility="gone"/>

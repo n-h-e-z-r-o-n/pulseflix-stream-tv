@@ -1,7 +1,6 @@
 package com.example.onyx
 
-import android.app.Activity
-import android.content.Intent
+
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -32,7 +31,6 @@ import kotlin.String
 import com.example.onyx.Database.AppDatabase
 import com.example.onyx.Database.SessionManger
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.onyx.FetchData.AnimeApi
 import com.example.onyx.OnyxClasses.AiringAnimeItem
 import com.example.onyx.OnyxClasses.AnimeAiringAdapter
@@ -126,7 +124,7 @@ class Anime_Page : AppCompatActivity() {
 
          ////////////////////////////////////////////////////////////////////////////////////////
 
-         val navBar = findViewById<LinearLayout>(R.id.animeNavBar)
+         val navBar = findViewById<LinearLayout>(R.id.NavBar)
          val homeAnimeBtn = findViewById<LinearLayout>(R.id.HomeAnimeBtn)
          val favAnimeBtn = findViewById<LinearLayout>(R.id.FavAnimeBtn)
          val searchAnimeBtn = findViewById<LinearLayout>(R.id.SearchAnimeBtn)
@@ -292,6 +290,16 @@ class Anime_Page : AppCompatActivity() {
              expandedWidthDp = 155f,
              collapsedWidthDp = 70f
          )
+
+
+         val displayMetrics = resources.displayMetrics
+         val screenHeight = displayMetrics.heightPixels
+         val screenWidth = displayMetrics.widthPixels
+
+
+         val dp70 = (70 * displayMetrics.density).toInt()
+         val container = findViewById<LinearLayout>(R.id.contentContainer)
+         container.minimumWidth = screenWidth - dp70
 
 
 
@@ -469,7 +477,10 @@ class Anime_Page : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        findViewById<LinearLayout>(R.id.HomeAnimeBtn).requestFocus()
+        val rootView = window.decorView.rootView
+        if (rootView.findFocus() == null) {
+            findViewById<LinearLayout>(R.id.HomeAnimeBtn).requestFocus()
+        }
 
         if (this::watchAdapter.isInitialized) {
             watchAdapter.clearItems()
@@ -1127,51 +1138,7 @@ class Anime_Page : AppCompatActivity() {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private fun o_notificationS() {
 
-        lifecycleScope.launch(Dispatchers.Main) {
-
-
-            val dnot = db.getAllAnimeNotifications(userId)
-            val notifications = mutableListOf<NotificationItem>()
-
-            findViewById<TextView>(R.id.notificationHeadline).text = "notifications (${dnot.size})"
-
-
-            for (item in dnot) {
-
-                Log.d("Not_anime", "notificationId: ${item["id"]}")
-                Log.d("Not_anime", "anime_id: ${item["anime_id"]}")
-                Log.d("Not_anime", "title: ${item["title"]}")
-                Log.d("Not_anime", "poster: ${item["poster"]}")
-                Log.d("Not_anime", "subStored: ${item["subStored"]}")
-                Log.d("Not_anime", "dubStored: ${item["dubStored"]}")
-                Log.d("Not_anime", "seasonsStored: ${item["seasonsStored"]}")
-                Log.d("Not_anime", "notify_at: ${item["notify_at"]}\n\n\n")
-
-
-                val itemData = NotificationItem(
-                    notificationId = item["id"].toString(),      // ✅ PASS ID
-                    imdbCode = item["anime_id"].toString(),
-                    title = item["title"].toString(),
-                    imageUrl = item["poster"],
-                    info = "sub: ${item["subStored"]} dub: ${item["dubStored"]}",
-                    type = "anime",
-                    newSeason = item["subStored"].toString(),
-                    newEpisode = item["dubStored"].toString(),
-                    time = item["notify_at"].toString()
-                )
-                notifications.add(itemData)
-            }
-
-
-            notificationAdapter = NotificationAdapter(
-                items = notifications.toMutableList(),
-                layoutResId = R.layout.item_notification
-            )
-            notificationRecyclerView.adapter = notificationAdapter
-        }
-    }
 
     private fun notificationS() {
         lifecycleScope.launch {
@@ -1186,16 +1153,30 @@ class Anime_Page : AppCompatActivity() {
 
             if (notificationsFromDb.size > 0) findViewById<CardView>(R.id.cNotificationAnimeIcon).visibility = View.VISIBLE
 
-
             // Map DB → UI model
             val notifications = notificationsFromDb.map { item ->
+                //Log.e("anime_Not_fetched", "xyz:" + item["subStored"]?.let { it::class } + item["seasons"] )
+
+                val subcount = (item["subStored"]?.toString()?.toIntOrNull()) ?: 0
+                val dubcount = (item["dubStored"]?.toString()?.toIntOrNull()) ?: 0
+
+                Log.e("anime_Not_fetched", "xyz:" + "subcount: " +subcount + " | " + item["subStored"] + " dubcount: " + dubcount+ " | " + item["dubStored"] )
+
+                var info = ""
+
+                if(subcount> 0){
+                    info = info + "Episode $subcount [SUB] available NOW \n\n"
+                }
+                if(dubcount> 0){
+                    info = info + "Episode $dubcount [DUB] available NOW"
+                }
 
                 NotificationItem(
                     notificationId = item["id"]?.toString().orEmpty(),
                     imdbCode = item["anime_id"]?.toString().orEmpty(),
                     title = item["title"]?.toString().orEmpty(),
                     imageUrl = item["poster"],
-                    info = "sub: ${item["subStored"]} dub: ${item["dubStored"]}",
+                    info =  info, //"sub: ${item["subStored"]} dub: ${item["dubStored"]}",
                     type = "anime",
                     newSeason = item["subStored"]?.toString().orEmpty(),
                     newEpisode = item["dubStored"]?.toString().orEmpty(),
