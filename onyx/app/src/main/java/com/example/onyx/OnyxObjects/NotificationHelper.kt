@@ -141,7 +141,6 @@ object NotificationHelper {
                 }
 
 
-
                 val fetch = TMDBapi(context)
 
                 val data = fetch.fetchAnimeData(item["anime_id"].toString())
