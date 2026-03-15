@@ -222,7 +222,6 @@ class Play : AppCompatActivity() {
                     return WebResourceResponse("text/plain", "utf-8", null) // block
                 }
 
-
                 return super.shouldInterceptRequest(view, request)
             }
 

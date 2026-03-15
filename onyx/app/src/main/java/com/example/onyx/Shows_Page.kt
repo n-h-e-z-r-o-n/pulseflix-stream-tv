@@ -178,6 +178,12 @@ class Shows_Page : AppCompatActivity() {
             cWatchBtn.isSelected = false
             cNotificationBtn.isSelected = false
         }
+        HomeBtn.setOnFocusChangeListener { v, hasFocus ->
+            Log.e("AUTO CLICK", "HomeBtn : " + HomeBtn )
+            if (hasFocus) {
+                v.performClick()
+            }
+        }
         HomeBtn.performClick()
         HomeBtn.requestFocus()
 
@@ -204,6 +210,13 @@ class Shows_Page : AppCompatActivity() {
             cWatchBtn.isSelected = false
             cNotificationBtn.isSelected = false
         }
+        MoviesBtn.setOnFocusChangeListener { v, hasFocus ->
+            Log.e("AUTO CLICK", "MoviesBtn : " + hasFocus )
+            if (hasFocus) {
+                v.performClick()
+            }
+        }
+
 
         seriesBtn.setOnClickListener {
             HomePage.visibility = View.GONE
@@ -340,7 +353,11 @@ class Shows_Page : AppCompatActivity() {
 
         val dp70 = (70 * displayMetrics.density).toInt()
         val container = findViewById<LinearLayout>(R.id.contentContainer)
+
         container.minimumWidth = screenWidth - dp70
+        val params = container.layoutParams
+        params.width = screenWidth - dp70
+        container.layoutParams = params
 
 
 

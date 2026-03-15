@@ -186,7 +186,7 @@ object GlobalUtils {
     // List of your theme keys
     private val availableThemes = listOf(
         "Default",
-        "light",
+        "Brown",
         "dark",
         "Yellow",
         "ghost",
@@ -198,7 +198,7 @@ object GlobalUtils {
 
     fun getAppTheme(context: Context): String {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return prefs.getString(KEY_APP_THEME, "light") ?: "light"
+        return prefs.getString(KEY_APP_THEME, "Default") ?: "Default"
     }
 
     fun setAppTheme(context: Context, theme: String) {
@@ -210,7 +210,7 @@ object GlobalUtils {
     fun applyTheme(activity: Activity) {
         when (getAppTheme(activity)) {
             "Default"-> activity.setTheme(R.style.Theme_Onyx_Default)
-            "light"  -> activity.setTheme(R.style.Theme_Onyx_Light)
+            "Brown"  -> activity.setTheme(R.style.Theme_Onyx_Brown)
             "dark" -> activity.setTheme(R.style.Theme_Onyx_Dark)
             "Yellow" -> activity.setTheme(R.style.Theme_Onyx_Yellow)
             "ghost" -> activity.setTheme(R.style.Theme_Onyx_Ghost)
@@ -420,20 +420,18 @@ object GlobalUtils {
             when (serverIndex) {
                 0 -> "https://vidsrc.to/embed/movie/$showId"
                 1 -> "https://player.embed-api.stream/?id=$showId&type=movie"
-                2 -> "https://www.2embed.skin/embed/$showId"
-                3 -> "https://embedmaster.link/movie/$showId"
-                4 -> "https://www.primewire.si/embed/movie?tmdb=$showId"
-                5 -> "https://www.vidking.net/embed/movie/$showId"
+                2 -> "https://embedmaster.link/movie/$showId"
+                3 -> "https://www.primewire.si/embed/movie?tmdb=$showId"
+                4 -> "https://www.vidking.net/embed/movie/$showId"
                 else -> "https://vidsrc.to/embed/movie/$showId"
             }
         } else {
             when (serverIndex) {
                 0 -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
                 1 -> "https://player.embed-api.stream/?id=$showId&s=$seasonNo&e=$episodeNo"
-                2 -> "https://www.2embed.cc/embedtv/$showId&s=$seasonNo&e=$episodeNo"
-                3 -> "https://embedmaster.link/tv/$showId/$seasonNo/$episodeNo"
-                4 -> "https://www.primewire.si/embed/tv?tmdb=$showId&season=$seasonNo&episode=$episodeNo"
-                5 -> "https://www.vidking.net/embed/tv/$showId/$seasonNo/$episodeNo"
+                2 -> "https://embedmaster.link/tv/$showId/$seasonNo/$episodeNo"
+                3 -> "https://www.primewire.si/embed/tv?tmdb=$showId&season=$seasonNo&episode=$episodeNo"
+                4 -> "https://www.vidking.net/embed/tv/$showId/$seasonNo/$episodeNo"
                 else -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
             }
         }
@@ -1051,7 +1049,7 @@ object GlobalUtils {
         var videoId = ""
 
         if (jsonObject != null) {
-            val results = jsonObject.getJSONArray("results")
+            val results = jsonObject.optJSONArray("results") ?: return
 
             if (results.length() == 0) return
 
@@ -1065,7 +1063,12 @@ object GlobalUtils {
 
                     videoId = obj.getString("key")
 
-                    setupWebView(context, webView, videoId, muted)
+                    if (videoId.isNotEmpty()) {
+                        withContext(Dispatchers.Main) {
+                            setupWebView(context, webView, videoId, muted)
+                        }
+                    }
+
                     break
                 }
             }
@@ -1085,7 +1088,8 @@ object GlobalUtils {
             settings.mediaPlaybackRequiresUserGesture = false
             settings.userAgentString =
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
-
+            settings.allowFileAccess = false
+            settings.allowContentAccess = false
             webChromeClient = WebChromeClient()
             webViewClient = object : WebViewClient() {
                 override fun shouldInterceptRequest(
@@ -1112,6 +1116,7 @@ object GlobalUtils {
         <!DOCTYPE html>
         <html>
         <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
                 body { margin: 0; padding: 0; background-color: #000; }
                 .container { position: relative; width: 100vw; height: 100vh; }

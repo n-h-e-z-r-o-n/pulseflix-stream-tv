@@ -299,7 +299,11 @@ class Anime_Page : AppCompatActivity() {
 
          val dp70 = (70 * displayMetrics.density).toInt()
          val container = findViewById<LinearLayout>(R.id.contentContainer)
+
          container.minimumWidth = screenWidth - dp70
+         val params = container.layoutParams
+         params.width = screenWidth - dp70
+         container.layoutParams = params
 
 
 

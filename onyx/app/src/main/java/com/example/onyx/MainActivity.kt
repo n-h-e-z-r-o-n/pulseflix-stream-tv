@@ -7,8 +7,10 @@ import android.graphics.LinearGradient
 import android.graphics.Matrix
 import android.graphics.Shader
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.OvershootInterpolator
+import android.webkit.WebView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
@@ -18,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.onyx.Database.SessionManger
 import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.NotificationHelper
+import com.example.onyx.OnyxObjects.StreamingLinks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -115,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
+        /*
         lifecycleScope.launch {
 
             // 1️⃣ Wait until restore finishes (runs on IO thread)
@@ -144,6 +147,11 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this@MainActivity, Login_Page::class.java))
             }
         }
+
+         */
+
+        startActivity(Intent(this@MainActivity, Watch_Page::class.java))
+
 
     }
 

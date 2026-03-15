@@ -32,7 +32,7 @@
             <FrameLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="541dp"
                 android:id="@+id/widget_1">
 
                 <!-- Backdrop image -->
@@ -48,7 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@raw/test2"
+                        android:src="@raw/backdrop"
                         android:layout_gravity="end"
                         android:adjustViewBounds="true"
                         tools:ignore="ContentDescription" />

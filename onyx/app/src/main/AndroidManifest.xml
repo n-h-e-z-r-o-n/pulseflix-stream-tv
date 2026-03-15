@@ -1,34 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- Device Features -->
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
     <uses-feature
         android:name="android.software.leanback"
-        android:required="false" />
-
-    <!-- Internet Access -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- Media access (Android 13+) -->
+        android:required="false" /> <!-- Internet Access -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Media access (Android 13+) -->
     <uses-permission
         android:name="android.permission.READ_MEDIA_IMAGES"
         tools:targetApi="33" />
-
     <uses-permission
         android:name="android.permission.READ_MEDIA_VIDEO"
-        tools:targetApi="33" />
-
-    <!-- For Android 12 and below -->
+        tools:targetApi="33" /> <!-- For Android 12 and below -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-
-
-    <!-- Allow installing APKs from inside the app -->
+        android:maxSdkVersion="32" /> <!-- Allow installing APKs from inside the app -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
@@ -42,7 +31,9 @@
         android:theme="@style/Theme.Onyx.Default"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-
+        <activity
+            android:name=".testpage"
+            android:exported="false" />
         <activity
             android:name=".Login_Page"
             android:exported="false" />
@@ -95,6 +86,7 @@
             android:theme="@style/Theme.Onyx.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>

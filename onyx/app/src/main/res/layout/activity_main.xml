@@ -63,7 +63,7 @@
             android:shadowRadius="4"
             android:text="ONYX"
             android:textColor="#152755"
-            android:textSize="200sp"
+            android:textSize="240sp"
             tools:ignore="HardcodedText" />
 
     </LinearLayout>
@@ -116,6 +116,8 @@
                     android:layout_marginHorizontal="15dp"/>
             </LinearLayout>
         </LinearLayout>
+
+
 
 
 

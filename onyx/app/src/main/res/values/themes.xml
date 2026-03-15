@@ -4,9 +4,9 @@
 
     <!-- Theme (default) -->
     <style name="Theme.Onyx.Default" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="BG_color">#042c40</item>
+        <item name="BG_color">#000d1a</item>
         <item name="FG_color">#FFFFFF</item>
-        <item name="BG_color_up">#0a3d5b</item>
+        <item name="BG_color_up">#001e35</item>
         <item name="AccentColor">#54becb</item>
         <item name="transparentEffect">#40042c40</item>
         <item name="notBudge">#290e05</item>
@@ -15,13 +15,13 @@
         <item name="themeImage">@raw/background_1</item>
     </style>
 
-    <style name="Theme.Onyx.Light" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="BG_color">#F5F5F5</item>
-        <item name="FG_color">#000000</item>
-        <item name="BG_color_up">#FAFAFA</item>
-        <item name="AccentColor">#2c9bcf</item>
-        <item name="transparentEffect">#40c0c0c0</item>
-        <item name="notBudge">#1565C0</item>
+    <style name="Theme.Onyx.Brown" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="BG_color">#1d0f08</item>
+        <item name="FG_color">#FFFFFF</item>
+        <item name="BG_color_up">#2b1b12</item>
+        <item name="AccentColor">#d6cfc4</item>
+        <item name="transparentEffect">#401d0f08</item>
+        <item name="notBudge">#707000</item>
     </style>
 
     <!-- Dark Theme  -->
