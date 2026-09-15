@@ -21,6 +21,7 @@ android {
         buildConfigField( "String", "A_K", "\"https://echo-anime.vercel.app\"")
         //buildConfigField( "String", "A_K", "\"http://192.168.100.22:4000\"")
         buildConfigField( "String", "APPV_J", "\"https://github.com/n-h-e-z-r-o-n/pulseflix-stream-tv/raw/refs/heads/main/App/version.json\"")
+        buildConfigField( "String", "STREAM_S", "\"https://github.com/n-h-e-z-r-o-n/pulseflix-stream-tv/raw/refs/heads/main/App/servers.json\"")
 
 
     }

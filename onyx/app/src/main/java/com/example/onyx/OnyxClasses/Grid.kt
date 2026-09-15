@@ -1371,7 +1371,7 @@ class FavAdapter(
                 val currentPos = bindingAdapterPosition
 
                 when (keyCode) {
-                    KeyEvent.KEYCODE_DPAD_LEFT -> {
+                     KeyEvent.KEYCODE_DPAD_LEFT -> {
                         // If we are at the very first item, swallow the left click
                         if (currentPos == 0) {
                             return@setOnKeyListener true
