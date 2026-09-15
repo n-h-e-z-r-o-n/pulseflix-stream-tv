@@ -13,6 +13,9 @@ class OnyxApplication : Application() {
         // Configure SSL only once when the app starts
         SSLHelper.trustAllCertificates()
         
+        // Initialize global settings
+        com.example.onyx.OnyxObjects.GlobalUtils.useLowQualityImages = com.example.onyx.OnyxObjects.GlobalUtils.isLowQualityImagesEnabled(this)
+        
         // Configure Picasso with unsafe HTTP client
         val client = UnsafeOkHttpClient.getUnsafeOkHttpClient()
         val picasso = Picasso.Builder(this)

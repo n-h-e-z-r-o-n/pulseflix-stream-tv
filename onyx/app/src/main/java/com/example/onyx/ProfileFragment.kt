@@ -115,6 +115,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         val isDynamicColor = sm.isDynamicColorEnabled()
         binding.dynamicColorValue.text = if (isDynamicColor) "On" else "Off"
+        
+        val isLowQuality = GlobalUtils.isLowQualityImagesEnabled(requireContext())
+        binding.lowQualityValue.text = if (isLowQuality) "On" else "Off"
     }
 
     private fun setupClickListeners() {
@@ -133,6 +136,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             Toast.makeText(
                 requireActivity(),
                 "Dynamic Color ${if (newState) "Enabled" else "Disabled"}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        binding.lowQualitySetting.setOnClickListener {
+            val newState = !GlobalUtils.isLowQualityImagesEnabled(requireContext())
+            GlobalUtils.setLowQualityImagesEnabled(requireContext(), newState)
+            binding.lowQualityValue.text = if (newState) "On" else "Off"
+            Toast.makeText(
+                requireActivity(),
+                "Low Quality Images ${if (newState) "Enabled" else "Disabled"}",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -172,6 +186,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.logoutBtn,
             binding.themeSetting,
             binding.dynamicColorSetting,
+            binding.lowQualitySetting,
             binding.versionInfo,
             binding.clearCache,
             binding.checkUpdates,

@@ -173,16 +173,29 @@ object GlobalUtils {
 
     // ==================== CACHE MANAGEMENT ====================
 
+    var useLowQualityImages: Boolean = false
+    private const val KEY_LOW_QUALITY_IMAGES = "low_quality_images"
+
+    fun setLowQualityImagesEnabled(context: Context, enabled: Boolean) {
+        val prefs = getSharedPreferences(context)
+        prefs.edit().putBoolean(KEY_LOW_QUALITY_IMAGES, enabled).apply()
+        useLowQualityImages = enabled
+    }
+
+    fun isLowQualityImagesEnabled(context: Context): Boolean {
+        return getSharedPreferences(context).getBoolean(KEY_LOW_QUALITY_IMAGES, false)
+    }
+
     fun getOptimizedPosterUrl(imageUrl: String?): String {
-        return optimizeTmdbImageUrl(imageUrl, TMDB_POSTER_SIZE)
+        return optimizeTmdbImageUrl(imageUrl, if (useLowQualityImages) TMDB_POSTER_SIZE else "original")
     }
 
     fun getOptimizedBackdropUrl(imageUrl: String?): String {
-        return optimizeTmdbImageUrl(imageUrl, TMDB_BACKDROP_SIZE)
+        return optimizeTmdbImageUrl(imageUrl, if (useLowQualityImages) TMDB_BACKDROP_SIZE else "original")
     }
 
     fun getOptimizedLogoUrl(imageUrl: String?): String {
-        return optimizeTmdbImageUrl(imageUrl, TMDB_LOGO_SIZE)
+        return optimizeTmdbImageUrl(imageUrl, if (useLowQualityImages) TMDB_LOGO_SIZE else "original")
     }
 
     private fun optimizeTmdbImageUrl(imageUrl: String?, size: String): String {
