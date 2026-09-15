@@ -16,6 +16,13 @@
     "key": "xpass",
     "movieTemplate": "https://play.xpass.top/e/movie/{showId}",
     "tvTemplate": "https://play.xpass.top/e/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "vidfast",
+    "key": "vidfast",
+    "movieTemplate": "https://vidfast.vc/movie/{showId}",
+    "tvTemplate": "https://vidfast.vc/tv/{showId}/{seasonNo}/{episodeNo}"
   }
+  
  
 ]
