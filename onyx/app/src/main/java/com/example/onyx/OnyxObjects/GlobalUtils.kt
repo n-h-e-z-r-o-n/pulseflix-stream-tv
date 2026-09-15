@@ -1070,6 +1070,29 @@ object GlobalUtils {
         }
     }
 
+    fun applyDimmingOnFocus(parentView: View, dimmedAlpha: Float = 0.4f, focusedAlpha: Float = 1.0f) {
+        parentView.post {
+            parentView.alpha = if (parentView.hasFocus()) focusedAlpha else dimmedAlpha
+        }
+
+        parentView.viewTreeObserver.addOnGlobalFocusChangeListener { oldFocus, newFocus ->
+            val oldWasInParent = oldFocus?.let { isViewAncestor(parentView, it) } ?: false
+            val newIsInParent = newFocus?.let { isViewAncestor(parentView, it) } ?: false
+
+            if (!oldWasInParent && newIsInParent) {
+                parentView.animate()
+                    .alpha(focusedAlpha)
+                    .setDuration(250)
+                    .start()
+            } else if (oldWasInParent && !newIsInParent) {
+                parentView.animate()
+                    .alpha(dimmedAlpha)
+                    .setDuration(250)
+                    .start()
+            }
+        }
+    }
+
     fun centerChildOnFocus(
         scrollView: ScrollView,
         childView: View

@@ -207,6 +207,8 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
         tvSection.visibility = View.GONE
 
 
+
+
         GlobalUtils.setHeightToMatchScreen(SpotlightSection)
         GlobalUtils.setHeightToMatchScreen(HomeContentSection)
 
@@ -218,6 +220,12 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
         GlobalUtils.centerParentOnFocus(activityScrollVIEW, filterSection)
         GlobalUtils.centerParentOnFocus(activityScrollVIEW, tvSection)
 
+        GlobalUtils.applyDimmingOnFocus(SpotlightSection)
+        GlobalUtils.applyDimmingOnFocus(HomeContentSection)
+        GlobalUtils.applyDimmingOnFocus(movieSection)
+        GlobalUtils.applyDimmingOnFocus(filterSection)
+        GlobalUtils.applyDimmingOnFocus(tvSection)
+
         ////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -228,6 +236,9 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
 
         GlobalUtils.snapRowToTopOnFocus(homeScrollView, realityRow)
         GlobalUtils.snapRowToTopOnFocus(homeScrollView, thrillsRow)
+
+        GlobalUtils.applyDimmingOnFocus(realityRow)
+        GlobalUtils.applyDimmingOnFocus(thrillsRow)
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////
