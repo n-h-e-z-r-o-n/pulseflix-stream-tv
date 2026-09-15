@@ -303,7 +303,7 @@ class FocusOverlay<T> (
                 for (index in 0 until recyclerView.childCount) {
                     add(recyclerView.getChildAt(index))
                 }
-            }.sortedBy { it.left }
+            }.sortedBy { recyclerView.getChildAdapterPosition(it) }
 
             val focusedIndex = visibleChildren.indexOf(focusedView)
             if (focusedIndex == -1) {
