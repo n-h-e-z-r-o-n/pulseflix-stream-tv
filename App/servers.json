@@ -16,6 +16,6 @@
     "key": "xpass",
     "movieTemplate": "https://play.xpass.top/e/movie/{showId}",
     "tvTemplate": "https://play.xpass.top/e/tv/{showId}/{seasonNo}/{episodeNo}"
-  },
+  }
  
 ]
