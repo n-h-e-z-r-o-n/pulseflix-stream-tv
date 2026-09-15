@@ -170,6 +170,10 @@ class Login_Page : AppCompatActivity() {
         profileAdapter = ProfileAdapter(profiles, R.layout.item_account)
         profileRecyclerView.adapter = profileAdapter
 
+        profileAdapter.onProfileLongPressed = { profile ->
+            showManageProfileDialog(profile)
+        }
+        
         profileAdapter.onProfileSelected = { profile ->
             Log.d("Login_Page", "Selected profile: $profile")
             if (profile.userid == "CREATE") {
@@ -516,5 +520,48 @@ class Login_Page : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun showManageProfileDialog(profile: com.example.onyx.OnyxClasses.profileItem) {
+        if (profile.userid == "CREATE") return
+        
+        val dialogView = layoutInflater.inflate(R.layout.dialog_update_user, null)
+        val dialog = android.app.AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        
+        val dialogTitle = dialogView.findViewById<android.widget.TextView>(R.id.dialogTitle)
+        val editPin = dialogView.findViewById<android.widget.EditText>(R.id.editPin)
+        val btnCancel = dialogView.findViewById<android.widget.Button>(R.id.btnCancel)
+        val btnDelete = dialogView.findViewById<android.widget.Button>(R.id.btnDelete)
+
+        dialogTitle.text = "Delete ${profile.username}"
+
+        btnCancel.setOnClickListener { dialog.dismiss() }
+
+        btnDelete.setOnClickListener {
+            val enteredPin = editPin.text.toString().trim()
+            
+            val cursor = db.validateUser(profile.username, enteredPin)
+            if (cursor.moveToFirst()) {
+                cursor.close()
+                // PIN matches! Proceed to delete
+                val success = db.deleteUser(profile.userid.toInt())
+                if (success) {
+                    android.widget.Toast.makeText(this, "Profile deleted", android.widget.Toast.LENGTH_SHORT).show()
+                    loadProfiles()
+                    dialog.dismiss()
+                } else {
+                    android.widget.Toast.makeText(this, "Failed to delete", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                cursor.close()
+                android.widget.Toast.makeText(this, "Incorrect PIN", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        dialog.show()
     }
 }

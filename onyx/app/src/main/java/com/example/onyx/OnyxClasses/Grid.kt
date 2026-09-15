@@ -1037,6 +1037,7 @@ class ProfileAdapter (
 ) :  RecyclerView.Adapter<ProfileAdapter .ViewHolder>() {
 
     var onProfileSelected: ((profileItem) -> Unit)? = null
+    var onProfileLongPressed: ((profileItem) -> Unit)? = null
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val CardViewcontiner: CardView = view.findViewById(R.id.profileCardContiner)
@@ -1116,9 +1117,12 @@ class ProfileAdapter (
         }
 
         holder.CardViewcontiner.setOnClickListener {
-            onProfileSelected?.invoke(currentItem) ?: run {
-
-            }
+            onProfileSelected?.invoke(currentItem) ?: run {}
+        }
+        
+        holder.CardViewcontiner.setOnLongClickListener {
+            onProfileLongPressed?.invoke(currentItem)
+            true
         }
 
         holder.CardViewcontiner.setOnKeyListener { v, keyCode, event ->

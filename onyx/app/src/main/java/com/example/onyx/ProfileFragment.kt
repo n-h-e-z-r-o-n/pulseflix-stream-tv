@@ -151,6 +151,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             ).show()
         }
 
+        binding.editProfileSetting.setOnClickListener { showEditProfileDialog() }
+        binding.clearWatchHistorySetting.setOnClickListener { showClearHistoryDialog() }
+        binding.clearFavoritesSetting.setOnClickListener { showClearFavoritesDialog() }
+        binding.deleteAccountSetting.setOnClickListener { showDeleteAccountDialog() }
+
         binding.clearCache.setOnClickListener {
             val cleared = GlobalUtils.clearAppCache(requireActivity())
             Toast.makeText(
@@ -184,6 +189,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun setupFocusHandling() {
         val focusableViews = listOf(
             binding.logoutBtn,
+            binding.editProfileSetting,
+            binding.clearWatchHistorySetting,
+            binding.clearFavoritesSetting,
+            binding.deleteAccountSetting,
             binding.themeSetting,
             binding.dynamicColorSetting,
             binding.lowQualitySetting,
@@ -373,4 +382,123 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         logoutDialog?.dismiss()
         _binding = null
     }
+    private fun showEditProfileDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_edit_profile, null)
+        val dialog = android.app.AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val editUsername = dialogView.findViewById<android.widget.EditText>(R.id.editUsername)
+        val editPin = dialogView.findViewById<android.widget.EditText>(R.id.editPin)
+        val btnSave = dialogView.findViewById<android.widget.Button>(R.id.btnSave)
+        val btnCancel = dialogView.findViewById<android.widget.Button>(R.id.btnCancel)
+
+        editUsername.setText(binding.profileName.text)
+
+        btnCancel.setOnClickListener { dialog.dismiss() }
+
+        btnSave.setOnClickListener {
+            val newName = editUsername.text.toString().trim()
+            val newPin = editPin.text.toString().trim()
+
+            if (newName.isEmpty()) {
+                android.widget.Toast.makeText(requireContext(), "Name cannot be empty", android.widget.Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            var finalPin = newPin
+            if (finalPin.isEmpty()) {
+                val cursor = db.readableDatabase.rawQuery("SELECT pin FROM users WHERE id=?", arrayOf(currentUserId.toString()))
+                if (cursor.moveToFirst()) {
+                    finalPin = cursor.getString(0)
+                }
+                cursor.close()
+            }
+
+            val success = db.updateUser(currentUserId, newName, finalPin)
+            if (success) {
+                android.widget.Toast.makeText(requireContext(), "Profile updated", android.widget.Toast.LENGTH_SHORT).show()
+                binding.profileName.text = newName
+                dialog.dismiss()
+            } else {
+                android.widget.Toast.makeText(requireContext(), "Failed to update", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+        dialog.show()
+    }
+
+    private fun showClearHistoryDialog() {
+        android.app.AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme)
+            .setTitle("Clear Watch History")
+            .setMessage("Are you sure you want to clear your watch history? This cannot be undone.")
+            .setPositiveButton("Clear") { _, _ ->
+                val success = db.clearWatchHistory(currentUserId)
+                if (success) {
+                    android.widget.Toast.makeText(requireContext(), "Watch history cleared", android.widget.Toast.LENGTH_SHORT).show()
+                    loadProfileData()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showClearFavoritesDialog() {
+        android.app.AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme)
+            .setTitle("Clear Favorites")
+            .setMessage("Are you sure you want to remove all saved favorites? This cannot be undone.")
+            .setPositiveButton("Clear") { _, _ ->
+                val success = db.clearFavorites(currentUserId)
+                if (success) {
+                    android.widget.Toast.makeText(requireContext(), "Favorites cleared", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showDeleteAccountDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_update_user, null)
+        val dialog = android.app.AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val dialogTitle = dialogView.findViewById<android.widget.TextView>(R.id.dialogTitle)
+        val editPin = dialogView.findViewById<android.widget.EditText>(R.id.editPin)
+        val btnCancel = dialogView.findViewById<android.widget.Button>(R.id.btnCancel)
+        val btnDelete = dialogView.findViewById<android.widget.Button>(R.id.btnDelete)
+
+        dialogTitle.text = "Delete ${binding.profileName.text}"
+
+        btnCancel.setOnClickListener { dialog.dismiss() }
+
+        btnDelete.setOnClickListener {
+            val enteredPin = editPin.text.toString().trim()
+
+            val cursor = db.validateUser(binding.profileName.text.toString(), enteredPin)
+            if (cursor.moveToFirst()) {
+                cursor.close()
+                val success = db.deleteUser(currentUserId)
+                if (success) {
+                    android.widget.Toast.makeText(requireContext(), "Profile deleted", android.widget.Toast.LENGTH_SHORT).show()
+                    sm.clearSession()
+                    val intent = android.content.Intent(requireActivity(), Login_Page::class.java)
+                    intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    requireActivity().finish()
+                    dialog.dismiss()
+                } else {
+                    android.widget.Toast.makeText(requireContext(), "Failed to delete", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                cursor.close()
+                android.widget. Toast.makeText(requireContext(), "Incorrect PIN", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+        dialog.show()
+    }
+
 }

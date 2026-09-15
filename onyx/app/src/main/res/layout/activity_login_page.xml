@@ -274,7 +274,6 @@
             android:clickable="true"
             android:drawableStart="@drawable/ic_settings"
             android:drawableTint="#FFF8EE"
-            android:drawablePadding="10dp"
             android:focusable="true"
             android:gravity="center"
             android:layout_margin="5dp"

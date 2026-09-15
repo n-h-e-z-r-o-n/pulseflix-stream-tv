@@ -252,9 +252,32 @@ class AppDatabase(context: Context) :
         }
     }
 
+        fun clearWatchHistory(userId: Int): Boolean {
+        val db = writableDatabase
+        return db.delete("continue_watching", "user_id=?", arrayOf(userId.toString())) >= 0
+    }
+
+    fun clearFavorites(userId: Int): Boolean {
+        val db = writableDatabase
+        var totalDeleted = 0
+        totalDeleted += db.delete("favorites_movies", "user_id=?", arrayOf(userId.toString()))
+        totalDeleted += db.delete("favorites_series", "user_id=?", arrayOf(userId.toString()))
+        totalDeleted += db.delete("favorites_anime", "user_id=?", arrayOf(userId.toString()))
+        return totalDeleted >= 0
+    }
+
     fun deleteUser(id: Int): Boolean {
         val db = writableDatabase
         return db.delete("users", "id=?", arrayOf(id.toString())) > 0
+    }
+
+    fun updateUser(id: Int, username: String, pin: String): Boolean {
+        val db = writableDatabase
+        val cv = ContentValues().apply {
+            put("username", username)
+            put("pin", pin)
+        }
+        return db.update("users", cv, "id=?", arrayOf(id.toString())) > 0
     }
 
     fun updateUserAvatar(id: Int, avatar: String): Boolean {
@@ -1191,16 +1214,8 @@ class AppDatabase(context: Context) :
     }
 
     fun isSubscriptionActive(): Boolean {
-        val db = readableDatabase
-        val cursor = db.rawQuery("SELECT subscription_expiry FROM app_settings WHERE id = 1", null)
-        var active = false
-
-        if (cursor.moveToFirst()) {
-            val expiry = cursor.getLong(cursor.getColumnIndexOrThrow("subscription_expiry"))
-            active = expiry > System.currentTimeMillis()
-        }
-        cursor.close()
-        return active
+        // PAYWALL DISABLED: Always return true to unlock all content legally/freely
+        return true
     }
 
     fun getSubscriptionDaysLeft(): Long {
