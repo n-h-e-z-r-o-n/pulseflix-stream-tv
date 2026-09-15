@@ -1,0 +1,86 @@
+[
+  {
+    "name": "VidSrc",
+    "key": "vidsrc",
+    "movieTemplate": "https://vidsrc.to/embed/movie/{showId}",
+    "tvTemplate": "https://vidsrc.to/embed/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "VidKing",
+    "key": "vidking",
+    "movieTemplate": "https://www.vidking.net/embed/movie/{showId}",
+    "tvTemplate": "https://www.vidking.net/embed/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "XPass",
+    "key": "xpass",
+    "movieTemplate": "https://play.xpass.top/e/movie/{showId}",
+    "tvTemplate": "https://play.xpass.top/e/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "VidZen",
+    "key": "vidzen",
+    "movieTemplate": "https://vidzen.fun/movie/{showId}",
+    "tvTemplate": "https://vidzen.fun/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "VidNest",
+    "key": "vidnest",
+    "movieTemplate": "https://vidnest.fun/movie/{showId}",
+    "tvTemplate": "https://vidnest.fun/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "Peachify",
+    "key": "peachify",
+    "movieTemplate": "https://peachify.top/embed/movie/{showId}?autoPlay=true&sub=English&cast=hide&pip=hide&accent=e50914",
+    "tvTemplate": "https://peachify.top/embed/tv/{showId}/{seasonNo}/{episodeNo}?autoPlay=true&autoNext=30&showNextBtn=true&sub=English&cast=hide&pip=hide&accent=e50914"
+  },
+  {
+    "name": "VidRock",
+    "key": "vidrock",
+    "movieTemplate": "https://vidrock.ru/movie/{showId}",
+    "tvTemplate": "https://vidrock.ru/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "AirFlix1",
+    "key": "airflix1",
+    "movieTemplate": "https://airflix1.com/embed/movie/{showId}",
+    "tvTemplate": "https://airflix1.com/embed/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "VidSync",
+    "key": "vidsync",
+    "movieTemplate": "https://vidsync.xyz/embed/movie/{showId}?autoPlay=true&autoNext=true&nextButton=true&theme=e50914",
+    "tvTemplate": "https://vidsync.xyz/embed/tv/{showId}/{seasonNo}/{episodeNo}?autoPlay=true&autoNext=true&nextButton=true&theme=e50914"
+  },
+  {
+    "name": "ZXCStream",
+    "key": "zxcstream",
+    "movieTemplate": "https://www.zxcstream.xyz/player/movie/{showId}",
+    "tvTemplate": "https://www.zxcstream.xyz/player/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "VSEmbed",
+    "key": "vsembed",
+    "movieTemplate": "https://vsembed.ru/embed/tv/movie/{showId}",
+    "tvTemplate": "https://vsembed.ru/embed/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "VAPlayer",
+    "key": "vaplayer",
+    "movieTemplate": "https://vaplayer.ru/embed/movie/{showId}",
+    "tvTemplate": "https://vaplayer.ru/embed/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "VidFast",
+    "key": "vidfast",
+    "movieTemplate": "https://vidfast.pro/movie/{showId}",
+    "tvTemplate": "https://vidfast.pro/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "MoviesAPI",
+    "key": "moviesapi",
+    "movieTemplate": "https://moviesapi.to/movie/{showId}",
+    "tvTemplate": "https://moviesapi.to/tv/{showId}/{seasonNo}/{episodeNo}"
+  }
+]
