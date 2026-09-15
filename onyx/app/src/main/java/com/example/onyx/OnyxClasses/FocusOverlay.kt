@@ -45,6 +45,8 @@ class FocusOverlay<T> (
             }
             overlay.post { updateOverlayAnchor() }
 
+            recyclerView.setItemViewCacheSize(6)
+
             recyclerView.layoutManager =  object : LinearLayoutManager(
                 recyclerView.context,
                 LinearLayoutManager.HORIZONTAL,
@@ -59,6 +61,11 @@ class FocusOverlay<T> (
                 ): Boolean {
                     return false
                 }
+
+                override fun calculateExtraLayoutSpace(state: RecyclerView.State, extraLayoutSpace: IntArray) {
+                    extraLayoutSpace[0] = 500
+                    extraLayoutSpace[1] = 500
+                }
             }
 
             recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
@@ -68,11 +75,8 @@ class FocusOverlay<T> (
                         view.animate().cancel()
                         view.alpha = UNFOCUSED_ITEM_ALPHA
                     }
-                    if (view !== embeddedFocusedView) {
-                        view.translationX = 0f
-                    }
                     if (embeddedFocusedView?.isAttachedToWindow == true) {
-                        recyclerView.post { updateVisibleChildTranslations(animate = false) }
+                        updateVisibleChildTranslations(animate = false)
                     }
                 }
                 override fun onChildViewDetachedFromWindow(view: View) {
@@ -81,13 +85,6 @@ class FocusOverlay<T> (
                     view.translationX = 0f
                     if (embeddedFocusedView === view) {
                         embeddedFocusedView = null
-                    }
-                }
-            })
-            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (embeddedFocusedView?.isAttachedToWindow == true) {
-                        updateVisibleChildTranslations(animate = false)
                     }
                 }
             })
@@ -138,7 +135,8 @@ class FocusOverlay<T> (
                     recyclerView.post {
                         if (!recyclerView.hasFocus() && embeddedFocusedView?.hasFocus() != true) {
                             overlay.strokeWidth = 0
-                            resetVisibleChildTranslations(animate = true)
+                            // Removed resetVisibleChildTranslations(animate = true) 
+                            // to keep items separated around the opaque overlay when focus is lost.
                         }
                     }
                 }
@@ -292,6 +290,15 @@ class FocusOverlay<T> (
             val overlayBounds = calculateOverlayBounds() ?: return
             val gapPx = calculateSiblingGapPx()
 
+            val overlayWidth = overlayBounds.second - overlayBounds.first
+            val childWidth = focusedView.width
+            if (childWidth == 0) {
+                focusedView.post { updateVisibleChildTranslations(animate) }
+                return
+            }
+
+            val pushOffset = (overlayWidth - childWidth) / 2f + gapPx
+
             val visibleChildren = buildList {
                 for (index in 0 until recyclerView.childCount) {
                     add(recyclerView.getChildAt(index))
@@ -304,30 +311,14 @@ class FocusOverlay<T> (
                 return
             }
 
-            applyChildTranslation(focusedView, 0f, animate)
-
-            var previousOriginalRight = focusedView.right
-            var previousFinalRight = overlayBounds.second + gapPx
-            for (index in focusedIndex + 1 until visibleChildren.size) {
+            for (index in visibleChildren.indices) {
                 val child = visibleChildren[index]
-                val originalGap = (child.left - previousOriginalRight).coerceAtLeast(0)
-                val targetLeft = maxOf(child.left, previousFinalRight + originalGap)
-                val translation = (targetLeft - child.left).toFloat()
+                val translation = when {
+                    index < focusedIndex -> -pushOffset
+                    index > focusedIndex -> pushOffset
+                    else -> 0f
+                }
                 applyChildTranslation(child, translation, animate)
-                previousOriginalRight = child.right
-                previousFinalRight = child.right + translation.toInt()
-            }
-
-            var nextOriginalLeft = focusedView.left
-            var nextFinalLeft = overlayBounds.first - gapPx
-            for (index in focusedIndex - 1 downTo 0) {
-                val child = visibleChildren[index]
-                val originalGap = (nextOriginalLeft - child.right).coerceAtLeast(0)
-                val targetRight = minOf(child.right, nextFinalLeft - originalGap)
-                val translation = (targetRight - child.right).toFloat()
-                applyChildTranslation(child, translation, animate)
-                nextOriginalLeft = child.left
-                nextFinalLeft = child.left + translation.toInt()
             }
         }
 
