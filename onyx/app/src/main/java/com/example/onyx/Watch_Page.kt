@@ -797,7 +797,7 @@ class Watch_Page : AppCompatActivity() {
 
         container.removeAllViews()
         val inflater = LayoutInflater.from(this@Watch_Page)
-        val servers = StreamingLinks.getServerUrls(showId, showType, showSno, showEno)
+        val servers = StreamingLinks.getServerUrls(this, showId, showType, showSno, showEno)
 
         // Cap concurrent WebViews at 2 to protect TV RAM
         val semaphore = Semaphore(2)
@@ -1088,7 +1088,7 @@ class Watch_Page : AppCompatActivity() {
 
     private fun showServerDialog() {
 
-        val servers = StreamingLinks.serversList
+        val servers = StreamingLinks.getServersList(this)
 
         val builder = android.app.AlertDialog.Builder(this, R.style.CustomDialogTheme)
         builder.setTitle("Select a Streaming Server (Powered by Third Parties)")

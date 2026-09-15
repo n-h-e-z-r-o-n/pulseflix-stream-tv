@@ -77,6 +77,8 @@ class MainActivity : AppCompatActivity() {
             if (GlobalUtils.getSavedCountryCode(applicationContext).isBlank()) {
                 runCatching { GlobalUtils.ipCheck(applicationContext) }
             }
+            
+            runCatching { com.example.onyx.OnyxObjects.StreamingLinks.syncServers(applicationContext) }
 
             if (hasSession && shouldRunDailyNotificationCheck()) {
                 runCatching { NotificationHelper.getTvNotifications(applicationContext) }

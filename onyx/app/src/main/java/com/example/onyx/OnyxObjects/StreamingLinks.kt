@@ -38,6 +38,11 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.example.onyx.BuildConfig
+import java.net.URL
+import java.net.HttpURLConnection
 object StreamingLinks {
 
 
@@ -342,7 +347,7 @@ object StreamingLinks {
         episodeNo: String = "",
     ): JSONObject = withContext(Dispatchers.IO) {
 
-        val servers = getServerUrls(imdb, type, seasonNo, episodeNo)
+        val servers = getServerUrls(context, imdb, type, seasonNo, episodeNo)
         val result = JSONObject()
 
         Log.e("Stream-Result", " extractAll  servers: $servers")
@@ -374,7 +379,7 @@ object StreamingLinks {
         episodeNo: String = "",
     ): JSONObject = coroutineScope {
 
-        val servers = getServerUrls(imdb, type, seasonNo, episodeNo)
+        val servers = getServerUrls(context, imdb, type, seasonNo, episodeNo)
         val result = JSONObject()
 
         Log.e("Stream-Result", "extractAll servers: $servers")
@@ -416,69 +421,74 @@ object StreamingLinks {
 
 
 
-     fun getServerUrls(showId: String, type: String, seasonNo: String , episodeNo: String): Map<String, String> {
 
-        val servers = mutableMapOf<String, String>()
+    data class ServerConfig(
+        @com.google.gson.annotations.SerializedName("name") val name: String,
+        @com.google.gson.annotations.SerializedName("key") val key: String,
+        @com.google.gson.annotations.SerializedName("movieTemplate") val movieTemplate: String,
+        @com.google.gson.annotations.SerializedName("tvTemplate") val tvTemplate: String
+    )
 
-        if (type == "movie") {
-            servers["vidsrc"] = "https://vidsrc.to/embed/movie/$showId"
-            servers["vidking"] = "https://www.vidking.net/embed/movie/$showId"
-            servers["xpass"] = "https://play.xpass.top/e/movie/$showId"
-            servers["vidzen"] = "https://vidzen.fun/movie/$showId"
-            servers["vidnest"] ="https://vidnest.fun/movie/$showId"
-            servers["peachify"] ="https://peachify.top/embed/movie/$showId?autoPlay=true&sub=English&cast=hide&pip=hide&accent=e50914"
-            servers["vidrock"] ="https://vidrock.ru/movie/$showId"
-            servers["airflix1"] ="https://airflix1.com/embed/movie/$showId"
-            servers["vidsync"] = "https://vidsync.xyz/embed/movie/$showId?autoPlay=true&autoNext=true&nextButton=true&theme=e50914"
-            servers["zxcstream"] = "https://www.zxcstream.xyz/player/movie/$showId"
-            servers["vsembed"] = "https://vsembed.ru/embed/tv/movie/$showId"
-            servers["vaplayer"] = "https://vaplayer.ru/embed/movie/$showId"
-            servers["vidfast"] = "https://vidfast.pro/movie/$showId"
-            servers["moviesapi"] ="https://moviesapi.to/movie/$showId"
-
-
-
-        } else {
-            servers["vidsrc"] =  "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
-            servers["vidking"] = "https://www.vidking.net/embed/tv/$showId/$seasonNo/$episodeNo"
-            servers["xpass"] = "https://play.xpass.top/e/tv/$showId/$seasonNo/$episodeNo"
-            servers["vidzen"] = "https://vidzen.fun/tv/$showId/$seasonNo/$episodeNo"
-            servers["vidnest"] = "https://vidnest.fun/tv/$showId/$seasonNo/$episodeNo"
-            servers["peachify"] = "https://peachify.top/embed/tv/$showId/$seasonNo/$episodeNo?autoPlay=true&autoNext=30&showNextBtn=true&sub=English&cast=hide&pip=hide&accent=e50914"
-            servers["vidrock"] = "https://vidrock.ru/tv/$showId/$seasonNo/$episodeNo"
-            servers["airflix1"] ="https://airflix1.com/embed/tv/$showId/$seasonNo/$episodeNo"
-            servers["vidsync"] = "https://vidsync.xyz/embed/tv/$showId/$seasonNo/$episodeNo?autoPlay=true&autoNext=true&nextButton=true&theme=e50914"
-            servers["zxcstream"] = "https://www.zxcstream.xyz/player/tv/$showId/$seasonNo/$episodeNo"
-            servers["vsembed"] = "https://vsembed.ru/embed/tv/$showId/$seasonNo/$episodeNo"
-            servers["vaplayer"] = "https://vaplayer.ru/embed/tv/$showId/$seasonNo/$episodeNo"
-            servers["vidfast"] = "https://vidfast.pro/tv/$showId/$seasonNo/$episodeNo"
-            servers["moviesapi"] ="https://moviesapi.to/tv/$showId/$seasonNo/$episodeNo"
+    fun syncServers(context: Context) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val connection = (URL(BuildConfig.STREAM_S).openConnection() as HttpURLConnection).apply {
+                    requestMethod = "GET"
+                    connectTimeout = 5000
+                    readTimeout = 5000
+                    connect()
+                }
+                if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                    val jsonStr = connection.inputStream.bufferedReader().readText()
+                    // Verify it's valid JSON
+                    val type = object : TypeToken<List<ServerConfig>>() {}.type
+                    val parsed: List<ServerConfig> = Gson().fromJson(jsonStr, type)
+                    if (parsed.isNotEmpty()) {
+                        val prefs = context.getSharedPreferences("server_prefs", Context.MODE_PRIVATE)
+                        prefs.edit().putString("servers_json", jsonStr).apply()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("StreamingLinks", "Failed to sync servers", e)
+            }
         }
-
-
-        return servers
     }
 
+    private fun getParsedServers(context: Context): List<ServerConfig> {
+        val prefs = context.getSharedPreferences("server_prefs", Context.MODE_PRIVATE)
+        val jsonStr = prefs.getString("servers_json", null)
+        if (!jsonStr.isNullOrEmpty()) {
+            try {
+                val type = object : TypeToken<List<ServerConfig>>() {}.type
+                val parsed: List<ServerConfig> = Gson().fromJson(jsonStr, type)
+                if (parsed.isNotEmpty()) return parsed
+            } catch (e: Exception) {
+                Log.e("StreamingLinks", "Failed to parse saved servers JSON", e)
+            }
+        }
+        return emptyList()
+    }
 
+    fun getServersList(context: Context): List<String> {
+        return getParsedServers(context).map { it.name }
+    }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-    val serversList = listOf(
-        "VidSrc",
-        "VidKing",
-        "XPass",
-        "VidZen",
-        "VidNest",
-        "Peachify",
-        "VidRock",
-        "AirFlix1",
-        "VidSync",
-        "ZXCStream",
-        "VSEmbed",
-        "VAPlayer",
-        "VidFast",
-        "MoviesAPI"
-    )
+    fun getServerUrls(context: Context, showId: String, type: String, seasonNo: String, episodeNo: String): Map<String, String> {
+        val servers = mutableMapOf<String, String>()
+        val parsedServers = getParsedServers(context)
+        
+        parsedServers.forEach { server ->
+            if (type == "movie") {
+                servers[server.key] = server.movieTemplate.replace("{showId}", showId)
+            } else {
+                servers[server.key] = server.tvTemplate
+                    .replace("{showId}", showId)
+                    .replace("{seasonNo}", seasonNo)
+                    .replace("{episodeNo}", episodeNo)
+            }
+        }
+        return servers
+    }
 
     fun getServerUrl(
         context: Context,
@@ -487,44 +497,20 @@ object StreamingLinks {
         seasonNo: String?,
         episodeNo: String?
     ): String {
+        val parsedServers = getParsedServers(context)
+        if (parsedServers.isEmpty()) return ""
+        
         val serverIndex = getSavedServerIndex(context)
-
+        val safeIndex = if (serverIndex in parsedServers.indices) serverIndex else 0
+        val server = parsedServers[safeIndex]
+        
         return if (urlType == "movie") {
-            when (serverIndex) {
-                0 -> "https://vidsrc.to/embed/movie/$showId"
-                1 -> "https://www.vidking.net/embed/movie/$showId"
-                2 -> "https://play.xpass.top/e/movie/$showId"
-                3 -> "https://vidzen.fun/movie/$showId"
-                4 -> "https://vidnest.fun/movie/$showId"
-                5 -> "https://peachify.top/embed/movie/$showId?autoPlay=true&sub=English&cast=hide&pip=hide&accent=e50914"
-                6 -> "https://vidrock.ru/movie/$showId"
-                7 -> "https://airflix1.com/embed/movie/$showId"
-                8 -> "https://vidsync.xyz/embed/movie/$showId?autoPlay=true&autoNext=true&nextButton=true&theme=e50914"
-                9 -> "https://www.zxcstream.xyz/player/movie/$showId"
-                10 -> "https://vsembed.ru/embed/tv/movie/$showId"
-                11 -> "https://vaplayer.ru/embed/movie/$showId"
-                12 -> "https://vidfast.pro/movie/$showId"
-                13 -> "https://moviesapi.to/movie/$showId"
-                else -> "https://vidsrc.to/embed/movie/$showId"
-            }
+            server.movieTemplate.replace("{showId}", showId ?: "")
         } else {
-            when (serverIndex) {
-                0 -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
-                1 -> "https://www.vidking.net/embed/tv/$showId/$seasonNo/$episodeNo"
-                2 -> "https://play.xpass.top/e/tv/$showId/$seasonNo/$episodeNo"
-                3 -> "https://vidzen.fun/tv/$showId/$seasonNo/$episodeNo"
-                4 -> "https://vidnest.fun/tv/$showId/$seasonNo/$episodeNo"
-                5 -> "https://peachify.top/embed/tv/$showId/$seasonNo/$episodeNo?autoPlay=true&autoNext=30&showNextBtn=true&sub=English&cast=hide&pip=hide&accent=e50914"
-                6 -> "https://vidrock.ru/tv/$showId/$seasonNo/$episodeNo"
-                7 -> "https://airflix1.com/embed/tv/$showId/$seasonNo/$episodeNo"
-                8 -> "https://vidsync.xyz/embed/tv/$showId/$seasonNo/$episodeNo?autoPlay=true&autoNext=true&nextButton=true&theme=e50914"
-                9 -> "https://www.zxcstream.xyz/player/tv/$showId/$seasonNo/$episodeNo"
-                10 -> "https://vsembed.ru/embed/tv/$showId/$seasonNo/$episodeNo"
-                11 -> "https://vaplayer.ru/embed/tv/$showId/$seasonNo/$episodeNo"
-                12 -> "https://vidfast.pro/tv/$showId/$seasonNo/$episodeNo"
-                13 -> "https://moviesapi.to/tv/$showId/$seasonNo/$episodeNo"
-                else -> "https://vidsrc.to/embed/tv/$showId/$seasonNo/$episodeNo"
-            }
+            server.tvTemplate
+                .replace("{showId}", showId ?: "")
+                .replace("{seasonNo}", seasonNo ?: "")
+                .replace("{episodeNo}", episodeNo ?: "")
         }
     }
 
@@ -535,14 +521,10 @@ object StreamingLinks {
 
     fun getSavedServerIndex(context: Context): Int {
         val prefs = context.getSharedPreferences("server_prefs", Context.MODE_PRIVATE)
-        Log.e("DEBUG_SERVER", prefs.getInt("selected_server_index", 0).toString())
         return prefs.getInt("selected_server_index", 0)
     }
 
-
-
 }
-
 data class StreamData(
     val url: String,
     val referer: String?,
