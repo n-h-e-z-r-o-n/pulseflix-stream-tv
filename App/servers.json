@@ -18,10 +18,10 @@
     "tvTemplate": "https://play.xpass.top/e/tv/{showId}/{seasonNo}/{episodeNo}"
   },
   {
-    "name": "vidfast",
-    "key": "vidfast",
-    "movieTemplate": "https://vidfast.vc/movie/{showId}",
-    "tvTemplate": "https://vidfast.vc/tv/{showId}/{seasonNo}/{episodeNo}"
+    "name": "HD4",
+    "key": "vaplayer",
+    "movieTemplate": "https://vaplayer.ru/embed/movie/{showId}",
+    "tvTemplate": "https://vaplayer.ru/embed/tv/{showId}/{seasonNo}/{episodeNo}"
   }
   
  
