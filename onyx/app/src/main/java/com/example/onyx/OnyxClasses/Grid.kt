@@ -1111,7 +1111,7 @@ class ProfileAdapter (
             }
             holder.profileImageWidget.setPadding(0, 0, 0, 0)
             holder.profileImageWidget.clearColorFilter()
-            holder.profileMetaWidget.text = "PROFILE"
+            holder.profileMetaWidget.text = username
             holder.profileCaptionWidget.text = "Continue"
         }
 

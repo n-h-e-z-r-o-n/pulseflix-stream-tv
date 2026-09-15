@@ -4,7 +4,7 @@
 
     <!-- Theme (default) -->
     <style name="Theme.Onyx.Default" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="BG_color">#0b0f19</item>
+        <item name="BG_color">#042c40</item>
         <item name="FG_color">#F5F1E6</item>
         <item name="BG_color_up">#1A140A</item>
         <item name="AccentColor">#54becb</item>

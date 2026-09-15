@@ -855,23 +855,23 @@ object GlobalUtils {
 
             val resolver = context.contentResolver
             val backupName = "app_data_backup.db"
-            val backupPath = "Documents/OnyxBackup/"
+            val backupPath = android.os.Environment.DIRECTORY_DOWNLOADS + "/OnyxBackup/"
 
             // 1️⃣ Check for existing backup and delete it
-            val selection = "${MediaStore.Files.FileColumns.DISPLAY_NAME}=? AND ${MediaStore.Files.FileColumns.RELATIVE_PATH}=?"
+            val selection = "${MediaStore.MediaColumns.DISPLAY_NAME}=? AND ${MediaStore.MediaColumns.RELATIVE_PATH}=?"
             val selectionArgs = arrayOf(backupName, backupPath)
 
             resolver.query(
-                MediaStore.Files.getContentUri("external"),
-                arrayOf(MediaStore.Files.FileColumns._ID),
+                MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+                arrayOf(MediaStore.MediaColumns._ID),
                 selection,
                 selectionArgs,
                 null
             )?.use { cursor ->
-                val idIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
+                val idIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)
                 while (cursor.moveToNext()) {
                     val existingUri = ContentUris.withAppendedId(
-                        MediaStore.Files.getContentUri("external"),
+                        MediaStore.Downloads.EXTERNAL_CONTENT_URI,
                         cursor.getLong(idIndex)
                     )
                     resolver.delete(existingUri, null, null)
@@ -881,13 +881,13 @@ object GlobalUtils {
 
             // 2️⃣ Insert new backup
             val contentValues = ContentValues().apply {
-                put(MediaStore.Files.FileColumns.DISPLAY_NAME, backupName)
-                put(MediaStore.Files.FileColumns.MIME_TYPE, "application/octet-stream")
-                put(MediaStore.Files.FileColumns.RELATIVE_PATH, backupPath)
-                put(MediaStore.Files.FileColumns.IS_PENDING, 1)
+                put(MediaStore.MediaColumns.DISPLAY_NAME, backupName)
+                put(MediaStore.MediaColumns.MIME_TYPE, "application/octet-stream")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, backupPath)
+                put(MediaStore.MediaColumns.IS_PENDING, 1)
             }
 
-            val uri = resolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
+            val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
                 ?: run {
                     Log.e("Database_backup", "Failed to create MediaStore entry")
                     return
@@ -901,7 +901,7 @@ object GlobalUtils {
 
             // Mark as complete
             contentValues.clear()
-            contentValues.put(MediaStore.Files.FileColumns.IS_PENDING, 0)
+            contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0)
             resolver.update(uri, contentValues, null, null)
 
             Log.d("Database_backup", "Database backed up successfully via MediaStore")
@@ -913,89 +913,62 @@ object GlobalUtils {
 
     fun autoRestoreDatabaseIfNeeded(context: Context) {
         try {
-            val dbHelper = object : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-                override fun onCreate(db: SQLiteDatabase) {}
-                override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
-            }
+            val dbFile = context.getDatabasePath(DATABASE_NAME)
+            var userCount = 0
 
-            val db = dbHelper.readableDatabase
-            val cursor = db.rawQuery("SELECT COUNT(*) FROM users", null)
-            cursor.moveToFirst()
-            val userCount = cursor.getInt(0)
-            cursor.close()
-            db.close()
+            // Safely check for data WITHOUT creating a blank database
+            if (dbFile.exists()) {
+                try {
+                    val db = android.database.sqlite.SQLiteDatabase.openDatabase(dbFile.absolutePath, null, android.database.sqlite.SQLiteDatabase.OPEN_READONLY)
+                    val cursor = db.rawQuery("SELECT COUNT(*) FROM users", null)
+                    if (cursor.moveToFirst()) {
+                        userCount = cursor.getInt(0)
+                    }
+                    cursor.close()
+                    db.close()
+                } catch (e: Exception) {
+                    Log.w("Database_backup", "Users table missing or unreadable, assuming empty database.")
+                }
+            }
 
             if (userCount > 0) {
                 Log.d("Database_backup", "Database already has data, skipping restore")
                 return
             }
 
-            val resolver = context.contentResolver
-
-            val projection = arrayOf(
-                MediaStore.MediaColumns._ID,
-                MediaStore.MediaColumns.DISPLAY_NAME,
-                MediaStore.MediaColumns.RELATIVE_PATH
-            )
-
-            val selection = """
-            ${MediaStore.MediaColumns.DISPLAY_NAME} = ? AND
-            ${MediaStore.MediaColumns.RELATIVE_PATH} = ?
-        """.trimIndent()
-
-            val selectionArgs = arrayOf(
-                "app_data_backup.db",
-                "Documents/OnyxBackup/"
-            )
-
-            val queryCursor = resolver.query(
-                MediaStore.Files.getContentUri("external"),
-                projection,
-                selection,
-                selectionArgs,
-                null
-            )
-
-            if (queryCursor == null || !queryCursor.moveToFirst()) {
-                Log.d("Database_backup", "Backup NOT found in MediaStore")
-                queryCursor?.close()
+            // Direct file approach (much more reliable than MediaStore query)
+            val downloadsDir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS)
+            val backupFile = java.io.File(downloadsDir, "OnyxBackup/app_data_backup.db")
+            
+            if (!backupFile.exists()) {
+                Log.d("Database_backup", "Backup NOT found at ${backupFile.absolutePath}")
+                // Ensure no corrupted/blank database is left behind so AppDatabase runs onCreate
+                if (userCount == 0 && dbFile.exists()) {
+                     dbFile.delete()
+                }
                 return
             }
 
-            val id = queryCursor.getLong(
-                queryCursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)
-            )
-
-            queryCursor.close()
-
-            val contentUri = ContentUris.withAppendedId(
-                MediaStore.Files.getContentUri("external"),
-                id
-            )
-
-            val dbFile = context.getDatabasePath(DATABASE_NAME)
+            // Perform the restore
             dbFile.parentFile?.mkdirs()
-
-            dbHelper.close()
-
-            resolver.openInputStream(contentUri)?.use { input ->
-                FileOutputStream(dbFile).use { output ->
+            java.io.FileInputStream(backupFile).use { input ->
+                java.io.FileOutputStream(dbFile).use { output ->
                     input.copyTo(output)
                     output.fd.sync()
                 }
-            } ?: run {
-                Log.e("Database_backup", "Could not open backup stream")
-                return
             }
-
-            Log.d("Database_backup", "Database restored successfully")
+            Log.d("Database_backup", "Database restored successfully from Downloads folder")
 
         } catch (e: Exception) {
             Log.e("Database_backup", "Restore failed: ${e.message}")
+            // Clean up to allow fresh install
+            val dbFile = context.getDatabasePath(DATABASE_NAME)
+            if (dbFile.exists()) {
+                 dbFile.delete()
+            }
         }
     }
 
-    // give your app that premium, Netflix-style vertical scrolling behavior.
     fun snapRowToTopOnFocus_(scrollView: ScrollView, rowView: View) {
         rowView.viewTreeObserver.addOnGlobalFocusChangeListener { oldFocus, newFocus ->
             val oldWasInRow = oldFocus?.let { isViewAncestor(rowView, it) } ?: false

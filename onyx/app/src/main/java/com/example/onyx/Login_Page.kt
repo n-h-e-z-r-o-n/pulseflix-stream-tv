@@ -48,7 +48,10 @@ class Login_Page : AppCompatActivity() {
     private lateinit var profileContainer: FrameLayout
     private lateinit var settingButton: TextView
     private lateinit var settingUi: View
-    private lateinit var gDriveBackup: TextView
+    private lateinit var gLocalBackup: TextView
+    private lateinit var gLocalRestore: TextView
+
+
     private lateinit var exitApp: TextView
     private lateinit var exitSetting: TextView
     private lateinit var CreateProfileContainer: FrameLayout
@@ -59,6 +62,40 @@ class Login_Page : AppCompatActivity() {
     private lateinit var usernamePinInput: EditText
     private lateinit var createProfileBtn: TextView
     private lateinit var cancelProfileBtn: TextView
+
+
+    private val restoreBackupLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                try {
+                    val dbFile = getDatabasePath("app_data.db")
+                    contentResolver.openInputStream(uri)?.use { input ->
+                        java.io.FileOutputStream(dbFile).use { output ->
+                            input.copyTo(output)
+                            output.fd.sync()
+                        }
+                    }
+                    android.widget.Toast.makeText(this, "Restore Successful! Restarting...", android.widget.Toast.LENGTH_LONG).show()
+                    val intent = android.content.Intent(this, Login_Page::class.java)
+                    intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish()
+                } catch (e: Exception) {
+                    android.widget.Toast.makeText(this, "Restore Failed: ${e.message}", android.widget.Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun launchRestorePicker() {
+        val intent = android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(android.content.Intent.CATEGORY_OPENABLE)
+            type = "*/*" 
+        }
+        restoreBackupLauncher.launch(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +132,8 @@ class Login_Page : AppCompatActivity() {
     private fun bindChrome() {
         settingUi = findViewById(R.id.settingUi)
         settingButton = findViewById(R.id.settingButton)
-        gDriveBackup = findViewById(R.id.gDriveBackup)
+        gLocalBackup = findViewById(R.id.gLocalBackup)
+        gLocalRestore = findViewById(R.id.gLocalRestore)
         exitApp = findViewById(R.id.exitApp)
         exitSetting = findViewById(R.id.exitSetting)
         CreateProfileContainer = findViewById(R.id.CreateProfileContainer)
@@ -104,9 +142,10 @@ class Login_Page : AppCompatActivity() {
         settingButton.setOnClickListener { showSettingsPanel() }
         exitSetting.setOnClickListener { hideSettingsPanel(restoreFocus = true) }
         exitApp.setOnClickListener { GlobalUtils.exitApp(this) }
-        gDriveBackup.setOnClickListener { backupLibrary() }
+        gLocalBackup.setOnClickListener { backupLibrary() }
+        gLocalRestore.setOnClickListener { launchRestorePicker() }
 
-        attachFocusLift(settingButton, gDriveBackup, exitApp, exitSetting)
+        attachFocusLift(settingButton, gLocalBackup, exitApp, exitSetting)
     }
 
     private fun initializeWidgets() {
@@ -303,7 +342,7 @@ class Login_Page : AppCompatActivity() {
             .alpha(1f)
             .translationY(0f)
             .setDuration(PANEL_ANIMATION_DURATION_MS)
-            .withEndAction { gDriveBackup.requestFocus() }
+            .withEndAction { gLocalBackup.requestFocus() }
             .start()
     }
 
@@ -375,8 +414,8 @@ class Login_Page : AppCompatActivity() {
 
     private fun backupLibrary() {
         lifecycleScope.launch {
-            gDriveBackup.isEnabled = false
-            gDriveBackup.alpha = 0.55f
+            gLocalBackup.isEnabled = false
+            gLocalBackup.alpha = 0.55f
             Toast.makeText(this@Login_Page, "Backing up library...", Toast.LENGTH_SHORT).show()
 
             try {
@@ -388,8 +427,8 @@ class Login_Page : AppCompatActivity() {
                 Log.e("Login_Page", "Backup failed: ${e.message}", e)
                 Toast.makeText(this@Login_Page, "Backup failed", Toast.LENGTH_SHORT).show()
             } finally {
-                gDriveBackup.isEnabled = true
-                gDriveBackup.alpha = 1f
+                gLocalBackup.isEnabled = true
+                gLocalBackup.alpha = 1f
             }
         }
     }
