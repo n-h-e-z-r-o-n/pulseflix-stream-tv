@@ -97,8 +97,11 @@ dependencies {
     implementation("androidx.webkit:webkit:1.8.0")
     
     //implementation("org.mozilla.geckoview:geckoview-omni:130.0.20240913135723")//https://mvnrepository.com/artifact/org.mozilla.geckoview/geckoview/versions
-
     
+    // ADB Library and Crypto
+    implementation("com.tananaev:adblib:1.3")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+
     // Room Database
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

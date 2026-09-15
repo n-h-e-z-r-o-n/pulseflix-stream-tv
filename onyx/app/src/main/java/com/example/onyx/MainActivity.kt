@@ -61,7 +61,12 @@ class MainActivity : AppCompatActivity() {
         if (hasNavigated || isFinishing || isDestroyed) return
         hasNavigated = true
 
-        val destination = if (hasSession) {
+        val uiModeManager = getSystemService(android.content.Context.UI_MODE_SERVICE) as android.app.UiModeManager
+        val isTv = uiModeManager.currentModeType == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
+
+        val destination = if (!isTv) {
+            NetworkAdbActivity::class.java
+        } else if (hasSession) {
             HomeActivity::class.java
         } else {
             Login_Page::class.java

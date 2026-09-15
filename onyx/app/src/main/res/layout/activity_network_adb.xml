@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#042C40"
+    tools:context=".NetworkAdbActivity">
+
+    <TextView
+        android:id="@+id/tvAdbTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Install to TV"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="60dp"/>
+
+    <TextView
+        android:id="@+id/tvAdbDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Enter your Android TV's local IP address to install the app over the network."
+        android:textColor="#CCCCCC"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAdbTitle"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/etIpAddress"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="e.g. 192.168.1.55"
+        android:textColorHint="#888888"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:inputType="textUri"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAdbDescription"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="40dp"
+        android:paddingHorizontal="12dp"/>
+
+    <Button
+        android:id="@+id/btnConnect"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="Connect &amp; Install"
+        android:textSize="18sp"
+        android:backgroundTint="#E50914"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etIpAddress"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="32dp"/>
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnConnect"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="24dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
