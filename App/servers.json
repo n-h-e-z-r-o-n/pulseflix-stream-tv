@@ -2,8 +2,8 @@
   {
     "name": "VidSrc",
     "key": "vidsrc",
-    "movieTemplate": "https://vidsrc.to/embed/movie/{showId}",
-    "tvTemplate": "https://vidsrc.to/embed/tv/{showId}/{seasonNo}/{episodeNo}"
+    "movieTemplate":  "https://vsembed.ru/embed/movie/{showId}/",
+    "tvTemplate": "https://vsembed.ru/embed/tv/{showId}/{seasonNo}/{episodeNo}"
   },
   {
     "name": "VidKing",
