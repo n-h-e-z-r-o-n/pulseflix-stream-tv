@@ -1,0 +1,28 @@
+[
+  {
+    "name": "VidSrc",
+    "key": "vidsrc",
+    "movieTemplate":  "https://vsembed.ru/embed/movie/{showId}/",
+    "tvTemplate": "https://vsembed.ru/embed/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "VidKing",
+    "key": "vidking",
+    "movieTemplate": "https://www.vidking.net/embed/movie/{showId}",
+    "tvTemplate": "https://www.vidking.net/embed/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "XPass",
+    "key": "xpass",
+    "movieTemplate": "https://play.xpass.top/e/movie/{showId}",
+    "tvTemplate": "https://play.xpass.top/e/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "HD4",
+    "key": "vaplayer",
+    "movieTemplate": "https://vaplayer.ru/embed/movie/{showId}",
+    "tvTemplate": "https://vaplayer.ru/embed/tv/{showId}/{seasonNo}/{episodeNo}"
+  }
+  
+ 
+]
