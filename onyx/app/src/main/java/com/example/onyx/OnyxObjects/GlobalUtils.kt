@@ -1336,6 +1336,11 @@ object GlobalUtils {
         }
     }
 
+    fun isTvDevice(context: Context): Boolean {
+        val uiModeManager = context.getSystemService(Context.UI_MODE_SERVICE) as android.app.UiModeManager
+        return uiModeManager.currentModeType == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////
 
     var favoritesStateHasChanged: Boolean = false

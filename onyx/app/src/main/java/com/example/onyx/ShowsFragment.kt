@@ -209,8 +209,7 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
 
 
 
-        GlobalUtils.setHeightToMatchScreen(SpotlightSection)
-        GlobalUtils.setHeightToMatchScreen(HomeContentSection)
+
 
 
 
@@ -220,18 +219,8 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
         GlobalUtils.centerParentOnFocus(activityScrollVIEW, filterSection)
         GlobalUtils.centerParentOnFocus(activityScrollVIEW, tvSection)
 
-        /*
 
-        val uiModeManager = getSystemService(requireContext().UI_MODE_SERVICE) as android.app.UiModeManager
-        val isTv = uiModeManager.currentModeType == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
 
-        if (isTv) {
-            GlobalUtils.applyDimmingOnFocus(SpotlightSection)
-            GlobalUtils.applyDimmingOnFocus(HomeContentSection)
-            GlobalUtils.applyDimmingOnFocus(movieSection)
-            GlobalUtils.applyDimmingOnFocus(filterSection)
-            GlobalUtils.applyDimmingOnFocus(tvSection)
-        }*/
 
         ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -244,8 +233,24 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
         GlobalUtils.snapRowToTopOnFocus(homeScrollView, realityRow)
         GlobalUtils.snapRowToTopOnFocus(homeScrollView, thrillsRow)
 
-        GlobalUtils.applyDimmingOnFocus(realityRow)
-        GlobalUtils.applyDimmingOnFocus(thrillsRow)
+
+
+
+        if (GlobalUtils.isTv(requireContext())) {
+
+            GlobalUtils.setHeightToMatchScreen(SpotlightSection)
+            GlobalUtils.setHeightToMatchScreen(HomeContentSection)
+
+            GlobalUtils.applyDimmingOnFocus(SpotlightSection)
+            GlobalUtils.applyDimmingOnFocus(HomeContentSection)
+            GlobalUtils.applyDimmingOnFocus(movieSection)
+            GlobalUtils.applyDimmingOnFocus(filterSection)
+            GlobalUtils.applyDimmingOnFocus(tvSection)
+
+            GlobalUtils.applyDimmingOnFocus(realityRow)
+            GlobalUtils.applyDimmingOnFocus(thrillsRow)
+
+        }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////
