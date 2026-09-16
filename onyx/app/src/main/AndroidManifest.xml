@@ -37,9 +37,11 @@
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
             android:exported="false" />
         <activity
             android:name=".Login_Page"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
             android:exported="false" />
 
 
@@ -48,6 +50,7 @@
             android:exported="false" />
         <activity
             android:name=".Anime_Video_Player"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
             android:exported="false" />
         <activity
             android:name=".AnimeStreamResolver"
@@ -60,6 +63,7 @@
             android:exported="false" />
         <activity
             android:name=".Actor_Page"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
             android:exported="false"
             android:launchMode="singleTop" />
 
@@ -69,10 +73,12 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".Video_payer"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
             android:name=".Play"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
@@ -80,9 +86,11 @@
             android:exported="false" />
         <activity
             android:name=".Watch_Page"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
             android:exported="true"
             android:theme="@style/Theme.Onyx.Splash">
             <intent-filter>

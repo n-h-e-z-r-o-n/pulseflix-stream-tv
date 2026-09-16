@@ -259,8 +259,10 @@ class Play : AppCompatActivity() {
         moveRunnable = object : Runnable {
             override fun run() {
                 action()
-                currentStep = (currentStep * 1.12f).coerceAtMost(MAX_STEP)
-                moveHandler.postDelayed(this, 60L)
+                // Increased acceleration (1.15x) to reach top speed faster
+                currentStep = (currentStep * 1.15f).coerceAtMost(MAX_STEP)
+                // Reduced delay to 30ms for 33 FPS smooth cursor movement
+                moveHandler.postDelayed(this, 30L)
             }
         }
         moveHandler.post(moveRunnable!!)
@@ -335,8 +337,8 @@ class Play : AppCompatActivity() {
 
     companion object {
         private const val MATCH = ViewGroup.LayoutParams.MATCH_PARENT
-        private const val BASE_STEP = 10f
-        private const val MAX_STEP  = 55f
+        private const val BASE_STEP = 15f
+        private const val MAX_STEP  = 120f
 
         /**
          * Extensions checked against the **path component only** (no query string).
@@ -454,6 +456,20 @@ class Play : AppCompatActivity() {
         })
     }
 
+    override fun onPause() {
+        super.onPause()
+        // Freeze the WebView engine to prevent background CPU/audio drain
+        webView?.onPause()
+        webView?.pauseTimers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Wake the WebView engine back up
+        webView?.onResume()
+        webView?.resumeTimers()
+    }
+
     override fun onStop() {
         super.onStop()
     }
@@ -461,6 +477,8 @@ class Play : AppCompatActivity() {
     override fun onDestroy() {
         cancelTimeout()
         stopRepeating()
+        // CRITICAL FIX: Guarantee the WebView is destroyed to prevent zombie memory leaks
+        clearWebViewData()
         isVideoLaunching.set(false)
         // Note: do NOT call finish() here — activity is already being destroyed.
         super.onDestroy()

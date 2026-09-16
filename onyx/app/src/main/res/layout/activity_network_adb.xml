@@ -203,7 +203,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="• Enable the debugging option required by your TV."
+                android:text="• Enable USB debugging option on your TV."
                 android:textColor="#AFC2C9"
                 android:textSize="13sp"
                 android:lineSpacingExtra="2dp"
