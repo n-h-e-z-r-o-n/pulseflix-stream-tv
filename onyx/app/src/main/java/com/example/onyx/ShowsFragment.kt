@@ -220,11 +220,18 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
         GlobalUtils.centerParentOnFocus(activityScrollVIEW, filterSection)
         GlobalUtils.centerParentOnFocus(activityScrollVIEW, tvSection)
 
-        GlobalUtils.applyDimmingOnFocus(SpotlightSection)
-        GlobalUtils.applyDimmingOnFocus(HomeContentSection)
-        GlobalUtils.applyDimmingOnFocus(movieSection)
-        GlobalUtils.applyDimmingOnFocus(filterSection)
-        GlobalUtils.applyDimmingOnFocus(tvSection)
+        /*
+
+        val uiModeManager = getSystemService(requireContext().UI_MODE_SERVICE) as android.app.UiModeManager
+        val isTv = uiModeManager.currentModeType == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
+
+        if (isTv) {
+            GlobalUtils.applyDimmingOnFocus(SpotlightSection)
+            GlobalUtils.applyDimmingOnFocus(HomeContentSection)
+            GlobalUtils.applyDimmingOnFocus(movieSection)
+            GlobalUtils.applyDimmingOnFocus(filterSection)
+            GlobalUtils.applyDimmingOnFocus(tvSection)
+        }*/
 
         ////////////////////////////////////////////////////////////////////////////////////////////
 

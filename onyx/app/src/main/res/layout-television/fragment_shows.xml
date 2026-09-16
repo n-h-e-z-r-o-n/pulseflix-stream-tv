@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/BG_color"
+    tools:context=".ShowsFragment">
+
+
+    <!-- Floating popup -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/floatingPopup"
+        android:layout_width="wrap_content"
+        android:layout_height="170dp"
+        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="?attr/AccentColor"
+        android:foreground="@drawable/background_focus"
+        android:elevation="5dp"
+        tools:ignore="MissingConstraints">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:elevation="20dp"
+            android:background="?attr/AccentColor"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:id="@+id/floatingPopupImg"
+                android:scaleType="fitCenter"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mainBox"
+        android:layout_margin="0dp"
+        android:layout_gravity="center"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false"
+        app:cardBackgroundColor="?attr/transparentEffect"
+        app:cardCornerRadius="0dp">
+
+        <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/transparentEffect"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/transparentEffect"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/transparentEffect"/>
+
+        <View
+            android:id="@+id/BackgroundContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/BG_color"
+            android:visibility="gone"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="end"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginVertical="0dp">
+
+
+                    <ScrollView
+                        android:id="@+id/activityScrollVIEW"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fillViewport="true"
+                        android:scrollbars="none"
+                        android:overScrollMode="never">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="0dp">
+
+
+                        <!-- //////////////////////// HOME PAGE //////////////////////////////////// -->
+
+                            <LinearLayout
+                                android:id="@+id/HomePage"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <FrameLayout
+                                    android:id="@+id/SpotlightSection"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical"
+                                        tools:ignore="UselessParent">
+
+                                            <FrameLayout
+                                                android:id="@+id/spotlightShows"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight="1"
+                                                android:layout_gravity="center"
+                                                android:focusable="true"
+                                                android:focusableInTouchMode="false"
+                                                android:descendantFocusability="afterDescendants"
+                                                android:clipChildren="false"
+                                                android:clipToPadding="false"
+                                                tools:ignore="TooDeepLayout" />
+
+
+                                            <View
+                                                android:layout_width="match_parent"
+                                                android:layout_marginVertical="5dp"
+                                                android:layout_height="1dp"
+                                                android:nextFocusLeft="@+id/spotlightShows"
+                                                android:nextFocusRight="@+id/spotlightShows"
+                                                android:nextFocusUp="@+id/spotlightShows"
+                                                android:focusable="true"
+                                                android:clickable="false"/>
+
+
+                                            <androidx.recyclerview.widget.RecyclerView
+                                                android:id="@+id/CategoryRecyclerView"
+                                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="match_parent"
+                                                android:layout_gravity="bottom"
+                                                android:clipToPadding="false"
+                                                tools:itemCount="1"
+                                                tools:listitem="@layout/item_category"
+                                                android:scrollbars="none"
+                                                tools:ignore="RtlSymmetry" />
+                                    </LinearLayout>
+                                </FrameLayout>
+
+
+
+
+
+
+<!-- //////////////////////// Movie PAGE //////////////////////////////////// -->
+
+
+
+
+                                <LinearLayout
+                                    android:id="@+id/MovieSection"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    tools:ignore="TooManyViews">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Library"
+                                        android:textAllCaps="true"
+                                        android:layout_marginStart="10dp"
+                                        android:textSize="5sp"
+                                        android:fontFamily="@font/p"
+                                        android:textColor="?attr/FG_color"
+                                        android:alpha="0.4"
+                                        tools:ignore="HardcodedText,SmallSp" />
+
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Movie Collection"
+                                        android:layout_marginStart="10dp"
+                                        android:fontFamily="@font/p"
+                                        android:textStyle="bold"
+                                        android:textSize="20sp"
+                                        android:textColor="?attr/FG_color"
+                                        tools:ignore="HardcodedText" />
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="320dp"
+                                        android:layout_marginVertical="10dp"
+                                        android:clipChildren="false"
+                                        android:clipToPadding="false">
+
+                                        <androidx.recyclerview.widget.RecyclerView
+                                            android:id="@+id/MoviesRecyclerView"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:clipToPadding="false"
+                                            android:scrollbars="none"
+                                            android:paddingHorizontal="400dp"
+                                            tools:itemCount="1"
+                                            tools:listitem="@layout/item_grid"
+                                            tools:ignore="RtlSymmetry" />
+
+                                        <!-- Fixed info card -->
+                                        <com.google.android.material.card.MaterialCardView
+                                            android:id="@+id/movieFixedFocusOverlay"
+                                            android:layout_width="527dp"
+                                            android:layout_height="320dp"
+                                            android:layout_gravity="start|center_vertical"
+                                            android:layout_marginStart="30dp"
+                                            android:focusable="false"
+                                            android:clickable="false"
+                                            android:alpha="0"
+                                            android:importantForAccessibility="no"
+                                            app:cardCornerRadius="12dp"
+                                            app:strokeWidth="0dp"
+                                            app:strokeColor="?attr/AccentColor"
+                                            app:cardBackgroundColor="?attr/BG_color_up"
+                                            app:cardElevation="0dp">
+
+
+                                            <ImageView
+                                                android:id="@+id/movieOverlayPoster"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:src="@raw/gradient_img"
+                                                android:scaleType="centerCrop"
+                                                tools:src="@drawable/splash_img"
+                                                tools:ignore="ContentDescription" />
+
+
+
+                                            <View
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:background="@drawable/overlay_bottom_gradient_bg"/>
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="bottom"
+                                                android:layout_marginStart="20dp"
+                                                android:layout_marginBottom="10dp"
+                                                android:orientation="vertical">
+
+                                                <TextView
+                                                    android:id="@+id/movieoOverlayTitle"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:textColor="#FFFFFF"
+                                                    android:textStyle="bold"/>
+
+                                                <TextView
+                                                    android:id="@+id/movieOverlayYear"
+                                                    android:layout_width="wrap_content"
+                                                    android:textColor="#FFFFFF"
+                                                    android:layout_height="wrap_content"/>
+
+                                                <TextView
+                                                    android:id="@+id/movieOverlayRating"
+                                                    android:textColor="#FFFFFF"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"/>
+
+                                            </LinearLayout>
+                                        </com.google.android.material.card.MaterialCardView>
+                                    </FrameLayout>
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:id="@+id/filterSection"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:gravity="center_vertical">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="vertical"
+                                            tools:ignore="TooDeepLayout">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="GENRES"
+                                                android:layout_marginStart="10dp"
+                                                android:textSize="5sp"
+                                                android:fontFamily="@font/p"
+                                                android:textColor="?attr/FG_color"
+                                                android:alpha="0.4"
+                                                tools:ignore="HardcodedText,SmallSp" />
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Browse by mood"
+                                                android:layout_marginStart="10dp"
+                                                android:fontFamily="@font/p"
+                                                android:textStyle="bold"
+                                                android:textSize="20sp"
+                                                android:textColor="?attr/FG_color"
+                                                tools:ignore="HardcodedText" />
+
+                                        </LinearLayout>
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="end"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:id="@+id/genreComedy"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:paddingHorizontal="13dp"
+                                                android:paddingVertical="6dp"
+                                                android:textSize="11sp"
+                                                android:fontFamily="@font/p"
+                                                android:textColor="@color/filter_btn_text_selector"
+                                                android:background="@drawable/filter_button"
+                                                android:clickable="true"
+                                                android:focusable="true"
+                                                android:text="COMEDY"
+                                                android:layout_marginHorizontal="5dp"
+                                                tools:ignore="HardcodedText,TooDeepLayout" />
+
+                                            <TextView
+                                                android:id="@+id/genreAction"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:paddingHorizontal="13dp"
+                                                android:paddingVertical="6dp"
+                                                android:textSize="11sp"
+                                                android:fontFamily="@font/p"
+                                                android:textColor="@color/filter_btn_text_selector"
+                                                android:background="@drawable/filter_button"
+                                                android:clickable="true"
+                                                android:focusable="true"
+                                                android:text="ACTION"
+                                                android:layout_marginHorizontal="5dp"
+                                                tools:ignore="HardcodedText,TooDeepLayout" />
+
+                                            <TextView
+                                                android:id="@+id/genreSCIFI"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:paddingHorizontal="13dp"
+                                                android:paddingVertical="6dp"
+                                                android:textSize="11sp"
+                                                android:fontFamily="@font/p"
+                                                android:textColor="@color/filter_btn_text_selector"
+                                                android:background="@drawable/filter_button"
+                                                android:clickable="true"
+                                                android:focusable="true"
+                                                android:text="SCI-FI"
+                                                android:layout_marginHorizontal="5dp"
+                                                tools:ignore="HardcodedText,TooDeepLayout" />
+
+                                            <TextView
+                                                android:id="@+id/genreAnimation"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:paddingHorizontal="13dp"
+                                                android:paddingVertical="6dp"
+                                                android:textSize="11sp"
+                                                android:fontFamily="@font/p"
+                                                android:textColor="@color/filter_btn_text_selector"
+                                                android:background="@drawable/filter_button"
+                                                android:clickable="true"
+                                                android:focusable="true"
+                                                android:text="ANIMATION"
+                                                android:layout_marginHorizontal="5dp"
+                                                tools:ignore="HardcodedText,TooDeepLayout" />
+
+
+                                            <TextView
+                                                android:id="@+id/genreFamily"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:paddingHorizontal="13dp"
+                                                android:paddingVertical="6dp"
+                                                android:textSize="11sp"
+                                                android:fontFamily="@font/p"
+                                                android:textColor="@color/filter_btn_text_selector"
+                                                android:background="@drawable/filter_button"
+                                                android:clickable="true"
+                                                android:focusable="true"
+                                                android:text="FAMILY"
+                                                android:layout_marginHorizontal="5dp"
+                                                tools:ignore="HardcodedText,TooDeepLayout" />
+
+
+                                            <TextView
+                                                android:id="@+id/genreRomance"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:paddingHorizontal="13dp"
+                                                android:paddingVertical="6dp"
+                                                android:textSize="11sp"
+                                                android:fontFamily="@font/p"
+                                                android:textColor="@color/filter_btn_text_selector"
+                                                android:background="@drawable/filter_button"
+                                                android:clickable="true"
+                                                android:focusable="true"
+                                                android:text="ROMANCE"
+                                                android:layout_marginHorizontal="5dp"
+                                                tools:ignore="HardcodedText,TooDeepLayout" />
+
+                                            <TextView
+                                                android:id="@+id/genreDrama"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:paddingHorizontal="13dp"
+                                                android:paddingVertical="6dp"
+                                                android:textSize="11sp"
+                                                android:nextFocusRight="@+id/genreComedy"
+                                                android:fontFamily="@font/p"
+                                                android:textColor="@color/filter_btn_text_selector"
+                                                android:background="@drawable/filter_button"
+                                                android:clickable="true"
+                                                android:focusable="true"
+                                                android:text="DRAMA"
+                                                android:layout_marginHorizontal="5dp"
+                                                tools:ignore="HardcodedText,TooDeepLayout" />
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="bottom"
+                                        android:clipChildren="false"
+                                        android:clipToPadding="false">
+
+                                        <androidx.recyclerview.widget.RecyclerView
+                                            android:id="@+id/genresRecyclerView"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:clipToPadding="false"
+                                            android:paddingStart="195dp"
+                                            android:paddingEnd="500dp"
+                                            android:scrollbars="none"
+                                            tools:ignore="RtlSymmetry" />
+
+                                        <View
+                                            android:id="@+id/genresFixedFocusOverlay"
+                                            android:layout_width="128dp"
+                                            android:layout_height="190dp"
+                                            android:layout_gravity="start|center_vertical"
+                                            android:layout_marginStart="190dp"
+                                            android:alpha="0"
+                                            android:background="@drawable/background_focus"
+                                            android:clickable="false"
+                                            android:focusable="false"
+                                            android:importantForAccessibility="no" />
+
+                                    </FrameLayout>
+
+                                </LinearLayout>
+
+
+<!-- //////////////////////// Series PAGE ////////////////////////////////////////////////////// -->
+
+
+
+                                <LinearLayout
+                                    android:id="@+id/tvSection"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    tools:ignore="TooManyViews">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Television"
+                                        android:textAllCaps="true"
+                                        android:layout_marginStart="10dp"
+                                        android:textSize="5sp"
+                                        android:fontFamily="@font/p"
+                                        android:textColor="?attr/FG_color"
+                                        android:alpha="0.4"
+                                        tools:ignore="HardcodedText,SmallSp" />
+
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Series Spotlight"
+                                        android:layout_marginStart="10dp"
+                                        android:fontFamily="@font/p"
+                                        android:textStyle="bold"
+                                        android:textSize="20sp"
+                                        android:textColor="?attr/FG_color"
+                                        tools:ignore="HardcodedText" />
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="320dp"
+                                        android:layout_marginVertical="10dp"
+                                        android:clipChildren="false"
+                                        android:clipToPadding="false">
+
+                                        <androidx.recyclerview.widget.RecyclerView
+                                            android:id="@+id/TVsRecyclerView"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:clipToPadding="false"
+                                            android:scrollbars="none"
+                                            android:paddingHorizontal="400dp"
+                                            tools:itemCount="1"
+                                            tools:listitem="@layout/item_grid"
+                                            tools:ignore="RtlSymmetry" />
+
+                                        <!-- Fixed info card -->
+                                        <com.google.android.material.card.MaterialCardView
+                                            android:id="@+id/tvFixedFocusOverlay"
+                                            android:layout_width="527dp"
+                                            android:layout_height="320dp"
+                                            android:layout_gravity="start|center_vertical"
+                                            android:layout_marginStart="30dp"
+                                            android:focusable="false"
+                                            android:clickable="false"
+                                            android:alpha="0"
+                                            android:importantForAccessibility="no"
+                                            app:cardCornerRadius="12dp"
+                                            app:strokeWidth="0dp"
+                                            app:strokeColor="?attr/AccentColor"
+                                            app:cardBackgroundColor="?attr/BG_color_up"
+                                            app:cardElevation="0dp">
+
+
+                                            <ImageView
+                                                android:id="@+id/tvOverlayPoster"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:src="@raw/gradient_img"
+                                                android:scaleType="centerCrop"
+                                                tools:src="@drawable/splash_img"
+                                                tools:ignore="ContentDescription" />
+
+                                            <View
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:background="@drawable/overlay_bottom_gradient_bg"/>
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="bottom"
+                                                android:layout_marginStart="20dp"
+                                                android:layout_marginBottom="10dp"
+                                                android:orientation="vertical">
+
+                                                <TextView
+                                                    android:id="@+id/tvOverlayTitle"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:textColor="#FFFFFF"
+                                                    android:textStyle="bold"/>
+
+                                                <TextView
+                                                    android:id="@+id/tvOverlayYear"
+                                                    android:layout_width="wrap_content"
+                                                    android:textColor="#FFFFFF"
+                                                    android:layout_height="wrap_content"/>
+
+                                                <TextView
+                                                    android:id="@+id/tvOverlayRating"
+                                                    android:textColor="#FFFFFF"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"/>
+
+                                            </LinearLayout>
+                                        </com.google.android.material.card.MaterialCardView>
+                                    </FrameLayout>
+                                </LinearLayout>
+
+
+
+                                <FrameLayout
+                                    android:id="@+id/HomeContentSection"
+                                    android:layout_width="match_parent"
+                                    android:focusable="true"
+                                    android:layout_height="wrap_content">
+
+                                    <include
+                                        android:id="@+id/selectedContentConfig"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        layout="@layout/item_selected_content"/>
+
+                                </FrameLayout>
+
+
+
+
+
+                                
+
+
+
+
+                            </LinearLayout>
+
+
+
+
+
+
+                        </LinearLayout>
+                    </ScrollView>
+
+
+
+                </LinearLayout>
+
+                <include layout="@layout/laod_animation"/>
+
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

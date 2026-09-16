@@ -7,12 +7,11 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:layout_width="1000dp"
-        android:layout_height="1000dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
-        android:scaleType="centerCrop"
-        android:rotation="90"
+        android:scaleType="fitXY"
         android:src="@drawable/splash_img"
         app:layout_constraintDimensionRatio="1.5"
         tools:ignore="ContentDescription" />
@@ -42,7 +41,7 @@
             android:shadowRadius="4"
             android:text="ONYX"
             android:textColor="#042c40"
-            android:textSize="90sp"
+            android:textSize="150sp"
             tools:ignore="HardcodedText" />
 
     </LinearLayout>

@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    tools:context=".Watch_Page"
+    android:background="?attr/BG_color">
+
+
+
+    <ScrollView
+        android:id="@+id/mainBox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="?attr/BG_color">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="541dp"
+                android:id="@+id/widget_1">
+
+                <!-- Backdrop image -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginStart="150dp"
+                    android:layout_marginBottom="100dp"
+                    tools:ignore="RtlHardcoded">
+
+                    <!-- Backdrop image -->
+                    <ImageView
+                        android:id="@+id/backdropImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        tools:src="@raw/movie_backdrop"
+                        android:layout_gravity="end"
+                        android:adjustViewBounds="true"
+                        tools:ignore="ContentDescription" />
+
+
+
+
+
+                    <LinearLayout
+                        android:id="@+id/blurContainer_left"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/overlay_left_gradient_bg"
+                        android:orientation="vertical"
+                        android:gravity="center"/>
+
+                    <LinearLayout
+                        android:id="@+id/blurContainer_bottom"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/overlay_bottom_gradient_bg"
+                        android:layout_gravity="bottom"
+                        android:orientation="horizontal" />
+
+
+
+
+
+                </FrameLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    tools:ignore="RtlSymmetry">
+
+
+                    <ImageView
+                        android:id="@+id/posterImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:visibility="gone"
+                        android:background="@android:color/transparent"
+                        tools:ignore="ContentDescription" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical"
+                        android:paddingStart="15dp"
+                        android:paddingBottom="1dp"
+                        tools:ignore="RtlSymmetry">
+
+                        <ImageView
+                            android:id="@+id/cShowLogo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="170dp"
+                            android:adjustViewBounds="true"
+                            android:maxHeight="170dp"
+                            android:maxWidth="400dp"
+                            android:scaleType="fitXY"
+                            tools:ignore="ContentDescription"
+                            android:layout_marginBottom="9dp"/>
+
+
+
+
+
+                        <TextView
+                            android:id="@+id/title_widget"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="3"
+                            android:maxWidth="400dp"
+                            tools:text="Movie Title"
+                            android:textColor="?attr/FG_color"
+                            android:fontFamily="@font/p"
+                            android:textSize="40sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="3"/>
+
+
+
+
+                        <TextView
+                            android:id="@+id/Production_widget"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.8"
+                            android:text="- Marvel    - DC   - action"
+                            android:textColor="?attr/FG_color"
+                            android:textSize="9sp"
+                            android:textStyle="italic"
+                            android:visibility="gone"
+                            tools:ignore="HardcodedText,SmallSp" />
+
+<!-- ========================================================================================    -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity=""
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingEnd="0dp" >
+
+
+
+                            <!-- Rating -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="start"
+                                android:orientation="horizontal"
+
+                                >
+
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:cardCornerRadius="3dp"
+                                    android:text="IMDB"
+                                    app:cardElevation="0dp"
+
+                                    android:textSize="11sp"
+                                    app:cardBackgroundColor="#99DAA520"
+                                    tools:ignore="HardcodedText"
+                                    android:textStyle="bold">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="IMDb"
+                                        android:paddingVertical="2dp"
+                                        android:paddingHorizontal="5dp"
+                                        android:textColor="#000000"
+                                        android:textStyle="bold"
+                                        android:textSize="11sp"
+                                        android:fontFamily="@font/p"
+                                        tools:ignore="HardcodedText" />
+
+                                </androidx.cardview.widget.CardView>
+                                <TextView
+                                    android:id="@+id/Rating_widget"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="2dp"
+                                    tools:text="8.5"
+                                    android:layout_gravity="center"
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="1"
+                                    android:paddingHorizontal="2dp"
+                                    android:shadowRadius="2"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    tools:ignore="HardcodedText" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:background="#FFFFFF"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:alpha="0.5"/>
+
+                            <TextView
+                                android:id="@+id/season_C"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:maxLines="1"
+                                android:fontFamily="@font/q"
+                                android:gravity="center"
+                                tools:text=""
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:paddingHorizontal="2dp"
+                                android:shadowRadius="2"
+                                android:textSize="11sp"
+                                tools:ignore="HardcodedText,SmallSp" />
+
+                            <View
+                                android:layout_width="1dp"
+                                android:background="#FFFFFF"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:alpha="0.5"/>
+
+                            <!-- Runtime -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="start"
+                                android:orientation="horizontal"
+                                android:paddingEnd="0dp"
+                                >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="⏱ "
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="11sp"
+                                    tools:ignore="HardcodedText" />
+                                <TextView
+                                    android:id="@+id/Runtime_widget"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="2h 3min"
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="1"
+                                    android:paddingHorizontal="2dp"
+                                    android:shadowRadius="2"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    tools:ignore="HardcodedText" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:background="#FFFFFF"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:alpha="0.5"/>
+
+                            <!-- Year -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="start"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/year_widget"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="1dp"
+                                    tools:text="2025"
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="1"
+                                    android:paddingHorizontal="2dp"
+                                    android:shadowRadius="2"
+                                    android:textSize="11sp"
+                                    tools:ignore="HardcodedText"
+                                    android:textStyle="bold"    />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:background="#FFFFFF"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:alpha="0.5"/>
+
+                            <!-- Pg -->
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="PG "
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="1"
+                                    android:paddingHorizontal="2dp"
+                                    android:shadowRadius="2"
+                                    android:fontFamily="@font/l"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    tools:ignore="HardcodedText" />
+                                <TextView
+                                    android:id="@+id/PG_widget"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="13"
+                                    android:textColor="#FFFFFF"
+                                    android:shadowColor="#000000"
+                                    android:shadowDx="1"
+                                    android:shadowDy="1"
+                                    android:paddingHorizontal="2dp"
+                                    android:shadowRadius="2"
+                                    android:fontFamily="@font/l"
+                                    android:textStyle="bold"
+                                    android:textSize="11sp"
+                                    tools:ignore="HardcodedText" />
+
+
+                            <View
+                                android:layout_width="1dp"
+                                android:background="#FFFFFF"
+                                android:layout_height="15dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="5dp"
+                                android:alpha="0.5"/>
+
+
+
+
+                                <ImageView
+                                    android:layout_marginStart="10dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/ic_hdr"
+                                    app:tint="#FFFFFF"
+                                    android:textSize="11sp"
+                                    android:alpha="0.7"/>
+
+                                <ImageView
+                                    android:layout_marginStart="0dp"
+                                    android:layout_width="24dp"
+                                    android:layout_height="18dp"
+                                    android:src="@drawable/ic_caption"
+                                    app:tint="#FFFFFF"
+                                    android:textSize="11sp"
+                                    android:alpha="0.7"/>
+
+
+                        </LinearLayout>
+
+                        <!-- VoteCount -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal"
+                            android:layout_marginEnd="15dp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="★★☆ "
+                                android:textColor="#FFFFFF"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText"
+                                />
+                            <TextView
+                                android:id="@+id/VoteCount_widget"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="342323"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/n"
+                                android:textSize="14sp"
+                                tools:ignore="HardcodedText" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/Genres_widget"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="Science fiction     drama   - action"
+                            android:textColor="#FFFFFF"
+                            android:shadowColor="#000000"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:paddingHorizontal="2dp"
+                            android:shadowRadius="2"
+                            android:textSize="11sp"
+                            tools:ignore="HardcodedText"
+                            android:fontFamily="@font/n"
+                            android:textStyle="bold"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:gravity="start"
+                            android:orientation="horizontal"
+                            android:padding="5dp"
+                            android:paddingEnd="0dp" >
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="500dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:gravity="start"
+                            android:orientation="horizontal"
+                            android:paddingEnd="0dp"
+                            android:layout_marginBottom="4dp">
+
+                            <TextView
+                                android:id="@+id/overview_widget"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginBottom="10dp"
+                                android:ellipsize="end"
+                                android:maxLines="3"
+                                android:singleLine="false"
+                                tools:text="An assassin, trained in the ways of the Ruska Roma, embarks on a quest for vengeance following the death of her father."
+                                android:textColor="#FFFFFF"
+                                android:shadowColor="#000000"
+                                android:shadowDx="2"
+                                android:shadowDy="2"
+                                android:shadowRadius="3"
+                                android:textSize="13sp"
+                                android:fontFamily="serif"
+                                tools:ignore="HardcodedText"
+                                />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingEnd="0dp">
+
+                            <!-- This is our custom expanding button -->
+                            <LinearLayout
+                                android:id="@+id/watchNowButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/watch_button"
+                                android:focusableInTouchMode="true"
+                                android:focusable="true"
+                                android:clickable="true"
+                                android:paddingVertical="8dp"
+                                android:paddingHorizontal="8dp"
+                                android:nextFocusLeft="@+id/serverButton"
+                                android:nextFocusRight="@+id/TrailerButton"
+                                android:elevation="2dp"
+                                android:layout_marginEnd="10dp">
+
+
+                                    <ImageView
+                                        android:layout_width="22dp"
+                                        android:layout_height="22dp"
+                                        android:layout_marginEnd="4dp"
+                                        android:src="@drawable/ic_play"
+                                        android:focusable="false"
+                                        android:focusableInTouchMode="false"
+                                        android:clickable="false"
+                                        app:tint="#FFFFFF"
+                                        android:textAllCaps="false"
+                                        tools:ignore="ContentDescription,UnusedAttribute" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Play"
+                                        android:textSize="15sp"
+                                        android:fontFamily="@font/o"
+                                        android:textColor="#FFFFFF"
+                                        tools:ignore="HardcodedText" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/TrailerButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/watch_button"
+                                android:focusableInTouchMode="true"
+                                android:focusable="true"
+                                android:clickable="true"
+                                android:paddingVertical="8dp"
+                                android:paddingHorizontal="8dp"
+                                android:nextFocusLeft="@+id/watchNowButton"
+                                android:nextFocusRight="@+id/favoriteButton"
+                                android:layout_marginEnd="10dp"
+                                android:elevation="2dp">
+
+                                <ImageView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:background="@android:color/transparent"
+                                    android:src="@drawable/ic_trailer"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:clickable="false"
+                                    app:tint="#FFFFFF"
+                                    android:textSize="14sp"
+                                    android:textAllCaps="false"
+                                    android:elevation="2dp"
+                                    tools:ignore="ContentDescription,UnusedAttribute"/>
+
+                                <TextView
+                                    android:id="@+id/trailer_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Trailer"
+                                    android:textSize="15sp"
+                                    android:fontFamily="@font/o"
+                                    android:textColor="#FFFFFF"
+                                    tools:ignore="HardcodedText" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/favoriteButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/watch_button"
+                                android:focusableInTouchMode="true"
+                                android:focusable="true"
+                                android:clickable="true"
+                                android:layout_marginEnd="10dp"
+                                android:paddingVertical="8dp"
+                                android:paddingHorizontal="8dp"
+                                android:nextFocusLeft="@+id/TrailerButton"
+                                android:nextFocusRight="@+id/serverButton"
+                                android:elevation="2dp" >
+
+
+
+                                <ImageView
+                                    android:id="@+id/favoriteButtonImg"
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:src="@drawable/ic_addfave"
+                                    app:tint="#FFFFFF"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:clickable="false"
+                                    android:background="@android:color/transparent"
+                                    android:textAllCaps="false"
+                                    android:tooltipText="Add to Favorites"
+                                    tools:ignore="UnusedAttribute" />
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/serverButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/watch_button"
+                                android:focusableInTouchMode="true"
+                                android:focusable="true"
+                                android:clickable="true"
+                                android:paddingVertical="8dp"
+                                android:paddingHorizontal="8dp"
+                                android:nextFocusLeft="@+id/favoriteButton"
+                                android:nextFocusRight="@+id/watchNowButton"
+                                android:elevation="2dp"
+                                android:layout_marginEnd="10dp">
+
+                                <ImageView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:background="@android:color/transparent"
+                                    android:src="@drawable/ic_server"
+                                    app:tint="#FFFFFF"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:clickable="false"
+                                    android:textAllCaps="false"
+                                    tools:ignore="ContentDescription" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/Season_widget"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <!-- ✅ Season Selector goes here -->
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="none"
+                            android:clipToPadding="false"
+                            android:descendantFocusability="afterDescendants"
+                            android:paddingVertical="1dp">
+
+                            <LinearLayout
+                                android:id="@+id/season_selector_container"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/season_1_btn"
+                                    android:layout_width="120dp"
+                                    android:layout_height="48dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:text="Season"
+
+                                    android:textColor="?attr/FG_color"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="@font/p"
+                                    android:background="@drawable/season_selector"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
+                                    android:stateListAnimator="@null"
+                                    android:textAllCaps="false"
+                                    tools:ignore="HardcodedText,TooDeepLayout" />
+
+                                <!-- Add more season buttons dynamically or here -->
+
+                            </LinearLayout>
+                        </HorizontalScrollView>
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/AccentColor"
+                            android:alpha="0.3" />
+
+                        <!-- Episodes Recycler -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/episodes_recycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="1dp"
+                            android:orientation="horizontal"
+                            android:clipToPadding="false"
+                            android:scrollbars="none"
+                            android:focusable="false"
+                            android:descendantFocusability="afterDescendants"/>
+
+
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/Cast_widget_mv"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:overScrollMode="never"
+                        android:scrollbars="none"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        tools:layout_editor_absoluteY="8dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        />
+
+                </LinearLayout>
+            </FrameLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/Cast_widget_tv"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:layout_margin="10dp"
+                android:layout_marginHorizontal="82dp"
+                android:scrollbars="none"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteY="8dp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text=" You may also like"
+                android:fontFamily="@font/p"
+                android:textColor="#FFFFFF"
+                android:visibility="gone"
+                android:shadowColor="#000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="3"
+                android:paddingHorizontal="2dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                tools:ignore="HardcodedText" />
+
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/Recommendation_widget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:layout_marginTop="20dp"
+                    android:overScrollMode="never"
+                    android:padding="10dp"
+                    android:paddingHorizontal="32dp"
+                    android:scrollbars="none"
+                    android:orientation="horizontal"
+                    tools:layout_editor_absoluteY="8dp"
+                    android:nestedScrollingEnabled="false"
+                    android:descendantFocusability="afterDescendants"/>
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/stream_main"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#99000000"
+            android:layout_gravity="center"
+            android:layout_marginVertical="50dp"
+            android:layout_marginHorizontal="300dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                app:cardBackgroundColor="#99000000"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="select a streaming Server"
+                    android:gravity="center"
+                    android:textSize="17sp"
+                    android:fontFamily="@font/p"
+                    android:paddingVertical="3dp"
+                    android:textColor="?attr/FG_color"
+                    tools:ignore="HardcodedText" />
+
+                <ImageView
+                    android:id="@+id/stream_links_animation"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@raw/flame_loading"
+                    android:layout_gravity="center"/>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:id="@+id/stream_links_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+
+                    </LinearLayout>
+                </ScrollView>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/container_server"
+        android:visibility="invisible"
+        android:layout_width="500dp"
+        android:orientation="vertical"
+        android:layout_height="150dp"
+        tools:ignore="MissingConstraints" />
+
+    <include layout="@layout/laod_animation"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

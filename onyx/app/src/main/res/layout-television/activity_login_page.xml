@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/BG_color"
+    tools:context=".Login_Page">
+
+    <ImageView
+        android:id="@+id/backgroundImgContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="?attr/themeImage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+
+    <View
+        android:id="@+id/bottomScrim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.8"
+        android:background="#E9042C40"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    <FrameLayout
+        android:id="@+id/profileContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/loginStage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_marginHorizontal="52dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/loginBrand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_settings_pill"
+                android:drawablePadding="8dp"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="9dp"
+                android:text="PULSEFLIX"
+                android:textAllCaps="true"
+                android:textColor="#F5F1EA"
+                android:textSize="12sp"
+                android:fontFamily="@font/p"
+                android:letterSpacing="0.18"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/loginTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Who's watching?"
+                android:textColor="#FFF8EE"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/p"
+                android:gravity="center"
+                android:shadowColor="#99000000"
+                android:shadowDx="0"
+                android:shadowDy="3"
+                android:shadowRadius="10"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/loginSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:alpha="0.82"
+                android:fontFamily="@font/n"
+                android:gravity="center"
+                android:text="Choose a profile to continue streaming"
+                android:textColor="#FFF3E2"
+                android:textSize="15sp"
+                tools:ignore="HardcodedText" />
+
+            <FrameLayout
+                android:id="@+id/profileStageSurface"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/login_surface_background"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingHorizontal="28dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="18dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    tools:ignore="UselessParent">
+
+                    <TextView
+                        android:id="@+id/profileRailLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.72"
+                        android:fontFamily="@font/n"
+                        android:letterSpacing="0.08"
+                        android:text="PROFILES"
+                        android:textAllCaps="true"
+                        android:textColor="#FFF4E8"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/profileRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:overScrollMode="never"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="8dp" />
+
+                </LinearLayout>
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:id="@+id/settingUi"
+            android:layout_width="278dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="74dp"
+            android:alpha="0"
+            android:background="@drawable/login_panel_background"
+            android:elevation="12dp"
+            android:orientation="vertical"
+            android:padding="18dp"
+            android:translationY="12dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/settingTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/p"
+                android:text="Quick Settings"
+                android:textColor="#FFF8EE"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+
+
+            <TextView
+                android:id="@+id/gLocalBackup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/login_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/p"
+                android:nextFocusDown="@+id/gLocalRestore"
+                android:nextFocusLeft="@+id/gLocalRestore"
+                android:nextFocusRight="@+id/exitSetting"
+                android:nextFocusUp="@+id/exitSetting"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="13dp"
+                android:text="Back up Localy"
+                android:textColor="#FFF8EE"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+
+            <TextView
+                android:id="@+id/gLocalRestore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/login_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/p"
+                android:nextFocusDown="@+id/exitApp"
+                android:nextFocusLeft="@+id/exitApp"
+                android:nextFocusRight="@+id/gLocalBackup"
+                android:nextFocusUp="@+id/gLocalBackup"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="13dp"
+                android:text="Restore Local"
+                android:textColor="#FFF8EE"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/exitApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/login_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/p"
+                android:nextFocusDown="@+id/exitSetting"
+                android:nextFocusLeft="@+id/exitSetting"
+                android:nextFocusRight="@+id/gLocalRestore"
+                android:nextFocusUp="@+id/gLocalRestore"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="13dp"
+                android:text="Close app"
+                android:textColor="#FFF8EE"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/exitSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/login_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/p"
+                android:nextFocusDown="@+id/gLocalBackup"
+                android:nextFocusLeft="@+id/gLocalBackup"
+                android:nextFocusRight="@+id/exitApp"
+                android:nextFocusUp="@+id/exitApp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="13dp"
+                android:text="Done"
+                android:textColor="#FFF8EE"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/settingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:background="@drawable/login_settings_pill"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_settings"
+            android:drawableTint="#FFF8EE"
+            android:focusable="true"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="12dp"
+            android:text="Settings"
+            android:textColor="#FFF8EE"
+            android:textSize="14sp"
+            android:fontFamily="@font/p"
+            tools:ignore="ContentDescription,HardcodedText,UseCompatTextViewDrawableXml" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/CreateProfileContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0"
+        android:background="#9905070D"
+        android:padding="24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/createProfileCard"
+            android:layout_width="460dp"
+            android:layout_margin="20dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="#042c40"
+            app:cardCornerRadius="38dp"
+            app:cardElevation="14dp">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/login_panel_background"
+                android:scrollbars="none"
+                android:layout_margin="18dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/createEyebrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.68"
+                    android:fontFamily="@font/n"
+                    android:letterSpacing="0.08"
+                    android:text="NEW PROFILE"
+                    android:textAllCaps="true"
+                    android:textColor="#FFF3E6"
+                    android:textSize="11sp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/createTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/p"
+                    android:text="Create a profile"
+                    android:textColor="#FFF8EE"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/createSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:alpha="0.7"
+                    android:fontFamily="@font/n"
+                    android:gravity="center"
+                    android:text="Pick an avatar, set a name, and keep the experience personal."
+                    android:textColor="#FFF1E5"
+                    android:textSize="13sp"
+                    tools:ignore="HardcodedText" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/selectedAvatarShell"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:layout_marginTop="22dp"
+                    app:cardBackgroundColor="#22FFFFFF"
+                    app:cardCornerRadius="55dp"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:id="@+id/selectedAvatarPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="18dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_person"
+                        app:tint="#FFF8EE"
+                        tools:ignore="ContentDescription" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/selectedAvatarLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:alpha="0.72"
+                    android:fontFamily="@font/n"
+                    android:text="Choose an avatar"
+                    android:textColor="#FFF2E5"
+                    android:textSize="13sp"
+                    tools:ignore="HardcodedText" />
+
+                <EditText
+                    android:id="@+id/usernameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:background="@drawable/login_input_field"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@font/n"
+                    android:hint="Profile name"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:nextFocusDown="@+id/usernamePinInput"
+                    android:nextFocusLeft="@+id/createProfileBtn"
+                    android:nextFocusRight="@+id/createProfileBtn"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="16dp"
+                    android:singleLine="true"
+                    android:textColor="#FFF8EE"
+                    android:textColorHint="#99FFF1E2"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
+
+                <EditText
+                    android:id="@+id/usernameGenderInput"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone" />
+f
+                <EditText
+                    android:id="@+id/usernamePinInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/login_input_field"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@font/n"
+                    android:hint="PIN"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberPassword"
+                    android:maxLines="1"
+                    android:nextFocusDown="@+id/avatarRecycler"
+                    android:nextFocusLeft="@+id/usernameInput"
+                    android:nextFocusRight="@+id/usernameInput"
+                    android:nextFocusUp="@+id/usernameInput"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="16dp"
+                    android:singleLine="true"
+                    android:textColor="#FFF8EE"
+                    android:textColorHint="#99FFF1E2"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/avatarSectionLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:alpha="0.72"
+                    android:fontFamily="@font/n"
+                    android:text="Avatar selection"
+                    android:textColor="#FFF1E5"
+                    android:textSize="13sp"
+                    tools:ignore="HardcodedText" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/avatarRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="104dp"
+                    android:layout_marginTop="10dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:nextFocusDown="@+id/createProfileBtn"
+                    android:overScrollMode="never"
+                    android:paddingHorizontal="4dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/createProfileBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/login_primary_button"
+                        android:clickable="true"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:fontFamily="@font/p"
+                        android:gravity="center"
+                        android:nextFocusDown="@+id/cancelProfileBtn"
+                        android:nextFocusLeft="@+id/cancelProfileBtn"
+                        android:nextFocusRight="@+id/cancelProfileBtn"
+                        android:nextFocusUp="@+id/avatarRecycler"
+                        android:paddingVertical="15dp"
+                        android:text="Create profile"
+                        android:textColor="#FFF8EE"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/cancelProfileBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/login_secondary_button"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:fontFamily="@font/p"
+                        android:gravity="center"
+                        android:nextFocusDown="@+id/usernameInput"
+                        android:nextFocusLeft="@+id/createProfileBtn"
+                        android:nextFocusRight="@+id/createProfileBtn"
+                        android:nextFocusUp="@+id/avatarRecycler"
+                        android:paddingVertical="15dp"
+                        android:text="Cancel"
+                        android:textColor="#FFF8EE"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

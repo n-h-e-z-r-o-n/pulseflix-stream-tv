@@ -1,0 +1,170 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="125dp"
+    android:layout_margin="6dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
+    android:foreground="@drawable/item_episode_focus"
+    app:cardCornerRadius="9dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="?attr/transparentEffect">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="?attr/transparentEffect"
+        >
+
+        <ImageView
+            android:id="@+id/Ep_IMG"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:background="?attr/transparentEffect"
+            android:layout_gravity="left"
+            tools:ignore="ContentDescription" />
+
+
+
+
+
+        <!-- Episode info -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="?attr/transparentEffect"
+            android:paddingHorizontal="2dp"
+            android:paddingVertical="8dp">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/episode_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:shadowColor="?attr/AccentColor"
+                    android:shadowDx="2"
+                    android:shadowDy="4"
+                    android:shadowRadius="4"
+                    android:text="45 min"
+                    android:textColor="?attr/FG_color"
+                    android:textSize="10sp"
+                    tools:ignore="HardcodedText,RtlSymmetry,SmallSp" />
+
+                <TextView
+                    android:id="@+id/episode_Rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:shadowColor="#80000000"
+                    android:shadowDx="2"
+                    android:shadowDy="3"
+                    android:shadowRadius="4"
+                    android:text="7.5 ★"
+                    android:textColor="?attr/AccentColor"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,InefficientWeight,SmallSp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/episode_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="3"
+                            android:text="Short episode description goes here..."
+                            android:textColor="?attr/FG_color"
+                            android:textSize="9sp"
+                            android:visibility="gone"
+                            tools:ignore="HardcodedText,SmallSp" />
+
+                        <TextView
+                            android:id="@+id/episode_Number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/o"
+                            android:maxLines="1"
+                            android:text="S1-E2"
+                            android:textColor="#FFFFFF"
+                            android:shadowColor="#000000"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="3"
+                            android:paddingHorizontal="2dp"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/episode_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/o"
+                            android:gravity="bottom"
+                            android:maxWidth="200dp"
+                            android:adjustViewBounds="true"
+                            android:maxLines="1"
+                            android:textColor="#FFFFFF"
+                            android:shadowColor="#000000"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="3"
+                            android:paddingHorizontal="2dp"
+                            android:text="Episode Title"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText,SmallSp" />
+                        <SeekBar
+                            android:id="@+id/cWatchSeek_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="0dp"
+                            android:max="1000"
+                            android:progress="600"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:focusableInTouchMode="false"
+                            android:enabled="false"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:paddingLeft="0dp"
+                            android:paddingRight="0dp"
+                            android:progressTint="?attr/AccentColor"
+                            android:progressBackgroundTint="?attr/FG_color"
+                            android:layout_gravity="bottom"
+                            android:thumbTint="@android:color/transparent" />
+            </LinearLayout>
+        </FrameLayout>
+
+    </FrameLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/BG_color"
+    tools:context=".PayWall">
+
+    <FrameLayout
+        android:id="@+id/showcasePanel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@raw/blur_vid_b"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/paywallShow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/paywall_showcase_overlay" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/paywall_left_scrim" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/leftStage"
+        android:layout_width="472dp"
+        android:layout_height="0dp"
+        android:paddingStart="28dp"
+        android:paddingTop="30dp"
+        android:paddingEnd="22dp"
+        android:paddingBottom="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/payInfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/appLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/p"
+                android:gravity="center"
+                android:shadowColor="#99000000"
+                android:shadowDx="0"
+                android:shadowDy="3"
+                android:shadowRadius="10"
+                android:text="ONYX"
+                android:textColor="#FFF8EE"
+                android:textSize="74sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:alpha="0.76"
+                android:fontFamily="@font/n"
+                android:gravity="center"
+                android:text="Unlimited movies and TV shows"
+                android:textColor="#FFF5E8"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                app:cardBackgroundColor="#D1141820"
+                app:cardCornerRadius="26dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/paywall_surface_background"
+                    android:orientation="vertical"
+                    android:padding="22dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/p"
+                            android:text="Premium Access"
+                            android:textColor="#FFF8EE"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/headerBadgeText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/paywall_badge_background"
+                            android:fontFamily="@font/n"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="5dp"
+                            android:text="MONTHLY"
+                            android:textColor="#FFF9F1"
+                            android:textSize="11sp"
+                            tools:ignore="HardcodedText,SmallSp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/priceCurrencyText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:fontFamily="@font/n"
+                            android:text="KSh"
+                            android:textColor="#FFF7EA"
+                            android:textSize="24sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/priceAmountText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/n"
+                            android:text="15"
+                            android:textColor="#FFF7EA"
+                            android:textSize="42sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/pricePeriodText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="6dp"
+                            android:alpha="0.74"
+                            android:fontFamily="@font/n"
+                            android:text="/ month"
+                            android:textColor="#FFF4E6"
+                            android:textSize="15sp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.92"
+                            android:fontFamily="@font/n"
+                            android:text="Included"
+                            android:textColor="#FFF6E8"
+                            android:textSize="13sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/n"
+                            android:text="All premium movies and TV shows"
+                            android:textColor="#FFF5E8"
+                            android:textSize="14sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/n"
+                            android:text="Ad-free playback and library access"
+                            android:textColor="#FFF5E8"
+                            android:textSize="14sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/n"
+                            android:text="Continuous updates and support"
+                            android:textColor="#FFF5E8"
+                            android:textSize="14sp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnPurchase"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="22dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/paywall_cta_button"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="@font/p"
+                        android:text="Unlock Premium"
+                        android:textAllCaps="false"
+                        android:textColor="#FFF9F0"
+                        android:textSize="17sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/termsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/n"
+                android:gravity="center"
+                android:text="Terms of Service and Privacy Policy"
+                android:textColor="#FFF3E5"
+                android:textSize="12sp"
+                tools:ignore="HardcodedText" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/PaymentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:elevation="10dp"
+            android:translationX="32dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="#E1141820"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="0dp">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:padding="22dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/p"
+                                android:text="Choose your plan"
+                                android:textColor="#FFF8EE"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:alpha="0.7"
+                                android:fontFamily="@font/n"
+                                android:text="One payment method is active on this device."
+                                android:textColor="#FFF2E5"
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/btnClosePayment"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/paywall_close_button"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:fontFamily="@font/n"
+                            android:gravity="center"
+                            android:text="X"
+                            android:textColor="#FFF8EE"
+                            android:textSize="18sp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/planGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="22dp"
+                        android:orientation="horizontal"
+                        tools:ignore="DisableBaselineAlignment">
+
+                        <LinearLayout
+                            android:id="@+id/planMonthly"
+                            android:layout_width="0dp"
+                            android:layout_height="92dp"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/paywall_option_default"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/p"
+                                android:text="Monthly"
+                                android:textColor="#FFF8EE"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:alpha="0.8"
+                                android:fontFamily="@font/n"
+                                android:text="KSh 15"
+                                android:textColor="#FFF4E6"
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/planQuarterly"
+                            android:layout_width="0dp"
+                            android:layout_height="92dp"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/paywall_option_default"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/p"
+                                android:text="Quarterly"
+                                android:textColor="#FFF8EE"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:alpha="0.8"
+                                android:fontFamily="@font/n"
+                                android:text="KSh 35"
+                                android:textColor="#FFF4E6"
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:alpha="0.64"
+                                android:fontFamily="@font/n"
+                                android:text="Save 22%"
+                                android:textColor="#FFF3E3"
+                                android:textSize="11sp"
+                                tools:ignore="HardcodedText,SmallSp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/planYearly"
+                            android:layout_width="0dp"
+                            android:layout_height="92dp"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/paywall_option_default"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/p"
+                                android:text="Yearly"
+                                android:textColor="#FFF8EE"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:alpha="0.8"
+                                android:fontFamily="@font/n"
+                                android:text="KSh 150"
+                                android:textColor="#FFF4E6"
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:alpha="0.64"
+                                android:fontFamily="@font/n"
+                                android:text="Save 17%"
+                                android:textColor="#FFF3E3"
+                                android:textSize="11sp"
+                                tools:ignore="HardcodedText,SmallSp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="22dp"
+                        android:background="#2AFFF5E7" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/p"
+                        android:text="Payment method"
+                        android:textColor="#FFF8EE"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+
+                    <LinearLayout
+                        android:id="@+id/rbMpesa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/paywall_option_selected"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_mpesa"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/p"
+                            android:text="M-Pesa"
+                            android:textColor="#FFF8EE"
+                            android:textSize="14sp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/mpesaSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.76"
+                            android:fontFamily="@font/n"
+                            android:text="Country"
+                            android:textColor="#FFF1E4"
+                            android:textSize="12sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/paymentCountryLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/paywall_static_field"
+                            android:fontFamily="@font/n"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="14dp"
+                            android:text="Kenya"
+                            android:textColor="#FFF8EE"
+                            android:textSize="14sp"
+                            tools:ignore="HardcodedText" />
+
+                        <Spinner
+                            android:id="@+id/spCountry"
+                            android:layout_width="1dp"
+                            android:layout_height="1dp"
+                            android:alpha="0"
+                            android:entries="@array/payment_countries"
+                            android:focusable="false"
+                            android:visibility="invisible" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:alpha="0.76"
+                            android:fontFamily="@font/n"
+                            android:text="M-Pesa number"
+                            android:textColor="#FFF1E4"
+                            android:textSize="12sp"
+                            tools:ignore="HardcodedText" />
+
+                        <EditText
+                            android:id="@+id/etMpesaPhone"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/paywall_input_background"
+                            android:fontFamily="@font/n"
+                            android:gravity="center_vertical"
+                            android:hint="07XX XXX XXX"
+                            android:inputType="phone"
+                            android:nextFocusDown="@+id/btnMpesaPayment"
+                            android:nextFocusLeft="@+id/etMpesaPhone"
+                            android:nextFocusRight="@+id/etMpesaPhone"
+                            android:nextFocusUp="@+id/rbMpesa"
+                            android:paddingHorizontal="16dp"
+                            android:textColor="#FFF8EE"
+                            android:textColorHint="#90FFF1E2"
+                            android:textSize="15sp"
+                            tools:ignore="Autofill,HardcodedText" />
+
+                        <ProgressBar
+                            android:id="@+id/MpesaProgressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="18dp"
+                            android:indeterminate="true"
+                            android:indeterminateTint="?attr/AccentColor"
+                            android:visibility="gone" />
+
+                        <Button
+                            android:id="@+id/btnMpesaPayment"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:layout_marginTop="18dp"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@drawable/paywall_cta_button"
+                            android:fontFamily="@font/p"
+                            android:nextFocusLeft="@+id/btnMpesaPayment"
+                            android:nextFocusRight="@+id/btnMpesaPayment"
+                            android:nextFocusUp="@+id/etMpesaPhone"
+                            android:text="Send M-Pesa prompt"
+                            android:textAllCaps="false"
+                            android:textColor="#FFF9F0"
+                            android:textSize="16sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/mpesaFeedbackBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:alpha="0.82"
+                            android:fontFamily="@font/n"
+                            android:gravity="center"
+                            android:maxLines="4"
+                            android:text=""
+                            android:textColor="#FFF4E6"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

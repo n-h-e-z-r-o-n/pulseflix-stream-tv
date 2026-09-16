@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         hasNavigated = true
 
         val uiModeManager = getSystemService(android.content.Context.UI_MODE_SERVICE) as android.app.UiModeManager
-        val isTv = uiModeManager.currentModeType == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
+        val isTv = true // uiModeManager.currentModeType == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
 
         val destination = if (!isTv) {
             NetworkAdbActivity::class.java

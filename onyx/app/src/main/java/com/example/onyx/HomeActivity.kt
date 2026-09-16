@@ -5,6 +5,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -28,6 +29,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GlobalUtils.applyTheme(this)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_home)
 
         val loadingImageView = findViewById<ImageView>(R.id.AnimationBG)

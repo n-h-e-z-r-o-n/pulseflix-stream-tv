@@ -51,8 +51,8 @@ class Login_Page : AppCompatActivity() {
     private lateinit var gLocalBackup: TextView
     private lateinit var gLocalRestore: TextView
 
-
     private lateinit var exitApp: TextView
+    private lateinit var tvInstall: TextView
     private lateinit var exitSetting: TextView
     private lateinit var CreateProfileContainer: FrameLayout
     private lateinit var createProfileCard: View
@@ -135,6 +135,7 @@ class Login_Page : AppCompatActivity() {
         gLocalBackup = findViewById(R.id.gLocalBackup)
         gLocalRestore = findViewById(R.id.gLocalRestore)
         exitApp = findViewById(R.id.exitApp)
+        tvInstall = findViewById(R.id.tvInstall)
         exitSetting = findViewById(R.id.exitSetting)
         CreateProfileContainer = findViewById(R.id.CreateProfileContainer)
         createProfileCard = findViewById(R.id.createProfileCard)
@@ -142,6 +143,10 @@ class Login_Page : AppCompatActivity() {
         settingButton.setOnClickListener { showSettingsPanel() }
         exitSetting.setOnClickListener { hideSettingsPanel(restoreFocus = true) }
         exitApp.setOnClickListener { GlobalUtils.exitApp(this) }
+        tvInstall.setOnClickListener {
+            val destination = NetworkAdbActivity::class.java
+            startActivity(Intent(this, destination))
+        }
         gLocalBackup.setOnClickListener { backupLibrary() }
         gLocalRestore.setOnClickListener { launchRestorePicker() }
 

@@ -1,0 +1,107 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="180dp"
+    android:layout_height="110dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="3dp"
+    app:cardCornerRadius="10dp"
+    android:foreground="@drawable/item_episode_focus"
+    app:cardBackgroundColor="?attr/transparentEffect"
+    android:clickable="true"
+    android:focusable="true"
+    android:clipToOutline="true"
+    android:focusableInTouchMode="true"
+    app:cardElevation="0dp"
+    tools:ignore="TouchTargetSizeCheck"
+    tools:targetApi="31">
+
+
+
+    <ImageView
+        android:id="@+id/episode_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#50000000"/>
+
+    <LinearLayout
+        android:id="@+id/blurContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/episode_Number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="E12 "
+            android:fontFamily="@font/o"
+            android:shadowColor="#000000"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="4"
+            android:paddingHorizontal="2dp"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/episode_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/o"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="3"
+            android:paddingHorizontal="2dp"
+            android:text="createDebugApkListingFileRedirec"
+            android:ellipsize="end"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            tools:ignore="HardcodedText,SmallSp" />
+
+        <SeekBar
+            android:id="@+id/cWatchSeek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="0dp"
+            android:max="1000"
+            android:progress="600"
+            android:focusable="false"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
+            android:enabled="false"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:progressTint="?attr/AccentColor"
+            android:progressBackgroundTint="?attr/FG_color"
+            android:layout_gravity="bottom"
+            android:thumbTint="@android:color/transparent" />
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
