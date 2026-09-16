@@ -16,7 +16,7 @@
     android:clickable="true"
     android:focusable="true"
     android:nextFocusUp="@+id/cardButton"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="false">
 
     <TextView
         android:id="@+id/searchTitle"

@@ -247,7 +247,7 @@ class WatchAnimeFragment : Fragment(R.layout.fragment_watch_anime_page) {
         val posterWidget = requireView().findViewById<ImageView>(R.id.WatchImage)
         Glide.with(posterWidget.context)
             .load(poster)
-            .fitCenter()
+            //.fitCenter()
             .into(posterWidget)
 
 
@@ -259,7 +259,7 @@ class WatchAnimeFragment : Fragment(R.layout.fragment_watch_anime_page) {
 
         Glide.with(requireContext())
             .load(backdrop)
-            .centerInside()
+            //.centerInside()
             .into(backdrop_Widget)
 
 

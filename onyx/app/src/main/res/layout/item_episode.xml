@@ -5,7 +5,7 @@
     android:layout_height="125dp"
     android:layout_margin="6dp"
     android:focusable="true"
-    android:focusableInTouchMode="true"
+    android:focusableInTouchMode="false"
     android:clickable="true"
     android:foreground="@drawable/item_episode_focus"
     app:cardCornerRadius="9dp"
@@ -117,7 +117,7 @@
                             android:shadowDy="2"
                             android:shadowRadius="3"
                             android:paddingHorizontal="2dp"
-                            android:textSize="15sp"
+                            android:textSize="11sp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText" />
 
@@ -139,7 +139,7 @@
                             android:shadowRadius="3"
                             android:paddingHorizontal="2dp"
                             android:text="Episode Title"
-                            android:textSize="10sp"
+                            android:textSize="7sp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText,SmallSp" />
                         <SeekBar

@@ -32,25 +32,30 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="150dp"
                 android:layout_marginBottom="100dp">
+                
 
                 <ImageView
                     android:id="@+id/backdropWidget"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="500dp"
                     android:scaleType="centerCrop"
-                    tools:src="@raw/background_3"
-                    tools:ignore="ContentDescription,ImageContrastCheck" />
+                    tools:src="@raw/movie_backdrop"
+                    android:layout_gravity="end"
+                    android:adjustViewBounds="true"
+                    tools:ignore="ContentDescription" />
 
                 <LinearLayout
                     android:id="@+id/blurContainerLeft"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:visibility="gone"
                     android:background="@drawable/overlay_left_gradient_bg"
                     android:orientation="vertical"
                     android:gravity="center"/>
+
+
 
                 <LinearLayout
                     android:id="@+id/blurContainerBottom"
@@ -72,14 +77,14 @@
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginHorizontal="5dp"
                         android:layout_marginBottom="10dp"
                         android:layout_gravity="bottom"
                         android:orientation="horizontal">
 
 
                         <LinearLayout
-                            android:layout_width="500dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             tools:ignore="TextSizeCheck">
@@ -93,7 +98,7 @@
                                 <ImageView
                                     android:id="@+id/cShowLogo"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="150dp"
+                                    android:layout_height="70dp"
                                     android:adjustViewBounds="true"
                                     android:maxWidth="400dp"
                                     android:maxHeight="170dp"
@@ -115,7 +120,7 @@
                                 android:shadowDy="2"
                                 android:shadowRadius="3"
                                 android:textColor="#FFFFFF"
-                                android:textSize="40sp"
+                                android:textSize="15sp"
                                 android:textStyle="bold"
                                 tools:ignore="HardcodedText"
                                 tools:text="Campfire Cooking in Another World with My Absurd Skill Season 2" />
@@ -129,7 +134,7 @@
                                 android:shadowDx="5"
                                 android:shadowDy="6"
                                 android:textColor="#FFFFFF"
-                                android:textSize="13sp"
+                                android:textSize="10sp"
                                 tools:ignore="HardcodedText,SmallSp"
                                 tools:text="Adventure ~ Drama ~ Fantasy" />
 
@@ -174,7 +179,7 @@
                                             android:shadowRadius="3"
                                             android:singleLine="true"
                                             android:textColor="@android:color/white"
-                                            android:textSize="15sp"
+                                            android:textSize="10sp"
                                             android:textStyle="bold"
                                             tools:ignore="HardcodedText,SmallSp,Suspicious0dp,TooDeepLayout,TextContrastCheck"
                                             tools:text="PG-13" />
@@ -208,7 +213,7 @@
                                             android:shadowRadius="3"
                                             android:singleLine="true"
                                             android:textColor="#FFFFFF"
-                                            android:textSize="15sp"
+                                            android:textSize="10sp"
                                             tools:ignore="HardcodedText,Suspicious0dp,TextContrastCheck"
                                             tools:text="HD" />
 
@@ -241,7 +246,7 @@
                                             android:shadowRadius="3"
                                             android:singleLine="false"
                                             android:textColor="#FFFFFF"
-                                            android:textSize="15sp"
+                                            android:textSize="10sp"
                                             tools:ignore="HardcodedText,SmallSp,Suspicious0dp,TextContrastCheck"
                                             tools:text="24m" />
                                     </androidx.cardview.widget.CardView>
@@ -291,7 +296,7 @@
                                                 android:shadowRadius="3"
                                                 android:singleLine="true"
                                                 android:textColor="#FFFFFF"
-                                                android:textSize="15sp"
+                                                android:textSize="10sp"
                                                 tools:ignore="HardcodedText,SmallSp,Suspicious0dp,TextContrastCheck"
                                                 tools:text="23" />
                                         </LinearLayout>
@@ -340,7 +345,7 @@
                                                 android:shadowRadius="3"
                                                 android:singleLine="true"
                                                 android:textColor="#FFFFFF"
-                                                android:textSize="15sp"
+                                                android:textSize="10sp"
                                                 tools:ignore="HardcodedText,SmallSp,Suspicious0dp,TextContrastCheck"
                                                 tools:text="43" />
 
@@ -373,7 +378,7 @@
                                         android:shadowRadius="3"
                                         android:singleLine="true"
                                         android:textColor="#FFFFFF"
-                                        android:textSize="15sp"
+                                        android:textSize="10sp"
                                         tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
                                         tools:text="Tv" />
 
@@ -413,6 +418,7 @@
                                 <TextView
                                     android:id="@+id/watchOverview"
                                     android:layout_width="match_parent"
+                                    android:layout_marginEnd="30dp"
                                     android:layout_height="0dp"
                                     android:layout_marginTop="10dp"
                                     android:layout_marginBottom="10dp"
@@ -425,7 +431,7 @@
                                     android:shadowDy="2"
                                     android:shadowRadius="3"
                                     android:textColor="#FFFFFF"
-                                    android:textSize="13sp"
+                                    android:textSize="7sp"
                                     tools:ignore="NestedWeights,SmallSp"
                                     tools:text="The fourth season of Tensei Shitara Slime Datta Ken. Demon Lord Rimuru's dream of creating an alliance between humans and monsters takes a step closer to being realized. As Tempest continues to prosper, Granville Rozzo and his granddaughter, Maribel Rozzo, clash with Demon Lord Rimuru over their plan to protect mankind by ruling over them. Meanwhile, in El Dorado, Demon Lord Leon works toward goals of his own. The awakening of a new Hero draws near! " />
 
@@ -474,7 +480,7 @@
                                             android:gravity="center_vertical"
                                             android:layout_marginStart="10dp"
                                             android:background="@drawable/watch_button"
-                                            android:focusableInTouchMode="true"
+                                            android:focusableInTouchMode="false"
                                             android:focusable="true"
                                             android:clickable="true"
                                             android:paddingVertical="8dp"
@@ -524,6 +530,7 @@
                             android:layout_marginTop="20dp"
                             android:scaleType="fitXY"
                             android:elevation="15dp"
+                            android:visibility="gone"
                             tools:src="@raw/anime_poster"
                             tools:ignore="ContentDescription,ImageContrastCheck" />
                     </FrameLayout>
@@ -586,7 +593,7 @@
                                     android:shadowDy="2"
                                     android:shadowRadius="3"
                                     android:paddingHorizontal="2dp"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     android:alpha="0.6"
                                     android:fontFamily="serif"
                                     tools:ignore="HardcodedText" />
@@ -611,6 +618,7 @@
             android:id="@+id/showMore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="80dp"
             android:orientation="vertical">
 
                 <TextView
@@ -618,8 +626,8 @@
                     android:layout_height="match_parent"
                     android:text="Recommended  Animes"
                     android:fontFamily="@font/q"
-                    android:layout_marginStart="20dp"
-                    android:textSize="25sp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:layout_marginTop="20dp"
                     android:textColor="?attr/FG_color"
@@ -632,7 +640,7 @@
                     android:layout_width="match_parent"
                     android:clipToPadding="false"
                     android:overScrollMode="never"
-                    android:padding="10dp"
+                    android:paddingHorizontal="10dp"
                     android:scrollbars="none"
                     android:focusable="false"
                     android:focusableInTouchMode="false"

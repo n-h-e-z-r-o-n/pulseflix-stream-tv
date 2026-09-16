@@ -1691,8 +1691,9 @@ class EpisodesAdapter(
         holder.ratingView.text = "â˜… ${ep.episodesRating}"
         holder.descView.text = ep.episodesDescription
 
-        GlobalUtils.enableFullViewOnDescendantFocus(ep.parentView, holder.itemView)
-
+        if(GlobalUtils.isTv(holder.itemView.context) ){
+            GlobalUtils.enableFullViewOnDescendantFocus(ep.parentView, holder.itemView)
+        }
 
         val url = "https://image.tmdb.org/t/p/w1280${ep.episodesImage}"
         val currentHeight = holder.itemView.height

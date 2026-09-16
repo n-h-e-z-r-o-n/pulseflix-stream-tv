@@ -122,6 +122,11 @@ class Watch_Page : AppCompatActivity() {
         //-------- ---------------------------------------------------------------------------------
 
         UIsection1 = findViewById<FrameLayout>(R.id.widget_1)
+        faveButton = findViewById<LinearLayout>(R.id.favoriteButton)
+        watchButton = findViewById<LinearLayout>(R.id.watchNowButton)
+        trailerButton = findViewById<LinearLayout>(R.id.TrailerButton)
+        serverButton = findViewById<LinearLayout>(R.id.serverButton)
+
         val displayMetrics = resources.displayMetrics
         val screenHeight = displayMetrics.heightPixels
 
@@ -131,20 +136,15 @@ class Watch_Page : AppCompatActivity() {
         UIsection1.layoutParams = params
          */
 
-        UIsection1.minimumHeight  = screenHeight
+        if (GlobalUtils.isTv(this@Watch_Page)) {
 
-        //-------- ---------------------------------------------------------------------------------
+            UIsection1.minimumHeight = screenHeight
 
-
-        faveButton = findViewById<LinearLayout>(R.id.favoriteButton)
-        watchButton = findViewById<LinearLayout>(R.id.watchNowButton)
-        trailerButton = findViewById<LinearLayout>(R.id.TrailerButton)
-        serverButton = findViewById<LinearLayout>(R.id.serverButton)
-
-        GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, faveButton )
-        GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, serverButton )
-        GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, trailerButton )
-        GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, watchButton )
+            GlobalUtils.enableFullViewOnDescendantFocus(UIsection1, faveButton)
+            GlobalUtils.enableFullViewOnDescendantFocus(UIsection1, serverButton)
+            GlobalUtils.enableFullViewOnDescendantFocus(UIsection1, trailerButton)
+            GlobalUtils.enableFullViewOnDescendantFocus(UIsection1, watchButton)
+        }
 
 
         //-------- Get extras from Intent-----------------------------------------------------------
@@ -317,8 +317,9 @@ class Watch_Page : AppCompatActivity() {
             Glide.with(this@Watch_Page)
                 .load(GlobalUtils.getOptimizedBackdropUrl(backdropUrl))
                 .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
-                .centerCrop()
                 .into(backdrop_Widget)
+
+
 
             // Start Ken Burns Effect (Slow Zoom & Pan)
             backdrop_Widget.post {
@@ -589,7 +590,7 @@ class Watch_Page : AppCompatActivity() {
                 text = s_name
                 textSize = 14f
                 isFocusable = true
-                isFocusableInTouchMode = true
+                isFocusableInTouchMode = false
                 isClickable = true
                 setTypeface(typeface, Typeface.BOLD)
                 stateListAnimator = null
@@ -642,8 +643,9 @@ class Watch_Page : AppCompatActivity() {
             }
 
             container.addView(seasonButton)
-
-            GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, seasonButton )
+            if(GlobalUtils.isTv(this@Watch_Page)){
+                GlobalUtils.enableFullViewOnDescendantFocus( UIsection1, seasonButton )
+            }
 
             if (track == 0) {
                 firstButton = seasonButton  // 👈 store reference to first button
@@ -988,21 +990,29 @@ class Watch_Page : AppCompatActivity() {
                         val recyclerView = findViewById<RecyclerView>(R.id.Recommendation_widget)
                         recyclerView.isNestedScrollingEnabled = false
 
-                        // Calculate number of rows
-                        val columns = 3
-                        val itemCount = movies.size
-                        val rows = Math.ceil(itemCount.toDouble() / columns).toInt()
-                        val dpPerRow = 172f
-                        val spacingBetweenRows = 19f // dp (from your item decoration)
-                        val totalHeightDp = (dpPerRow * rows) + (spacingBetweenRows * (rows - 1))
-                        // Convert dp to pixels
-                        val density = resources.displayMetrics.density
-                        val totalHeightPx = (totalHeightDp * density).toInt()
-                        // Set the calculated height
-                        recyclerView.layoutParams.height = totalHeightPx
-                        recyclerView.requestLayout() // Important: request layout update
 
-                        recyclerView.layoutManager = GridLayoutManager(this@Watch_Page, 3)
+
+                        if (GlobalUtils.isTv(this@Watch_Page)) {
+                            // Calculate number of rows
+                            val columns = 3
+                            val itemCount = movies.size
+                            val rows = Math.ceil(itemCount.toDouble() / columns).toInt()
+                            val dpPerRow = 172f
+                            val spacingBetweenRows = 19f // dp (from your item decoration)
+                            val totalHeightDp = (dpPerRow * rows) + (spacingBetweenRows * (rows - 1))
+                            // Convert dp to pixels
+                            val density = resources.displayMetrics.density
+                            val totalHeightPx = (totalHeightDp * density).toInt()
+                            // Set the calculated height
+                            recyclerView.layoutParams.height = totalHeightPx
+                            recyclerView.requestLayout() // Important: request layout update
+                            recyclerView.layoutManager = GridLayoutManager(this@Watch_Page, 3)
+                        }else{
+                            //recyclerView.layoutManager = GridLayoutManager(this@Watch_Page, 1)
+                            recyclerView.layoutManager = LinearLayoutManager(this@Watch_Page, LinearLayoutManager.HORIZONTAL, false)
+                        }
+
+
                         recyclerView.adapter = RecommendAdapter(movies, R.layout.recomendation_card)
                         val spacing = (19 * resources.displayMetrics.density).toInt() // 16dp to px
                         recyclerView.addItemDecoration(EqualSpaceItemDecoration(spacing))

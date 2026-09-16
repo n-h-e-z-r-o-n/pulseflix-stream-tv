@@ -39,7 +39,7 @@
                     android:shadowDx="2"
                     android:shadowDy="2"
                     android:shadowRadius="3"
-                    android:textSize="15sp"
+                    android:textSize="10sp"
                     android:gravity="center_vertical"
                     android:layout_gravity="center"
                     android:fontFamily="@font/p"
@@ -64,7 +64,7 @@
             android:clickable="true"
             android:focusable="true"
             android:nextFocusUp="@+id/cardButton"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="false">
                 <ImageView
                     android:id="@+id/itemImage"
                     android:layout_width="match_parent"

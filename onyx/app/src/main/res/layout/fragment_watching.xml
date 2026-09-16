@@ -7,9 +7,26 @@
     android:orientation="vertical"
     tools:context=".WatchingFragment">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Watched"
+        android:textStyle="bold"
+        android:fontFamily="@font/q"
+        android:textSize="15sp"
+        android:textColor="#FFFFFF"
+        android:shadowColor="#000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="3"
+        tools:ignore="HardcodedText"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="50dp"/>
+
     <ScrollView
         android:id="@+id/fragmentScrollView"
         android:layout_width="match_parent"
+        android:layout_gravity="center_vertical"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -31,7 +48,7 @@
                             android:text="  Show Watchlist"
                             android:textStyle="bold"
                             android:fontFamily="@font/p"
-                            android:textSize="18sp"
+                            android:textSize="15sp"
                             android:textColor="#FFFFFF"
                             android:shadowColor="#000000"
                             android:shadowDx="2"
@@ -53,8 +70,14 @@
 
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
 
                     <LinearLayout
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:orientation="vertical"
                         android:layout_height="wrap_content"
@@ -66,7 +89,7 @@
                             android:text="  Anime WatchList"
                             android:textStyle="bold"
                             android:fontFamily="@font/p"
-                            android:textSize="18sp"
+                            android:textSize="15sp"
                             android:textColor="#FFFFFF"
                             android:shadowColor="#000000"
                             android:shadowDx="2"

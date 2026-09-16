@@ -7,6 +7,7 @@
     android:layout_height="165dp"
     android:clickable="true"
     android:focusable="true"
+    android:focusableInTouchMode="false"
     android:gravity="center"
     android:orientation="vertical"
     card_view:cardCornerRadius="12dp"

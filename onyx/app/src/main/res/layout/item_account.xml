@@ -17,7 +17,7 @@
         android:layout_height="192dp"
         android:clickable="true"
         android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:focusableInTouchMode="false"
         android:foreground="@drawable/login_profile_focus"
         card_view:cardBackgroundColor="#25171C24"
         card_view:cardCornerRadius="22dp"

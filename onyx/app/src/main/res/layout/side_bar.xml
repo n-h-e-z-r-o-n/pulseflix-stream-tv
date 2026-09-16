@@ -4,61 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sideBar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
     android:orientation="vertical"
     android:visibility="visible"
-    android:background="@drawable/overlay_left_gradient_bg"
+    android:background="@drawable/overlay_bottom_gradient_bg"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        app:cardElevation="5dp"
-        app:cardBackgroundColor="?attr/BG_color_up"
-        app:cardCornerRadius="300dp"
-        android:layout_margin="10dp"
-        tools:ignore="UselessParent"/>
 
 
 
-    <TextClock
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/l"
-        android:alpha="0.5"
-        android:format12Hour="h:mm:ss a"
-        android:format24Hour="h:mm:ss a"
-        android:textColor="?attr/FG_color"
-        android:textSize="14sp"
-        tools:text="1:12:45 PM" />
 
+
+
+  <HorizontalScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:scrollbars="none">
 
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        android:orientation="vertical">
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
+                        android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/sidebarBtnShows"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="5dp"
                 android:background="@android:color/transparent"
@@ -77,6 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha="0.5"
+                android:visibility="gone"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
@@ -89,14 +74,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
+                        android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/sidebarBtnAnime"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="5dp"
                 android:background="@android:color/transparent"
@@ -117,6 +101,8 @@
                 android:alpha="0.5"
                 android:ellipsize="end"
                 android:gravity="center"
+                android:visibility="gone"
+
                 android:maxLines="1"
                 android:text="Anime"
                 android:textColor="?attr/FG_color"
@@ -127,14 +113,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
+                        android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/sidebarSearchBtn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="5dp"
                 android:background="@android:color/transparent"
@@ -155,6 +140,7 @@
                 android:alpha="0.5"
                 android:ellipsize="end"
                 android:gravity="center"
+                android:visibility="gone"
                 android:maxLines="1"
                 android:text="Search"
                 android:textColor="?attr/FG_color"
@@ -165,14 +151,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
+                        android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/sidebarWatchListBtn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="5dp"
                 android:background="@android:color/transparent"
@@ -193,6 +178,7 @@
                 android:alpha="0.5"
                 android:ellipsize="end"
                 android:gravity="center"
+                android:visibility="gone"
                 android:maxLines="1"
                 android:text="Watching"
                 android:textColor="?attr/FG_color"
@@ -204,14 +190,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/sidebarFavoritesBtn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="5dp"
                 android:background="@android:color/transparent"
@@ -232,6 +217,7 @@
                 android:alpha="0.5"
                 android:ellipsize="end"
                 android:gravity="center"
+                android:visibility="gone"
                 android:maxLines="1"
                 android:text="Favorites"
                 android:textColor="?attr/FG_color"
@@ -242,8 +228,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
+                        android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <FrameLayout
@@ -288,6 +273,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Alerts"
+                android:visibility="gone"
                 android:textColor="?attr/FG_color"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText,InefficientWeight,SmallSp" />
@@ -297,14 +283,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/sidebarBtnProfile"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="bottom"
                 android:layout_margin="5dp"
                 android:clickable="true"
@@ -339,6 +324,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Profile"
+                android:visibility="gone"
                 android:textColor="?attr/FG_color"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText,InefficientWeight,SmallSp" />
@@ -348,8 +334,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
+                        android:gravity="center_vertical"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <ImageButton
@@ -377,14 +363,14 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
+                android:visibility="gone"
                 android:text="Close App"
                 android:textColor="?attr/FG_color"
                 android:textSize="13sp"
                 tools:ignore="HardcodedText,InefficientWeight,SmallSp" />
         </LinearLayout>
-
-
     </LinearLayout>
+  </HorizontalScrollView>
 
 
 </FrameLayout>

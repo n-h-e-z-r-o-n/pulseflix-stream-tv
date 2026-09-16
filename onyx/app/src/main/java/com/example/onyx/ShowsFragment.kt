@@ -523,6 +523,7 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
 
         val Spacing = (10 * resources.displayMetrics.density).toInt()
         val gapUsed = 70
+        val zeroPadding = (0 * resources.displayMetrics.density).toInt()
 
 
         //  Movies ---------------------------------------------------------------------------------
@@ -539,12 +540,24 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
 
         movieAdapter.onAddMoreClicked = { loadMoreMovies() }
 
-        FocusOverlay<MovieItemOne>(
-            overlay = movieFixedFocusOverlay,
-            recyclerView = movieRecyclerView,
-            adapter = movieAdapter
-        ) { item ->
-            projectMovieItemIntoHero(item)
+        if (GlobalUtils.isTv(requireContext())) {
+
+
+            FocusOverlay<MovieItemOne>(
+                overlay = movieFixedFocusOverlay,
+                recyclerView = movieRecyclerView,
+                adapter = movieAdapter
+            ) { item ->
+                projectMovieItemIntoHero(item)
+            }
+        }else{
+
+            movieRecyclerView.setPadding(
+                zeroPadding,
+                movieRecyclerView.paddingTop,
+                zeroPadding,
+                movieRecyclerView.paddingBottom
+            )
         }
 
 
@@ -561,14 +574,27 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
         tvAdapter = GridAdapter(mutableListOf(), R.layout.item_grid)
         tvRecyclerView.adapter = tvAdapter
 
-        FocusOverlay<MovieItemOne>(
-            overlay = tvFixedFocusOverlay,
-            recyclerView = tvRecyclerView,
-            adapter = tvAdapter
-        ) { item ->
-            projectTvItemIntoHero(item)
-        }
         tvAdapter.onAddMoreClicked = { loadMoreTv() }
+
+
+        if (GlobalUtils.isTv(requireContext())) {
+
+            FocusOverlay<MovieItemOne>(
+                overlay = tvFixedFocusOverlay,
+                recyclerView = tvRecyclerView,
+                adapter = tvAdapter
+            ) { item ->
+                projectTvItemIntoHero(item)
+            }
+        }else{
+
+            tvRecyclerView.setPadding(
+                zeroPadding,
+                tvRecyclerView.paddingTop,
+                zeroPadding,
+                tvRecyclerView.paddingBottom
+            )
+        }
 
         // Filter  ---------------------------------------------------------------------------------
 
@@ -588,23 +614,38 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
         val realityFixedFocusOverlay = requireView().findViewById<View>(R.id.realityFixedFocusOverlay)
         realityRecyclerView = requireView().findViewById(R.id.realityRecyclerView)
         realityAdapter = FilterAdapter(mutableListOf(), R.layout.item_list2)
-        realityAdapter.onItemFocused = { view, item ->
-            currentContent.visibility = View.VISIBLE
-            currentContentBackground.visibility = View.VISIBLE
-            updateContentJob?.cancel()
-            updateContentJob = lifecycleScope.launch {
-                delay(300)
-                updateCurrentContent(item)
+
+        if (GlobalUtils.isTv(requireContext())) {
+
+            realityAdapter.onItemFocused = { view, item ->
+                currentContent.visibility = View.VISIBLE
+                currentContentBackground.visibility = View.VISIBLE
+                updateContentJob?.cancel()
+                updateContentJob = lifecycleScope.launch {
+                    delay(300)
+                    updateCurrentContent(item)
+                }
+                realitySetFixedFocusOverlayVisible(realityFixedFocusOverlay, true)
+                centerChildUnderFixedFocus(realityRecyclerView, realityFixedFocusOverlay, view)
             }
-            realitySetFixedFocusOverlayVisible(realityFixedFocusOverlay, true)
-            centerChildUnderFixedFocus(realityRecyclerView, realityFixedFocusOverlay, view)
-        }
-        realityAdapter.onItemFocusLost = {
-            currentContent.visibility = View.GONE
-            currentContentBackground.visibility = View.GONE
-            realityRecyclerView.post {
-                realitySetFixedFocusOverlayVisible( realityFixedFocusOverlay,realityRecyclerView.hasFocus()                )
+            realityAdapter.onItemFocusLost = {
+                currentContent.visibility = View.GONE
+                currentContentBackground.visibility = View.GONE
+                realityRecyclerView.post {
+                    realitySetFixedFocusOverlayVisible(
+                        realityFixedFocusOverlay,
+                        realityRecyclerView.hasFocus()
+                    )
+                }
             }
+        }else{
+            realityRecyclerView.setPadding(
+                zeroPadding,
+                realityRecyclerView.paddingTop,
+                zeroPadding,
+                realityRecyclerView.paddingBottom
+            )
+
         }
 
 
@@ -643,24 +684,37 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
         val thrillFixedFocusOverlay = requireView().findViewById<View>(R.id.thrillFixedFocusOverlay)
         thrillRecyclerView = requireView().findViewById<RecyclerView>(R.id.ThrillsRecyclerView)
         thrillAdapter = FilterAdapter(mutableListOf(), R.layout.item_list2)
-        thrillAdapter.onItemFocused = { view, item ->
-            currentContent.visibility = View.VISIBLE
-            currentContentBackground.visibility = View.VISIBLE
 
-            updateContentJob?.cancel()
-            updateContentJob = lifecycleScope.launch {
-                delay(300)
-                updateCurrentContent(item)
+        if (GlobalUtils.isTv(requireContext())) {
+            thrillAdapter.onItemFocused = { view, item ->
+                currentContent.visibility = View.VISIBLE
+                currentContentBackground.visibility = View.VISIBLE
+
+                updateContentJob?.cancel()
+                updateContentJob = lifecycleScope.launch {
+                    delay(300)
+                    updateCurrentContent(item)
+                }
+                thrillSetFixedFocusOverlayVisible(thrillFixedFocusOverlay, true)
+                centerChildUnderFixedFocus(thrillRecyclerView, thrillFixedFocusOverlay, view)
             }
-            thrillSetFixedFocusOverlayVisible(thrillFixedFocusOverlay, true)
-            centerChildUnderFixedFocus(thrillRecyclerView, thrillFixedFocusOverlay, view)
-        }
-        thrillAdapter.onItemFocusLost = {
-            currentContent.visibility = View.GONE
-            currentContentBackground.visibility = View.GONE
+            thrillAdapter.onItemFocusLost = {
+                currentContent.visibility = View.GONE
+                currentContentBackground.visibility = View.GONE
 
-            realitySetFixedFocusOverlayVisible( thrillFixedFocusOverlay,thrillRecyclerView.hasFocus()                )
+                realitySetFixedFocusOverlayVisible(
+                    thrillFixedFocusOverlay,
+                    thrillRecyclerView.hasFocus()
+                )
 
+            }
+        }else{
+            thrillRecyclerView.setPadding(
+                zeroPadding,
+                thrillRecyclerView.paddingTop,
+                zeroPadding,
+                thrillRecyclerView.paddingBottom
+            )
         }
         thrillRecyclerView.layoutManager = LinearLayoutManager(
             requireActivity(),
@@ -692,21 +746,36 @@ class ShowsFragment : Fragment(R.layout.fragment_shows) {
 
         val genresFixedFocusOverlay = requireView().findViewById<View>(R.id.genresFixedFocusOverlay)
         genreAdapter = FilterAdapter(mutableListOf(), R.layout.item_list)
-        genreAdapter.onItemFocused = { view, item ->
-            genreSetFixedFocusOverlayVisible(genresFixedFocusOverlay, true)
-            centerChildUnderFixedFocus(genreRecyclerView, genresFixedFocusOverlay, view)
-        }
-        genreAdapter.onItemFocusLost = {
-            genreRecyclerView.post {
-                genreSetFixedFocusOverlayVisible(genresFixedFocusOverlay, genreRecyclerView.hasFocus())
-            }
-        }
         genreRecyclerView = requireView().findViewById(R.id.genresRecyclerView)
         genreRecyclerView.layoutManager = LinearLayoutManager(
             requireActivity(),
             LinearLayoutManager.HORIZONTAL,
             false
         )
+
+        if (GlobalUtils.isTv(requireContext())) {
+
+            genreAdapter.onItemFocused = { view, item ->
+                genreSetFixedFocusOverlayVisible(genresFixedFocusOverlay, true)
+                centerChildUnderFixedFocus(genreRecyclerView, genresFixedFocusOverlay, view)
+            }
+            genreAdapter.onItemFocusLost = {
+                genreRecyclerView.post {
+                    genreSetFixedFocusOverlayVisible(
+                        genresFixedFocusOverlay,
+                        genreRecyclerView.hasFocus()
+                    )
+                }
+            }
+        }else{
+            genreRecyclerView.setPadding(
+                zeroPadding,
+                genreRecyclerView.paddingTop,
+                zeroPadding,
+                genreRecyclerView.paddingBottom
+            )
+        }
+
         genreRecyclerView.adapter = genreAdapter
         genreRecyclerView.layoutManager?.scrollToPosition(0)
 

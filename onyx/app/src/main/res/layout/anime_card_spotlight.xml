@@ -1,352 +1,238 @@
-<!-- res/layout/item_grid.xml -->
+<!-- res/layout/anime_card_spotlight.xml (Optimized for Mobile) -->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/spotlightAnimesCard"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:nextFocusDown="@id/cardButton"
-    android:nextFocusUp="@+id/searchBarAnime"
+    android:layout_height="wrap_content"
     android:focusable="true"
-    android:layout_marginVertical="10dp"
-    android:layout_marginEnd="90dp"
-    android:clipToOutline="true"
-    android:layout_marginStart="15dp"
+    android:focusableInTouchMode="false"
+    android:clickable="true"
+    android:layout_marginHorizontal="0dp"
     app:strokeColor="@color/card_stroke"
-    app:strokeWidth="3dp"
-    app:cardCornerRadius="20dp"
-    android:foreground="@android:color/transparent"
+    app:strokeWidth="1dp"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="0dp"
     app:cardBackgroundColor="?attr/BG_color_up"
-    android:descendantFocusability="beforeDescendants"
+    android:foreground="?android:attr/selectableItemBackground"
     tools:targetApi="31">
-
 
     <FrameLayout
         android:id="@+id/CardBackground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToOutline="true"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end">
-                        <ImageView
-                            android:id="@+id/SliderBackdrop"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:adjustViewBounds="true"
-                            android:scaleType="centerCrop"
-                            tools:src="@raw/gradient_img"
-                            tools:ignore="ContentDescription" />
+        <!-- Image stretches across the full width like a banner -->
+        <ImageView
+            android:id="@+id/SliderBackdrop"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:scaleType="centerCrop"
+            tools:src="@raw/gradient_img"
+            tools:ignore="ContentDescription" />
 
-                        <LinearLayout
-                            android:id="@+id/blurContainerBottom"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:visibility="gone"
-                            android:background="@drawable/overlay_bottom_gradient_bg"
-                            android:orientation="horizontal"
-                            android:layout_gravity="bottom" />
+        <!-- Bottom gradient to ensure text readability -->
+        <LinearLayout
+            android:id="@+id/blurContainerBottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/overlay_bottom_gradient_bg"
+            android:orientation="horizontal" />
 
-                        <LinearLayout
-                            android:id="@+id/blurContainerLeft"
-                            android:layout_width="200dp"
-                            android:layout_height="match_parent"
-                            android:visibility="visible"
-                            android:background="@drawable/overlay_left_gradient_bg_up"
-                            android:orientation="horizontal"
-                            android:layout_gravity="start" />
-                </FrameLayout>
-
-
+        <!-- Invisible left container just to satisfy the Kotlin logic without breaking the mobile layout -->
+        <LinearLayout
+            android:id="@+id/blurContainerLeft"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:orientation="horizontal" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/overlay_bottom_gradient_bg"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:orientation="vertical"
-            android:paddingStart="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="bottom"
-            tools:ignore="RtlSymmetry">
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/cardTitle"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="5dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/p"
-                android:maxLines="3"
+                android:maxLines="2"
                 android:shadowColor="#000000"
                 android:shadowDx="2"
                 android:shadowDy="2"
                 android:shadowRadius="3"
-                android:singleLine="false"
                 tools:text="Sakamoto Days Part 2"
                 android:textColor="#FFFFFF"
-                android:textSize="30sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
-                tools:ignore="HardcodedText,Suspicious0dp" />
+                android:layout_marginBottom="8dp"
+                tools:ignore="HardcodedText" />
 
+            <!-- Row for tags, year, runtime, etc -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/cardPg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="2dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="9dp"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="PG-13"
-                    android:textColor="#FFFFFF"
-                    android:shadowColor="#000000"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText,SmallSp,Suspicious0dp"
-
-
-                    />
-
-
-                <TextView
-                    android:id="@+id/cardType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="9dp"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="Mv"
-                    android:paddingHorizontal="2dp"
-                    android:textColor="#FFFFFF"
-                    android:shadowColor="#000000"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
-                    android:textSize="13sp"
-                    tools:ignore="HardcodedText,Suspicious0dp" />
-
-
-                <TextView
-                    android:id="@+id/cardRuntime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="9dp"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:singleLine="false"
-                    android:text="9.7"
-                    android:paddingHorizontal="2dp"
-                    android:textColor="#FFFFFF"
-                    android:shadowColor="#000000"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
-                    android:textSize="13sp"
-                    tools:ignore="HardcodedText,Suspicious0dp" />
-
-
-                <TextView
-                    android:id="@+id/cardYear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="9dp"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:singleLine="false"
-                    android:text="2025"
-                    android:textColor="#FFFFFF"
-                    android:paddingHorizontal="2dp"
-                    android:shadowColor="#000000"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
-                    android:textSize="13sp"
-                    tools:ignore="HardcodedText,Suspicious0dp" />
-
+                <!-- Quality Badge -->
                 <androidx.cardview.widget.CardView
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:cardCornerRadius="3dp">
-
+                    app:cardBackgroundColor="?attr/AccentColor"
+                    app:cardCornerRadius="4dp">
                     <TextView
                         android:id="@+id/cardQuality"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:ellipsize="end"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:singleLine="true"
                         android:text="HD"
                         android:textColor="#FFFFFF"
-                        android:shadowColor="#000000"
-                        android:shadowDx="1"
-                        android:shadowDy="1"
-                        android:shadowRadius="2"
-                        android:paddingHorizontal="2dp"
-                        android:textSize="13sp"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="2dp"
+                        android:textSize="10sp"
                         android:textStyle="bold"
-                        tools:ignore="HardcodedText,Suspicious0dp" />
-
+                        tools:ignore="HardcodedText" />
                 </androidx.cardview.widget.CardView>
 
-
+                <!-- Sub Badge -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:cardCornerRadius="3dp">
-
+                    app:cardBackgroundColor="?attr/BG_color_up"
+                    app:cardCornerRadius="4dp">
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="5dp"
-                        tools:ignore="UseCompoundDrawables">
-
-
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="2dp">
                         <ImageView
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
                             android:src="@drawable/ic_sub"
                             app:tint="?attr/AccentColor"
                             tools:ignore="ContentDescription" />
-
                         <TextView
                             android:id="@+id/cardSub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:ellipsize="end"
-                            android:gravity="center"
-                            android:maxLines="1"
-                            android:singleLine="true"
+                            android:layout_marginStart="2dp"
                             android:text="2"
                             android:textColor="#FFFFFF"
-                            android:shadowColor="#000000"
-                            android:shadowDx="1"
-                            android:shadowDy="1"
-                            android:shadowRadius="2"
-                            android:paddingHorizontal="2dp"
-                            android:textSize="13sp"
+                            android:textSize="10sp"
                             android:textStyle="bold"
-                            tools:ignore="HardcodedText,Suspicious0dp" />
-
+                            tools:ignore="HardcodedText" />
                     </LinearLayout>
-
                 </androidx.cardview.widget.CardView>
 
+                <!-- Dub Badge -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:cardCornerRadius="3dp">
-
+                    app:cardBackgroundColor="?attr/BG_color_up"
+                    app:cardCornerRadius="4dp">
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="5dp"
-                        tools:ignore="UseCompoundDrawables">
-
-
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="4dp"
+                        android:paddingVertical="2dp">
                         <ImageView
-                            android:layout_width="10dp"
-                            android:layout_height="10dp"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
                             android:src="@drawable/ic_dub"
                             app:tint="?attr/AccentColor"
                             tools:ignore="ContentDescription" />
-
                         <TextView
                             android:id="@+id/cardDub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:ellipsize="end"
-                            android:gravity="center"
-                            android:maxLines="1"
-                            android:singleLine="true"
+                            android:layout_marginStart="2dp"
                             android:text="2"
                             android:textColor="#FFFFFF"
-                            android:shadowColor="#000000"
-                            android:shadowDx="1"
-                            android:shadowDy="1"
-                            android:shadowRadius="2"
-                            android:paddingHorizontal="2dp"
-                            android:textSize="13sp"
+                            android:textSize="10sp"
                             android:textStyle="bold"
-                            tools:ignore="HardcodedText,SmallSp,Suspicious0dp" />
-
+                            tools:ignore="HardcodedText" />
                     </LinearLayout>
-
                 </androidx.cardview.widget.CardView>
 
+                <!-- PG Rating -->
+                <TextView
+                    android:id="@+id/cardPg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="PG-13"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+                <!-- Type -->
+                <TextView
+                    android:id="@+id/cardType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Mv"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    tools:ignore="HardcodedText" />
+
+                <!-- Rating -->
+                <TextView
+                    android:id="@+id/cardRuntime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="9.7"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    tools:ignore="HardcodedText" />
+
+                <!-- Year -->
+                <TextView
+                    android:id="@+id/cardYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="2025"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
-
+            <!-- Overview -->
             <TextView
                 android:id="@+id/cardOverview"
-                android:layout_width="300dp"
-                android:layout_height="100dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="5"
-                android:singleLine="false"
+                android:maxLines="4"
                 android:fontFamily="serif"
-                android:textColor="#FFFFFF"
-                android:shadowColor="#000000"
-                android:shadowDx="2"
-                tools:text="Five years ago, a tear in the fabric of reality brought creatures to our world from an alternate dimension bent on our destruction. A father hides his daughter on an island to keep her safe while he prepares her for survival and the"
-                android:shadowDy="2"
-                android:shadowRadius="3"
-                android:paddingHorizontal="2dp"
-                android:textSize="12sp"
-                tools:ignore="Suspicious0dp" />
+                android:textColor="#EAEAEA"
+                android:textSize="8sp"
+                android:lineSpacingExtra="2dp"
+                tools:text="Five years ago, a tear in the fabric of reality brought creatures to our world from an alternate dimension bent on our destruction..."
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
-
-
     </FrameLayout>
-
 </com.google.android.material.card.MaterialCardView>
-
-

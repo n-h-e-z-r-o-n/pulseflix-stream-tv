@@ -8,6 +8,7 @@
     android:layout_margin="6dp"
     android:clickable="true"
     android:focusable="true"
+    android:focusableInTouchMode="false"
     android:foreground="@drawable/login_avatar_focus"
     card_view:cardBackgroundColor="#221A2027"
     card_view:cardCornerRadius="43dp"

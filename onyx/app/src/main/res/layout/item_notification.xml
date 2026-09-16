@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="140dp"
     android:layout_marginVertical="8dp"
-    android:layout_marginHorizontal="70dp"
+    android:layout_marginHorizontal="0dp"
     android:elevation="2dp"
     android:background="?attr/BG_color"
     android:clickable="true"
@@ -40,10 +40,11 @@
         <!-- Notification Icon -->
         <ImageView
             android:id="@+id/notification_icon"
-            android:layout_width="70dp"
+            android:layout_width="1dp"
             android:layout_height="100dp"
             android:src="@drawable/notifications"
             android:padding="8dp"
+
             android:contentDescription="Notification icon"
             tools:ignore="HardcodedText,MissingConstraints"
             />
@@ -67,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Notification Title"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:textColor="?attr/FG_color"
                 android:background="@android:color/transparent"
@@ -83,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:fontFamily="@font/o"
                 android:textColor="?attr/FG_color"
                 android:maxLines="5"

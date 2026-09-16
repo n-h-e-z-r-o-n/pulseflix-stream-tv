@@ -161,10 +161,63 @@ class CardStack {
         cards.forEach { card ->
 
             card.isFocusable = true
-
             card.isFocusableInTouchMode = true
 
+            val gestureDetector = android.view.GestureDetector(context, object : android.view.GestureDetector.SimpleOnGestureListener() {
+                private val SWIPE_THRESHOLD = 50
+                private val SWIPE_VELOCITY_THRESHOLD = 50
 
+                override fun onDown(e: android.view.MotionEvent): Boolean {
+                    // Stop auto swipe when touched
+                    stopAutoSwipe()
+                    return true
+                }
+
+                override fun onSingleTapUp(e: android.view.MotionEvent): Boolean {
+                    card.performClick()
+                    return true
+                }
+
+                override fun onFling(
+                    e1: android.view.MotionEvent?,
+                    e2: android.view.MotionEvent,
+                    velocityX: Float,
+                    velocityY: Float
+                ): Boolean {
+                    try {
+                        val diffY = e2.y - (e1?.y ?: e2.y)
+                        val diffX = e2.x - (e1?.x ?: e2.x)
+                        if (kotlin.math.abs(diffX) > kotlin.math.abs(diffY)) {
+                            if (kotlin.math.abs(diffX) > SWIPE_THRESHOLD && kotlin.math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                                if (diffX > 0) {
+                                    // Swipe Right (Reverse the stack)
+                                    swapLeft(container, keepFocus = false)
+                                } else {
+                                    // Swipe Left (Advance the stack)
+                                    swapRight(container, keepFocus = false)
+                                }
+                                return true
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    return false
+                }
+            })
+
+            card.setOnTouchListener { _, event ->
+                val handled = gestureDetector.onTouchEvent(event)
+                // Resume auto-swipe if the user lifts their finger
+                if (event.action == android.view.MotionEvent.ACTION_UP || event.action == android.view.MotionEvent.ACTION_CANCEL) {
+                    autoSwipeResumeRunnable?.let { container.removeCallbacks(it) }
+                    autoSwipeResumeRunnable = Runnable {
+                        if (!container.hasFocus()) startAutoSwipe()
+                    }
+                    container.postDelayed(autoSwipeResumeRunnable!!, 300)
+                }
+                handled
+            }
 
             card.setOnFocusChangeListener { v, hasFocus ->
 
@@ -250,13 +303,10 @@ class CardStack {
 
 
                 // Clear all listeners to prevent memory leaks
-
                 cards.forEach { card ->
-
                     card.setOnFocusChangeListener(null)
-
                     card.setOnKeyListener(null)
-
+                    card.setOnTouchListener(null)
                 }
 
             }

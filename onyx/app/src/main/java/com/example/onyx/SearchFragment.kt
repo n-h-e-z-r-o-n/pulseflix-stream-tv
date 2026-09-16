@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment
 import com.example.onyx.FetchData.AnimeApi
 import com.example.onyx.OnyxClasses.GridAdapter2
 import com.example.onyx.OnyxClasses.MovieItem
+import com.example.onyx.OnyxObjects.GlobalUtils
 import com.example.onyx.OnyxObjects.LoadingAnimation
 import com.google.android.material.button.MaterialButtonToggleGroup
 import org.json.JSONObject
@@ -76,7 +77,8 @@ class SearchFragment :  Fragment(R.layout.fragment_search) {
         //-----------------------------------------------------------------------------------------
 
         animeSearchRecyclerView = requireView().findViewById(R.id.SearchRecyclerAnime)
-        animeSearchRecyclerView.layoutManager =  object : GridLayoutManager(requireActivity(), 4){
+        val spanCount = if (GlobalUtils.isTv(requireContext())) 4 else 2
+        animeSearchRecyclerView.layoutManager =  object : GridLayoutManager(requireActivity(), 2){
 
             override fun onInterceptFocusSearch(focused: View, direction: Int): View? {
                 val currentPosition = getPosition(focused)

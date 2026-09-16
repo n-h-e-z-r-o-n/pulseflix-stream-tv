@@ -20,6 +20,7 @@
             android:orientation="vertical">
 
             <FrameLayout
+                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -32,7 +33,7 @@
                     android:fontFamily="@font/q"
                     android:text="My Favorites"
                     android:textColor="?attr/FG_color"
-                    android:textSize="28sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText" />
 
 

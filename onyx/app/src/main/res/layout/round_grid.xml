@@ -10,8 +10,8 @@
         <!-- Profile image container -->
         <androidx.cardview.widget.CardView
             android:id="@+id/CardViewcontiner"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_margin="5dp"
             android:layout_gravity="center_horizontal"
             android:focusable="true"
@@ -51,7 +51,7 @@
             android:shadowDx="2"
             android:shadowDy="2"
             android:shadowRadius="2"
-            android:textSize="12sp"
+            android:textSize="7sp"
             android:fontFamily="@font/p"
             tools:ignore="HardcodedText,SmallSp" />
 

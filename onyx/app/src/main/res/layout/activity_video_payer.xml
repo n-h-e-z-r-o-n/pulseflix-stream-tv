@@ -137,8 +137,7 @@
                         android:background="@drawable/tv_button_selector"
                         android:clickable="true"
                         android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:padding="5dp"
+        android:focusableInTouchMode="false"                        android:padding="5dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_rewind_back"
                         app:tint="@android:color/white"
@@ -152,8 +151,7 @@
                         android:background="@drawable/tv_button_selector"
                         android:clickable="true"
                         android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:padding="5dp"
+        android:focusableInTouchMode="false"                        android:padding="5dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_play"
                         app:tint="@android:color/white"
@@ -167,8 +165,7 @@
                         android:background="@drawable/tv_button_selector"
                         android:clickable="true"
                         android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:padding="5dp"
+        android:focusableInTouchMode="false"                        android:padding="5dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_rewind_forward"
                         app:tint="@android:color/white"
@@ -200,8 +197,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:fontFamily="@font/p"
-                    android:focusableInTouchMode="true"
-                    tools:ignore="HardcodedText,TouchTargetSizeCheck">
+    android:focusableInTouchMode="false"                    tools:ignore="HardcodedText,TouchTargetSizeCheck">
 
                     <TextView
                         android:id="@+id/btn_speed_text"
@@ -225,8 +221,7 @@
                     android:background="@drawable/tv_button_selector"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:src="@android:drawable/ic_lock_silent_mode_off"
+    android:focusableInTouchMode="false"                    android:src="@android:drawable/ic_lock_silent_mode_off"
                     app:tint="@android:color/white"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
@@ -238,8 +233,7 @@
                     android:layout_marginEnd="8dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:background="@drawable/tv_button_selector"
+    android:focusableInTouchMode="false"                    android:background="@drawable/tv_button_selector"
                     android:src="@android:drawable/ic_menu_agenda"
                     app:tint="@android:color/white"
                     tools:ignore="ContentDescription"
@@ -253,8 +247,7 @@
                     android:background="@drawable/tv_button_selector"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:gravity="center"
+    android:focusableInTouchMode="false"                    android:gravity="center"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:text="Auto-next: On"
@@ -272,8 +265,7 @@
                     android:background="@drawable/tv_button_selector"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:gravity="center"
+    android:focusableInTouchMode="false"                    android:gravity="center"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:text="Auto"
@@ -290,8 +282,7 @@
                     android:background="@drawable/tv_button_selector"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:src="@drawable/ic_refresh"
+    android:focusableInTouchMode="false"                    android:src="@drawable/ic_refresh"
                     app:tint="@android:color/white"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
@@ -304,8 +295,7 @@
                     android:background="@drawable/tv_button_selector"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:src="@drawable/ic_setting"
+    android:focusableInTouchMode="false"                    android:src="@drawable/ic_setting"
                     app:tint="@android:color/white"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
@@ -318,8 +308,7 @@
                     android:background="@drawable/tv_button_selector"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:src="@android:drawable/ic_menu_crop"
+    android:focusableInTouchMode="false"                    android:src="@android:drawable/ic_menu_crop"
                     app:tint="@android:color/white"
                     android:visibility="gone"
                     tools:ignore="ContentDescription" />
@@ -332,8 +321,7 @@
                     android:background="@drawable/tv_button_selector"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:src="@drawable/ic_close"
+    android:focusableInTouchMode="false"                    android:src="@drawable/ic_close"
                     app:tint="@color/nav_icon_color_selector"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 

@@ -14,7 +14,7 @@
         android:clickable="true"
         android:focusable="true"
         android:clipToOutline="true"
-        android:focusableInTouchMode="true"
+        android:focusableInTouchMode="false"
         app:cardElevation="0dp"
         tools:ignore="TouchTargetSizeCheck"
         tools:targetApi="31">
@@ -68,7 +68,7 @@
                     android:shadowRadius="2"
                     android:text="12:"
                     android:textColor="#FFFFFF"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
@@ -87,7 +87,7 @@
                 android:text="createDebugApkListingFileRedirec"
                 android:ellipsize="end"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 tools:ignore="HardcodedText,SmallSp" />
 
             </LinearLayout>

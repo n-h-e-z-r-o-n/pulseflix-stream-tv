@@ -49,6 +49,7 @@ import android.graphics.Color
 import android.widget.FrameLayout
 import android.widget.Toast
 import android.view.ViewTreeObserver
+import com.example.onyx.OnyxClasses.MovieItemOne
 import com.google.android.material.card.MaterialCardView
 
 class AnimeFragment : Fragment() {
@@ -177,18 +178,32 @@ class AnimeFragment : Fragment() {
             }
         }
 
-        FocusOverlay<AnimeGridItem>(
-            overlay = binding.dubbFixedFocusOverlay,
-            recyclerView = binding.dubbedRecycler,
-            adapter = dubbedAdapter
-        ) { item ->
-            projectDubbItemIntoHero(item)
+
+
+        if (GlobalUtils.isTv(requireContext())) {
+
+
+            FocusOverlay<AnimeGridItem>(
+                overlay = binding.dubbFixedFocusOverlay,
+                recyclerView = binding.dubbedRecycler,
+                adapter = dubbedAdapter
+            ) { item ->
+                projectDubbItemIntoHero(item)
+            }
+        }else{
+            val zeroPadding = (0 * resources.displayMetrics.density).toInt()
+
+            binding.dubbedRecycler.setPadding(
+                zeroPadding,
+                binding.dubbedRecycler.paddingTop,
+                zeroPadding,
+                binding.dubbedRecycler.paddingBottom
+            )
         }
 
         animeHomeData()
         fetchDubbedAnime(highestLoadedDubbedPage, isPrepending = false)
         fetchTrendingAnime(highestLoadedPage, isPrepending = false)
-
 
         setupNetworkListener()
     }
@@ -279,9 +294,11 @@ class AnimeFragment : Fragment() {
 
             val inflater = LayoutInflater.from(requireActivity())
 
-            val params = binding.spotlightAnimes.layoutParams
-            params.height = (screenHeight * 0.85).toInt()
-            binding.spotlightAnimes.layoutParams = params
+            if (GlobalUtils.isTv(requireContext())) {
+                val params = binding.spotlightAnimes.layoutParams
+                params.height = (screenHeight * 0.85).toInt()
+                binding.spotlightAnimes.layoutParams = params
+            }
 
             val jsonObject = withContext(Dispatchers.IO) { fetchAnimeAPI.animeHome() }
 
