@@ -12,7 +12,7 @@ class AdbInstaller(private val context: Context, private val connection: AdbConn
 
     suspend fun pushAndInstallApk(onProgress: (String) -> Unit): Boolean = withContext(Dispatchers.IO) {
         try {
-            onProgress("Checking for latest version on GitHub...")
+            onProgress("Checking for latest version ...")
             val versionJsonUrl = BuildConfig.APPV_J
             val connection = (java.net.URL(versionJsonUrl).openConnection() as java.net.HttpURLConnection).apply {
                 requestMethod = "GET"
@@ -30,7 +30,7 @@ class AdbInstaller(private val context: Context, private val connection: AdbConn
             val updateInfo = com.google.gson.Gson().fromJson(reader, com.example.onyx.OnyxObjects.AppUpdater.UpdateInfo::class.java)
             val downloadUrlString = updateInfo.downloadUrl
 
-            onProgress("Downloading latest APK from GitHub...")
+            onProgress("Downloading latest APK ...")
             val apkConnection = (java.net.URL(downloadUrlString).openConnection() as java.net.HttpURLConnection).apply {
                 requestMethod = "GET"
                 connectTimeout = 15000

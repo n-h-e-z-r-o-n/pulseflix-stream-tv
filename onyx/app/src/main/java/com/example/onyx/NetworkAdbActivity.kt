@@ -5,6 +5,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +21,10 @@ class NetworkAdbActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_network_adb)
         supportActionBar?.hide()
-        
+
         GlobalUtils.hideSystemUI(this)
 
         etIpAddress = findViewById(R.id.etIpAddress)

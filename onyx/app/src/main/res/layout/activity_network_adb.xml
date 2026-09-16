@@ -1,81 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#042C40"
+    android:fillViewport="true"
+    android:clipToPadding="false"
     tools:context=".NetworkAdbActivity">
 
-    <TextView
-        android:id="@+id/tvAdbTitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Install to TV"
-        android:textColor="#FFFFFF"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="60dp"/>
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingStart="28dp"
+        android:paddingEnd="28dp"
+        android:paddingTop="48dp"
+        android:paddingBottom="40dp">
 
-    <TextView
-        android:id="@+id/tvAdbDescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Enter your Android TV's local IP address to install the app over the network."
-        android:textColor="#CCCCCC"
-        android:textSize="16sp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAdbTitle"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="16dp"/>
+        <!-- Network / TV icon -->
+        <TextView
+            android:id="@+id/tvNetworkIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp"
+            android:elevation="2dp"
+            tools:ignore="HardcodedText" />
 
-    <EditText
-        android:id="@+id/etIpAddress"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:hint="e.g. 192.168.1.55"
-        android:textColorHint="#888888"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#FFFFFF"
-        android:inputType="textUri"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAdbDescription"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="40dp"
-        android:paddingHorizontal="12dp"/>
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:tint="?attr/AccentColor"
+            android:src="@drawable/ic_adb"/>
 
-    <Button
-        android:id="@+id/btnConnect"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:text="Connect &amp; Install"
-        android:textSize="18sp"
-        android:backgroundTint="#E50914"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etIpAddress"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="32dp"/>
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvAdbTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Install to TV"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:letterSpacing="0.01"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnConnect"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="24dp"/>
+        <!-- Description -->
+        <TextView
+            android:id="@+id/tvAdbDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Install this app directly to your Android TV over the same Wi-Fi network."
+            android:textColor="#B8C9D0"
+            android:textSize="16sp"
+            android:lineSpacingExtra="4dp"
+            android:gravity="center"
+            tools:ignore="HardcodedText" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Connection card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="#07394D"
+            android:elevation="3dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TV IP address"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/etIpAddress"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:hint="192.168.1.55"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#78909C"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:inputType="textUri"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:background="#052F42"
+                android:importantForAutofill="no" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Find this in your TV's network settings."
+                android:textColor="#78909C"
+                android:textSize="12sp"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btnConnect"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="20dp"
+                android:text="Connect &amp; Install"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.02"
+                android:background="#E50914"
+                android:stateListAnimator="@null"
+                android:elevation="0dp" />
+
+        </LinearLayout>
+
+        <!-- Status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="58dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:background="#063447">
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:lineSpacingExtra="3dp" />
+
+        </LinearLayout>
+
+        <!-- Network reminder -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="Make sure your phone and TV are connected to the same Wi-Fi network, and that Developer Options and USB debugging are enabled on your TV."
+            android:textColor="#6F8993"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+
+</ScrollView>
+
