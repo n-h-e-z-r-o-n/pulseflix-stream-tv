@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import com.example.onyx.OnyxObjects.GlobalUtils
 import kotlinx.coroutines.withContext
 
-class NetworkAdbActivity : AppCompatActivity() {
+class    NetworkAdbActivity : AppCompatActivity() {
 
     private lateinit var etIpAddress: EditText
     private lateinit var btnConnect: Button

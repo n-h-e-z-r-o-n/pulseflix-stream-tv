@@ -50,7 +50,7 @@
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="1"
-                    android:textSize="33sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     android:ellipsize="end"
                     android:maxLines="1"
@@ -86,7 +86,7 @@
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/p"
                     android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:textSize="14sp"
                     android:textColor="?attr/FG_color"
                     tools:ignore="HardcodedText" />
 
@@ -203,7 +203,7 @@
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/p"
                     android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:textSize="14sp"
                     android:textColor="?attr/FG_color"
                     tools:ignore="HardcodedText" />
 

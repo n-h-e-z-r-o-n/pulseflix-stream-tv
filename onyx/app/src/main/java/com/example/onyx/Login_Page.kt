@@ -52,7 +52,7 @@ class Login_Page : AppCompatActivity() {
     private lateinit var gLocalRestore: TextView
 
     private lateinit var exitApp: TextView
-    private lateinit var tvInstall: TextView
+    private var tvInstall: TextView? = null
     private lateinit var exitSetting: TextView
     private lateinit var CreateProfileContainer: FrameLayout
     private lateinit var createProfileCard: View
@@ -143,7 +143,7 @@ class Login_Page : AppCompatActivity() {
         settingButton.setOnClickListener { showSettingsPanel() }
         exitSetting.setOnClickListener { hideSettingsPanel(restoreFocus = true) }
         exitApp.setOnClickListener { GlobalUtils.exitApp(this) }
-        tvInstall.setOnClickListener {
+        tvInstall?.setOnClickListener {
             val destination = NetworkAdbActivity::class.java
             startActivity(Intent(this, destination))
         }

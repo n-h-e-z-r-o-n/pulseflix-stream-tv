@@ -124,6 +124,9 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
     private fun setupRecyclerViews() {
 
+        val zeroPadding = (0 * resources.displayMetrics.density).toInt()
+
+
         //------------------------------------------------------------------------------------------
 
         val moviesRecyclerView = requireView().findViewById<RecyclerView>(R.id.MoviesRecyclerView)
@@ -139,12 +142,23 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
 
         moviesAdapter.onAddMoreClicked = { loadMoreMovies() }
 
-        FocusOverlay<MovieItemOne>(
-            overlay = movieFixedFocusOverlay,
-            recyclerView = moviesRecyclerView,
-            adapter = moviesAdapter
-        ) { item ->
-            projectMovieItemIntoHero(item)
+        if (GlobalUtils.isTv(requireContext())) {
+
+            FocusOverlay<MovieItemOne>(
+                overlay = movieFixedFocusOverlay,
+                recyclerView = moviesRecyclerView,
+                adapter = moviesAdapter
+            ) { item ->
+                projectMovieItemIntoHero(item)
+            }
+        }else{
+
+            moviesRecyclerView.setPadding(
+                zeroPadding,
+                moviesRecyclerView.paddingTop,
+                zeroPadding,
+                moviesRecyclerView.paddingBottom
+            )
         }
 
         //------------------------------------------------------------------------------------------
@@ -160,14 +174,28 @@ class CategoryFragment : Fragment(R.layout.fragment_category) {
         tvAdapter = GridAdapter(mutableListOf(), R.layout.item_grid)
         tvRecyclerView.adapter = tvAdapter
 
-        FocusOverlay<MovieItemOne>(
-            overlay = tvFixedFocusOverlay,
-            recyclerView = tvRecyclerView,
-            adapter = tvAdapter
-        ) { item ->
-            projectTvItemIntoHero(item)
-        }
+
         tvAdapter.onAddMoreClicked = { loadMoreTv() }
+
+
+        if (GlobalUtils.isTv(requireContext())) {
+
+            FocusOverlay<MovieItemOne>(
+                overlay = tvFixedFocusOverlay,
+                recyclerView = tvRecyclerView,
+                adapter = tvAdapter
+            ) { item ->
+                projectTvItemIntoHero(item)
+            }
+        }else{
+
+            tvRecyclerView.setPadding(
+                zeroPadding,
+                tvRecyclerView.paddingTop,
+                zeroPadding,
+                tvRecyclerView.paddingBottom
+            )
+        }
 
     }
 

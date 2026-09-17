@@ -35,6 +35,7 @@
                 android:layout_marginStart="10dp"
                 android:textColor="#FFFFFF"
                 android:textSize="40sp"
+                android:visibility="gone"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
 
