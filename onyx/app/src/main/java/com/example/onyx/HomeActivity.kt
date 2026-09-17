@@ -17,6 +17,7 @@ import com.example.onyx.OnyxObjects.NavAction
 class HomeActivity : AppCompatActivity() {
 
     var showsFragment: ShowsFragment? = null
+    var liveFragment: LiveStreamFragment? = null
     var animeFragment: AnimeFragment? = null
     private var profileFragment: ProfileFragment? = null
     private var watchingFragment: WatchingFragment? = null
@@ -58,6 +59,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupSidebarForFragments() {
         requireSidebarView(TAG_SHOWS).setOnClickListener { navigateToCoreTag(TAG_SHOWS) }
+        requireSidebarView(TAG_LIVE).setOnClickListener { navigateToCoreTag(TAG_LIVE) }
         requireSidebarView(TAG_ANIME).setOnClickListener { navigateToCoreTag(TAG_ANIME) }
         requireSidebarView(TAG_SEARCH).setOnClickListener { navigateToCoreTag(TAG_SEARCH) }
         requireSidebarView(TAG_WATCHING).setOnClickListener { navigateToCoreTag(TAG_WATCHING) }
@@ -83,6 +85,7 @@ class HomeActivity : AppCompatActivity() {
     private fun sidebarSelectionViews(): Map<String, View> {
         return mapOf(
             TAG_SHOWS to requireSidebarView(TAG_SHOWS),
+            TAG_LIVE to requireSidebarView(TAG_LIVE),
             TAG_ANIME to requireSidebarView(TAG_ANIME),
             TAG_SEARCH to requireSidebarView(TAG_SEARCH),
             TAG_WATCHING to requireSidebarView(TAG_WATCHING),
@@ -96,6 +99,7 @@ class HomeActivity : AppCompatActivity() {
         val viewId = when (normalizeCoreTag(tag)) {
             TAG_SHOWS -> R.id.sidebarBtnShows
             TAG_ANIME -> R.id.sidebarBtnAnime
+            TAG_LIVE -> R.id.sidebarBtnLive
             TAG_SEARCH -> R.id.sidebarSearchBtn
             TAG_WATCHING -> R.id.sidebarWatchListBtn
             TAG_FAVORITES -> R.id.sidebarFavoritesBtn
@@ -241,6 +245,7 @@ class HomeActivity : AppCompatActivity() {
         val fm = supportFragmentManager
         showsFragment = fm.findFragmentByTag(TAG_SHOWS) as? ShowsFragment
         animeFragment = fm.findFragmentByTag(TAG_ANIME) as? AnimeFragment
+        liveFragment = fm.findFragmentByTag(TAG_LIVE) as? LiveStreamFragment
         profileFragment = fm.findFragmentByTag(TAG_PROFILE) as? ProfileFragment
         watchingFragment = fm.findFragmentByTag(TAG_WATCHING) as? WatchingFragment
         notificationFragment = fm.findFragmentByTag(TAG_NOTIFICATIONS) as? notificationFragment
@@ -250,6 +255,7 @@ class HomeActivity : AppCompatActivity() {
     private fun createCoreFragment(tag: String): Fragment {
         val fragment = when (tag) {
             TAG_SHOWS -> ShowsFragment()
+            TAG_LIVE -> LiveStreamFragment()
             TAG_ANIME -> AnimeFragment()
             TAG_PROFILE -> ProfileFragment()
             TAG_WATCHING -> WatchingFragment()
@@ -261,6 +267,7 @@ class HomeActivity : AppCompatActivity() {
 
         when (tag) {
             TAG_SHOWS -> showsFragment = fragment as ShowsFragment
+            TAG_LIVE -> liveFragment = fragment as LiveStreamFragment
             TAG_ANIME -> animeFragment = fragment as AnimeFragment
             TAG_PROFILE -> profileFragment = fragment as ProfileFragment
             TAG_WATCHING -> watchingFragment = fragment as WatchingFragment
@@ -278,6 +285,7 @@ class HomeActivity : AppCompatActivity() {
     private fun coreTagForFragment(fragment: Fragment): String? {
         return when (fragment) {
             is ShowsFragment -> TAG_SHOWS
+            is LiveStreamFragment -> TAG_LIVE
             is AnimeFragment -> TAG_ANIME
             is ProfileFragment -> TAG_PROFILE
             is WatchingFragment -> TAG_WATCHING
@@ -319,6 +327,7 @@ class HomeActivity : AppCompatActivity() {
         private const val PREF_LAST_FRAGMENT = "last_fragment"
 
         private const val TAG_SHOWS = "shows"
+        private const val TAG_LIVE = "live"
         private const val TAG_ANIME = "anime"
         private const val TAG_PROFILE = "profile"
         private const val TAG_WATCHING = "watching"
@@ -328,6 +337,7 @@ class HomeActivity : AppCompatActivity() {
 
         private val CORE_NAVIGATION_TAGS = setOf(
             TAG_SHOWS,
+            TAG_LIVE,
             TAG_ANIME,
             TAG_PROFILE,
             TAG_WATCHING,
@@ -337,3 +347,4 @@ class HomeActivity : AppCompatActivity() {
         )
     }
 }
+

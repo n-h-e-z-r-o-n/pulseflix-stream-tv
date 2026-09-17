@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@drawable/setting_item_background"
+    android:layout_marginVertical="4dp"
+    android:layout_marginHorizontal="8dp">
+
+    <ImageView
+        android:id="@+id/channelLogo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_tv"
+        app:tint="?attr/FG_color"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/channelName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/p"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textColor="?attr/FG_color"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="ESPN (1080p)" />
+
+    <!-- Optional: Add a favorite button or indicator on the right if needed later -->
+
+</LinearLayout>

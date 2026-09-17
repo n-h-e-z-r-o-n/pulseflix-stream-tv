@@ -31,6 +31,7 @@ object NavAction {
 
         val btnShows = activity.findViewById<ImageButton>(R.id.sidebarBtnShows)
         val btnAnime = activity.findViewById<ImageButton>(R.id.sidebarBtnAnime)
+        val btnLive = activity.findViewById<ImageButton>(R.id.sidebarBtnLive)
         val btnSearch = activity.findViewById<ImageButton>(R.id.sidebarSearchBtn)
         val btnWatching = activity.findViewById<ImageButton>(R.id.sidebarWatchListBtn)
         val btnFavorites = activity.findViewById<ImageButton>(R.id.sidebarFavoritesBtn)
@@ -41,6 +42,7 @@ object NavAction {
 
         val labelMvTv = activity.findViewById<TextView>(R.id.sidebarLabelShows)
         val labelAnime = activity.findViewById<TextView>(R.id.sidebarLabelAnime)
+        val labelLive = activity.findViewById<TextView>(R.id.sidebarLabelLive)
         val labelSearch = activity.findViewById<TextView>(R.id.sidebarLabelSearch)
         val labelWatched = activity.findViewById<TextView>(R.id.sidebarLabelWatchList)
         val labelFavorites = activity.findViewById<TextView>(R.id.sidebarLabelFavorites)
@@ -50,8 +52,8 @@ object NavAction {
 
 
 
-        val buttons = listOf(btnShows, btnAnime, btnSearch, btnWatching, btnFavorites, btnNotification, btnProfile, btnExit)
-        val labels = listOf(labelMvTv, labelAnime, labelSearch, labelWatched,labelFavorites, labelNotification, labelProfile, labelExit)
+        val buttons = listOf(btnShows, btnAnime,btnLive, btnSearch, btnWatching, btnFavorites, btnNotification, btnProfile, btnExit)
+        val labels = listOf(labelMvTv, labelAnime, labelLive, labelSearch, labelWatched,labelFavorites, labelNotification, labelProfile, labelExit)
 
         btnExit.setOnClickListener {
             GlobalUtils.exitApp(activity)

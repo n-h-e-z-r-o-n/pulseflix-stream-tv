@@ -56,4 +56,13 @@ class SessionManger(context: Context) {
             .apply()
     }
 
+    /* ---------- LAST PLAYED LIVE CHANNEL ---------- */
+    fun saveLastPlayedLiveChannel(userId: Int, url: String) {
+        pref.edit().putString("LAST_PLAYED_LIVE_$userId", url).apply()
+    }
+
+    fun getLastPlayedLiveChannel(userId: Int): String? {
+        return pref.getString("LAST_PLAYED_LIVE_$userId", null)
+    }
+
 }

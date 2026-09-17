@@ -15,9 +15,9 @@ interface OnSearchListener {
 
 class CustomKeyboardManager(
     private val context: Context,
-    private val searchEditText: EditText,
+    var searchEditText: EditText,
     private val keyboardLayout: LinearLayout,
-    private val searchListener: OnSearchListener? = null
+    var searchListener: OnSearchListener? = null
 ) {
 
     init {

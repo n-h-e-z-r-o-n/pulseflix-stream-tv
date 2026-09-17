@@ -195,6 +195,19 @@ class AppDatabase(context: Context) :
                 VALUES (0, 'NONE', 0, 0, '', 0);"""
         )
 
+// 11. Favorites Live
+        db.execSQL(
+            """CREATE TABLE IF NOT EXISTS favorites_live (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                name TEXT,
+                group_name TEXT,
+                logo TEXT,
+                url TEXT,
+                UNIQUE(user_id, url),
+                FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+            )"""
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -206,6 +219,7 @@ class AppDatabase(context: Context) :
         db.execSQL("DROP TABLE IF EXISTS favorites_anime")
         db.execSQL("DROP TABLE IF EXISTS downloads")
         db.execSQL("DROP TABLE IF EXISTS continue_watching")
+        db.execSQL("DROP TABLE IF EXISTS favorites_live")
         onCreate(db)
     }
 
@@ -1272,6 +1286,91 @@ class AppDatabase(context: Context) :
         cursor.close()
     }
 
+    //////////////////////////////// FAVORITES LIVE FUNCTIONS ///////////////////////////////////////
+
+    fun addFavoriteLive(
+        userId: Int,
+        name: String,
+        groupName: String,
+        logo: String,
+        url: String
+    ): Boolean {
+        val db = writableDatabase
+        // Ensure table exists (in case user hasn't wiped DB)
+        db.execSQL(
+            """CREATE TABLE IF NOT EXISTS favorites_live (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                name TEXT,
+                group_name TEXT,
+                logo TEXT,
+                url TEXT,
+                UNIQUE(user_id, url),
+                FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+            )"""
+        )
+        val cv = ContentValues().apply {
+            put("user_id", userId)
+            put("name", name)
+            put("group_name", groupName)
+            put("logo", logo)
+            put("url", url)
+        }
+        return try {
+            db.insertOrThrow("favorites_live", null, cv) > 0
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun removeFavoriteLive(userId: Int, url: String): Boolean {
+        return try {
+            val db = writableDatabase
+            db.delete("favorites_live", "user_id=? AND url=?", arrayOf(userId.toString(), url)) > 0
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun isFavoriteLive(userId: Int, url: String): Boolean {
+        return try {
+            val db = readableDatabase
+            val cursor = db.rawQuery(
+                "SELECT 1 FROM favorites_live WHERE user_id=? AND url=? LIMIT 1",
+                arrayOf(userId.toString(), url)
+            )
+            val exists = cursor.moveToFirst()
+            cursor.close()
+            exists
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun getFavoriteLiveChannels(userId: Int): ArrayList<com.example.onyx.IptvChannel> {
+        val list = ArrayList<com.example.onyx.IptvChannel>()
+        try {
+            val db = readableDatabase
+            val cursor = db.rawQuery(
+                "SELECT * FROM favorites_live WHERE user_id=? ORDER BY id DESC",
+                arrayOf(userId.toString())
+            )
+            if (cursor.moveToFirst()) {
+                do {
+                    val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                    val groupName = cursor.getString(cursor.getColumnIndexOrThrow("group_name"))
+                    val logo = cursor.getString(cursor.getColumnIndexOrThrow("logo"))
+                    val url = cursor.getString(cursor.getColumnIndexOrThrow("url"))
+                    list.add(com.example.onyx.IptvChannel(name, groupName, logo, url))
+                } while (cursor.moveToNext())
+            }
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return list
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1287,6 +1386,7 @@ class AppDatabase(context: Context) :
         db.execSQL("DROP TABLE IF EXISTS downloads")
         db.execSQL("DROP TABLE IF EXISTS continue_watching")
         db.execSQL("DROP TABLE IF EXISTS app_settings")
+        db.execSQL("DROP TABLE IF EXISTS favorites_live")
 
         // Recreate database schema
         onCreate(db)

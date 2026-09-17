@@ -112,6 +112,47 @@
                 tools:ignore="HardcodedText,InefficientWeight,SmallSp" />
         </LinearLayout>
 
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/sidebarBtnLive"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="5dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:contentDescription="Anime"
+                android:focusable="true"
+                android:nextFocusLeft="@id/sidebarBtnLive"
+                android:nextFocusUp="@id/sidebarBtnAnime"
+                android:nextFocusDown="@id/sidebarSearchBtn"
+                android:src="@drawable/ic_live"
+                app:tint="@color/nav_icon_color_selector"
+                tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/sidebarLabelLive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:alpha="0.5"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Live"
+                android:textColor="?attr/FG_color"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText,InefficientWeight,SmallSp" />
+        </LinearLayout>
+
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
