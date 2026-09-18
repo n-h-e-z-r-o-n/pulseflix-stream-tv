@@ -2,7 +2,7 @@
   {
     "name": "VidSrc",
     "key": "vidsrc",
-    "movieTemplate":  "https://vsembed.ru/embed/movie/{showId}/",
+    "movieTemplate":  "https://vidsrc.sh/embed/movie/{showId}/",
     "tvTemplate": "https://vsembed.ru/embed/tv/{showId}/{seasonNo}/{episodeNo}"
   },
   {
