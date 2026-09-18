@@ -3,6 +3,7 @@ package com.example.onyx
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
@@ -38,6 +39,9 @@ class HomeActivity : AppCompatActivity() {
         if (!GlobalUtils.isTvDevice(this)) {
             GlobalUtils.enableImmersiveMode(this)
         }
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
 
         val loadingImageView = findViewById<ImageView>(R.id.AnimationBG)
         val typedValue = TypedValue()

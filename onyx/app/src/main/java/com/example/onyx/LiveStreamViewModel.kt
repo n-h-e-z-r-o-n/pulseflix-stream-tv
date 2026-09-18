@@ -79,6 +79,7 @@ class LiveStreamViewModel(
                 var currentName = ""
                 var currentLogo = ""
                 var currentGroup = "Uncategorized"
+                var currentCountry = ""
 
                 while (line != null) {
                     line = line.trim()
@@ -90,6 +91,15 @@ class LiveStreamViewModel(
                         // Extract Logo
                         val logoMatch = Regex("tvg-logo=\"([^\"]+)\"").find(line)
                         currentLogo = logoMatch?.groups?.get(1)?.value ?: ""
+                        
+                        // Extract Country from tvg-id (format: Channel.us@SD)
+                        val idMatch = Regex("tvg-id=\"([^\"]+)\"").find(line)
+                        val tvgId = idMatch?.groups?.get(1)?.value ?: ""
+                        currentCountry = if (tvgId.contains("@")) {
+                            tvgId.substringBefore("@").substringAfterLast(".", "")
+                        } else {
+                            tvgId.substringAfterLast(".", "")
+                        }.uppercase()
 
                         // Extract Name (after the last comma)
                         val commaIndex = line.lastIndexOf(",")
@@ -104,7 +114,8 @@ class LiveStreamViewModel(
                             name = currentName,
                             group = currentGroup,
                             logo = currentLogo,
-                            url = line
+                            url = line,
+                            country = currentCountry
                         )
                         parsedChannels.add(channel)
                         categorySet.add(currentGroup)
@@ -113,6 +124,7 @@ class LiveStreamViewModel(
                         currentName = ""
                         currentLogo = ""
                         currentGroup = "Uncategorized"
+                        currentCountry = ""
                     }
                     line = reader.readLine()
                 }
@@ -166,8 +178,45 @@ class LiveStreamViewModel(
         }
     }
 
+    private val _englishOnlyFilter = MutableLiveData<Boolean>(false)
+    val englishOnlyFilter: LiveData<Boolean> get() = _englishOnlyFilter
+
+    fun toggleEnglishFilter() {
+        val current = _englishOnlyFilter.value ?: false
+        _englishOnlyFilter.value = !current
+        applyFilters()
+    }
+
     private fun applyFilters() {
         var filtered = allChannels.toList()
+
+        val isEnglishOnly = _englishOnlyFilter.value ?: false
+        if (isEnglishOnly) {
+            val englishCountries = listOf("US", "UK", "CA", "AU", "NZ", "IE", "ZA", "INT")
+            filtered = filtered.filter { channel ->
+                val upperGroup = channel.group.uppercase()
+                val upperName = channel.name.uppercase()
+                val country = channel.country.uppercase()
+                
+                // If iptv-org has explicit country tag matching English countries
+                if (englishCountries.contains(country)) {
+                    return@filter true
+                }
+                
+                // If there's no tag, check if it's explicitly named/grouped as English
+                val explicitlyEnglishName = listOf("UK", "US", "CA", "AU", "EN", "ENGLISH", "USA").any { 
+                    upperGroup.contains(it) || upperName.startsWith("$it:") || upperName.startsWith("[$it]")
+                }
+                
+                // STRICT MODE: If we have a country tag and it's NOT in englishCountries, reject it.
+                // If we don't have a tag, rely on the explicitlyEnglishName heuristic.
+                if (country.isNotEmpty()) {
+                    false // It has a tag but wasn't in englishCountries
+                } else {
+                    explicitlyEnglishName
+                }
+            }
+        }
 
         val cat = _selectedCategory.value ?: "All"
         if (cat != "All") {

@@ -317,6 +317,11 @@ class LiveStreamFragment : Fragment() {
         val btnLiveFave = livePlayerView.findViewById<ImageButton>(R.id.btn_live_fave)
         val btnLiveRefresh = livePlayerView.findViewById<ImageButton>(R.id.btn_live_refresh)
         val favoriteButton = view?.findViewById<View>(R.id.favoriteButton)
+        val btnLanguageEnglish = view?.findViewById<com.google.android.material.card.MaterialCardView>(R.id.btn_language_english)
+
+        btnLanguageEnglish?.setOnClickListener {
+            viewModel.toggleEnglishFilter()
+        }
 
         btnFullscreen?.setOnClickListener {
             val nextState = if (currentPlayerState == PlayerState.NORMAL) PlayerState.FULLSCREEN else PlayerState.NORMAL
@@ -627,6 +632,22 @@ class LiveStreamFragment : Fragment() {
         viewModel.favoriteChannels.observe(viewLifecycleOwner) { favs ->
             favoritesAdapter?.submitList(favs)
             liveFaveCount?.text = "${favs.size}"
+        }
+
+        viewModel.englishOnlyFilter.observe(viewLifecycleOwner) { isEnglishOnly ->
+            val btnLanguageEnglish = view?.findViewById<com.google.android.material.card.MaterialCardView>(R.id.btn_language_english)
+            if (isEnglishOnly) {
+                val typedValue = android.util.TypedValue()
+                requireContext().theme.resolveAttribute(R.attr.AccentColor, typedValue, true)
+                val accentColor = if (typedValue.resourceId != 0) {
+                    androidx.core.content.ContextCompat.getColor(requireContext(), typedValue.resourceId)
+                } else {
+                    typedValue.data
+                }
+                btnLanguageEnglish?.setCardBackgroundColor(accentColor)
+            } else {
+                btnLanguageEnglish?.setCardBackgroundColor(android.graphics.Color.parseColor("#051923"))
+            }
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->

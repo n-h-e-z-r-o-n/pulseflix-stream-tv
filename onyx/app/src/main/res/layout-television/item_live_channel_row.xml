@@ -76,30 +76,7 @@
                 android:textSize="6sp"
                 tools:ignore="HardcodedText,SmallSp" />
                 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1080p"
-                    android:textColor="#89A3B2"
-                    android:textSize="10sp"
-                    tools:ignore="HardcodedText,SmallSp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="• SPORTS"
-                    android:textColor="#597A8C"
-                    android:textSize="10sp"
-                    tools:ignore="HardcodedText,SmallSp" />
-            </LinearLayout>
         </LinearLayout>
 
 
