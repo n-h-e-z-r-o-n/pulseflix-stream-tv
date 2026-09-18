@@ -44,6 +44,10 @@ class LiveStreamFragment : Fragment() {
     private lateinit var currentChannelName: TextView
     private lateinit var currentChannelCategory: TextView
 
+    private var liveFaveCount: TextView? = null
+    private var liveCategoryCount: TextView? = null
+    private var categoryChannelCount: TextView? = null
+
     private lateinit var channelAdapter: LiveChannelAdapter
     private lateinit var categoryAdapter: LiveCategoryAdapter
 
@@ -85,6 +89,10 @@ class LiveStreamFragment : Fragment() {
         currentChannelLogo = view.findViewById(R.id.currentChannelLogo)
         currentChannelName = view.findViewById(R.id.currentChannelName)
         currentChannelCategory = view.findViewById(R.id.currentChannelCategory)
+
+        liveFaveCount = view.findViewById(R.id.live_fave_count)
+        liveCategoryCount = view.findViewById(R.id.live_category_count)
+        categoryChannelCount = view.findViewById(R.id.cateogry_channel_count)
 
         liveFavoritesRecyclerView = view.findViewById(R.id.liveFavoritesRecyclerView)
         liveFavoritesToggleContainer = view.findViewById(R.id.liveFavoritesToggleContainer)
@@ -448,16 +456,37 @@ class LiveStreamFragment : Fragment() {
         val channel = currentPlayingChannel ?: return
         val isFav = viewModel.isFavorite(channel.url)
         
-        val btnLiveFave = livePlayerView.findViewById<ImageButton>(R.id.btn_live_fave)
+        val btnLiveFave = livePlayerView.findViewById<android.widget.ImageButton>(R.id.btn_live_fave)
         val favoriteButtonImg = view?.findViewById<ImageView>(R.id.favoriteButtonImg)
 
-        val iconRes = if (isFav) R.drawable.ic_fave else R.drawable.ic_addfave
-        btnLiveFave?.setImageResource(iconRes)
-        favoriteButtonImg?.setImageResource(iconRes)
+        if (isFav) {
+            val iconRes = R.drawable.ic_tickfave
+            val tint = android.content.res.ColorStateList.valueOf(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.fav))
+            
+            btnLiveFave?.setImageResource(iconRes)
+            btnLiveFave?.imageTintList = tint
+            
+            favoriteButtonImg?.setImageResource(iconRes)
+            favoriteButtonImg?.imageTintList = tint
+        } else {
+            val iconRes = R.drawable.ic_addfave
+            val tint = android.content.res.ColorStateList.valueOf(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.white))
+            
+            btnLiveFave?.setImageResource(iconRes)
+            btnLiveFave?.imageTintList = tint
+            
+            favoriteButtonImg?.setImageResource(iconRes)
+            favoriteButtonImg?.imageTintList = tint
+        }
     }
 
     private fun setupRecyclerViews() {
-        liveRecyclerView.layoutManager = LinearLayoutManager(context)
+        val isTv = (requireActivity().resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_TYPE_MASK) == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
+        if (isTv) {
+            liveRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(context, 4)
+        } else {
+            liveRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+        }
         
         channelAdapter = LiveChannelAdapter { channel ->
             playChannel(channel)
@@ -483,7 +512,6 @@ class LiveStreamFragment : Fragment() {
             }
         }
 
-        val isTv = (requireActivity().resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_TYPE_MASK) == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
         val orientation = if (isTv) LinearLayoutManager.VERTICAL else LinearLayoutManager.HORIZONTAL
 
         liveCategoriesRecyclerView.layoutManager = LinearLayoutManager(context, orientation, false)
@@ -496,6 +524,11 @@ class LiveStreamFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.channels.observe(viewLifecycleOwner) { channels ->
             channelAdapter.submitList(channels)
+            
+            val cat = viewModel.selectedCategory.value ?: "All"
+            val total = channels.size
+            categoryChannelCount?.text = "Showing $total channels in $cat"
+            
             if (exoPlayer?.mediaItemCount == 0 && channels.isNotEmpty()) {
                 val lastUrl = sessionManager.getLastPlayedLiveChannel(userId)
                 val channelToPlay = channels.find { it.url == lastUrl } ?: channels[0]
@@ -505,10 +538,12 @@ class LiveStreamFragment : Fragment() {
 
         viewModel.categories.observe(viewLifecycleOwner) { categories ->
             categoryAdapter.submitList(categories)
+            liveCategoryCount?.text = "${categories.size} Genres"
         }
 
         viewModel.favoriteChannels.observe(viewLifecycleOwner) { favs ->
             favoritesAdapter?.submitList(favs)
+            liveFaveCount?.text = "${favs.size}"
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->

@@ -1,289 +1,494 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/BG_color"
+    android:background="#020C12"
+    android:orientation="horizontal"
     tools:context=".LiveStreamFragment">
 
+    <!-- Left Sidebar -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/sidebarContainer"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
-
+        android:orientation="vertical"
+        android:background="#031016"
+        android:paddingTop="24dp">
 
         <LinearLayout
-            android:id="@+id/sidebarContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingTop="20dp"
-            android:background="?attr/transparentEffect"
-            tools:ignore="UselessLeaf">
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            android:id="@+id/liveFavoritesToggleContainer"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="24dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="12dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="@drawable/watch_button"
+            android:backgroundTint="#0A2433">
+            
+            <ImageView
+                android:id="@+id/liveFavoritesToggleIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_stars"
+                app:tint="#FACC15"
+                tools:ignore="ContentDescription" />
+                
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/liveFavoritesToggleContainer"
-                    android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:textSize="13sp"
+                android:text="My Favorites"
+                android:textStyle="bold"
+                android:textColor="#0EA5E9"
+                tools:ignore="HardcodedText" />
+                
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                app:cardBackgroundColor="#041219"
+                app:cardCornerRadius="10dp"
+                app:strokeColor="#0EA5E9"
+                app:strokeWidth="1dp">
+                <TextView
+                    android:id="@+id/live_fave_count"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="8dp"
-                    android:orientation="horizontal"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="?attr/selectableItemBackground">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="14sp"
-                        android:text="My Favorites"
-                        android:textStyle="bold"
-                        android:textColor="?attr/AccentColor"/>
-
-                    <ImageView
-                        android:id="@+id/liveFavoritesToggleIcon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_stars"
-                        app:tint="?attr/AccentColor"
-                        tools:ignore="UseAppTint" />
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/liveFavoritesRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:layout_marginHorizontal="16dp"
-                    android:paddingBottom="10dp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:textSize="14sp"
-                        android:text="Category"
-                        android:textColor="?attr/FG_color"/>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="42dp"
-                        android:layout_marginHorizontal="16dp"
-                        app:cardBackgroundColor="?attr/BG_color_up"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="0dp"
-                        app:strokeColor="?attr/transparentEffect"
-                        app:strokeWidth="1dp">
-
-                        <androidx.appcompat.widget.SearchView
-                            android:id="@+id/liveSearchViewCategory"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:paddingHorizontal="4dp"
-                            app:iconifiedByDefault="false"
-                            app:queryBackground="@android:color/transparent"
-                            app:queryHint="Search..." />
-
-                    </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-            <!-- Horizontal Categories -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/liveCategoriesRecyclerView"
-                android:layout_width="220dp"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp"
-                android:orientation="horizontal"
-                tools:listitem="@layout/item_category_chip" />
-
+                    tools:text="12"
+                    android:textColor="#FFFFFF"
+                    android:textSize="8sp"
+                    android:paddingHorizontal="6dp"
+                    android:layout_gravity="center"
+                    tools:ignore="HardcodedText,SmallSp" />
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
+        
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/liveFavoritesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginHorizontal="16dp"
+            android:paddingBottom="10dp"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:text="CATEGORY"
+                android:textColor="#FFFFFF"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/live_category_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textSize="10sp"
+                tools:text="14 Genres"
+                android:textColor="#89A3B2"
+                tools:ignore="HardcodedText" />
+        </RelativeLayout>
 
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#051923"
+            app:cardCornerRadius="18dp"
+            app:strokeColor="#0A2E3D"
+            app:strokeWidth="1dp">
+            
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/liveSearchViewCategory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="4dp"
+                app:iconifiedByDefault="false"
+                app:queryBackground="@android:color/transparent"
+                app:queryHint="Filter categories..." />
+        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Right Content Area -->
-        <LinearLayout
-            android:layout_width="0dp"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/liveCategoriesRecyclerView"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="24dp"
+            android:orientation="vertical"
+            tools:listitem="@layout/item_category_chip" />
+    </LinearLayout>
+
+    <!-- Vertical Divider -->
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#0A2E3D" />
+
+    <!-- Right Content Area -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <!-- Top Section: Player & Info -->
             <LinearLayout
                 android:id="@+id/topPlayerContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="280dp"
+                android:orientation="horizontal"
+                android:padding="24dp">
 
-                <!-- Top Left Player -->
-                <com.example.onyx.CustomPlayerView
-                    android:id="@+id/livePlayerView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="280dp"
-                    android:layout_margin="15dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    app:resize_mode="fit"
-                    app:use_controller="true"
-                    app:controller_layout_id="@layout/layout_live_player_controls"
-                    app:show_timeout="3000" />
+                <!-- Left Player -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.7"
+                    app:cardBackgroundColor="#000000"
+                    app:cardCornerRadius="16dp"
+                    app:strokeColor="#0A2E3D"
+                    app:strokeWidth="1dp"
+                    android:layout_marginEnd="20dp">
+                    
+                    <com.example.onyx.CustomPlayerView
+                        android:id="@+id/livePlayerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:resize_mode="fit"
+                        app:use_controller="true"
+                        app:controller_layout_id="@layout/layout_live_player_controls"
+                        app:show_timeout="3000" />
+                        
+                    <!-- Player Badges overlay (optional mocked for design) -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="16dp">
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="18dp"
+                            app:cardBackgroundColor="#EF4444"
+                            app:cardCornerRadius="4dp"
+                            app:strokeWidth="0dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="LIVE"
+                                android:textColor="#FFFFFF"
+                                android:textSize="9sp"
+                                android:textStyle="bold"
+                                android:layout_gravity="center"
+                                android:paddingHorizontal="6dp"
+                                tools:ignore="HardcodedText" />
+                        </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:id="@+id/currentChannelResolution"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- Current Channel Info (Right of Player) -->
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginVertical="15dp"
-                    android:layout_marginEnd="10dp"
-                    app:cardBackgroundColor="?attr/BG_color_up"
-                    app:cardCornerRadius="10dp"
-                    app:strokeWidth="0dp"
-                    android:layout_height="match_parent">
+                    android:layout_width="240dp"
+                    android:layout_height="match_parent"
+                    app:cardBackgroundColor="#051923"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#0A2E3D"
+                    app:strokeWidth="1dp">
 
-                        <LinearLayout
-                            android:id="@+id/currentChannelInfo"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:padding="10dp">
+                    <LinearLayout
+                        android:id="@+id/currentChannelInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <!-- Top Header Row -->
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical">
+                                android:layout_alignParentStart="true"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
 
-                                <ImageView
-                                    android:id="@+id/currentChannelLogo"
-                                    android:layout_width="wrap_content"
-                                    android:adjustViewBounds="true"
-                                    android:layout_height="60dp"
-                                    android:scaleType="fitCenter"
-                                    android:src="@drawable/ic_tv"
-                                    tools:ignore="ContentDescription" />
-
-
-                                <LinearLayout
-                                    android:id="@+id/favoriteButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:background="@drawable/watch_button"
-                                    android:focusableInTouchMode="true"
-                                    android:focusable="true"
-                                    android:clickable="true"
-                                    android:layout_marginEnd="10dp"
-                                    android:paddingVertical="8dp"
-                                    android:paddingHorizontal="8dp"
-                                    android:nextFocusLeft="@+id/TrailerButton"
-                                    android:nextFocusRight="@+id/serverButton"
-                                    android:elevation="2dp" >
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    app:cardBackgroundColor="#0A2B3D"
+                                    app:cardCornerRadius="8dp"
+                                    app:strokeWidth="0dp">
 
                                     <ImageView
-                                        android:id="@+id/favoriteButtonImg"
-                                        android:layout_width="22dp"
-                                        android:layout_height="22dp"
-                                        android:src="@drawable/ic_addfave"
-                                        app:tint="#FFFFFF"
-                                        android:focusable="false"
-                                        android:focusableInTouchMode="false"
-                                        android:clickable="false"
-                                        android:background="@android:color/transparent"
-                                        android:textAllCaps="false"
-                                        android:tooltipText="Add to Favorites"
-                                        tools:ignore="UnusedAttribute" />
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:fontFamily="@font/o"
-                                android:letterSpacing="0.1"
-                                android:textColor="?attr/AccentColor"
-                                android:textSize="14sp"
-                                android:textAllCaps="true"
-                                tools:text="Category" />
-
-                            <TextView
-                                android:id="@+id/currentChannelCategory"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:fontFamily="@font/p"
-                                android:textColor="?attr/FG_color"
-                                android:textSize="14sp"
-                                tools:text="SPORTS" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginVertical="10dp"
-                                    android:background="?attr/BG_color" />
-
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="?attr/AccentColor"
-                                    android:letterSpacing="0.1"
-                                    android:textSize="14sp"
-                                    android:fontFamily="@font/o"
-                                    android:text="Up Next"
-                                    tools:ignore="HardcodedText" />
-
-                                <ScrollView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-                                    <LinearLayout
+                                        android:id="@+id/currentChannelLogo"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="vertical">
-                                        <TextView
-                                            android:id="@+id/upNextDetails"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:textColor="?attr/FG_color"
-                                            android:textSize="12sp"
-                                            android:fontFamily="@font/q"
-                                            android:text="No Program Details Available"
-                                            android:layout_marginTop="8dp"
-                                            tools:ignore="HardcodedText" />
+                                        android:layout_height="match_parent"
+                                        android:padding="8dp"
+                                        android:scaleType="fitCenter"
+                                        android:src="@drawable/ic_tv"
+                                        tools:ignore="ContentDescription" />
+                                </com.google.android.material.card.MaterialCardView>
 
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/currentChannelName"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textColor="#FFFFFF"
+                                            android:textSize="11sp"
+                                            android:fontFamily="sans-serif-condensed"
+                                            android:textStyle="bold"
+                                            tools:ignore="HardcodedText"
+                                            tools:text="SuperSport Premier 1 HD" />
+
+                                        <com.google.android.material.card.MaterialCardView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="16dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="8dp"
+                                            app:cardBackgroundColor="#092E1B"
+                                            app:cardCornerRadius="4dp"
+                                            app:strokeColor="#115934"
+                                            app:strokeWidth="1dp">
+
+                                            <TextView
+                                                android:id="@+id/currentChannelStatus"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:paddingHorizontal="6dp"
+                                                android:text="ONLINE"
+                                                android:textColor="#22C55E"
+                                                android:textSize="9sp"
+                                                android:textStyle="bold"
+                                                tools:ignore="HardcodedText" />
+                                        </com.google.android.material.card.MaterialCardView>
                                     </LinearLayout>
 
-                                    >
-
-                                </ScrollView>
+                                    <TextView
+                                        android:id="@+id/currentChannelSource"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:textColor="#89A3B2"
+                                        android:textSize="11sp"
+                                        tools:ignore="HardcodedText" />
+                                </LinearLayout>
                             </LinearLayout>
+
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/favoriteButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="28dp"
+                            android:gravity="center_vertical"
+                            android:background="@drawable/watch_button"
+                            android:backgroundTint="#0EA5E9"
+                            android:layout_marginTop="10dp"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:paddingHorizontal="12dp">
+                            <ImageView
+                                android:id="@+id/favoriteButtonImg"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:src="@drawable/ic_addfave"
+                                app:tint="#FFFFFF"
+                                android:layout_marginEnd="6dp"
+                                tools:ignore="ContentDescription" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Favorite"
+                                android:textColor="#FFFFFF"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="#0A2E3D" />
+
+                        <!-- Category Info Row -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_alignParentStart="true">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="CATEGORY"
+                                    android:textColor="#0EA5E9"
+                                    android:textSize="9sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="HardcodedText" />
+                                <TextView
+                                    android:id="@+id/currentChannelCategory"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    tools:text="SPORTS • EUROPE FOOTBALL"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="HardcodedText" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="end"
+                                android:layout_alignParentEnd="true">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="EPG CURRENT"
+                                    android:textColor="#89A3B2"
+                                    android:textSize="9sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="HardcodedText" />
+                                <TextView
+                                    android:id="@+id/currentEpgTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    tools:text="Arsenal vs Chelsea (LIVE)"
+                                    android:textColor="#0EA5E9"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="HardcodedText" />
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="#0A2E3D" />
+
+                        <!-- Up Next -->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:text="🕒 UP NEXT"
+                                android:textColor="#0EA5E9"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText,SmallSp" />
+                            <TextView
+                                android:id="@+id/upNextTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                tools:text="Coming 21:00 - 23:00"
+                                android:textColor="#89A3B2"
+                                android:textSize="10sp"
+                                tools:ignore="HardcodedText" />
+                        </RelativeLayout>
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <TextView
+                                        android:id="@+id/upNextTitle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentStart="true"
+                                        tools:text="Post-Match Analysis &amp; Highlights"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold"
+                                        tools:ignore="HardcodedText" />
+                                    <TextView
+                                        android:id="@+id/upNextTimeSmall"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentEnd="true"
+                                        tools:text="21:00"
+                                        android:textColor="#FACC15"
+                                        android:textSize="11sp"
+                                        android:textStyle="bold"
+                                        tools:ignore="HardcodedText" />
+                                </RelativeLayout>
+                                <TextView
+                                    android:id="@+id/upNextDetails"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#89A3B2"
+                                    android:textSize="11sp"
+                                    tools:text="Studio coverage with Gary Neville and Jamie Carragher reviewing tacticals, referee calls, and press conferences."
+                                    android:layout_marginTop="6dp"
+                                    tools:ignore="HardcodedText" />
+                            </LinearLayout>
+                        </ScrollView>
+
+                    </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
@@ -291,35 +496,91 @@
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="?attr/BG_color_up" />
+                android:background="#0A2E3D" />
 
-            <LinearLayout
+            <!-- Filters Row -->
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="12dp">
+                
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="220dp"
+                        android:layout_height="32dp"
+                        app:cardBackgroundColor="#051923"
+                        app:cardCornerRadius="16dp"
+                        app:strokeColor="#0A2E3D"
+                        app:strokeWidth="1dp"
+                        android:layout_marginEnd="16dp">
+                        <androidx.appcompat.widget.SearchView
+                            android:id="@+id/liveSearchViewChannel"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="4dp"
+                            app:iconifiedByDefault="false"
+                            app:queryBackground="@android:color/transparent"
+                            app:queryHint="Search live channels..." />
+                    </com.google.android.material.card.MaterialCardView>
+                    
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="200dp"
-                    android:layout_height="42dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginHorizontal="16dp"
-                    app:cardBackgroundColor="?attr/BG_color_up"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="?attr/transparentEffect"
-                    app:strokeWidth="1dp">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="#051923"
+                        app:cardCornerRadius="6dp"
+                        app:strokeColor="#0A2E3D"
+                        app:strokeWidth="1dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="HD Only"
+                            android:textColor="#89A3B2"
+                            android:textSize="11sp"
+                            android:paddingHorizontal="12dp"
+                            android:layout_gravity="center"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.card.MaterialCardView>
 
-                    <androidx.appcompat.widget.SearchView
-                        android:id="@+id/liveSearchViewChannel"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingHorizontal="4dp"
-                        app:iconifiedByDefault="false"
-                        app:queryHint="Search..." />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        app:cardBackgroundColor="#051923"
+                        app:cardCornerRadius="6dp"
+                        app:strokeColor="#0A2E3D"
+                        app:strokeWidth="1dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4K UHD"
+                            android:textColor="#89A3B2"
+                            android:textSize="11sp"
+                            android:paddingHorizontal="12dp"
+                            android:layout_gravity="center"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
 
-                </com.google.android.material.card.MaterialCardView>
-
-
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/cateogry_channel_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    tools:text="Showing 1-8 of 48 in Sports"
+                    android:textColor="#89A3B2"
+                    android:textSize="11sp"
+                    tools:ignore="HardcodedText" />
+            </RelativeLayout>
 
             <!-- Channels List (Bottom Right) -->
             <androidx.recyclerview.widget.RecyclerView
@@ -328,40 +589,40 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:clipToPadding="false"
-                android:padding="8dp"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="16dp"
                 tools:listitem="@layout/item_live_channel_row" />
 
         </LinearLayout>
-    </LinearLayout>
+        
+        <!-- Error Text -->
+        <TextView
+            android:id="@+id/liveErrorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="16sp"
+            android:visibility="gone"
+            tools:text="Error loading channels" />
 
-    <!-- Error Text -->
-    <TextView
-        android:id="@+id/liveErrorText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="16sp"
-        android:visibility="gone"
-        tools:text="Error loading channels" />
-
-    <!-- Loading Indicator -->
-    <ProgressBar
-        android:id="@+id/liveProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="visible" />
-
-    <!-- Custom Keyboard -->
-    <include 
-        layout="@layout/keyboard_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="false"
-        android:layout_marginBottom="20dp"
-        android:visibility="gone" />
-
-</RelativeLayout>
+        <!-- Loading Indicator -->
+        <ProgressBar
+            android:id="@+id/liveProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible" />
+            
+        <!-- Custom Keyboard -->
+        <include 
+            layout="@layout/keyboard_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone" />
+            
+    </RelativeLayout>
+</LinearLayout>

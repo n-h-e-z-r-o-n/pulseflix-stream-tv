@@ -25,7 +25,8 @@
             android:background="@drawable/live_button_selector"
             android:src="@drawable/ic_play"
             android:contentDescription="Play/Pause"
-            android:tint="@android:color/white" />
+            app:tint="@android:color/white"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/btn_live_sync"
@@ -34,10 +35,11 @@
             android:text="LIVE"
             android:paddingHorizontal="15dp"
             android:paddingVertical="5dp"
-            android:textColor="@android:color/white"
+            android:textColor="#cc0000"
+            android:background="@drawable/live_button_selector"
             android:textStyle="bold"
-            android:background="#cc0000"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp"
+            tools:ignore="HardcodedText" />
 
 
         <TextView
@@ -57,23 +59,27 @@
             android:id="@+id/btn_live_fave"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:padding="5dp"
+            android:padding="8dp"
+            android:scaleType="fitXY"
             android:adjustViewBounds="true"
             android:background="@drawable/live_button_selector"
             android:src="@drawable/ic_addfave"
             android:contentDescription="Fullscreen"
-            android:tint="@android:color/white" />
+            app:tint="@android:color/white"
+            tools:ignore="HardcodedText" />
 
         <ImageButton
             android:id="@+id/btn_fullscreen"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:padding="5dp"
+            android:padding="8dp"
+            android:scaleType="fitXY"
             android:adjustViewBounds="true"
             android:background="@drawable/live_button_selector"
             android:src="@drawable/ic_fullscreen"
             android:contentDescription="Fullscreen"
-            android:tint="@android:color/white" />
+            app:tint="@android:color/white"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
 </RelativeLayout>
