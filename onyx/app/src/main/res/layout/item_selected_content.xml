@@ -337,7 +337,7 @@
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/p"
                     android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:textSize="14sp"
                     android:textColor="?attr/FG_color"
                     tools:ignore="HardcodedText" />
 
@@ -403,7 +403,7 @@
                     android:layout_marginStart="10dp"
                     android:fontFamily="@font/p"
                     android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:textSize="14sp"
                     android:textColor="?attr/FG_color"
                     tools:ignore="HardcodedText" />
 

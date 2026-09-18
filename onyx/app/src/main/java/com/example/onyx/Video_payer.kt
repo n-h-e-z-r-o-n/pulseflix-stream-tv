@@ -22,6 +22,7 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.C
@@ -186,6 +187,7 @@ class Video_payer : AppCompatActivity(), Player.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_video_payer)
 
         // Keep screen on while playing
@@ -204,6 +206,10 @@ class Video_payer : AppCompatActivity(), Player.Listener {
         setupGestures()
         setupBackPressedCallback()
         registerNetworkCallback()
+
+        if (!GlobalUtils.isTvDevice(this)) {
+            GlobalUtils.enableImmersiveMode(this)
+        }
     }
 
     override fun onPause() {

@@ -212,8 +212,13 @@ class Anime_Video_Player : AppCompatActivity(), Player.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalUtils.applyTheme(this)
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_anime_video_player)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) // Prevent screen from sleeping while this Activity is visible
+
+        if (!GlobalUtils.isTvDevice(this)) {
+            GlobalUtils.enableImmersiveMode(this)
+        }
 
         db = AppDatabase(this)         // Initialize database
         sm = SessionManger(this)

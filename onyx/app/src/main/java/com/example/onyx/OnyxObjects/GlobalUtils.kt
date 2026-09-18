@@ -71,6 +71,10 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.time.format.DateTimeParseException
+import android.view.Window
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 private val interpolator = AccelerateDecelerateInterpolator()
 
@@ -1346,4 +1350,23 @@ object GlobalUtils {
     var favoritesStateHasChanged: Boolean = false
 
     //////////////////////////
+
+
+    fun enableImmersiveMode(activity: Activity) {
+        val window: Window = activity.window
+        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+        
+        insetsController.hide(WindowInsetsCompat.Type.systemBars())
+        insetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
+    
+
+    fun disableImmersiveMode(activity: Activity) {
+        val window: Window = activity.window
+        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+        
+        insetsController.show(WindowInsetsCompat.Type.systemBars())
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+    }
 }

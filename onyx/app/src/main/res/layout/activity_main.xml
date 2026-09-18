@@ -39,7 +39,7 @@
             android:shadowColor="@android:color/white"
             android:shadowDx="5"
             android:shadowDy="6"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="50dp"
             android:shadowRadius="4"
             android:text="ONYX"
             android:textColor="#042c40"

@@ -45,13 +45,6 @@ class AppUpdater(private val activity: Activity, private val coroutineScope: Cor
             Toast.makeText(activity, "Checking for updates...", Toast.LENGTH_SHORT).show()
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-            !activity.packageManager.canRequestPackageInstalls()
-        ) {
-            showInstallPermissionDialog()
-            return
-        }
-
         coroutineScope.launch(Dispatchers.IO) {
             try {
                 val connection = (URL(versionJsonUrl).openConnection() as HttpURLConnection).apply {
@@ -130,7 +123,11 @@ class AppUpdater(private val activity: Activity, private val coroutineScope: Cor
             .setTitle("Update Available: v${updateInfo.versionName}")
             .setMessage("Changelog:\n${updateInfo.changelog}\n\nWould you like to update now?")
             .setPositiveButton("Update Now") { _, _ ->
-                downloadAndInstallApk(updateInfo.downloadUrl)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !activity.packageManager.canRequestPackageInstalls()) {
+                    showInstallPermissionDialog()
+                } else {
+                    downloadAndInstallApk(updateInfo.downloadUrl)
+                }
             }
             .setNegativeButton("Later", null)
             .show()

@@ -67,6 +67,10 @@ class Play : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_play)
 
+        if (!GlobalUtils.isTvDevice(this)) {
+            GlobalUtils.enableImmersiveMode(this)
+        }
+
         showId       = intent.getStringExtra("imdb_code")   ?: ""
         showType     = intent.getStringExtra("type")         ?: ""
         showTitle    = intent.getStringExtra("title")        ?: ""

@@ -20,16 +20,6 @@
         android:paddingTop="16dp"
         tools:ignore="TextSizeCheck">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="serif"
-            android:text="Search"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
-
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/searchCategoryToggle"
             android:layout_width="match_parent"
@@ -71,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             app:cardBackgroundColor="#000000"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="20dp"
             android:layout_marginHorizontal="16dp"
             app:strokeColor="?attr/AccentColor"
             app:strokeWidth="1dp">

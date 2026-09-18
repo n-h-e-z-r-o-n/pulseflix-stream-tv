@@ -13,7 +13,7 @@ android {
         applicationId = "com.example.onyx"
         minSdk = 26
         targetSdk = 36
-        versionCode = 11
+        versionCode = 12
         versionName = "1.1"
 
         buildConfigField( "String", "TM_K", "\"eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZjliMmUyN2MxYTZiYzMyMzNhZjE4MzJmNGFjYzg1MCIsIm5iZiI6MTcxOTY3NDUxNy4xOTYsInN1YiI6IjY2ODAyNjk1ZWZhYTI1ZjBhOGE4NGE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RTms-g8dzOl3WwCeJ7WNLq3i2kXxl3T7gOTa8POcxcw\"")
@@ -22,8 +22,6 @@ android {
         //buildConfigField( "String", "A_K", "\"http://192.168.100.22:4000\"")
         buildConfigField( "String", "APPV_J", "\"https://github.com/n-h-e-z-r-o-n/pulseflix-stream-tv/raw/refs/heads/main/App/version.json\"")
         buildConfigField( "String", "STREAM_S", "\"https://github.com/n-h-e-z-r-o-n/pulseflix-stream-tv/raw/refs/heads/main/App/servers.json\"")
-
-
     }
 
     buildTypes {
@@ -53,8 +51,6 @@ android {
         viewBinding = true
         buildConfig = true
     }
-
-
 }
 
 dependencies {

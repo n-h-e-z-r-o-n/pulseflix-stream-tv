@@ -24,9 +24,7 @@ class    NetworkAdbActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_network_adb)
         supportActionBar?.hide()
-
         GlobalUtils.hideSystemUI(this)
-
         etIpAddress = findViewById(R.id.etIpAddress)
         btnConnect = findViewById(R.id.btnConnect)
         tvStatus = findViewById(R.id.tvStatus)
@@ -38,6 +36,10 @@ class    NetworkAdbActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             startAdbConnection(ip)
+        }
+
+        if (!GlobalUtils.isTvDevice(this)) {
+            GlobalUtils.enableImmersiveMode(this)
         }
     }
 

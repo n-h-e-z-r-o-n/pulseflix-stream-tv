@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#042C40"
+    android:background="#051016"
     android:fillViewport="true"
     android:clipToPadding="false"
     android:scrollbars="none"
@@ -15,217 +15,615 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:paddingStart="22dp"
-        android:paddingEnd="22dp"
-        android:paddingTop="32dp"
-        android:paddingBottom="32dp">
+        android:padding="24dp">
 
-        <!-- Header -->
-        <LinearLayout
+        <!-- Top Bar -->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:layout_marginBottom="32dp">
 
+            <!-- Back Button -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                app:cardCornerRadius="18dp"
+                app:cardBackgroundColor="#0A2433"
+                app:strokeWidth="0dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textColor="#89A3B2"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Center Pill -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_centerInParent="true"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="#0A2433"
+                app:strokeWidth="0dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="6dp"
+                        android:layout_height="6dp"
+                        app:cardCornerRadius="3dp"
+                        app:cardBackgroundColor="#0EA5E9"
+                        app:strokeWidth="0dp"
+                        android:layout_marginEnd="6dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ADB Wireless"
+                        android:textColor="#0EA5E9"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Help Button -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:cardCornerRadius="18dp"
+                app:cardBackgroundColor="#0A2433"
+                app:strokeWidth="0dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="?"
+                    android:textColor="#89A3B2"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+            </com.google.android.material.card.MaterialCardView>
+        </RelativeLayout>
+
+        <!-- Header Icon -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="#0A2B3D"
+            app:strokeWidth="0dp">
             <TextView
                 android:id="@+id/tvNetworkIcon"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:gravity="center"
-                android:text="▣"
-                android:textColor="#FFFFFF"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:background="#0B465D"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/tvAdbTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Install to TV"
-                android:textColor="#FFFFFF"
-                android:textSize="27sp"
-                android:textStyle="bold"
-                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="📺"
+                android:textSize="32sp"
                 tools:ignore="HardcodedText" />
+        </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/tvAdbDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text="Install the app directly to your Android TV over your local network."
-                android:textColor="#B8C9D0"
-                android:textSize="15sp"
-                android:lineSpacingExtra="3dp"
-                android:gravity="center"
-                tools:ignore="HardcodedText" />
-
-        </LinearLayout>
-
-        <!-- Connection section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="vertical"
-            android:padding="18dp"
-            android:background="#07394D">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Connect to your TV"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Enter the local IP address shown on your TV."
-                android:textColor="#91AEB8"
-                android:textSize="13sp"
-                tools:ignore="HardcodedText" />
-
-            <!-- IP label -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="TV IP address"
-                android:textColor="#DCE8EC"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
-
-            <!-- IP input -->
-            <EditText
-                android:id="@+id/etIpAddress"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="8dp"
-                android:background="#052F42"
-                android:hint="192.168.1.55"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#6F8993"
-                android:textSize="16sp"
-                android:singleLine="true"
-                android:inputType="textUri"
-                android:imeOptions="actionDone"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:importantForAutofill="no" />
-
-            <!-- Connect -->
-            <Button
-                android:id="@+id/btnConnect"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="16dp"
-                android:background="#E50914"
-                android:text="Connect &amp; Install"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:stateListAnimator="@null"
-                android:elevation="0dp"
-                tools:ignore="HardcodedText" />
-
-        </LinearLayout>
-
-        <!-- Status -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:orientation="vertical"
-            android:padding="15dp"
-            android:background="#063447">
-
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:lineSpacingExtra="3dp" />
-
-        </LinearLayout>
-
-        <!-- Requirements -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:background="#063447">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Before you connect"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
-                android:text="• Connect your phone and TV to the same Wi-Fi network."
-                android:textColor="#AFC2C9"
-                android:textSize="13sp"
-                android:lineSpacingExtra="2dp"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="• Enable Developer Options on your TV."
-                android:textColor="#AFC2C9"
-                android:textSize="13sp"
-                android:lineSpacingExtra="2dp"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="• Enable USB debugging option on your TV."
-                android:textColor="#AFC2C9"
-                android:textSize="13sp"
-                android:lineSpacingExtra="2dp"
-                tools:ignore="HardcodedText" />
-
-        </LinearLayout>
-
-        <!-- Footer -->
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tvAdbTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:text="If the connection fails, check the TV's IP address and make sure both devices are on the same network."
-            android:textColor="#6F8993"
-            android:textSize="12sp"
-            android:gravity="center"
-            android:lineSpacingExtra="3dp"
+            android:text="Install to TV"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
             tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tvAdbDescription"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Install the app directly to your Android TV over your local network."
+            android:textColor="#89A3B2"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            tools:ignore="HardcodedText" />
+
+        <!-- Card: Connect to your TV -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            app:cardBackgroundColor="#051923"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#0A2E3D"
+            app:strokeWidth="1.5dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+                
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:text="⚡ Connect to your TV"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        app:cardCornerRadius="12dp"
+                        app:cardBackgroundColor="#092E1B"
+                        app:strokeColor="#115934"
+                        app:strokeWidth="1dp">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp">
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="6dp"
+                                android:layout_height="6dp"
+                                app:cardCornerRadius="3dp"
+                                app:cardBackgroundColor="#22C55E"
+                                app:strokeWidth="0dp"
+                                android:layout_marginEnd="6dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ready"
+                                android:textColor="#22C55E"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                tools:ignore="HardcodedText" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </RelativeLayout>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Enter the local IP address shown on your TV screen."
+                    android:textColor="#89A3B2"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText" />
+                    
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="TV IP ADDRESS"
+                        android:textColor="#89A3B2"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="Port: 5555"
+                        android:textColor="#597A8C"
+                        android:textSize="11sp"
+                        tools:ignore="HardcodedText" />
+                </RelativeLayout>
+                
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    app:cardBackgroundColor="#041219"
+                    app:cardCornerRadius="8dp"
+                    app:strokeColor="#0A2E3D"
+                    app:strokeWidth="1.5dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🌐"
+                            android:textSize="14sp"
+                            android:layout_marginStart="12dp"
+                            tools:ignore="HardcodedText" />
+                        <EditText
+                            android:id="@+id/etIpAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:hint="192.168.1.55"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#597A8C"
+                            android:textSize="15sp"
+                            android:singleLine="true"
+                            android:inputType="textUri"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            tools:ignore="HardcodedText" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="✕"
+                            android:textColor="#597A8C"
+                            android:textSize="14sp"
+                            android:layout_marginEnd="12dp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quick pick:"
+                        android:textColor="#597A8C"
+                        android:textSize="12sp"
+                        android:layout_marginEnd="12dp"
+                        tools:ignore="HardcodedText" />
+                    
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="#041219"
+                        app:cardCornerRadius="4dp"
+                        app:strokeColor="#0A2E3D"
+                        app:strokeWidth="1dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=".1.55"
+                            android:textColor="#89A3B2"
+                            android:textSize="11sp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:layout_gravity="center"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.card.MaterialCardView>
+                    
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="#041219"
+                        app:cardCornerRadius="4dp"
+                        app:strokeColor="#0A2E3D"
+                        app:strokeWidth="1dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=".1.102"
+                            android:textColor="#89A3B2"
+                            android:textSize="11sp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:layout_gravity="center"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        app:cardBackgroundColor="#041219"
+                        app:cardCornerRadius="4dp"
+                        app:strokeColor="#0A2E3D"
+                        app:strokeWidth="1dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=".0.45"
+                            android:textColor="#89A3B2"
+                            android:textSize="11sp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:layout_gravity="center"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+                
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnConnect"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="#0EA5E9"
+                    android:text="➔  Connect &amp; Install"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    app:cornerRadius="26dp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Status Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#051923"
+            app:cardCornerRadius="8dp"
+            app:strokeColor="#0A2E3D"
+            app:strokeWidth="1.5dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ⓘ"
+                    android:textColor="#0EA5E9"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="8dp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Ready to connect. Make sure TV is turned on."
+                    android:textColor="#89A3B2"
+                    android:textSize="13sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Before You Connect Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#051923"
+            app:cardCornerRadius="16dp"
+            app:strokeColor="#0A2E3D"
+            app:strokeWidth="1.5dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="☑"
+                        android:textColor="#0EA5E9"
+                        android:textSize="16sp"
+                        android:layout_marginEnd="8dp"
+                        tools:ignore="HardcodedText" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BEFORE YOU CONNECT"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+                
+                <!-- Step 1 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        app:cardCornerRadius="6dp"
+                        app:cardBackgroundColor="#0A2B3D"
+                        app:strokeWidth="0dp"
+                        android:layout_marginEnd="12dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1"
+                            android:textColor="#0EA5E9"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.card.MaterialCardView>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Same Wi-Fi Network"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Connect your phone and TV to the exact same Wi-Fi SSID."
+                            android:textColor="#89A3B2"
+                            android:textSize="12sp"
+                            android:lineSpacingExtra="2dp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Step 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        app:cardCornerRadius="6dp"
+                        app:cardBackgroundColor="#0A2B3D"
+                        app:strokeWidth="0dp"
+                        android:layout_marginEnd="12dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2"
+                            android:textColor="#0EA5E9"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.card.MaterialCardView>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Enable Developer Options"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Go to TV Settings → About → tap 'Build' 7 times."
+                            android:textColor="#89A3B2"
+                            android:textSize="12sp"
+                            android:lineSpacingExtra="2dp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Step 3 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        app:cardCornerRadius="6dp"
+                        app:cardBackgroundColor="#0A2B3D"
+                        app:strokeWidth="0dp"
+                        android:layout_marginEnd="12dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3"
+                            android:textColor="#0EA5E9"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            tools:ignore="HardcodedText" />
+                    </com.google.android.material.card.MaterialCardView>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Enable Wireless ADB / USB Debugging"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Turn on &quot;USB debugging&quot; and &quot;Network debugging&quot; in Developer Options."
+                            android:textColor="#89A3B2"
+                            android:textSize="12sp"
+                            android:lineSpacingExtra="2dp"
+                            tools:ignore="HardcodedText" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Warning Bottom Box -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#030E14"
+            app:cardCornerRadius="8dp"
+            app:strokeColor="#0A2E3D"
+            app:strokeWidth="1.5dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚠"
+                    android:textColor="#597A8C"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="12dp"
+                    tools:ignore="HardcodedText" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="If connection fails, verify the TV's IP address in Network Settings."
+                    android:textColor="#597A8C"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
 </ScrollView>
-

@@ -179,6 +179,7 @@
                                     android:id="@+id/MovieSection"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
                                     android:orientation="vertical"
                                     tools:ignore="TooManyViews">
 
@@ -202,7 +203,7 @@
                                         android:layout_marginStart="10dp"
                                         android:fontFamily="@font/p"
                                         android:textStyle="bold"
-                                        android:textSize="20sp"
+                                        android:textSize="14sp"
                                         android:textColor="?attr/FG_color"
                                         tools:ignore="HardcodedText" />
 
@@ -295,6 +296,7 @@
                                     android:id="@+id/filterSection"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
                                     android:orientation="vertical">
 
                                     <LinearLayout
@@ -326,7 +328,7 @@
                                                 android:layout_marginStart="10dp"
                                                 android:fontFamily="@font/p"
                                                 android:textStyle="bold"
-                                                android:textSize="20sp"
+                                                android:textSize="14sp"
                                                 android:textColor="?attr/FG_color"
                                                 tools:ignore="HardcodedText" />
 
@@ -507,6 +509,7 @@
                                     android:id="@+id/tvSection"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
                                     android:orientation="vertical"
                                     tools:ignore="TooManyViews">
 
@@ -621,6 +624,7 @@
                                 <FrameLayout
                                     android:id="@+id/HomeContentSection"
                                     android:layout_width="match_parent"
+                                    android:layout_marginTop="20dp"
                                     android:focusable="true"
                                     android:layout_height="wrap_content">
 

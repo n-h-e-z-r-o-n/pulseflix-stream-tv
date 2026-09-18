@@ -30,10 +30,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginVertical="10dp"
-                    android:fontFamily="@font/q"
+                    android:fontFamily="serif"
+                    android:letterSpacing="0.09"
                     android:text="My Favorites"
                     android:textColor="?attr/FG_color"
-                    android:textSize="15sp"
+                    android:textSize="17sp"
                     tools:ignore="HardcodedText" />
 
 
@@ -50,7 +51,7 @@
                     android:shadowDy="1"
                     android:shadowRadius="1"
                     android:textColor="?attr/FG_color"
-                    android:textSize="28sp"
+                    android:textSize="18sp"
                     tools:ignore="HardcodedText"
                     tools:text="22" />
 
