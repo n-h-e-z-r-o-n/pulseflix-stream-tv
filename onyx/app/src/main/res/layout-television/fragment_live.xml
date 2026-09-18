@@ -520,7 +520,7 @@
                         app:cardCornerRadius="16dp"
                         app:strokeColor="#0A2E3D"
                         app:strokeWidth="1dp"
-                        android:layout_marginEnd="16dp">
+                        android:layout_marginEnd="4dp">
                         <androidx.appcompat.widget.SearchView
                             android:id="@+id/liveSearchViewChannel"
                             android:layout_width="match_parent"
@@ -530,6 +530,17 @@
                             app:queryBackground="@android:color/transparent"
                             app:queryHint="Search live channels..." />
                     </com.google.android.material.card.MaterialCardView>
+
+
+                    <ImageButton
+                        android:id="@+id/btnVoiceSearch"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@android:drawable/ic_btn_speak_now"
+                        android:contentDescription="Voice Search"
+                        app:tint="@color/image_focus"
+                        tools:ignore="HardcodedText" />
                     
 
                     <com.google.android.material.card.MaterialCardView

@@ -37,6 +37,13 @@ class LiveStreamFragment : Fragment() {
     private lateinit var liveErrorText: TextView
     private lateinit var currentChannelInfo: View
     private lateinit var divider: View
+    
+    private var speechRecognizer: android.speech.SpeechRecognizer? = null
+    private val requestPermissionLauncher = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            startListening()
+        }
+    }
 
     // UI elements for the embedded player & info
     private lateinit var livePlayerView: CustomPlayerView
@@ -110,11 +117,79 @@ class LiveStreamFragment : Fragment() {
 
         setupRecyclerViews()
         setupSearchViews(view)
+        setupVoiceSearch(view)
         observeViewModel()
         
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressedCallback)
 
         return view
+    }
+
+    private fun setupVoiceSearch(view: View) {
+        val voiceSearchBtn = view.findViewById<android.widget.ImageButton>(R.id.btnVoiceSearch)
+        voiceSearchBtn?.setOnClickListener {
+            if (androidx.core.content.ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.RECORD_AUDIO) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                startListening()
+            } else {
+                requestPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
+            }
+        }
+    }
+
+    private fun startListening() {
+        if (!android.speech.SpeechRecognizer.isRecognitionAvailable(requireContext())) {
+            android.util.Log.e("VoiceSearch", "Speech recognition not available")
+            return
+        }
+
+        speechRecognizer?.destroy()
+        speechRecognizer = android.speech.SpeechRecognizer.createSpeechRecognizer(requireContext())
+        val intent = android.content.Intent(android.speech.RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(android.speech.RecognizerIntent.EXTRA_LANGUAGE_MODEL, android.speech.RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(android.speech.RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+
+        speechRecognizer?.setRecognitionListener(object : android.speech.RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {
+                val searchInput = view?.findViewById<SearchView>(R.id.liveSearchViewChannel)
+                searchInput?.queryHint = "Listening..."
+                view?.findViewById<android.widget.ImageButton>(R.id.btnVoiceSearch)?.setColorFilter(android.graphics.Color.RED)
+            }
+            override fun onBeginningOfSpeech() {}
+            override fun onRmsChanged(rmsdB: Float) {}
+            override fun onBufferReceived(buffer: ByteArray?) {}
+            override fun onEndOfSpeech() {
+                val searchInput = view?.findViewById<SearchView>(R.id.liveSearchViewChannel)
+                searchInput?.queryHint = "Search live channels..."
+                view?.findViewById<android.widget.ImageButton>(R.id.btnVoiceSearch)?.clearColorFilter()
+            }
+            override fun onError(error: Int) {
+                val searchInput = view?.findViewById<SearchView>(R.id.liveSearchViewChannel)
+                searchInput?.queryHint = "Search live channels..."
+                view?.findViewById<android.widget.ImageButton>(R.id.btnVoiceSearch)?.clearColorFilter()
+                android.util.Log.e("VoiceSearch", "Error code: $error")
+                speechRecognizer?.destroy()
+                speechRecognizer = null
+            }
+            override fun onResults(results: Bundle?) {
+                val data = results?.getStringArrayList(android.speech.SpeechRecognizer.RESULTS_RECOGNITION)
+                if (!data.isNullOrEmpty()) {
+                    val spokenText = data[0]
+                    val searchInput = view?.findViewById<SearchView>(R.id.liveSearchViewChannel)
+                    searchInput?.setQuery(spokenText, true)
+                }
+                speechRecognizer?.destroy()
+                speechRecognizer = null
+            }
+            override fun onPartialResults(partialResults: Bundle?) {
+                val data = partialResults?.getStringArrayList(android.speech.SpeechRecognizer.RESULTS_RECOGNITION)
+                if (!data.isNullOrEmpty()) {
+                    val searchInput = view?.findViewById<SearchView>(R.id.liveSearchViewChannel)
+                    searchInput?.setQuery(data[0], false)
+                }
+            }
+            override fun onEvent(eventType: Int, params: Bundle?) {}
+        })
+        speechRecognizer?.startListening(intent)
     }
 
     private fun setupSearchViews(view: View) {
@@ -240,6 +315,7 @@ class LiveStreamFragment : Fragment() {
         val btnLiveSync = livePlayerView.findViewById<TextView>(R.id.btn_live_sync)
         val btnPlayPause = livePlayerView.findViewById<ImageButton>(R.id.exo_play_pause)
         val btnLiveFave = livePlayerView.findViewById<ImageButton>(R.id.btn_live_fave)
+        val btnLiveRefresh = livePlayerView.findViewById<ImageButton>(R.id.btn_live_refresh)
         val favoriteButton = view?.findViewById<View>(R.id.favoriteButton)
 
         btnFullscreen?.setOnClickListener {
@@ -249,6 +325,13 @@ class LiveStreamFragment : Fragment() {
 
         btnLiveSync?.setOnClickListener {
             exoPlayer?.seekToDefaultPosition()
+        }
+        
+        btnLiveRefresh?.setOnClickListener {
+            exoPlayer?.let { player ->
+                player.seekToDefaultPosition()
+                player.prepare()
+            }
         }
         
         btnPlayPause?.setOnClickListener {
@@ -377,10 +460,32 @@ class LiveStreamFragment : Fragment() {
 
     private fun initializePlayer() {
         if (exoPlayer == null) {
-            exoPlayer = ExoPlayer.Builder(requireContext()).build()
+            val loadControl = androidx.media3.exoplayer.DefaultLoadControl.Builder()
+                .setBufferDurationsMs(
+                    15000, // minBufferMs
+                    50000, // maxBufferMs
+                    1500,  // bufferForPlaybackMs
+                    2000   // bufferForPlaybackAfterRebufferMs
+                ).build()
+                
+            exoPlayer = ExoPlayer.Builder(requireContext())
+                .setLoadControl(loadControl)
+                .build()
+                
             livePlayerView.player = exoPlayer
             
             exoPlayer?.addListener(object : androidx.media3.common.Player.Listener {
+                override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                    super.onPlayerError(error)
+                    // Auto-heal logic for live streams that stall or drop connection
+                    exoPlayer?.let { player ->
+                        if (player.playbackState == androidx.media3.common.Player.STATE_IDLE) {
+                            player.seekToDefaultPosition()
+                            player.prepare()
+                        }
+                    }
+                }
+                
                 override fun onMediaMetadataChanged(mediaMetadata: androidx.media3.common.MediaMetadata) {
                     val upNextDetails = view?.findViewById<TextView>(R.id.upNextDetails) ?: return
                     
@@ -563,6 +668,9 @@ class LiveStreamFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        
+        speechRecognizer?.destroy()
+        speechRecognizer = null
         
         fullscreenDialog?.dismiss()
         fullscreenDialog = null

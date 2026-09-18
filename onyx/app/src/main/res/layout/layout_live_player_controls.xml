@@ -55,6 +55,21 @@
             tools:text="Select a channel" />
 
 
+
+        <ImageButton
+            android:id="@+id/btn_live_refresh"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="8dp"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:background="@drawable/live_button_selector"
+            android:src="@drawable/ic_refresh"
+            android:contentDescription="Fullscreen"
+            app:tint="@android:color/white"
+            tools:ignore="HardcodedText" />
+
+
         <ImageButton
             android:id="@+id/btn_live_fave"
             android:layout_width="35dp"
