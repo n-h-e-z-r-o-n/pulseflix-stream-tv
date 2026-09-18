@@ -47,6 +47,10 @@ class LiveStreamFragment : Fragment() {
     private var liveFaveCount: TextView? = null
     private var liveCategoryCount: TextView? = null
     private var categoryChannelCount: TextView? = null
+    
+    private var fullscreenDialog: android.app.Dialog? = null
+    private var originalPlayerParent: ViewGroup? = null
+    private var originalPlayerLayoutParams: ViewGroup.LayoutParams? = null
 
     private lateinit var channelAdapter: LiveChannelAdapter
     private lateinit var categoryAdapter: LiveCategoryAdapter
@@ -324,74 +328,48 @@ class LiveStreamFragment : Fragment() {
         currentPlayerState = state
         backPressedCallback.isEnabled = (state != PlayerState.NORMAL)
         
-        val window = requireActivity().window
-        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-        
-        val topContainer = view?.findViewById<View>(R.id.topPlayerContainer)
-        val sidebarContainer = view?.findViewById<View>(R.id.sidebarContainer)
-        
         when (state) {
             PlayerState.NORMAL -> {
-                // Show UI
-                currentChannelInfo.visibility = View.VISIBLE
-                divider.visibility = View.VISIBLE
-                sidebarContainer?.visibility = View.VISIBLE
-                liveCategoriesRecyclerView.visibility = View.VISIBLE
-                liveRecyclerView.visibility = View.VISIBLE
+                fullscreenDialog?.dismiss()
                 
-                // Show HomeActivity Sidebar if exists
-                (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.sideBar)?.visibility = View.VISIBLE
+                (livePlayerView.parent as? ViewGroup)?.removeView(livePlayerView)
+                if (originalPlayerParent != null && originalPlayerLayoutParams != null) {
+                    originalPlayerParent?.addView(livePlayerView, 0, originalPlayerLayoutParams)
+                }
                 
                 // Show System UI
-                insetsController.show(WindowInsetsCompat.Type.systemBars())
+                val window = requireActivity().window
+                androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).show(androidx.core.view.WindowInsetsCompat.Type.systemBars())
                 
-                val layoutParams = livePlayerView.layoutParams as? ViewGroup.MarginLayoutParams
-                layoutParams?.apply {
-                    val isTv = (requireActivity().resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_TYPE_MASK) == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
-                    if (isTv) {
-                        height = (280 * resources.displayMetrics.density).toInt()
-                        width = 0
-                        if (this is android.widget.LinearLayout.LayoutParams) {
-                            weight = 1.2f
-                        }
-                        val margin16 = (16 * resources.displayMetrics.density).toInt()
-                        setMargins(margin16, margin16, margin16, margin16)
-                        
-                        topContainer?.layoutParams = topContainer?.layoutParams?.apply { 
-                            height = ViewGroup.LayoutParams.WRAP_CONTENT 
-                        }
-                    } else {
-                        height = ViewGroup.LayoutParams.WRAP_CONTENT
-                        width = ViewGroup.LayoutParams.MATCH_PARENT
-                        setMargins(0, 0, 0, 0)
-                    }
-                }
-                livePlayerView.layoutParams = layoutParams
+                livePlayerView.requestFocus()
             }
             PlayerState.FULLSCREEN -> {
-                // Hide EVERYTHING
-                currentChannelInfo.visibility = View.GONE
-                divider.visibility = View.GONE
-                sidebarContainer?.visibility = View.GONE
-                liveCategoriesRecyclerView.visibility = View.GONE
-                liveRecyclerView.visibility = View.GONE
-                
-                (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.sideBar)?.visibility = View.GONE
-                
-                insetsController.hide(WindowInsetsCompat.Type.systemBars())
-                insetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                
-                val layoutParams = livePlayerView.layoutParams as? ViewGroup.MarginLayoutParams
-                layoutParams?.apply {
-                    height = ViewGroup.LayoutParams.MATCH_PARENT
-                    width = ViewGroup.LayoutParams.MATCH_PARENT
-                    setMargins(0, 0, 0, 0)
-                    
-                    topContainer?.layoutParams = topContainer?.layoutParams?.apply { 
-                        height = ViewGroup.LayoutParams.MATCH_PARENT 
+                if (fullscreenDialog == null) {
+                    fullscreenDialog = object : android.app.Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
+                        override fun onBackPressed() {
+                            setPlayerState(PlayerState.NORMAL)
+                        }
                     }
                 }
-                livePlayerView.layoutParams = layoutParams
+                
+                originalPlayerParent = livePlayerView.parent as? ViewGroup
+                originalPlayerLayoutParams = livePlayerView.layoutParams
+                
+                originalPlayerParent?.removeView(livePlayerView)
+                
+                fullscreenDialog?.setContentView(livePlayerView, ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, 
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                ))
+                
+                fullscreenDialog?.show()
+                
+                // Hide System UI
+                val window = fullscreenDialog?.window ?: requireActivity().window
+                val insetsController = androidx.core.view.WindowCompat.getInsetsController(window, window.decorView)
+                insetsController.hide(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+                insetsController.systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                
                 livePlayerView.requestFocus()
             }
         }
@@ -585,6 +563,10 @@ class LiveStreamFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        
+        fullscreenDialog?.dismiss()
+        fullscreenDialog = null
+        
         exoPlayer?.release()
         exoPlayer = null
         livePlayerView.player = null
@@ -592,7 +574,7 @@ class LiveStreamFragment : Fragment() {
         // Restore system UI if leaving fragment
         if (currentPlayerState == PlayerState.FULLSCREEN) {
             val window = requireActivity().window
-            WindowCompat.getInsetsController(window, window.decorView).show(WindowInsetsCompat.Type.systemBars())
+            androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).show(androidx.core.view.WindowInsetsCompat.Type.systemBars())
             (requireActivity() as? HomeActivity)?.findViewById<View>(R.id.sideBar)?.visibility = View.VISIBLE
         }
     }
