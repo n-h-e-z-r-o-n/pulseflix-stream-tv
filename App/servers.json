@@ -17,6 +17,14 @@
     "movieTemplate": "https://play.xpass.top/e/movie/{showId}",
     "tvTemplate": "https://play.xpass.top/e/tv/{showId}/{seasonNo}/{episodeNo}"
   },
+
+  {
+    "name": "primesrc",
+    "key": "primesrc",
+    "movieTemplate": "https://primesrc.me/embed/movie?tmdb={showId}",
+    "tvTemplate": "https://primesrc.me/embed/tv?tmdb={showId}&season={seasonNo}&episode={episodeNo}"
+  },
+  
   {
     "name": "HD4",
     "key": "vaplayer",
