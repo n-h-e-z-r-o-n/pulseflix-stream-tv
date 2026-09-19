@@ -46,8 +46,8 @@
     "tvTemplate": "https://vidup.to/tv/{showId}/{seasonNo}/{episodeNo}"
   },
   {
-    "name": "vidup",
-    "key": "vidup",
+    "name": "vidcore",
+    "key": "vidcore",
     "movieTemplate": "https://vidcore.io/movie/{showId}",
     "tvTemplate": "https://vidcore.io/tv/{showId}/{seasonNo}/{episodeNo}"
   }
