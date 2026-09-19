@@ -26,10 +26,30 @@
   },
   
   {
-    "name": "HD4",
+    "name": "vaplayer",
     "key": "vaplayer",
     "movieTemplate": "https://vaplayer.ru/embed/movie/{showId}",
     "tvTemplate": "https://vaplayer.ru/embed/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  
+  {
+    "name": "vidfast",
+    "key": "vidfast",
+    "movieTemplate": "https://vidfast.vc/movie/{showId}",
+    "tvTemplate": "https://vidfast.vc/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  
+  {
+    "name": "vidup",
+    "key": "vidup",
+    "movieTemplate": "https://vidup.to/movie/{showId}",
+    "tvTemplate": "https://vidup.to/tv/{showId}/{seasonNo}/{episodeNo}"
+  },
+  {
+    "name": "vidup",
+    "key": "vidup",
+    "movieTemplate": "https://vidcore.io/movie/{showId}",
+    "tvTemplate": "https://vidcore.io/tv/{showId}/{seasonNo}/{episodeNo}"
   }
   
  
